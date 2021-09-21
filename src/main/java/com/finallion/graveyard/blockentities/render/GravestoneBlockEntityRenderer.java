@@ -11,6 +11,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.texture.NativeImage;
@@ -43,9 +44,9 @@ public class GravestoneBlockEntityRenderer extends TileEntityRenderer<Gravestone
 
     private static ItemStack stack = new ItemStack(TGBlocks.GRAVESTONE.asItem(), 1);
 
-    public GravestoneBlockEntityRenderer(TileEntityRendererDispatcher blockEntityRenderDispatcher) {
+    public GravestoneBlockEntityRenderer(TileEntityRendererDispatcher blockEntityRenderDispatcher, ItemRenderer itemRenderer) {
         super(blockEntityRenderDispatcher);
-        this.itemRenderer = p_i50970_2_;
+        this.itemRenderer = itemRenderer;
     }
 
 
@@ -58,7 +59,7 @@ public class GravestoneBlockEntityRenderer extends TileEntityRenderer<Gravestone
         // offset on block
         matrixStack.translate(0.5D, 0.25D, 0.5D);
 
-        float rotation = -((float)blockState.getValue(GravestoneBlock.FACING));
+        float rotation = -(blockState.getValue(GravestoneBlock.FACING).toYRot());
         //float h = -((float)((Integer)blockState.get(SignBlock.ROTATION) * 360) / 16.0F);
         matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
         matrixStack.pushPose();
@@ -69,17 +70,15 @@ public class GravestoneBlockEntityRenderer extends TileEntityRenderer<Gravestone
         matrixStack.translate(0.0D, 0.3333333432674408D, 0.23);
         matrixStack.scale(0.010416667F, -0.010416667F, 0.010416667F);
 
-        int i = signBlockEntity.getColor().getTextColor();
-        double d0 = 0.4D;
-        int j = (int)((double) NativeImage.getR(i) * 0.4D);
-        int k = (int)((double)NativeImage.getG(i) * 0.4D);
-        int l = (int)((double)NativeImage.getB(i) * 0.4D);
-        int i1 = NativeImage.combine(0, l, k, j);
-        int j1 = 20;
+        int m = signBlockEntity.getColor().getTextColor();
+        int n = (int)((double) NativeImage.getR(m) * 0.4D);
+        int k = (int)((double)NativeImage.getG(m) * 0.4D);
+        int l = (int)((double)NativeImage.getB(m) * 0.4D);
+        int i1 = NativeImage.combine(0, l, k, n);
 
         for(int k1 = 0; k1 < 4; ++k1) {
             IReorderingProcessor ireorderingprocessor = signBlockEntity.getRenderMessage(k1, (p_243502_1_) -> {
-                List<IReorderingProcessor> list = fontrenderer.split(signBlockEntity, 90);
+                List<IReorderingProcessor> list = fontrenderer.split(p_243502_1_, 90);
                 return list.isEmpty() ? IReorderingProcessor.EMPTY : list.get(0);
             });
             if (ireorderingprocessor != null) {
@@ -100,12 +99,10 @@ public class GravestoneBlockEntityRenderer extends TileEntityRenderer<Gravestone
         matrixStack.translate(0.5, 0.43, 0.5);
         matrixStack.scale(2.28F, 2.15F, 2.28F);
 
-        float rotation = -((float)state.getValue(GravestoneBlock.FACING));
+        float rotation = -((float)state.getValue(GravestoneBlock.FACING).toYRot());
         matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
 
-        this.model.renderToBuffer(matrixStack, vertexConsumerProvider, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-
-        //MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GROUND, i, j, matrixStack, vertexConsumerProvider);
+        this.itemRenderer.renderStatic(stack, ItemCameraTransforms.TransformType.GROUND, i, OverlayTexture.NO_OVERLAY, matrixStack, vertexConsumerProvider);
 
         matrixStack.popPose();
     }

@@ -2,170 +2,167 @@ package com.finallion.graveyard.blockentities;
 
 import com.finallion.graveyard.init.TGBlocks;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.ICommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.server.command.CommandOutput;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.*;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.DyeColor;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IReorderingProcessor;
+import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentUtils;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
 import java.util.function.Function;
 
-public class GravestoneBlockEntity extends BlockEntity {
-    private final Text[] texts;
-    private boolean editable;
+public class GravestoneBlockEntity extends TileEntity {
+    private final ITextComponent[] messages = new ITextComponent[]{StringTextComponent.EMPTY, StringTextComponent.EMPTY, StringTextComponent.EMPTY, StringTextComponent.EMPTY};
+    private boolean isEditable = true;
     private PlayerEntity editor;
-    private final OrderedText[] textsBeingEdited;
-    private DyeColor textColor;
+    private final IReorderingProcessor[] renderMessages = new IReorderingProcessor[4];
+    private DyeColor color = DyeColor.BLACK;
+
 
 	public GravestoneBlockEntity() {
         super(TGBlocks.GRAVESTONE_BLOCK_ENTITY);
-        this.texts = new Text[]{LiteralText.EMPTY, LiteralText.EMPTY, LiteralText.EMPTY, LiteralText.EMPTY};
-        this.editable = true;
-        this.textsBeingEdited = new OrderedText[4];
-        this.textColor = DyeColor.BLACK;
     }
 
 
-    public NbtCompound writeNbt(NbtCompound nbt) {
-        super.writeNbt(nbt);
+    public CompoundNBT save(CompoundNBT p_189515_1_) {
+        super.save(p_189515_1_);
 
         for(int i = 0; i < 4; ++i) {
-            String string = Text.Serializer.toJson(this.texts[i]);
-            nbt.putString("Text" + (i + 1), string);
+            String s = ITextComponent.Serializer.toJson(this.messages[i]);
+            p_189515_1_.putString("Text" + (i + 1), s);
         }
 
-        nbt.putString("Color", this.textColor.getName());
-        return nbt;
+        p_189515_1_.putString("Color", this.color.getName());
+        return p_189515_1_;
     }
 
-    public void fromTag(BlockState state, NbtCompound tag) {
-        this.editable = false;
-        super.fromTag(state, tag);
-        this.textColor = DyeColor.byName(tag.getString("Color"), DyeColor.BLACK);
+    public void load(BlockState p_230337_1_, CompoundNBT p_230337_2_) {
+        this.isEditable = false;
+        super.load(p_230337_1_, p_230337_2_);
+        this.color = DyeColor.byName(p_230337_2_.getString("Color"), DyeColor.BLACK);
 
         for(int i = 0; i < 4; ++i) {
-            String string = tag.getString("Text" + (i + 1));
-            Text text = Text.Serializer.fromJson(string.isEmpty() ? "\"\"" : string);
-            if (this.world instanceof ServerWorld) {
+            String s = p_230337_2_.getString("Text" + (i + 1));
+            ITextComponent itextcomponent = ITextComponent.Serializer.fromJson(s.isEmpty() ? "\"\"" : s);
+            if (this.level instanceof ServerWorld) {
                 try {
-                    this.texts[i] = Texts.parse(this.getCommandSource((ServerPlayerEntity)null), text, (Entity)null, 0);
-                } catch (CommandSyntaxException var7) {
-                    this.texts[i] = text;
+                    this.messages[i] = TextComponentUtils.updateForEntity(this.createCommandSourceStack((ServerPlayerEntity)null), itextcomponent, (Entity)null, 0);
+                } catch (CommandSyntaxException commandsyntaxexception) {
+                    this.messages[i] = itextcomponent;
                 }
             } else {
-                this.texts[i] = text;
+                this.messages[i] = itextcomponent;
             }
 
-            this.textsBeingEdited[i] = null;
+            this.renderMessages[i] = null;
         }
 
     }
 
-
-
-    @Environment(EnvType.CLIENT)
-    public Text getTextOnRow(int row) {
-        return this.texts[row];
+    @OnlyIn(Dist.CLIENT)
+    public ITextComponent getMessage(int p_212366_1_) {
+        return this.messages[p_212366_1_];
     }
 
-    public void setTextOnRow(int row, Text text) {
-        this.texts[row] = text;
-        this.textsBeingEdited[row] = null;
+    public void setMessage(int p_212365_1_, ITextComponent p_212365_2_) {
+        this.messages[p_212365_1_] = p_212365_2_;
+        this.renderMessages[p_212365_1_] = null;
     }
 
     @Nullable
-    @Environment(EnvType.CLIENT)
-    public OrderedText getTextBeingEditedOnRow(int row, Function<Text, OrderedText> function) {
-        if (this.textsBeingEdited[row] == null && this.texts[row] != null) {
-            this.textsBeingEdited[row] = (OrderedText)function.apply(this.texts[row]);
+    @OnlyIn(Dist.CLIENT)
+    public IReorderingProcessor getRenderMessage(int p_242686_1_, Function<ITextComponent, IReorderingProcessor> p_242686_2_) {
+        if (this.renderMessages[p_242686_1_] == null && this.messages[p_242686_1_] != null) {
+            this.renderMessages[p_242686_1_] = p_242686_2_.apply(this.messages[p_242686_1_]);
         }
 
-        return this.textsBeingEdited[row];
+        return this.renderMessages[p_242686_1_];
     }
-
 
     @Nullable
-    public BlockEntityUpdateS2CPacket toUpdatePacket() {
-        return new BlockEntityUpdateS2CPacket(this.pos, 9, this.toInitialChunkDataNbt());
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(this.worldPosition, 9, this.getUpdateTag());
     }
 
-    public NbtCompound toInitialChunkDataNbt() {
-        return this.writeNbt(new NbtCompound());
+    public CompoundNBT getUpdateTag() {
+        return this.save(new CompoundNBT());
     }
 
-    public boolean copyItemDataRequiresOperator() {
+    public boolean onlyOpCanSetNbt() {
         return true;
     }
 
     public boolean isEditable() {
-        return this.editable;
+        return this.isEditable;
     }
 
-    public void setEditable(boolean editable) {
-        this.editable = editable;
-        if (!editable) {
+    @OnlyIn(Dist.CLIENT)
+    public void setEditable(boolean p_145913_1_) {
+        this.isEditable = p_145913_1_;
+        if (!p_145913_1_) {
             this.editor = null;
         }
 
     }
 
-    public void setEditor(PlayerEntity player) {
-        this.editor = player;
+    public void setAllowedPlayerEditor(PlayerEntity p_145912_1_) {
+        this.editor = p_145912_1_;
     }
 
-    public PlayerEntity getEditor() {
+    public PlayerEntity getPlayerWhoMayEdit() {
         return this.editor;
     }
 
-    public boolean onActivate(ServerPlayerEntity player) {
-        Text[] var2 = this.texts;
-        int var3 = var2.length;
-
-        for(int var4 = 0; var4 < var3; ++var4) {
-            Text text = var2[var4];
-            Style style = text.getStyle();
-            ClickEvent clickEvent = style.getClickEvent();
-            if (clickEvent != null && clickEvent.getAction() == ClickEvent.Action.RUN_COMMAND) {
-                player.getServer().getCommandManager().execute(this.getCommandSource(player), clickEvent.getValue());
+    public boolean executeClickCommands(PlayerEntity p_174882_1_) {
+        for(ITextComponent itextcomponent : this.messages) {
+            Style style = itextcomponent == null ? null : itextcomponent.getStyle();
+            if (style != null && style.getClickEvent() != null) {
+                ClickEvent clickevent = style.getClickEvent();
+                if (clickevent.getAction() == ClickEvent.Action.RUN_COMMAND) {
+                    p_174882_1_.getServer().getCommands().performCommand(this.createCommandSourceStack((ServerPlayerEntity)p_174882_1_), clickevent.getValue());
+                }
             }
         }
 
         return true;
     }
 
-    public ServerCommandSource getCommandSource(@Nullable ServerPlayerEntity player) {
-        String string = player == null ? "Sign" : player.getName().getString();
-        Text text = player == null ? new LiteralText("Sign") : player.getDisplayName();
-        return new ServerCommandSource(CommandOutput.DUMMY, Vec3d.ofCenter(this.pos), Vec2f.ZERO, (ServerWorld)this.world, 2, string, (Text)text, this.world.getServer(), player);
+    public CommandSource createCommandSourceStack(@Nullable ServerPlayerEntity p_195539_1_) {
+        String s = p_195539_1_ == null ? "Sign" : p_195539_1_.getName().getString();
+        ITextComponent itextcomponent = (ITextComponent)(p_195539_1_ == null ? new StringTextComponent("Sign") : p_195539_1_.getDisplayName());
+        return new CommandSource(ICommandSource.NULL, Vector3d.atCenterOf(this.worldPosition), Vector2f.ZERO, (ServerWorld)this.level, 2, s, itextcomponent, this.level.getServer(), p_195539_1_);
     }
 
-    public DyeColor getTextColor() {
-        return this.textColor;
+    public DyeColor getColor() {
+        return this.color;
     }
 
-    public boolean setTextColor(DyeColor value) {
-        if (value != this.getTextColor()) {
-            this.textColor = value;
-            this.markDirty();
-            this.world.updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), 3);
+    public boolean setColor(DyeColor p_214068_1_) {
+        if (p_214068_1_ != this.getColor()) {
+            this.color = p_214068_1_;
+            this.setChanged();
+            this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
             return true;
         } else {
             return false;
         }
     }
-
 
 
 }
