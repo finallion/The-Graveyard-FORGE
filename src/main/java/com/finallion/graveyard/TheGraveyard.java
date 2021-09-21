@@ -1,5 +1,6 @@
 package com.finallion.graveyard;
 
+import com.finallion.graveyard.client.TheGraveyardClient;
 import com.finallion.graveyard.config.TheGraveyardConfig;
 import com.finallion.graveyard.init.*;
 import com.finallion.graveyard.utils.StructureGenerationUtil;
@@ -15,6 +16,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.registries.RegistryManager;
 
 
 public class TheGraveyard implements ModInitializer {
@@ -50,6 +53,10 @@ public class TheGraveyard implements ModInitializer {
 
 
 
+    private void clientSetup(FMLClientSetupEvent event) {
+        TheGraveyardClient.clientInit();
+
+    }
 
     @Override
     public void onInitialize() {

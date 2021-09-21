@@ -4,134 +4,133 @@ import com.finallion.graveyard.blocks.UrnBlock;
 import com.finallion.graveyard.init.TGBlocks;
 import net.minecraft.block.BarrelBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.block.entity.LootableContainerBlockEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.inventory.container.ChestContainer;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.GenericContainerScreenHandler;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.tileentity.LockableLootTileEntity;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
-public class UrnBlockEntity extends LootableContainerBlockEntity {
-    private DefaultedList<ItemStack> inventory;
-    private int viewerCount;
+public class UrnBlockEntity extends LockableLootTileEntity {
+    private NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
+    private int openCount;
 
     public UrnBlockEntity() {
-        super(TGBlocks.URN_BLOCK_ENTITY);
-        this.inventory = DefaultedList.ofSize(27, ItemStack.EMPTY);
+        super(TGBlocks.URN_BLOCK_ENTITY.get());
     }
 
-    public NbtCompound writeNbt(NbtCompound nbt) {
-        super.writeNbt(nbt);
-        if (!this.serializeLootTable(nbt)) {
-            Inventories.writeNbt(nbt, this.inventory);
+    public CompoundNBT save(CompoundNBT p_189515_1_) {
+        super.save(p_189515_1_);
+        if (!this.trySaveLootTable(p_189515_1_)) {
+            ItemStackHelper.saveAllItems(p_189515_1_, this.items);
         }
 
-        return nbt;
+        return p_189515_1_;
     }
 
-    public void fromTag(BlockState state, NbtCompound tag) {
-        super.fromTag(state, tag);
-        this.inventory = DefaultedList.ofSize(this.size(), ItemStack.EMPTY);
-        if (!this.deserializeLootTable(tag)) {
-            Inventories.readNbt(tag, this.inventory);
+    public void load(BlockState p_230337_1_, CompoundNBT p_230337_2_) {
+        super.load(p_230337_1_, p_230337_2_);
+        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        if (!this.tryLoadLootTable(p_230337_2_)) {
+            ItemStackHelper.loadAllItems(p_230337_2_, this.items);
         }
 
     }
 
-    public int size() {
+    public int getContainerSize() {
         return 27;
     }
 
-    protected DefaultedList<ItemStack> getInvStackList() {
-        return this.inventory;
+    protected NonNullList<ItemStack> getItems() {
+        return this.items;
     }
 
-    protected void setInvStackList(DefaultedList<ItemStack> list) {
-        this.inventory = list;
+    protected void setItems(NonNullList<ItemStack> p_199721_1_) {
+        this.items = p_199721_1_;
     }
 
-    protected Text getContainerName() {
-        return new TranslatableText("container.urn");
+    protected ITextComponent getDefaultName() {
+        return new TranslationTextComponent("container.barrel");
     }
 
-    protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
-        return GenericContainerScreenHandler.createGeneric9x3(syncId, playerInventory, this);
+    protected Container createMenu(int p_213906_1_, PlayerInventory p_213906_2_) {
+        return ChestContainer.threeRows(p_213906_1_, p_213906_2_, this);
     }
 
-    public void onOpen(PlayerEntity player) {
-        if (!player.isSpectator()) {
-            if (this.viewerCount < 0) {
-                this.viewerCount = 0;
+    public void startOpen(PlayerEntity p_174889_1_) {
+        if (!p_174889_1_.isSpectator()) {
+            if (this.openCount < 0) {
+                this.openCount = 0;
             }
 
-            ++this.viewerCount;
-            BlockState blockState = this.getCachedState();
-            boolean bl = (Boolean)blockState.get(BarrelBlock.OPEN);
-            if (!bl) {
-                this.playSound(blockState, SoundEvents.BLOCK_BARREL_OPEN);
-                this.setOpen(blockState, true);
+            ++this.openCount;
+            BlockState blockstate = this.getBlockState();
+            boolean flag = blockstate.getValue(BarrelBlock.OPEN);
+            if (!flag) {
+                this.playSound(blockstate, SoundEvents.BARREL_OPEN);
+                this.updateBlockState(blockstate, true);
             }
 
-            this.scheduleUpdate();
+            this.scheduleRecheck();
         }
 
     }
 
-    private void scheduleUpdate() {
-        this.world.getBlockTickScheduler().schedule(this.getPos(), this.getCachedState().getBlock(), 5);
+    private void scheduleRecheck() {
+        this.level.getBlockTicks().scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), 5);
     }
 
-    public void tick() {
-        int i = this.pos.getX();
-        int j = this.pos.getY();
-        int k = this.pos.getZ();
-        this.viewerCount = ChestBlockEntity.countViewers(this.world, this, i, j, k);
-        if (this.viewerCount > 0) {
-            this.scheduleUpdate();
+    public void recheckOpen() {
+        int i = this.worldPosition.getX();
+        int j = this.worldPosition.getY();
+        int k = this.worldPosition.getZ();
+        this.openCount = ChestTileEntity.getOpenCount(this.level, this, i, j, k);
+        if (this.openCount > 0) {
+            this.scheduleRecheck();
         } else {
-            BlockState blockState = this.getCachedState();
-            if (!(blockState.getBlock() instanceof UrnBlock)) {
-                this.markRemoved();
+            BlockState blockstate = this.getBlockState();
+            if (!blockstate.is(Blocks.BARREL)) {
+                this.setRemoved();
                 return;
             }
 
-            boolean bl = (Boolean)blockState.get(UrnBlock.OPEN);
-            if (bl) {
-                this.playSound(blockState, SoundEvents.BLOCK_BARREL_CLOSE);
-                this.setOpen(blockState, false);
+            boolean flag = blockstate.getValue(BarrelBlock.OPEN);
+            if (flag) {
+                this.playSound(blockstate, SoundEvents.BARREL_CLOSE);
+                this.updateBlockState(blockstate, false);
             }
         }
 
     }
 
-
-    public void onClose(PlayerEntity player) {
-        if (!player.isSpectator()) {
-            --this.viewerCount;
+    public void stopOpen(PlayerEntity p_174886_1_) {
+        if (!p_174886_1_.isSpectator()) {
+            --this.openCount;
         }
 
     }
 
-    private void setOpen(BlockState state, boolean open) {
-        this.world.setBlockState(this.getPos(), (BlockState)state.with(BarrelBlock.OPEN, open), 3);
+    private void updateBlockState(BlockState p_213963_1_, boolean p_213963_2_) {
+        this.level.setBlock(this.getBlockPos(), p_213963_1_.setValue(BarrelBlock.OPEN, Boolean.valueOf(p_213963_2_)), 3);
     }
 
-    void playSound(BlockState state, SoundEvent soundEvent) {
-        Vec3i vec3i = ((Direction) state.get(UrnBlock.FACING)).getVector();
-        double d = (double) this.pos.getX() + 0.5D + (double) vec3i.getX() / 2.0D;
-        double e = (double) this.pos.getY() + 0.5D + (double) vec3i.getY() / 2.0D;
-        double f = (double) this.pos.getZ() + 0.5D + (double) vec3i.getZ() / 2.0D;
-        this.world.playSound((PlayerEntity) null, d, e, f, soundEvent, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+    private void playSound(BlockState p_213965_1_, SoundEvent p_213965_2_) {
+        Vector3i vector3i = p_213965_1_.getValue(BarrelBlock.FACING).getNormal();
+        double d0 = (double)this.worldPosition.getX() + 0.5D + (double)vector3i.getX() / 2.0D;
+        double d1 = (double)this.worldPosition.getY() + 0.5D + (double)vector3i.getY() / 2.0D;
+        double d2 = (double)this.worldPosition.getZ() + 0.5D + (double)vector3i.getZ() / 2.0D;
+        this.level.playSound((PlayerEntity)null, d0, d1, d2, p_213965_2_, SoundCategory.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
     }
 }

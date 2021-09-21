@@ -3,219 +3,211 @@ package com.finallion.graveyard.client.gui;
 import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
 import com.finallion.graveyard.blockentities.render.GravestoneBlockEntityRenderer;
 import com.finallion.graveyard.blocks.GravestoneBlock;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.SignBlock;
+import net.minecraft.block.StandingSignBlock;
+import net.minecraft.client.gui.DialogTexts;
+import net.minecraft.client.gui.fonts.TextInputUtil;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ScreenTexts;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.render.*;
-import net.minecraft.client.render.block.entity.SignBlockEntityRenderer;
-import net.minecraft.client.util.SelectionManager;
-import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.SignType;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.network.play.ClientPlayNetHandler;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.model.RenderMaterial;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.tileentity.SignTileEntityRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.network.play.client.CUpdateSignPacket;
+import net.minecraft.tileentity.SignTileEntity;
 import net.minecraft.util.Util;
-import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.IntStream;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GravestoneScreen extends Screen {
     private final GravestoneBlockEntity sign;
-    private int ticksSinceOpened;
-    private int currentRow;
-    private SelectionManager selectionManager;
-    private SignType signType;
-    private SignBlockEntityRenderer.SignModel model;
-    private final String[] text = (String[]) Util.make(new String[4], (strings) -> {
-        Arrays.fill(strings, "");
-    });
+    private SignTileEntityRenderer.SignModel model;
+    private int frame;
+    private int line;
+    private TextInputUtil signField;
+    private final String[] messages;
 
-    public GravestoneScreen(GravestoneBlockEntity sign, boolean filtered) {
-        super(new TranslatableText("gravestone.edit"));
+
+    public GravestoneScreen(GravestoneBlockEntity sign) {
+        super(new TranslationTextComponent("gravestone.edit"));
+        this.messages = IntStream.range(0, 4).mapToObj(sign::getMessage).map(ITextComponent::getString).toArray((p_243354_0_) -> {
+            return new String[p_243354_0_];
+        });
         this.sign = sign;
     }
 
+
+
     protected void init() {
-        this.client.keyboard.setRepeatEvents(true);
-        this.addButton(new ButtonWidget(this.width / 2 - 100, this.height / 4 + 120, 200, 20, ScreenTexts.DONE, (button) -> {
-            this.finishEditing();
+        this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
+        this.addButton(new Button(this.width / 2 - 100, this.height / 4 + 120, 200, 20, DialogTexts.GUI_DONE, (p_238847_1_) -> {
+            this.onDone();
         }));
         this.sign.setEditable(false);
-        this.selectionManager = new SelectionManager(() -> {
-            return this.text[this.currentRow];
-        }, (text) -> {
-            this.text[this.currentRow] = text;
-            this.sign.setTextOnRow(this.currentRow, new LiteralText(text));
-        }, SelectionManager.makeClipboardGetter(this.client), SelectionManager.makeClipboardSetter(this.client), (text) -> {
-            return this.client.textRenderer.getWidth(text) <= 90;
+        this.signField = new TextInputUtil(() -> {
+            return this.messages[this.line];
+        }, (p_238850_1_) -> {
+            this.messages[this.line] = p_238850_1_;
+            this.sign.setMessage(this.line, new StringTextComponent(p_238850_1_));
+        }, TextInputUtil.createClipboardGetter(this.minecraft), TextInputUtil.createClipboardSetter(this.minecraft), (p_238848_1_) -> {
+            return this.minecraft.font.width(p_238848_1_) <= 90;
         });
-        BlockState blockState = this.sign.getCachedState();
-        this.signType = GravestoneBlockEntityRenderer.getSignType(blockState.getBlock());
-        this.model = GravestoneBlockEntityRenderer.createSignModel(this.client.getEntityRenderDispatcher(), this.signType);
     }
 
     public void removed() {
-        this.client.keyboard.setRepeatEvents(false);
-        ClientPlayNetworkHandler clientPlayNetworkHandler = this.client.getNetworkHandler();
-        if (clientPlayNetworkHandler != null) {
-            clientPlayNetworkHandler.sendPacket(new UpdateSignC2SPacket(this.sign.getPos(), this.text[0], this.text[1], this.text[2], this.text[3]));
+        this.minecraft.keyboardHandler.setSendRepeatsToGui(false);
+        ClientPlayNetHandler clientplaynethandler = this.minecraft.getConnection();
+        if (clientplaynethandler != null) {
+            clientplaynethandler.send(new CUpdateSignPacket(this.sign.getBlockPos(), this.messages[0], this.messages[1], this.messages[2], this.messages[3]));
         }
 
         this.sign.setEditable(true);
     }
 
     public void tick() {
-        ++this.ticksSinceOpened;
-        if (!this.sign.getType().supports(this.sign.getCachedState().getBlock())) {
-            this.finishEditing();
+        ++this.frame;
+        if (!this.sign.getType().isValid(this.sign.getBlockState().getBlock())) {
+            this.onDone();
         }
 
     }
 
-    private void finishEditing() {
-        this.sign.markDirty();
-        this.client.openScreen((Screen) null);
+    private void onDone() {
+        this.sign.setChanged();
+        this.minecraft.setScreen((Screen)null);
     }
 
-    public boolean charTyped(char chr, int modifiers) {
-        this.selectionManager.insert(chr);
+    public boolean charTyped(char p_231042_1_, int p_231042_2_) {
+        this.signField.charTyped(p_231042_1_);
         return true;
     }
 
     public void onClose() {
-        this.finishEditing();
+        this.onDone();
     }
 
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == 265) {
-            this.currentRow = this.currentRow - 1 & 3;
-            this.selectionManager.putCursorAtEnd();
+    public boolean keyPressed(int p_231046_1_, int p_231046_2_, int p_231046_3_) {
+        if (p_231046_1_ == 265) {
+            this.line = this.line - 1 & 3;
+            this.signField.setCursorToEnd();
             return true;
-        } else if (keyCode != 264 && keyCode != 257 && keyCode != 335) {
-            return this.selectionManager.handleSpecialKey(keyCode) ? true : super.keyPressed(keyCode, scanCode, modifiers);
+        } else if (p_231046_1_ != 264 && p_231046_1_ != 257 && p_231046_1_ != 335) {
+            return this.signField.keyPressed(p_231046_1_) ? true : super.keyPressed(p_231046_1_, p_231046_2_, p_231046_3_);
         } else {
-            this.currentRow = this.currentRow + 1 & 3;
-            this.selectionManager.putCursorAtEnd();
+            this.line = this.line + 1 & 3;
+            this.signField.setCursorToEnd();
             return true;
         }
     }
 
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        DiffuseLighting.disableGuiDepthLighting();
-        this.renderBackground(matrices);
-        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 40, 16777215);
-        matrices.push();
-        matrices.translate((double) (this.width / 2), 0.0D, 50.0D);
+    public void render(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
+        RenderHelper.setupForFlatItems();
+        this.renderBackground(p_230430_1_);
+        drawCenteredString(p_230430_1_, this.font, this.title, this.width / 2, 40, 16777215);
+        p_230430_1_.pushPose();
+        p_230430_1_.translate((double)(this.width / 2), 0.0D, 50.0D);
         float f = 93.75F;
-        matrices.scale(93.75F, -93.75F, 93.75F);
-        matrices.translate(0.0D, -1.3125D, 0.0D);
-        BlockState blockState = this.sign.getCachedState();
-        boolean bl = blockState.getBlock() instanceof SignBlock;
-        if (!bl) {
-            matrices.translate(0.0D, -0.3125D, 0.0D);
+        p_230430_1_.scale(93.75F, -93.75F, 93.75F);
+        p_230430_1_.translate(0.0D, -1.3125D, 0.0D);
+        BlockState blockstate = this.sign.getBlockState();
+        boolean flag = blockstate.getBlock() instanceof StandingSignBlock;
+        if (!flag) {
+            p_230430_1_.translate(0.0D, -0.3125D, 0.0D);
         }
 
-        boolean bl2 = this.ticksSinceOpened / 6 % 2 == 0;
-        float g = 0.6666667F;
-        matrices.push();
-        matrices.scale(0.6666667F, -0.6666667F, -0.6666667F);
-        VertexConsumerProvider.Immediate immediate = this.client.getBufferBuilders().getEntityVertexConsumers();
-        SpriteIdentifier spriteIdentifier = new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, ((GravestoneBlock) sign.getCachedState().getBlock()).getTexture());
-        //SpriteIdentifier spriteIdentifier = TexturedRenderLayers.getSignTextureId(SignType.WARPED);
-        SignBlockEntityRenderer.SignModel var10002 = this.model;
-        Objects.requireNonNull(var10002);
-        VertexConsumer vertexConsumer = spriteIdentifier.getVertexConsumer(immediate, var10002::getLayer);
+        boolean flag1 = this.frame / 6 % 2 == 0;
+        float f1 = 0.6666667F;
+        p_230430_1_.pushPose();
+        p_230430_1_.scale(0.6666667F, -0.6666667F, -0.6666667F);
+        IRenderTypeBuffer.Impl irendertypebuffer$impl = this.minecraft.renderBuffers().bufferSource();
+        //RenderMaterial rendermaterial = SignTileEntityRenderer.getMaterial(blockstate.getBlock());
+        RenderMaterial rendermaterial = new RenderMaterial(Atlases.SIGN_SHEET, ((GravestoneBlock) sign.getBlockState().getBlock()).getTexture());
+        IVertexBuilder ivertexbuilder = rendermaterial.buffer(irendertypebuffer$impl, this.model::renderType);
+        this.model.sign.render(p_230430_1_, ivertexbuilder, 15728880, OverlayTexture.NO_OVERLAY);
 
-        this.model.foot.visible = false;
-        this.model.field.render(matrices, vertexConsumer, 15728880, OverlayTexture.DEFAULT_UV);
-        matrices.pop();
-        float h = 0.010416667F;
-        matrices.translate(0.0D, 0.3333333432674408D, 0.046666666865348816D);
-        matrices.scale(0.010416667F, -0.010416667F, 0.010416667F);
-        int i = this.sign.getTextColor().getSignColor();
-        int j = this.selectionManager.getSelectionStart();
-        int k = this.selectionManager.getSelectionEnd();
-        int l = this.currentRow * 10 - this.text.length * 5;
-        Matrix4f matrix4f = matrices.peek().getModel();
+        p_230430_1_.popPose();
+        float f2 = 0.010416667F;
+        p_230430_1_.translate(0.0D, (double)0.33333334F, (double)0.046666667F);
+        p_230430_1_.scale(0.010416667F, -0.010416667F, 0.010416667F);
+        int i = this.sign.getColor().getTextColor();
+        int j = this.signField.getCursorPos();
+        int k = this.signField.getSelectionPos();
+        int l = this.line * 10 - this.messages.length * 5;
+        Matrix4f matrix4f = p_230430_1_.last().pose();
 
-        int m;
-        String string2;
-        int s;
-        int t;
-        for (m = 0; m < this.text.length; ++m) {
-            string2 = this.text[m];
-            if (string2 != null) {
-                if (this.textRenderer.isRightToLeft()) {
-                    string2 = this.textRenderer.mirror(string2);
+        for(int i1 = 0; i1 < this.messages.length; ++i1) {
+            String s = this.messages[i1];
+            if (s != null) {
+                if (this.font.isBidirectional()) {
+                    s = this.font.bidirectionalShaping(s);
                 }
 
-                float n = (float) (-this.client.textRenderer.getWidth(string2) / 2);
-                this.client.textRenderer.draw(string2, n, (float) (m * 10 - this.text.length * 5), i, false, matrix4f, immediate, false, 0, 15728880, false);
-                if (m == this.currentRow && j >= 0 && bl2) {
-                    s = this.client.textRenderer.getWidth(string2.substring(0, Math.max(Math.min(j, string2.length()), 0)));
-                    t = s - this.client.textRenderer.getWidth(string2) / 2;
-                    if (j >= string2.length()) {
-                        this.client.textRenderer.draw("_", (float) t, (float) l, i, false, matrix4f, immediate, false, 0, 15728880, false);
+                float f3 = (float)(-this.minecraft.font.width(s) / 2);
+                this.minecraft.font.drawInBatch(s, f3, (float)(i1 * 10 - this.messages.length * 5), i, false, matrix4f, irendertypebuffer$impl, false, 0, 15728880, false);
+                if (i1 == this.line && j >= 0 && flag1) {
+                    int j1 = this.minecraft.font.width(s.substring(0, Math.max(Math.min(j, s.length()), 0)));
+                    int k1 = j1 - this.minecraft.font.width(s) / 2;
+                    if (j >= s.length()) {
+                        this.minecraft.font.drawInBatch("_", (float)k1, (float)l, i, false, matrix4f, irendertypebuffer$impl, false, 0, 15728880, false);
                     }
                 }
             }
         }
 
-        immediate.draw();
+        irendertypebuffer$impl.endBatch();
 
-        for (m = 0; m < this.text.length; ++m) {
-            string2 = this.text[m];
-            if (string2 != null && m == this.currentRow && j >= 0) {
-                int r = this.client.textRenderer.getWidth(string2.substring(0, Math.max(Math.min(j, string2.length()), 0)));
-                s = r - this.client.textRenderer.getWidth(string2) / 2;
-                if (bl2 && j < string2.length()) {
-                    int var31 = l - 1;
-                    int var10003 = s + 1;
-                    Objects.requireNonNull(this.client.textRenderer);
-                    fill(matrices, s, var31, var10003, l + 9, -16777216 | i);
+        for(int i3 = 0; i3 < this.messages.length; ++i3) {
+            String s1 = this.messages[i3];
+            if (s1 != null && i3 == this.line && j >= 0) {
+                int j3 = this.minecraft.font.width(s1.substring(0, Math.max(Math.min(j, s1.length()), 0)));
+                int k3 = j3 - this.minecraft.font.width(s1) / 2;
+                if (flag1 && j < s1.length()) {
+                    fill(p_230430_1_, k3, l - 1, k3 + 1, l + 9, -16777216 | i);
                 }
 
                 if (k != j) {
-                    t = Math.min(j, k);
-                    int u = Math.max(j, k);
-                    int v = this.client.textRenderer.getWidth(string2.substring(0, t)) - this.client.textRenderer.getWidth(string2) / 2;
-                    int w = this.client.textRenderer.getWidth(string2.substring(0, u)) - this.client.textRenderer.getWidth(string2) / 2;
-                    int x = Math.min(v, w);
-                    int y = Math.max(v, w);
+                    int l3 = Math.min(j, k);
+                    int l1 = Math.max(j, k);
+                    int i2 = this.minecraft.font.width(s1.substring(0, l3)) - this.minecraft.font.width(s1) / 2;
+                    int j2 = this.minecraft.font.width(s1.substring(0, l1)) - this.minecraft.font.width(s1) / 2;
+                    int k2 = Math.min(i2, j2);
+                    int l2 = Math.max(i2, j2);
                     Tessellator tessellator = Tessellator.getInstance();
-                    BufferBuilder bufferBuilder = tessellator.getBuffer();
+                    BufferBuilder bufferbuilder = tessellator.getBuilder();
                     RenderSystem.disableTexture();
                     RenderSystem.enableColorLogicOp();
                     RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
-                    bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
-                    float var32 = (float) x;
-                    Objects.requireNonNull(this.client.textRenderer);
-                    bufferBuilder.vertex(matrix4f, var32, (float) (l + 9), 0.0F).color(0, 0, 255, 255).next();
-                    var32 = (float) y;
-                    Objects.requireNonNull(this.client.textRenderer);
-                    bufferBuilder.vertex(matrix4f, var32, (float) (l + 9), 0.0F).color(0, 0, 255, 255).next();
-                    bufferBuilder.vertex(matrix4f, (float) y, (float) l, 0.0F).color(0, 0, 255, 255).next();
-                    bufferBuilder.vertex(matrix4f, (float) x, (float) l, 0.0F).color(0, 0, 255, 255).next();
-                    bufferBuilder.end();
-                    BufferRenderer.draw(bufferBuilder);
+                    bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+                    bufferbuilder.vertex(matrix4f, (float)k2, (float)(l + 9), 0.0F).color(0, 0, 255, 255).endVertex();
+                    bufferbuilder.vertex(matrix4f, (float)l2, (float)(l + 9), 0.0F).color(0, 0, 255, 255).endVertex();
+                    bufferbuilder.vertex(matrix4f, (float)l2, (float)l, 0.0F).color(0, 0, 255, 255).endVertex();
+                    bufferbuilder.vertex(matrix4f, (float)k2, (float)l, 0.0F).color(0, 0, 255, 255).endVertex();
+                    bufferbuilder.end();
+                    WorldVertexBufferUploader.end(bufferbuilder);
                     RenderSystem.disableColorLogicOp();
                     RenderSystem.enableTexture();
                 }
             }
         }
 
-        matrices.pop();
-        DiffuseLighting.enableGuiDepthLighting();
-        super.render(matrices, mouseX, mouseY, delta);
+        p_230430_1_.popPose();
+        RenderHelper.setupFor3DItems();
+        super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
     }
+
 }

@@ -6,7 +6,7 @@ import net.minecraft.block.PaneBlock;
 public class DarkIronBars extends PaneBlock {
 
     // helper class to access protected PaneBlock class
-    public DarkIronBars(Settings settings) {
+    public DarkIronBars(Properties settings) {
         super(settings);
     }
 

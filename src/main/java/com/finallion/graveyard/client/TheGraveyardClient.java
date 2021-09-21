@@ -5,71 +5,75 @@ import com.finallion.graveyard.blockentities.render.GravestoneBlockEntityRendere
 import com.finallion.graveyard.entites.renders.SkeletonCreeperRender;
 import com.finallion.graveyard.init.TGBlocks;
 import com.finallion.graveyard.init.TGEntities;
+import com.finallion.graveyard.init.TGItems;
 import com.finallion.graveyard.init.TGParticles;
 import com.finallion.graveyard.utils.SpriteIdentifierRegistry;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.color.block.BlockColorProvider;
-import net.minecraft.client.color.item.ItemColorProvider;
-import net.minecraft.client.color.world.BiomeColors;
-import net.minecraft.client.color.world.GrassColors;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.TexturedRenderLayers;
-import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockRenderView;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.client.renderer.model.RenderMaterial;
+import net.minecraft.item.BlockItem;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.GrassColors;
+import net.minecraft.world.biome.BiomeColors;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.Mod;
 
 
-@Environment(EnvType.CLIENT)
-public class TheGraveyardClient implements ClientModInitializer {
-    private static final RenderLayer CUTOUT_MIPPED = RenderLayer.getCutoutMipped();
 
-    @Override
-    public void onInitializeClient() {
+@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class TheGraveyardClient {
+    private static final RenderType CUTOUT_MIPPED = RenderType.cutoutMipped();
+
+
+    @SubscribeEvent
+    public static void onBlockColorsInit(ColorHandlerEvent.Item event) {
+        final BlockColors blockColors = event.getBlockColors();
+
+        blockColors.register((unknown, lightReader, pos, unknown2) -> lightReader != null && pos != null ? BiomeColors.getAverageGrassColor(lightReader, pos) : GrassColors.get(0.5D, 1.0D), TGBlocks.TG_GRASS_BLOCK);
+    }
+
+    @SubscribeEvent
+    public static void onItemColorsInit(ColorHandlerEvent.Item event) {
+        final BlockColors blockColors = event.getBlockColors();
+        final ItemColors itemColors = event.getItemColors();
+
+        IItemColor itemBlockColourHandler = (stack, tintIndex) -> {
+            BlockState state = ((BlockItem) stack.getItem()).getBlock().defaultBlockState();
+            return blockColors.getColor(state, null, null, tintIndex);
+        };
+
+
+        itemColors.register(itemBlockColourHandler, TGBlocks.TG_GRASS_BLOCK);
+    }
+
+    @SubscribeEvent
+    public static void clientInit() {
 
         TGParticles.init();
 
-
-
-        BlockRenderLayerMap.INSTANCE.putBlocks(CUTOUT_MIPPED, TGBlocks.DARK_IRON_BARS, TGBlocks.TG_GRASS_BLOCK);
-
+        RenderTypeLookup.setRenderLayer(TGBlocks.DARK_IRON_BARS, CUTOUT_MIPPED);
+        RenderTypeLookup.setRenderLayer(TGBlocks.TG_GRASS_BLOCK, CUTOUT_MIPPED);
 
         // texture of the edit screen of the gravestone
-        Identifier texture = TGBlocks.GRAVESTONE_TEXTURE;
-        SpriteIdentifierRegistry.INSTANCE.addIdentifier(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, texture));
+        ResourceLocation texture = TGBlocks.GRAVESTONE_TEXTURE;
+        SpriteIdentifierRegistry.INSTANCE.addRenderMaterial(new RenderMaterial(Atlases.SIGN_SHEET, texture));
 
-        BlockEntityRendererRegistry.INSTANCE.register(TGBlocks.GRAVESTONE_BLOCK_ENTITY, GravestoneBlockEntityRenderer::new);
-
-
-
-        // coloring of tg_grass_block depending on biome
-        ColorProviderRegistry.BLOCK.register(new BlockColorProvider() {
-            @Override
-            public int getColor(BlockState state, @Nullable BlockRenderView world, @Nullable BlockPos pos, int tintIndex) {
-                return world != null && pos != null ? BiomeColors.getGrassColor(world, pos) : GrassColors.getColor(0.5D, 1.0D);
-            }
-        }, TGBlocks.TG_GRASS_BLOCK);
-
-        ColorProviderRegistry.ITEM.register(new ItemColorProvider() {
-            @Override
-            public int getColor(ItemStack stack, int tintIndex) {
-                return GrassColors.getColor(0.5D, 1.0D);
-            }
-        }, TGBlocks.TG_GRASS_BLOCK);
-
-
+        ClientRegistry.bindTileEntityRenderer(TGBlocks.GRAVESTONE_BLOCK_ENTITY.get(), GravestoneBlockEntityRenderer::new);
 
         // entities
-        EntityRendererRegistry.INSTANCE.register(TGEntities.SKELETON_CREEPER, (manager, context) -> new SkeletonCreeperRender(manager));
+        RenderingRegistry.registerEntityRenderingHandler(TGEntities.SKELETON_CREEPER.get(), SkeletonCreeperRender::new);
 
     }
+
+
+
 }

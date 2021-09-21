@@ -5,225 +5,146 @@ import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
 import com.finallion.graveyard.blockentities.UrnBlockEntity;
 import com.finallion.graveyard.blocks.*;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.WallBlock;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.util.Identifier;
+import net.minecraft.block.*;
+import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.function.Supplier;
+
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TGBlocks {
 
+    public static final ResourceLocation GRAVESTONE_TEXTURE = new ResourceLocation("minecraft", "block/polished_basalt_side");
+    private static final DeferredRegister<Block> TG_BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TheGraveyard.MOD_ID);
 
 
     // blocks backported from 1.17
-    public static final Block TG_DEEPSLATE = new TGDeepslateBlock(FabricBlockSettings.copyOf(Blocks.STONE));
-    public static final Block TG_ROOTED_DIRT = new Block(FabricBlockSettings.copyOf(Blocks.DIRT));
-    public static final Block TG_TUFF = new Block(FabricBlockSettings.copyOf(Blocks.NETHERRACK));
-    public static final Block TG_MOSS_BLOCK = new TGMossBlock(FabricBlockSettings.copyOf(Blocks.GRASS_BLOCK));
+    public static final RegistryObject<Block> TG_DEEPSLATE = TG_BLOCKS.register("tg_deepslate", () -> new TGDeepslateBlock(AbstractBlock.Properties.copy(Blocks.STONE)));
+    public static final RegistryObject<Block> TG_ROOTED_DIRT = TG_BLOCKS.register("tg_rooted_dirt", () -> new Block(AbstractBlock.Properties.copy(Blocks.DIRT)));
+    public static final RegistryObject<Block> TG_TUFF = TG_BLOCKS.register("tg_tuff", () -> new Block(AbstractBlock.Properties.copy(Blocks.NETHERRACK)));
+    public static final RegistryObject<Block> TG_MOSS_BLOCK = TG_BLOCKS.register("tg_moss_block", () -> new TGMossBlock(AbstractBlock.Properties.copy(Blocks.GRASS_BLOCK)));
 
-    public static final Block TG_COBBLED_DEEPSLATE = new Block(FabricBlockSettings.copyOf(Blocks.COBBLESTONE));
-    public static final Block TG_COBBLED_DEEPSLATE_STAIRS = new TGStairsBlock(FabricBlockSettings.copyOf(Blocks.STONE_STAIRS), TG_COBBLED_DEEPSLATE.getDefaultState());
-    public static final Block TG_COBBLED_DEEPSLATE_SLAB = new SlabBlock(FabricBlockSettings.copyOf(Blocks.STONE_SLAB));
-    public static final Block TG_COBBLED_DEEPSLATE_WALL = new WallBlock(FabricBlockSettings.copyOf(Blocks.COBBLESTONE));
+    public static final RegistryObject<Block> TG_COBBLED_DEEPSLATE = TG_BLOCKS.register("tg_cobbled_deepslate", () -> new Block(AbstractBlock.Properties.copy(Blocks.COBBLESTONE)));
+    public static final RegistryObject<Block> TG_COBBLED_DEEPSLATE_STAIRS = TG_BLOCKS.register("tg_cobbled_deepslate_stairs", () -> new TGStairsBlock(AbstractBlock.Properties.copy(Blocks.STONE_STAIRS), TG_COBBLED_DEEPSLATE.get().defaultBlockState()));
+    public static final RegistryObject<Block> TG_COBBLED_DEEPSLATE_SLAB = TG_BLOCKS.register("tg_cobbled_deepslate_slab", () -> new SlabBlock(AbstractBlock.Properties.copy(Blocks.STONE_SLAB)));
+    public static final RegistryObject<Block> TG_COBBLED_DEEPSLATE_WALL = TG_BLOCKS.register("tg_cobbled_deepslate_wall", () -> new WallBlock(AbstractBlock.Properties.copy(Blocks.COBBLESTONE)));
 
-    public static final Block TG_POLISHED_DEEPSLATE = new Block(FabricBlockSettings.copyOf(Blocks.STONE));
-    public static final Block TG_POLISHED_DEEPSLATE_STAIRS = new TGStairsBlock(FabricBlockSettings.copyOf(Blocks.STONE_STAIRS), TG_POLISHED_DEEPSLATE.getDefaultState());
-    public static final Block TG_POLISHED_DEEPSLATE_SLAB = new SlabBlock(FabricBlockSettings.copyOf(Blocks.STONE_SLAB));
-    public static final Block TG_POLISHED_DEEPSLATE_WALL = new WallBlock(FabricBlockSettings.copyOf(Blocks.COBBLESTONE));
+    public static final RegistryObject<Block> TG_POLISHED_DEEPSLATE = TG_BLOCKS.register("tg_polished_deepslate", () -> new Block(AbstractBlock.Properties.copy(Blocks.STONE)));
+    public static final RegistryObject<Block> TG_POLISHED_DEEPSLATE_STAIRS = TG_BLOCKS.register("tg_polished_deepslate_stairs", () -> new TGStairsBlock(AbstractBlock.Properties.copy(Blocks.STONE_STAIRS), TG_POLISHED_DEEPSLATE.get().defaultBlockState()));
+    public static final RegistryObject<Block> TG_POLISHED_DEEPSLATE_SLAB = TG_BLOCKS.register("tg_polished_deepslate_slab", () -> new SlabBlock(AbstractBlock.Properties.copy(Blocks.STONE_SLAB)));
+    public static final RegistryObject<Block> TG_POLISHED_DEEPSLATE_WALL = TG_BLOCKS.register("tg_polished_deepslate_wall", () -> new WallBlock(AbstractBlock.Properties.copy(Blocks.COBBLESTONE)));
 
-    public static final Block TG_DEEPSLATE_BRICKS = new Block(FabricBlockSettings.copyOf(Blocks.STONE));
-    public static final Block TG_DEEPSLATE_BRICK_STAIRS = new TGStairsBlock(FabricBlockSettings.copyOf(Blocks.STONE_STAIRS), TG_DEEPSLATE_BRICKS.getDefaultState());
-    public static final Block TG_DEEPSLATE_BRICK_SLAB = new SlabBlock(FabricBlockSettings.copyOf(Blocks.STONE_SLAB));
-    public static final Block TG_DEEPSLATE_BRICK_WALL = new WallBlock(FabricBlockSettings.copyOf(Blocks.COBBLESTONE));
-    public static final Block TG_CRACKED_DEEPSLATE_BRICKS = new Block(FabricBlockSettings.copyOf(Blocks.STONE_BRICKS));
+    public static final RegistryObject<Block> TG_DEEPSLATE_BRICKS = TG_BLOCKS.register("tg_deepslate_bricks", () -> new Block(AbstractBlock.Properties.copy(Blocks.STONE)));
+    public static final RegistryObject<Block> TG_DEEPSLATE_BRICK_STAIRS = TG_BLOCKS.register("tg_deepslate_brick_stairs", () -> new TGStairsBlock(AbstractBlock.Properties.copy(Blocks.STONE_STAIRS), TG_DEEPSLATE_BRICKS.get().defaultBlockState()));
+    public static final RegistryObject<Block> TG_DEEPSLATE_BRICK_SLAB = TG_BLOCKS.register("tg_deepslate_brick_slab", () -> new SlabBlock(AbstractBlock.Properties.copy(Blocks.STONE_SLAB)));
+    public static final RegistryObject<Block> TG_DEEPSLATE_BRICK_WALL = TG_BLOCKS.register("tg_deepslate_brick_wall", () -> new WallBlock(AbstractBlock.Properties.copy(Blocks.COBBLESTONE)));
+    public static final RegistryObject<Block> TG_CRACKED_DEEPSLATE_BRICKS = TG_BLOCKS.register("tg_cracked_deepslate_bricks", () -> new Block(AbstractBlock.Properties.copy(Blocks.STONE_BRICKS)));
 
-    public static final Block TG_DEEPSLATE_TILES = new Block(FabricBlockSettings.copyOf(Blocks.STONE));
-    public static final Block TG_DEEPSLATE_TILE_STAIRS = new TGStairsBlock(FabricBlockSettings.copyOf(Blocks.STONE_STAIRS), TG_DEEPSLATE_TILES.getDefaultState());
-    public static final Block TG_DEEPSLATE_TILE_SLAB = new SlabBlock(FabricBlockSettings.copyOf(Blocks.STONE_SLAB));
-    public static final Block TG_DEEPSLATE_TILE_WALL = new WallBlock(FabricBlockSettings.copyOf(Blocks.COBBLESTONE));
-    public static final Block TG_CRACKED_DEEPSLATE_TILES = new Block(FabricBlockSettings.copyOf(Blocks.STONE_BRICKS));
+    public static final RegistryObject<Block> TG_DEEPSLATE_TILES = TG_BLOCKS.register("tg_deepslate_tiles", () -> new Block(AbstractBlock.Properties.copy(Blocks.STONE)));
+    public static final RegistryObject<Block> TG_DEEPSLATE_TILE_STAIRS = TG_BLOCKS.register("tg_deepslate_tile_stairs", () -> new TGStairsBlock(AbstractBlock.Properties.copy(Blocks.STONE_STAIRS), TG_DEEPSLATE_TILES.get().defaultBlockState()));
+    public static final RegistryObject<Block> TG_DEEPSLATE_TILE_SLAB = TG_BLOCKS.register("tg_deepslate_tile_slab", () -> new SlabBlock(AbstractBlock.Properties.copy(Blocks.STONE_SLAB)));
+    public static final RegistryObject<Block> TG_DEEPSLATE_TILE_WALL = TG_BLOCKS.register("tg_deepslate_tile_wall", () -> new WallBlock(AbstractBlock.Properties.copy(Blocks.COBBLESTONE)));
+    public static final RegistryObject<Block> TG_CRACKED_DEEPSLATE_TILES = TG_BLOCKS.register("tg_cracked_deepslate_tiles", () -> new Block(AbstractBlock.Properties.copy(Blocks.STONE_BRICKS)));
 
-    public static final Block TG_CHISELED_DEEPSLATE = new Block(FabricBlockSettings.copyOf(Blocks.STONE_BRICKS));
+    public static final RegistryObject<Block> TG_CHISELED_DEEPSLATE = TG_BLOCKS.register("tg_chiseled_deepslate", () -> new Block(AbstractBlock.Properties.copy(Blocks.STONE_BRICKS)));
 
 
     // helper blocks that get don't get replaced on world generation, generate ores or generate trees on
-    public static final Block TG_GRASS_BLOCK = new TGGrassBlock(FabricBlockSettings.copyOf(Blocks.GRASS_BLOCK).drops(Blocks.GRASS_BLOCK.getLootTableId()));
-    public static final Block TG_DIRT = new TGStoneBlock(() -> Blocks.DIRT, FabricBlockSettings.copyOf(Blocks.DIRT).drops(Blocks.DIRT.getLootTableId()));
-    public static final Block TG_COARSE_DIRT = new TGStoneBlock(() -> Blocks.COARSE_DIRT, FabricBlockSettings.copyOf(Blocks.COARSE_DIRT).drops(Blocks.COARSE_DIRT.getLootTableId()));
-    public static final Block TG_ANDESITE = new TGStoneBlock(() -> Blocks.ANDESITE, FabricBlockSettings.copyOf(Blocks.ANDESITE).drops(Blocks.ANDESITE.getLootTableId()));
-    public static final Block TG_GRANITE = new TGStoneBlock(() -> Blocks.GRANITE, FabricBlockSettings.copyOf(Blocks.GRANITE).drops(Blocks.GRANITE.getLootTableId()));
-    public static final Block TG_DIORITE = new TGStoneBlock(() -> Blocks.DIORITE, FabricBlockSettings.copyOf(Blocks.DIORITE).drops(Blocks.DIORITE.getLootTableId()));
-    public static final Block TG_STONE = new TGStoneBlock(() -> Blocks.STONE, FabricBlockSettings.copyOf(Blocks.STONE).drops(Blocks.STONE.getLootTableId()));
-    public static final Block TG_PODZOL = new TGStoneBlock(() -> Blocks.PODZOL, FabricBlockSettings.copyOf(Blocks.PODZOL).drops(Blocks.PODZOL.getLootTableId()));
+    public static final RegistryObject<Block> TG_GRASS_BLOCK = TG_BLOCKS.register("tg_grass_block", () -> new TGGrassBlock(AbstractBlock.Properties.copy(Blocks.GRASS_BLOCK).lootFrom(() -> Blocks.GRASS_BLOCK)));
+    public static final RegistryObject<Block> TG_DIRT = TG_BLOCKS.register("tg_dirt", () -> new TGStoneBlock(() -> Blocks.DIRT, AbstractBlock.Properties.copy(Blocks.DIRT).lootFrom(() -> Blocks.DIRT)));
+    public static final RegistryObject<Block> TG_COARSE_DIRT = TG_BLOCKS.register("tg_coarse_dirt", () -> new TGStoneBlock(() -> Blocks.COARSE_DIRT, AbstractBlock.Properties.copy(Blocks.COARSE_DIRT).lootFrom(() -> Blocks.COARSE_DIRT)));
+    public static final RegistryObject<Block> TG_ANDESITE = TG_BLOCKS.register("tg_andesite", () -> new TGStoneBlock(() -> Blocks.ANDESITE, AbstractBlock.Properties.copy(Blocks.ANDESITE).lootFrom(() -> Blocks.ANDESITE)));
+    public static final RegistryObject<Block> TG_GRANITE = TG_BLOCKS.register("tg_granite", () -> new TGStoneBlock(() -> Blocks.GRANITE, AbstractBlock.Properties.copy(Blocks.GRANITE).lootFrom(() -> Blocks.GRANITE)));
+    public static final RegistryObject<Block> TG_DIORITE = TG_BLOCKS.register("tg_diortie", () -> new TGStoneBlock(() -> Blocks.DIORITE, AbstractBlock.Properties.copy(Blocks.DIORITE).lootFrom(() -> Blocks.DIORITE)));
+    public static final RegistryObject<Block> TG_STONE = TG_BLOCKS.register("tg_stone", () -> new TGStoneBlock(() -> Blocks.STONE, AbstractBlock.Properties.copy(Blocks.STONE).lootFrom(() -> Blocks.STONE)));
+    public static final RegistryObject<Block> TG_PODZOL = TG_BLOCKS.register("tg_podzol", () -> new TGStoneBlock(() -> Blocks.PODZOL, AbstractBlock.Properties.copy(Blocks.PODZOL).lootFrom(() -> Blocks.PODZOL)));
 
 
-    public static final Identifier GRAVESTONE_TEXTURE = new Identifier("minecraft", "block/polished_basalt_side");
+    public static final RegistryObject<Block> DARK_IRON_BARS = TG_BLOCKS.register("dark_iron_bars", () -> new DarkIronBars(AbstractBlock.Properties.of(Material.METAL).strength(1.0F).noOcclusion()));
+    public static final RegistryObject<Block> SKULL_WITH_RIB_CAGE = TG_BLOCKS.register("skull_with_rib_cage", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> LEANING_SKELETON = TG_BLOCKS.register("leaning_skeleton", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> SKULL_PILE = TG_BLOCKS.register("skull_pile", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> LYING_SKELETON = TG_BLOCKS.register("lying_skeleton", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> WITHER_SKULL_WITH_RIB_CAGE = TG_BLOCKS.register("wither_skull_with_rib_cage", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> LEANING_WITHER_SKELETON = TG_BLOCKS.register("leaning_wither_skeleton", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> WITHER_SKULL_PILE = TG_BLOCKS.register("wither_skull_pile", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> LYING_WITHER_SKELETON = TG_BLOCKS.register("lying_wither_skeleton", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> CREEPER_SKELETON = TG_BLOCKS.register("creeper_skeleton", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> SKELETON_HAND = TG_BLOCKS.register("skeleton_hand", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> WITHER_SKELETON_HAND = TG_BLOCKS.register("wither_skeleton_hand", () -> new BoneDisplayBlock());
 
-    public static final Block DARK_IRON_BARS = new DarkIronBars(FabricBlockSettings.of(Material.METAL).strength(1.0F).nonOpaque());
-    public static final Block SKULL_WITH_RIB_CAGE = new BoneDisplayBlock();
-    public static final Block LEANING_SKELETON = new BoneDisplayBlock();
-    public static final Block SKULL_PILE = new BoneDisplayBlock();
-    public static final Block LYING_SKELETON = new BoneDisplayBlock();
-    public static final Block WITHER_SKULL_WITH_RIB_CAGE = new BoneDisplayBlock();
-    public static final Block LEANING_WITHER_SKELETON = new BoneDisplayBlock();
-    public static final Block WITHER_SKULL_PILE = new BoneDisplayBlock();
-    public static final Block LYING_WITHER_SKELETON = new BoneDisplayBlock();
-    public static final Block CREEPER_SKELETON = new BoneDisplayBlock();
-    public static final Block SKELETON_HAND = new BoneDisplayBlock();
-    public static final Block WITHER_SKELETON_HAND = new BoneDisplayBlock();
+    public static final RegistryObject<Block> BLACK_URN = TG_BLOCKS.register("black_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> WHITE_URN = TG_BLOCKS.register("white_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> LIGHT_GRAY_URN = TG_BLOCKS.register("light_gray_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> GRAY_URN = TG_BLOCKS.register("gray_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> BROWN_URN = TG_BLOCKS.register("brown_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> BLUE_URN = TG_BLOCKS.register("blue_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> LIGHT_BLUE_URN = TG_BLOCKS.register("light_blue_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> CYAN_URN = TG_BLOCKS.register("cyan_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> PURPLE_URN = TG_BLOCKS.register("purple_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> MAGENTA_URN = TG_BLOCKS.register("magenta_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> PINK_URN = TG_BLOCKS.register("pink_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> ORANGE_URN = TG_BLOCKS.register("orange_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> RED_URN = TG_BLOCKS.register("red_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> YELLOW_URN = TG_BLOCKS.register("yellow_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> GREEN_URN = TG_BLOCKS.register("green_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> LIME_URN = TG_BLOCKS.register("lime_urn", () -> new UrnBlock());
 
-    public static final Block BLACK_URN = new UrnBlock();
-    public static final Block WHITE_URN = new UrnBlock();
-    public static final Block LIGHT_GRAY_URN = new UrnBlock();
-    public static final Block GRAY_URN = new UrnBlock();
-    public static final Block BROWN_URN = new UrnBlock();
-    public static final Block BLUE_URN = new UrnBlock();
-    public static final Block LIGHT_BLUE_URN = new UrnBlock();
-    public static final Block CYAN_URN = new UrnBlock();
-    public static final Block PURPLE_URN = new UrnBlock();
-    public static final Block MAGENTA_URN = new UrnBlock();
-    public static final Block PINK_URN = new UrnBlock();
-    public static final Block ORANGE_URN = new UrnBlock();
-    public static final Block RED_URN = new UrnBlock();
-    public static final Block YELLOW_URN = new UrnBlock();
-    public static final Block GREEN_URN = new UrnBlock();
-    public static final Block LIME_URN = new UrnBlock();
+    public static final RegistryObject<Block> SMALL_BLACK_URN = TG_BLOCKS.register("small_black_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> SMALL_WHITE_URN = TG_BLOCKS.register("small_white_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> SMALL_LIGHT_GRAY_URN = TG_BLOCKS.register("small_light_gray_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> SMALL_GRAY_URN = TG_BLOCKS.register("small_gray_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> SMALL_BROWN_URN = TG_BLOCKS.register("small_brown_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> SMALL_BLUE_URN = TG_BLOCKS.register("small_blue_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> SMALL_LIGHT_BLUE_URN = TG_BLOCKS.register("small_light_blue_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> SMALL_CYAN_URN = TG_BLOCKS.register("small_cyan_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> SMALL_PURPLE_URN = TG_BLOCKS.register("small_purple_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> SMALL_MAGENTA_URN = TG_BLOCKS.register("small_magenta_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> SMALL_PINK_URN = TG_BLOCKS.register("small_pink_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> SMALL_ORANGE_URN = TG_BLOCKS.register("small_orange_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> SMALL_RED_URN = TG_BLOCKS.register("small_red_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> SMALL_YELLOW_URN = TG_BLOCKS.register("small_yellow_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> SMALL_GREEN_URN = TG_BLOCKS.register("small_green_urn", () -> new UrnBlock());
+    public static final RegistryObject<Block> SMALL_LIME_URN = TG_BLOCKS.register("small_lime_urn", () -> new UrnBlock());
 
-    public static final Block SMALL_BLACK_URN = new UrnBlock();
-    public static final Block SMALL_WHITE_URN = new UrnBlock();
-    public static final Block SMALL_LIGHT_GRAY_URN = new UrnBlock();
-    public static final Block SMALL_GRAY_URN = new UrnBlock();
-    public static final Block SMALL_BROWN_URN = new UrnBlock();
-    public static final Block SMALL_BLUE_URN = new UrnBlock();
-    public static final Block SMALL_LIGHT_BLUE_URN = new UrnBlock();
-    public static final Block SMALL_CYAN_URN = new UrnBlock();
-    public static final Block SMALL_PURPLE_URN = new UrnBlock();
-    public static final Block SMALL_MAGENTA_URN = new UrnBlock();
-    public static final Block SMALL_PINK_URN = new UrnBlock();
-    public static final Block SMALL_ORANGE_URN = new UrnBlock();
-    public static final Block SMALL_RED_URN = new UrnBlock();
-    public static final Block SMALL_YELLOW_URN = new UrnBlock();
-    public static final Block SMALL_GREEN_URN = new UrnBlock();
-    public static final Block SMALL_LIME_URN = new UrnBlock();
+    public static final RegistryObject<Block> VASE_BLOCK = TG_BLOCKS.register("vase_block", () -> new VaseBlock());
 
-    public static final Block VASE_BLOCK = new VaseBlock();
-
-    public static final Block GRAVESTONE = new GravestoneBlock(GRAVESTONE_TEXTURE);
+    public static final RegistryObject<Block> GRAVESTONE = TG_BLOCKS.register("gravestone", () -> new GravestoneBlock(GRAVESTONE_TEXTURE));
 
 
-    public static void registerBlocks() {
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_rooted_dirt"), TG_ROOTED_DIRT);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_moss_block"), TG_MOSS_BLOCK);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_deepslate"), TG_DEEPSLATE);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_tuff"), TG_TUFF);
+    public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, TheGraveyard.MOD_ID);
 
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_cobbled_deepslate"), TG_COBBLED_DEEPSLATE);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_cobbled_deepslate_stairs"), TG_COBBLED_DEEPSLATE_STAIRS);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_cobbled_deepslate_slab"), TG_COBBLED_DEEPSLATE_SLAB);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_cobbled_deepslate_wall"), TG_COBBLED_DEEPSLATE_WALL);
+    public static final RegistryObject<TileEntityType<GravestoneBlockEntity>> GRAVESTONE_BLOCK_ENTITY = register("gravestone_block_entity", () -> TileEntityType.Builder.of(GravestoneBlockEntity::new, GRAVESTONE.get()).build(null));
+    public static final RegistryObject<TileEntityType<UrnBlockEntity>> URN_BLOCK_ENTITY = register("urn_block_entity", () -> TileEntityType.Builder.of(UrnBlockEntity::new,
+            BLACK_URN.get(),
+            BLUE_URN.get(),
+            LIGHT_BLUE_URN.get(),
+            CYAN_URN.get(),
+            BROWN_URN.get(),
+            GRAY_URN.get(),
+            LIGHT_GRAY_URN.get(),
+            PURPLE_URN.get(),
+            MAGENTA_URN.get(),
+            PINK_URN.get(),
+            RED_URN.get(),
+            YELLOW_URN.get(),
+            ORANGE_URN.get(),
+            GREEN_URN.get(),
+            LIME_URN.get(),
+            WHITE_URN.get()).build(null));
 
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_polished_deepslate"), TG_POLISHED_DEEPSLATE);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_polished_deepslate_stairs"), TG_POLISHED_DEEPSLATE_STAIRS);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_polished_deepslate_slab"), TG_POLISHED_DEEPSLATE_SLAB);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_polished_deepslate_wall"), TG_POLISHED_DEEPSLATE_WALL);
-
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_deepslate_bricks"), TG_DEEPSLATE_BRICKS);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_deepslate_brick_stairs"), TG_DEEPSLATE_BRICK_STAIRS);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_deepslate_brick_slab"), TG_DEEPSLATE_BRICK_SLAB);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_deepslate_brick_wall"), TG_DEEPSLATE_BRICK_WALL);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_cracked_deepslate_bricks"), TG_CRACKED_DEEPSLATE_BRICKS);
-
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_deepslate_tiles"), TG_DEEPSLATE_TILES);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_deepslate_tile_stairs"), TG_DEEPSLATE_TILE_STAIRS);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_deepslate_tile_slab"), TG_DEEPSLATE_TILE_SLAB);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_deepslate_tile_wall"), TG_DEEPSLATE_TILE_WALL);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_cracked_deepslate_tiles"), TG_CRACKED_DEEPSLATE_TILES);
-
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_chiseled_deepslate"), TG_CHISELED_DEEPSLATE);
-
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_stone"), TG_STONE);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_diorite"), TG_DIORITE);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_granite"), TG_GRANITE);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_andesite"), TG_ANDESITE);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_dirt"), TG_DIRT);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_coarse_dirt"), TG_COARSE_DIRT);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_grass_block"), TG_GRASS_BLOCK);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_podzol"), TG_PODZOL);
-
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "dark_iron_bars"), DARK_IRON_BARS);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "skull_with_rib_cage"), SKULL_WITH_RIB_CAGE);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "leaning_skeleton"), LEANING_SKELETON);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "skull_pile"), SKULL_PILE);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "lying_skeleton"), LYING_SKELETON);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "skeleton_hand"), SKELETON_HAND);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "wither_skull_with_rib_cage"), WITHER_SKULL_WITH_RIB_CAGE);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "leaning_wither_skeleton"), LEANING_WITHER_SKELETON);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "wither_skull_pile"), WITHER_SKULL_PILE);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "lying_wither_skeleton"), LYING_WITHER_SKELETON);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "wither_skeleton_hand"), WITHER_SKELETON_HAND);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "creeper_skeleton"), CREEPER_SKELETON);
-
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "black_urn"), BLACK_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "brown_urn"), BROWN_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "blue_urn"), BLUE_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "light_blue_urn"), LIGHT_BLUE_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "cyan_urn"), CYAN_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "gray_urn"), GRAY_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "light_gray_urn"), LIGHT_GRAY_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "white_urn"), WHITE_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "purple_urn"), PURPLE_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "magenta_urn"), MAGENTA_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "pink_urn"), PINK_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "lime_urn"), LIME_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "green_urn"), GREEN_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "red_urn"), RED_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "orange_urn"), ORANGE_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "yellow_urn"), YELLOW_URN);
-
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_black_urn"), SMALL_BLACK_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_brown_urn"), SMALL_BROWN_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_blue_urn"), SMALL_BLUE_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_light_blue_urn"), SMALL_LIGHT_BLUE_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_cyan_urn"), SMALL_CYAN_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_gray_urn"), SMALL_GRAY_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_light_gray_urn"), SMALL_LIGHT_GRAY_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_white_urn"), SMALL_WHITE_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_purple_urn"), SMALL_PURPLE_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_magenta_urn"), SMALL_MAGENTA_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_pink_urn"), SMALL_PINK_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_lime_urn"), SMALL_LIME_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_green_urn"), SMALL_GREEN_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_red_urn"), SMALL_RED_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_orange_urn"), SMALL_ORANGE_URN);
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "small_yellow_urn"), SMALL_YELLOW_URN);
-
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "vase_block"), VASE_BLOCK);
-
-        Registry.register(Registry.BLOCK, new Identifier(TheGraveyard.MOD_ID, "gravestone"), GRAVESTONE);
-
+    private static <T extends TileEntityType<?>> RegistryObject<T> register(String name, Supplier<T> tileEntity) {
+        return TILE_ENTITIES.register(name, tileEntity);
     }
 
-    public static final BlockEntityType<GravestoneBlockEntity> GRAVESTONE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(TheGraveyard.MOD_ID, "gravestone_block_entity"), BlockEntityType.Builder.create(GravestoneBlockEntity::new, GRAVESTONE).build(null));
-    public static BlockEntityType<UrnBlockEntity> URN_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(TheGraveyard.MOD_ID, "urn_block_entity"), BlockEntityType.Builder.create(UrnBlockEntity::new,
-            BLACK_URN,
-            BLUE_URN,
-            LIGHT_BLUE_URN,
-            CYAN_URN,
-            BROWN_URN,
-            GRAY_URN,
-            LIGHT_GRAY_URN,
-            PURPLE_URN,
-            MAGENTA_URN,
-            PINK_URN,
-            RED_URN,
-            YELLOW_URN,
-            ORANGE_URN,
-            GREEN_URN,
-            LIME_URN,
-            WHITE_URN).build(null));
 
 
 }

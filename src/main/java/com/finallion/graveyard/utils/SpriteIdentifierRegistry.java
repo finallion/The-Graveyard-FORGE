@@ -1,25 +1,31 @@
 package com.finallion.graveyard.utils;
 
-import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.client.renderer.model.RenderMaterial;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+
 public class SpriteIdentifierRegistry {
+
     public static final SpriteIdentifierRegistry INSTANCE = new SpriteIdentifierRegistry();
-    private final List<SpriteIdentifier> identifiers;
+    private static List<RenderMaterial> identifiers = new ArrayList<>();
 
     private SpriteIdentifierRegistry() {
         identifiers = new ArrayList<>();
     }
 
-    public void addIdentifier(SpriteIdentifier sprite) {
-        this.identifiers.add(sprite);
+    private static final List<RenderMaterial> sprites = new ArrayList<>();
+
+    public void addRenderMaterial(RenderMaterial material) {
+        sprites.add(material);
     }
 
-    public Collection<SpriteIdentifier> getIdentifiers() {
-        return Collections.unmodifiableList(identifiers);
+    public Collection<RenderMaterial> getSprites() {
+        return Collections.unmodifiableCollection(sprites);
     }
+
 }

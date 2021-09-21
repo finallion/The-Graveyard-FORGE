@@ -7,7 +7,7 @@ public class TGStairsBlock extends StairsBlock {
 
 
     // helper class to access private constructor
-    public TGStairsBlock(Settings settings, BlockState baseBlock) {
+    public TGStairsBlock(Properties settings, BlockState baseBlock) {
         super(baseBlock, settings);
     }
 
