@@ -1,0 +1,115 @@
+package com.finallion.graveyard.blockentities.render;
+
+import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
+import com.finallion.graveyard.blocks.GravestoneBlock;
+import com.finallion.graveyard.init.TGBlocks;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.block.AbstractSignBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.model.Model;
+import net.minecraft.client.renderer.model.ModelBakery;
+import net.minecraft.client.renderer.texture.NativeImage;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.projectile.TridentEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.SignTileEntity;
+import net.minecraft.util.IReorderingProcessor;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.model.ItemLayerModel;
+import net.minecraftforge.client.model.generators.ItemModelBuilder;
+import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.client.model.generators.ModelBuilder;
+import net.minecraftforge.common.ForgeConfig;
+
+import java.util.List;
+
+
+@OnlyIn(Dist.CLIENT)
+public class GravestoneBlockEntityRenderer extends TileEntityRenderer<GravestoneBlockEntity> {
+    private final ItemRenderer itemRenderer;
+
+    private static ItemStack stack = new ItemStack(TGBlocks.GRAVESTONE.asItem(), 1);
+
+    public GravestoneBlockEntityRenderer(TileEntityRendererDispatcher blockEntityRenderDispatcher) {
+        super(blockEntityRenderDispatcher);
+        this.itemRenderer = p_i50970_2_;
+    }
+
+
+    public void render(GravestoneBlockEntity signBlockEntity, float f, MatrixStack matrixStack, IRenderTypeBuffer vertexConsumerProvider, int i, int j) {
+        BlockState blockState = signBlockEntity.getBlockState();
+        matrixStack.pushPose();
+
+
+        // text render location in world
+        // offset on block
+        matrixStack.translate(0.5D, 0.25D, 0.5D);
+
+        float rotation = -((float)blockState.getValue(GravestoneBlock.FACING));
+        //float h = -((float)((Integer)blockState.get(SignBlock.ROTATION) * 360) / 16.0F);
+        matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
+        matrixStack.pushPose();
+        // size
+        matrixStack.scale(0.6666667F, -0.6666667F, -0.6666667F);
+        matrixStack.popPose();
+        FontRenderer fontrenderer = this.renderer.getFont();
+        matrixStack.translate(0.0D, 0.3333333432674408D, 0.23);
+        matrixStack.scale(0.010416667F, -0.010416667F, 0.010416667F);
+
+        int i = signBlockEntity.getColor().getTextColor();
+        double d0 = 0.4D;
+        int j = (int)((double) NativeImage.getR(i) * 0.4D);
+        int k = (int)((double)NativeImage.getG(i) * 0.4D);
+        int l = (int)((double)NativeImage.getB(i) * 0.4D);
+        int i1 = NativeImage.combine(0, l, k, j);
+        int j1 = 20;
+
+        for(int k1 = 0; k1 < 4; ++k1) {
+            IReorderingProcessor ireorderingprocessor = signBlockEntity.getRenderMessage(k1, (p_243502_1_) -> {
+                List<IReorderingProcessor> list = fontrenderer.split(signBlockEntity, 90);
+                return list.isEmpty() ? IReorderingProcessor.EMPTY : list.get(0);
+            });
+            if (ireorderingprocessor != null) {
+                float f3 = (float)(-fontrenderer.width(ireorderingprocessor) / 2);
+                fontrenderer.drawInBatch(ireorderingprocessor, f3, (float)(k1 * 10 - 20), i1, false, matrixStack.last().pose(), vertexConsumerProvider, false, 0, i);
+            }
+        }
+
+
+        matrixStack.popPose();
+        renderGrave(blockState, f, matrixStack, vertexConsumerProvider, i, j);
+
+    }
+
+    public void renderGrave(BlockState state, float f, MatrixStack matrixStack, IRenderTypeBuffer vertexConsumerProvider, int i, int j) {
+
+        matrixStack.pushPose();
+        matrixStack.translate(0.5, 0.43, 0.5);
+        matrixStack.scale(2.28F, 2.15F, 2.28F);
+
+        float rotation = -((float)state.getValue(GravestoneBlock.FACING));
+        matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
+
+        this.model.renderToBuffer(matrixStack, vertexConsumerProvider, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+
+        //MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GROUND, i, j, matrixStack, vertexConsumerProvider);
+
+        matrixStack.popPose();
+    }
+
+
+}
+
