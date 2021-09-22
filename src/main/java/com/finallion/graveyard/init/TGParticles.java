@@ -1,20 +1,33 @@
 package com.finallion.graveyard.init;
 
+import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.particles.GraveyardFogParticle;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
-import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.particles.BasicParticleType;
+import net.minecraft.particles.ParticleType;
 import net.minecraft.util.registry.Registry;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
+@Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class TGParticles {
 
 
-    public static DefaultParticleType GRAVEYARD_FOG_PARTICLE;
-
-    public static void init() {
-
-        GRAVEYARD_FOG_PARTICLE = Registry.register(Registry.PARTICLE_TYPE, "graveyard:graveyard_fog_particle", FabricParticleTypes.simple(true));
-        ParticleFactoryRegistry.getInstance().register(GRAVEYARD_FOG_PARTICLE, GraveyardFogParticle.FogFactory::new);
+    @SubscribeEvent
+    public static void initParticles(ParticleFactoryRegisterEvent event){
+        Minecraft.getInstance().particleEngine.register(GRAVEYARD_FOG_PARTICLE.get(), GraveyardFogParticle.FogFactory::new);
     }
+
+
+    public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, TheGraveyard.MOD_ID);
+
+    public static final RegistryObject<BasicParticleType> GRAVEYARD_FOG_PARTICLE = PARTICLES.register("graveyard_fog_particle", () -> new BasicParticleType(true));
+
+
 
 }

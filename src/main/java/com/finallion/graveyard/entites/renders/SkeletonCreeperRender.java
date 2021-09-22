@@ -1,47 +1,46 @@
 package com.finallion.graveyard.entites.renders;
 
+import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.entites.renders.features.SkeletonCreeperEyes;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.render.entity.feature.CreeperChargeFeatureRenderer;
-import net.minecraft.client.render.entity.model.CreeperEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.mob.CreeperEntity;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.layers.CreeperChargeLayer;
+import net.minecraft.client.renderer.entity.model.CreeperModel;
+import net.minecraft.entity.monster.CreeperEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@Environment(EnvType.CLIENT)
-public class SkeletonCreeperRender extends MobEntityRenderer<CreeperEntity, CreeperEntityModel<CreeperEntity>> {
 
-    private static final Identifier TEXTURE = new Identifier("graveyard:textures/entity/skeleton_creeper.png");
+@OnlyIn(Dist.CLIENT)
+public class SkeletonCreeperRender extends MobRenderer<CreeperEntity, CreeperModel<CreeperEntity>> {
+    private static final ResourceLocation CREEPER_LOCATION = new ResourceLocation(TheGraveyard.MOD_ID,"textures/entity/skeleton_creeper.png");
 
-    public SkeletonCreeperRender(EntityRenderDispatcher context) {
-        super(context, new CreeperEntityModel(), 0.5F);
-        this.addFeature(new CreeperChargeFeatureRenderer(this));
-        this.addFeature(new SkeletonCreeperEyes(this));
+    public SkeletonCreeperRender(EntityRendererManager p_i46186_1_) {
+        super(p_i46186_1_, new CreeperModel<>(), 0.5F);
+        this.addLayer(new SkeletonCreeperEyes(this));
+        this.addLayer(new CreeperChargeLayer(this));
     }
 
-
-    protected void scale(CreeperEntity creeperEntity, MatrixStack matrixStack, float f) {
-        float g = creeperEntity.getClientFuseTime(f);
-        float h = 1.0F + MathHelper.sin(g * 100.0F) * g * 0.01F;
-        g = MathHelper.clamp(g, 0.0F, 1.0F);
-        g *= g;
-        g *= g;
-        float i = (1.0F + g * 0.4F) * h;
-        float j = (1.0F + g * 0.1F) / h;
-        matrixStack.scale(i, j, i);
+    protected void scale(CreeperEntity p_225620_1_, MatrixStack p_225620_2_, float p_225620_3_) {
+        float f = p_225620_1_.getSwelling(p_225620_3_);
+        float f1 = 1.0F + MathHelper.sin(f * 100.0F) * f * 0.01F;
+        f = MathHelper.clamp(f, 0.0F, 1.0F);
+        f = f * f;
+        f = f * f;
+        float f2 = (1.0F + f * 0.4F) * f1;
+        float f3 = (1.0F + f * 0.1F) / f1;
+        p_225620_2_.scale(f2, f3, f2);
     }
 
-    protected float getAnimationCounter(CreeperEntity creeperEntity, float f) {
-        float g = creeperEntity.getClientFuseTime(f);
-        return (int)(g * 10.0F) % 2 == 0 ? 0.0F : MathHelper.clamp(g, 0.5F, 1.0F);
+    protected float getWhiteOverlayProgress(CreeperEntity p_225625_1_, float p_225625_2_) {
+        float f = p_225625_1_.getSwelling(p_225625_2_);
+        return (int)(f * 10.0F) % 2 == 0 ? 0.0F : MathHelper.clamp(f, 0.5F, 1.0F);
     }
 
-    @Override
-    public Identifier getTexture(CreeperEntity creeperEntity) {
-        return TEXTURE;
+    public ResourceLocation getTextureLocation(CreeperEntity p_110775_1_) {
+        return CREEPER_LOCATION;
     }
 }

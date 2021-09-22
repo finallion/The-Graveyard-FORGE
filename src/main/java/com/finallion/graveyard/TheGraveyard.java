@@ -1,7 +1,7 @@
 package com.finallion.graveyard;
 
 import com.finallion.graveyard.client.TheGraveyardClient;
-import com.finallion.graveyard.config.TheGraveyardConfig;
+import com.finallion.graveyard.config.TheGraveyardConfig2;
 import com.finallion.graveyard.init.*;
 import com.finallion.graveyard.utils.StructureGenerationUtil;
 import com.finallion.graveyard.utils.TGBiomeKeys;
@@ -16,14 +16,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.registries.RegistryManager;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 
+@Mod("graveyard")
 public class TheGraveyard implements ModInitializer {
     public static final String MOD_ID = "graveyard";
-    public static final TheGraveyardConfig config = OmegaConfig.register(TheGraveyardConfig.class);
+    public static final TheGraveyardConfig2 config = OmegaConfig.register(TheGraveyardConfig2.class);
 
+
+
+    public TheGraveyard() {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+
+        final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        TGParticles.PARTICLES.register(modEventBus);
+    }
 
     // halloween
     // swamp
@@ -55,7 +67,6 @@ public class TheGraveyard implements ModInitializer {
 
     private void clientSetup(FMLClientSetupEvent event) {
         TheGraveyardClient.clientInit();
-
     }
 
     @Override

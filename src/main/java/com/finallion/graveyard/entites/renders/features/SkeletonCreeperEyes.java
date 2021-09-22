@@ -1,35 +1,31 @@
 package com.finallion.graveyard.entites.renders.features;
 
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.feature.FeatureRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.CreeperEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.mob.CreeperEntity;
-import net.minecraft.util.Identifier;
-
-@Environment(EnvType.CLIENT)
-public class SkeletonCreeperEyes extends FeatureRenderer<CreeperEntity, CreeperEntityModel<CreeperEntity>> {
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.IEntityRenderer;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.model.CreeperModel;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.entity.monster.CreeperEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 
-    public SkeletonCreeperEyes(FeatureRendererContext<CreeperEntity, CreeperEntityModel<CreeperEntity>> context) {
-        super(context);
+@OnlyIn(Dist.CLIENT)
+public class SkeletonCreeperEyes extends LayerRenderer<CreeperEntity, CreeperModel<CreeperEntity>> {
+
+    public SkeletonCreeperEyes(IEntityRenderer<CreeperEntity, CreeperModel<CreeperEntity>> p_i50925_1_) {
+        super(p_i50925_1_);
     }
 
-    @Override
-    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CreeperEntity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
-        VertexConsumer vertex = vertexConsumers.getBuffer(RenderLayer.getEyes(new Identifier("graveyard:textures/entity/skeleton_creeper_eyes.png")));
+    public void render(MatrixStack p_225628_1_, IRenderTypeBuffer p_225628_2_, int p_225628_3_, CreeperEntity p_225628_4_, float p_225628_5_, float p_225628_6_, float p_225628_7_, float p_225628_8_, float p_225628_9_, float p_225628_10_) {
+        IVertexBuilder vertex = p_225628_2_.getBuffer(RenderType.eyes(new ResourceLocation("graveyard:textures/entity/skeleton_creeper_eyes.png")));
 
-        this.getContextModel().render(matrices, vertex, 15728640, OverlayTexture.DEFAULT_UV, 1F, 1F, 1F, 1F);
+        this.getParentModel().renderToBuffer(p_225628_1_, vertex, 15728640, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
     }
-
-
-
 }
 
