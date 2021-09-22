@@ -1,6 +1,7 @@
 package com.finallion.graveyard.blockentities;
 
 import com.finallion.graveyard.init.TGBlocks;
+import com.finallion.graveyard.init.TGTileEntities;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.block.BlockState;
 import net.minecraft.command.CommandSource;
@@ -36,7 +37,7 @@ public class GravestoneBlockEntity extends TileEntity {
 
 
 	public GravestoneBlockEntity() {
-        super(TGBlocks.GRAVESTONE_BLOCK_ENTITY.get());
+        super(TGTileEntities.GRAVESTONE_BLOCK_ENTITY);
     }
 
 

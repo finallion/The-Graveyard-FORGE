@@ -2,6 +2,7 @@ package com.finallion.graveyard.blockentities;
 
 import com.finallion.graveyard.blocks.UrnBlock;
 import com.finallion.graveyard.init.TGBlocks;
+import com.finallion.graveyard.init.TGTileEntities;
 import net.minecraft.block.BarrelBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -28,7 +29,7 @@ public class UrnBlockEntity extends LockableLootTileEntity {
     private int openCount;
 
     public UrnBlockEntity() {
-        super(TGBlocks.URN_BLOCK_ENTITY.get());
+        super(TGTileEntities.URN_BLOCK_ENTITY);
     }
 
     public CompoundNBT save(CompoundNBT p_189515_1_) {
