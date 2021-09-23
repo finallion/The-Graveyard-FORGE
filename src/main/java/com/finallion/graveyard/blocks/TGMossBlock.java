@@ -31,10 +31,10 @@ public class TGMossBlock extends Block implements IGrowable {
     public void animateTick(BlockState p_180655_1_, World world, BlockPos pos, Random random) {
         super.animateTick(p_180655_1_, world, pos, random);
         // can spawn
-        if (TheGraveyard.config.fogParticle.canGenerate) {
+        if (TheGraveyard.CONFIG.fog_particle.get()) {
             // how much will spawn
-            if (random.nextInt(TheGraveyard.config.fogParticle.fog_particle_spawn) == 0) {
-                world.addParticle(TGParticles.GRAVEYARD_FOG_PARTICLE, (double) pos.getX() + random.nextDouble(), (double) pos.getY() + random.nextDouble(), (double) pos.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
+            if (random.nextInt(TheGraveyard.CONFIG.fog_particle_chance.get()) == 0) {
+                world.addParticle(TGParticles.GRAVEYARD_FOG_PARTICLE.get(), (double) pos.getX() + random.nextDouble(), (double) pos.getY() + random.nextDouble(), (double) pos.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
             }
         }
 

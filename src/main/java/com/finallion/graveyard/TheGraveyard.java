@@ -16,6 +16,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraft.world.gen.feature.template.StructureProcessorList;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -39,12 +40,11 @@ public class TheGraveyard {
 
     public TheGraveyard() {
         CONFIG = ConfigHelper.register(ModConfig.Type.COMMON, TheGraveyardConfig::new, "graveyard-forge-config-v1.toml");
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus forgeBus = MinecraftForge.EVENT_BUS;
 
-
-        modEventBus.addListener(EventPriority.HIGH, this::biomeModification);
+        forgeBus.addListener(EventPriority.HIGH, this::biomeModification);
 
         TGStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
         TGTileEntities.TILE_ENTITIES.register(modEventBus);
@@ -55,10 +55,6 @@ public class TheGraveyard {
         putStructures(event);
     }
 
-
-    private void clientSetup(FMLClientSetupEvent event) {
-        TheGraveyardClient.clientInit();
-    }
 
     public static void putStructures(final BiomeLoadingEvent event) {
         if (event.getCategory().getName().contains("birch")) {

@@ -34,6 +34,7 @@ public class TGStructures {
     public static RegistryObject<Structure<NoFeatureConfig>> LARGE_WALLED_GRAVEYARD = DEFERRED_REGISTRY_STRUCTURE.register("large_walled_graveyard", () -> (new LargeWalledGraveyard(NoFeatureConfig.CODEC)));
 
     public static void register() {
+        TGConfiguredFeatures.registerConfiguredStructures();
         setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD.get(), TheGraveyard.CONFIG.small_walled_graveyard_separation.get(), TheGraveyard.CONFIG.small_walled_graveyard_spacing.get(), TheGraveyard.CONFIG.small_walled_graveyard_salt.get(), true);
         setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD_SAVANNA.get(), TheGraveyard.CONFIG.small_walled_graveyard_savanna_separation.get(), TheGraveyard.CONFIG.small_walled_graveyard_savanna_spacing.get(), TheGraveyard.CONFIG.small_walled_graveyard_savanna_salt.get(), true);
         setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD_DESERT.get(), TheGraveyard.CONFIG.small_walled_graveyard_desert_separation.get(), TheGraveyard.CONFIG.small_walled_graveyard_desert_spacing.get(), TheGraveyard.CONFIG.small_walled_graveyard_desert_salt.get(), true);

@@ -4,15 +4,10 @@
   "package": "com.finallion.graveyard.mixin",
   "refmap": "graveyard.refmap.json",
   "mixins": [
-    "CreeperEntityMixin",
-    "LakeFeatureMixin",
-    "NoiseChunkGeneratorMixin",
-    "ServerPlayNetworkHandlerMixin",
-    "TreeFeatureMixin"
+
   ],
   "client": [
-    "AtlasesMixin",
-    "ClientPlayNetworkHandlerMixin"
+
 
   ],
   "injectors": {

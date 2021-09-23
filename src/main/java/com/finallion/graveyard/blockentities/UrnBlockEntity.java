@@ -29,7 +29,7 @@ public class UrnBlockEntity extends LockableLootTileEntity {
     private int openCount;
 
     public UrnBlockEntity() {
-        super(TGTileEntities.URN_BLOCK_ENTITY);
+        super(TGTileEntities.URN_BLOCK_ENTITY.get());
     }
 
     public CompoundNBT save(CompoundNBT p_189515_1_) {
