@@ -2,101 +2,88 @@ package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.structures.*;
-import net.fabricmc.fabric.api.structure.v1.FabricStructureBuilder;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.FeatureConfig;
-import net.minecraft.world.gen.feature.StructureFeature;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import net.minecraft.util.registry.WorldGenRegistries;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.gen.settings.DimensionStructuresSettings;
+import net.minecraft.world.gen.settings.StructureSeparationSettings;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TGStructures {
 
-    public static List<StructureFeature<DefaultFeatureConfig>> structures = new ArrayList<>();
+    public static final List<Structure> MOD_STRUCTURES = new ArrayList<>();
 
-    public static StructureFeature<DefaultFeatureConfig> SMALL_WALLED_GRAVEYARD = new SmallWalledGraveyard(DefaultFeatureConfig.CODEC);
-    public static StructureFeature<DefaultFeatureConfig> SMALL_WALLED_GRAVEYARD_SAVANNA = new SmallWalledGraveyardSavanna(DefaultFeatureConfig.CODEC);
-    public static StructureFeature<DefaultFeatureConfig> SMALL_WALLED_GRAVEYARD_DESERT = new SmallWalledGraveyardDesert(DefaultFeatureConfig.CODEC);
-    public static StructureFeature<DefaultFeatureConfig> SMALL_GRAVE = new SmallGrave(DefaultFeatureConfig.CODEC);
-    public static StructureFeature<DefaultFeatureConfig> MUSHROOM_GRAVE = new MushroomGrave(DefaultFeatureConfig.CODEC);
-    public static StructureFeature<DefaultFeatureConfig> LARGE_BIRCH_TREE = new LargeBirchTree(DefaultFeatureConfig.CODEC);
-    public static StructureFeature<DefaultFeatureConfig> MEDIUM_WALLED_GRAVEYARD = new MediumWalledGraveyard(DefaultFeatureConfig.CODEC);
-    public static StructureFeature<DefaultFeatureConfig> LARGE_WALLED_GRAVEYARD = new LargeWalledGraveyard(DefaultFeatureConfig.CODEC);
+    public static final DeferredRegister<Structure<?>> DEFERRED_REGISTRY_STRUCTURE = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, TheGraveyard.MOD_ID);
 
-    public static void setupAndRegisterStructureFeatures() {
-        FabricStructureBuilder.create(new Identifier(TheGraveyard.MOD_ID, "small_walled_graveyard"), SMALL_WALLED_GRAVEYARD)
-                .step(GenerationStep.Feature.SURFACE_STRUCTURES)
-                .defaultConfig(TheGraveyard.config.structureChances.small_walled_graveyard_spacing, TheGraveyard.config.structureChances.small_walled_graveyard_separation, TheGraveyard.config.structureChances.small_walled_graveyard_salt)
-                .superflatFeature(SMALL_WALLED_GRAVEYARD.configure(FeatureConfig.DEFAULT))
-                .adjustsSurface()
-                .register();
+    public static RegistryObject<Structure<NoFeatureConfig>> SMALL_WALLED_GRAVEYARD = DEFERRED_REGISTRY_STRUCTURE.register("small_walled_graveyard", () -> (new SmallWalledGraveyard(NoFeatureConfig.CODEC)));
+    public static RegistryObject<Structure<NoFeatureConfig>> SMALL_WALLED_GRAVEYARD_SAVANNA = DEFERRED_REGISTRY_STRUCTURE.register("small_walled_graveyard_savanna", () -> (new SmallWalledGraveyardSavanna(NoFeatureConfig.CODEC)));
+    public static RegistryObject<Structure<NoFeatureConfig>> SMALL_WALLED_GRAVEYARD_DESERT = DEFERRED_REGISTRY_STRUCTURE.register("small_walled_graveyard_desert", () -> (new SmallWalledGraveyardDesert(NoFeatureConfig.CODEC)));
+    public static RegistryObject<Structure<NoFeatureConfig>> SMALL_GRAVE = DEFERRED_REGISTRY_STRUCTURE.register("small_grave", () -> (new SmallGrave(NoFeatureConfig.CODEC)));
+    public static RegistryObject<Structure<NoFeatureConfig>> MUSHROOM_GRAVE = DEFERRED_REGISTRY_STRUCTURE.register("mushroom_grave", () -> (new MushroomGrave(NoFeatureConfig.CODEC)));
+    public static RegistryObject<Structure<NoFeatureConfig>> LARGE_BIRCH_TREE = DEFERRED_REGISTRY_STRUCTURE.register("large_birch_tree", () -> (new LargeBirchTree(NoFeatureConfig.CODEC)));
+    public static RegistryObject<Structure<NoFeatureConfig>> MEDIUM_WALLED_GRAVEYARD = DEFERRED_REGISTRY_STRUCTURE.register("medium_walled_graveyard", () -> (new MediumWalledGraveyard(NoFeatureConfig.CODEC)));
+    public static RegistryObject<Structure<NoFeatureConfig>> LARGE_WALLED_GRAVEYARD = DEFERRED_REGISTRY_STRUCTURE.register("large_walled_graveyard", () -> (new LargeWalledGraveyard(NoFeatureConfig.CODEC)));
 
-        FabricStructureBuilder.create(new Identifier(TheGraveyard.MOD_ID, "small_grave"), SMALL_GRAVE)
-                .step(GenerationStep.Feature.SURFACE_STRUCTURES)
-                .defaultConfig(TheGraveyard.config.structureChances.small_grave_spacing, TheGraveyard.config.structureChances.small_grave_separation, TheGraveyard.config.structureChances.small_grave_salt)
-                .superflatFeature(SMALL_WALLED_GRAVEYARD.configure(FeatureConfig.DEFAULT))
-                .adjustsSurface()
-                .register();
-
-        FabricStructureBuilder.create(new Identifier(TheGraveyard.MOD_ID, "small_walled_graveyard_desert"), SMALL_WALLED_GRAVEYARD_DESERT)
-                .step(GenerationStep.Feature.SURFACE_STRUCTURES)
-                .defaultConfig(TheGraveyard.config.structureChances.small_walled_graveyard_desert_spacing, TheGraveyard.config.structureChances.small_walled_graveyard_desert_separation, TheGraveyard.config.structureChances.small_walled_graveyard_desert_salt)
-                .superflatFeature(SMALL_WALLED_GRAVEYARD.configure(FeatureConfig.DEFAULT))
-                .adjustsSurface()
-                .register();
-
-        FabricStructureBuilder.create(new Identifier(TheGraveyard.MOD_ID, "small_walled_graveyard_savanna"), SMALL_WALLED_GRAVEYARD_SAVANNA)
-                .step(GenerationStep.Feature.SURFACE_STRUCTURES)
-                .defaultConfig(TheGraveyard.config.structureChances.small_walled_graveyard_savanna_spacing, TheGraveyard.config.structureChances.small_walled_graveyard_savanna_separation, TheGraveyard.config.structureChances.small_walled_graveyard_savanna_salt)
-                .superflatFeature(SMALL_WALLED_GRAVEYARD.configure(FeatureConfig.DEFAULT))
-                .adjustsSurface()
-                .register();
-
-        FabricStructureBuilder.create(new Identifier(TheGraveyard.MOD_ID, "large_birch_tree"), LARGE_BIRCH_TREE)
-                .step(GenerationStep.Feature.SURFACE_STRUCTURES)
-                .defaultConfig(TheGraveyard.config.structureChances.large_birch_tree_spacing, TheGraveyard.config.structureChances.large_birch_tree_separation, TheGraveyard.config.structureChances.large_birch_tree_salt)
-                .superflatFeature(SMALL_WALLED_GRAVEYARD.configure(FeatureConfig.DEFAULT))
-                .adjustsSurface()
-                .register();
-
-        FabricStructureBuilder.create(new Identifier(TheGraveyard.MOD_ID, "medium_walled_graveyard"), MEDIUM_WALLED_GRAVEYARD)
-                .step(GenerationStep.Feature.SURFACE_STRUCTURES)
-                .defaultConfig(TheGraveyard.config.structureChances.medium_walled_graveyard_spacing, TheGraveyard.config.structureChances.medium_walled_graveyard_separation, TheGraveyard.config.structureChances.medium_walled_graveyard_salt)
-                .superflatFeature(SMALL_WALLED_GRAVEYARD.configure(FeatureConfig.DEFAULT))
-                .adjustsSurface()
-                .register();
-
-        FabricStructureBuilder.create(new Identifier(TheGraveyard.MOD_ID, "large_walled_graveyard"), LARGE_WALLED_GRAVEYARD)
-                .step(GenerationStep.Feature.SURFACE_STRUCTURES)
-                .defaultConfig(TheGraveyard.config.structureChances.large_walled_graveyard_spacing, TheGraveyard.config.structureChances.large_walled_graveyard_separation, TheGraveyard.config.structureChances.large_walled_graveyard_salt)
-                .superflatFeature(SMALL_WALLED_GRAVEYARD.configure(FeatureConfig.DEFAULT))
-                .adjustsSurface()
-                .register();
-
-
-
-        FabricStructureBuilder.create(new Identifier(TheGraveyard.MOD_ID, "mushroom_grave"), MUSHROOM_GRAVE)
-                .step(GenerationStep.Feature.SURFACE_STRUCTURES)
-                .defaultConfig(TheGraveyard.config.structureChances.mushroom_grave_spacing, TheGraveyard.config.structureChances.mushroom_grave_separation, TheGraveyard.config.structureChances.mushroom_grave_salt)
-                .superflatFeature(SMALL_WALLED_GRAVEYARD.configure(FeatureConfig.DEFAULT))
-                .adjustsSurface()
-                .register();
-
-
-        structures.add(SMALL_GRAVE);
-        structures.add(SMALL_WALLED_GRAVEYARD_SAVANNA);
-        structures.add(SMALL_WALLED_GRAVEYARD_DESERT);
-        structures.add(SMALL_WALLED_GRAVEYARD);
-        structures.add(MEDIUM_WALLED_GRAVEYARD);
-        structures.add(LARGE_BIRCH_TREE);
-        structures.add(LARGE_WALLED_GRAVEYARD);
-        structures.add(MUSHROOM_GRAVE);
-
-
-
+    public static void setupStructures() {
+        setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD.get(), TheGraveyard.CONFIG.small_walled_graveyard_separation.get(), TheGraveyard.CONFIG.small_walled_graveyard_spacing.get(), TheGraveyard.CONFIG.small_walled_graveyard_salt.get(), true);
+        setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD_SAVANNA.get(), TheGraveyard.CONFIG.small_walled_graveyard_savanna_separation.get(), TheGraveyard.CONFIG.small_walled_graveyard_savanna_spacing.get(), TheGraveyard.CONFIG.small_walled_graveyard_savanna_salt.get(), true);
+        setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD_DESERT.get(), TheGraveyard.CONFIG.small_walled_graveyard_desert_separation.get(), TheGraveyard.CONFIG.small_walled_graveyard_desert_spacing.get(), TheGraveyard.CONFIG.small_walled_graveyard_desert_salt.get(), true);
+        setupMapSpacingAndLand(SMALL_GRAVE.get(), TheGraveyard.CONFIG.small_grave_separation.get(), TheGraveyard.CONFIG.small_grave_spacing.get(), TheGraveyard.CONFIG.small_grave_salt.get(), true);
+        setupMapSpacingAndLand(MUSHROOM_GRAVE.get(), TheGraveyard.CONFIG.mushroom_grave_separation.get(), TheGraveyard.CONFIG.mushroom_grave_spacing.get(), TheGraveyard.CONFIG.mushroom_grave_salt.get(), true);
+        setupMapSpacingAndLand(LARGE_BIRCH_TREE.get(), TheGraveyard.CONFIG.large_birch_tree_separation.get(), TheGraveyard.CONFIG.large_birch_tree_spacing.get(), TheGraveyard.CONFIG.large_birch_tree_salt.get(), true);
+        setupMapSpacingAndLand(MEDIUM_WALLED_GRAVEYARD.get(), TheGraveyard.CONFIG.medium_walled_graveyard_separation.get(), TheGraveyard.CONFIG.medium_walled_graveyard_spacing.get(), TheGraveyard.CONFIG.medium_walled_graveyard_salt.get(), true);
+        setupMapSpacingAndLand(LARGE_WALLED_GRAVEYARD.get(), TheGraveyard.CONFIG.large_walled_graveyard_separation.get(), TheGraveyard.CONFIG.large_walled_graveyard_spacing.get(), TheGraveyard.CONFIG.large_walled_graveyard_salt.get(), true);
 
 
     }
+
+
+    public static <F extends Structure<?>> void setupMapSpacingAndLand(F structure, int separation, int spacing, int salt, boolean transformSurroundingLand) {
+        MOD_STRUCTURES.add(structure);
+        setupMapSpacingAndLand(structure, new StructureSeparationSettings(spacing, separation, salt), transformSurroundingLand);
+    }
+
+    public static <F extends Structure<?>> void setupMapSpacingAndLand(F structure, StructureSeparationSettings structureSeparationSettings, boolean transformSurroundingLand) {
+
+        Structure.STRUCTURES_REGISTRY.put(structure.getRegistryName().toString(), structure);
+
+        if (transformSurroundingLand) {
+            Structure.NOISE_AFFECTING_FEATURES =
+                    ImmutableList.<Structure<?>>builder()
+                            .addAll(Structure.NOISE_AFFECTING_FEATURES)
+                            .add(structure)
+                            .build();
+        }
+
+
+        DimensionStructuresSettings.DEFAULTS =
+                ImmutableMap.<Structure<?>, StructureSeparationSettings>builder()
+                        .putAll(DimensionStructuresSettings.DEFAULTS)
+                        .put(structure, structureSeparationSettings)
+                        .build();
+
+        WorldGenRegistries.NOISE_GENERATOR_SETTINGS.entrySet().forEach(settings -> {
+            Map<Structure<?>, StructureSeparationSettings> structureMap = settings.getValue().structureSettings().structureConfig();
+
+
+            if (structureMap instanceof ImmutableMap) {
+                Map<Structure<?>, StructureSeparationSettings> tempMap = new HashMap<>(structureMap);
+                tempMap.put(structure, structureSeparationSettings);
+                settings.getValue().structureSettings().structureConfig = tempMap;
+            } else {
+                structureMap.put(structure, structureSeparationSettings);
+            }
+        });
+    }
+
+
 }

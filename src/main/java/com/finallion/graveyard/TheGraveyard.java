@@ -1,21 +1,23 @@
 package com.finallion.graveyard;
 
 import com.finallion.graveyard.client.TheGraveyardClient;
-import com.finallion.graveyard.config.TheGraveyardConfig2;
+import com.finallion.graveyard.config.TheGraveyardConfig;
 import com.finallion.graveyard.init.*;
-import com.finallion.graveyard.utils.StructureGenerationUtil;
+import com.finallion.graveyard.structures.processors.SimpleSurfaceProcessors;
+import com.finallion.graveyard.utils.ProcessorRegistry;
 import com.finallion.graveyard.utils.TGBiomeKeys;
-import draylar.omegaconfig.OmegaConfig;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.feature.StructureFeature;
+import net.minecraft.world.gen.feature.template.IStructureProcessorType;
+import net.minecraft.world.gen.feature.template.StructureProcessorList;
+import net.minecraftforge.common.util.Lazy;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -23,51 +25,93 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 
 @Mod("graveyard")
-public class TheGraveyard implements ModInitializer {
+public class TheGraveyard {
     public static final String MOD_ID = "graveyard";
-    public static final TheGraveyardConfig2 config = OmegaConfig.register(TheGraveyardConfig2.class);
+    public static TheGraveyardConfig CONFIG;
 
 
+    public static final IStructureProcessorType<SimpleSurfaceProcessors> SIMPLE_SURFACE_PROCESSOR = IStructureProcessorType.register("simple_surface_processor", SimpleSurfaceProcessors.CODEC);
+    public static final StructureProcessorList SIMPLE_SURFACE_LIST = ProcessorRegistry.registerStructureProcessor("simple_surface_list", ImmutableList.of(
+            new SimpleSurfaceProcessors()
+    ));
 
     public TheGraveyard() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 
-        final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+
+        modEventBus.addListener(EventPriority.HIGH, this::biomeModification);
 
         TGParticles.PARTICLES.register(modEventBus);
     }
 
-    // halloween
-    // swamp
-    // more mushrooms
-    // underwater
-    // portal
-    // mausoleum
-    // crypt
-    // ossuary
-    // large trees
-    // normal trees with bones
-    // grave of the giant / skeleton
-    // ziggurat
-    // dragon graveyard
-    // pirate ship -> jigsaw battle
-
-    // vignette
-
-    // one way street
-    // end street
-    // more branches
-    // more corners
-
-    // more fog particles!
-
-    // recipes (stonecutter) for deepslate backports
-
+    public void biomeModification(final BiomeLoadingEvent event) {
+        putStructures(event);
+    }
 
 
     private void clientSetup(FMLClientSetupEvent event) {
         TheGraveyardClient.clientInit();
     }
+
+    public static void putStructures(final BiomeLoadingEvent event) {
+        if (event.getCategory().getName().contains("birch")) {
+            add(event, TGConfiguredFeatures.CONFIGURED_LARGE_BIRCH_TREE, CONFIG.large_birch_tree.get());
+        }
+
+        if (event.getCategory().getName().contains("giant") || event.getCategory().getName().contains("wooded") || event.getCategory().getName().contains("taiga_mountains") || event.getCategory().getName().contains("flower") || event.getCategory().getName().contains("dark_forest_hills")) {
+            add(event, TGConfiguredFeatures.CONFIGURED_MEDIUM_WALLED_GRAVEYARD, CONFIG.medium_walled_graveyard.get());
+        }
+
+        if (event.getCategory().getName().contains("snowy_taiga") || event.getCategory().getName().contains("dark_forest") || event.getCategory().getName().equals("jungle") || event.getCategory().getName().equals("forest") || event.getCategory().getName().equals("taiga") || event.getCategory().getName().equals("taiga_hills") || event.getCategory().getName().equals("dark_forest")) {
+            add(event, TGConfiguredFeatures.CONFIGURED_LARGE_WALLED_GRAVEYARD, CONFIG.large_walled_graveyard.get());
+        }
+
+
+        Biome.Category category = event.getCategory();
+
+        switch (category) {
+            case PLAINS:
+                add(event, TGConfiguredFeatures.CONFIGURED_SMALL_WALLED_GRAVEYARD, CONFIG.small_walled_graveyard.get());
+                add(event, TGConfiguredFeatures.CONFIGURED_SMALL_GRAVE, CONFIG.small_grave.get());
+                break;
+            case SAVANNA:
+                add(event, TGConfiguredFeatures.CONFIGURED_SMALL_WALLED_GRAVEYARD_SAVANNA, CONFIG.small_walled_graveyard_savanna.get());
+                break;
+            case FOREST:
+                add(event, TGConfiguredFeatures.CONFIGURED_SMALL_GRAVE, CONFIG.small_grave.get());
+                break;
+            case TAIGA:
+                add(event, TGConfiguredFeatures.CONFIGURED_SMALL_GRAVE, CONFIG.small_grave.get());
+                break;
+            case MUSHROOM:
+                add(event, TGConfiguredFeatures.CONFIGURED_MUSHROOM_GRAVE, CONFIG.mushroom_grave.get());
+                break;
+            case DESERT:
+                add(event, TGConfiguredFeatures.CONFIGURED_SMALL_WALLED_GRAVEYARD_DESERT, CONFIG.small_walled_graveyard_desert.get());
+                break;
+            case JUNGLE:
+                add(event, TGConfiguredFeatures.CONFIGURED_MUSHROOM_GRAVE, CONFIG.mushroom_grave.get());
+                break;
+            case SWAMP:
+                add(event, TGConfiguredFeatures.CONFIGURED_MUSHROOM_GRAVE, CONFIG.mushroom_grave.get());
+                break;
+            default:
+                break;
+        }
+
+
+
+    }
+
+    public static void add(final BiomeLoadingEvent e, StructureFeature<?, ?> s, boolean config) {
+        if (config) {
+            e.getGeneration().getStructures().add(Lazy.of(() -> s));
+        }
+    }
+
+    /*
 
     @Override
     public void onInitialize() {
@@ -82,66 +126,16 @@ public class TheGraveyard implements ModInitializer {
 
 
 
-        BiomeModifications.create(new Identifier(MOD_ID, "small_walled_graveyard"))
-                .add(ModificationPhase.ADDITIONS,
-                        BiomeSelectors.categories(Biome.Category.PLAINS).and(StructureGenerationUtil.booleanToPredicate(config.structures.small_walled_graveyard)),
-                        context -> { context.getGenerationSettings().addBuiltInStructure(TGConfiguredFeatures.CONFIGURED_SMALL_WALLED_GRAVEYARD);
-                        });
-
-        BiomeModifications.create(new Identifier(MOD_ID, "small_walled_graveyard_savanna"))
-                .add(ModificationPhase.ADDITIONS,
-                        BiomeSelectors.categories(Biome.Category.SAVANNA).and(StructureGenerationUtil.booleanToPredicate(config.structures.small_walled_graveyard_savanna)),
-                        context -> { context.getGenerationSettings().addBuiltInStructure(TGConfiguredFeatures.CONFIGURED_SMALL_WALLED_GRAVEYARD_SAVANNA);
-                        });
-
-
-        BiomeModifications.create(new Identifier(MOD_ID, "small_grave"))
-                .add(ModificationPhase.ADDITIONS,
-                        BiomeSelectors.categories(Biome.Category.PLAINS, Biome.Category.FOREST, Biome.Category.TAIGA).and(StructureGenerationUtil.booleanToPredicate(config.structures.small_grave)),
-                        context -> { context.getGenerationSettings().addBuiltInStructure(TGConfiguredFeatures.CONFIGURED_SMALL_GRAVE);
-                        });
-
-
-        BiomeModifications.create(new Identifier(MOD_ID, "mushroom_grave"))
-                .add(ModificationPhase.ADDITIONS,
-                        BiomeSelectors.categories(Biome.Category.MUSHROOM, Biome.Category.JUNGLE, Biome.Category.SWAMP).and(StructureGenerationUtil.booleanToPredicate(config.structures.mushroom_grave)),
-                        context -> { context.getGenerationSettings().addBuiltInStructure(TGConfiguredFeatures.CONFIGURED_MUSHROOM_GRAVE);
-                        });
-
-
-        BiomeModifications.create(new Identifier(MOD_ID, "large_birch_tree"))
-                .add(ModificationPhase.ADDITIONS,
-                        BiomeSelectors.includeByKey(TGBiomeKeys.birch_biomes).and(StructureGenerationUtil.booleanToPredicate(config.structures.large_birch_tree)),
-                        context -> { context.getGenerationSettings().addBuiltInStructure(TGConfiguredFeatures.CONFIGURED_LARGE_BIRCH_TREE);
-                        });
-
-
-        BiomeModifications.create(new Identifier(MOD_ID, "medium_walled_graveyard"))
-                .add(ModificationPhase.ADDITIONS,
-                        BiomeSelectors.includeByKey(TGBiomeKeys.forest_biomes).and(StructureGenerationUtil.booleanToPredicate(config.structures.medium_walled_graveyard)),
-                        context -> { context.getGenerationSettings().addBuiltInStructure(TGConfiguredFeatures.CONFIGURED_MEDIUM_WALLED_GRAVEYARD);
-                        });
-
-        BiomeModifications.create(new Identifier(MOD_ID, "small_walled_graveyard_desert"))
-                .add(ModificationPhase.ADDITIONS,
-                        BiomeSelectors.categories(Biome.Category.DESERT).and(StructureGenerationUtil.booleanToPredicate(config.structures.small_walled_graveyard_desert)),
-                        context -> { context.getGenerationSettings().addBuiltInStructure(TGConfiguredFeatures.CONFIGURED_SMALL_WALLED_GRAVEYARD_DESERT);
-                        });
-
-
-        BiomeModifications.create(new Identifier(MOD_ID, "large_walled_graveyard"))
-                .add(ModificationPhase.ADDITIONS,
-                        BiomeSelectors.includeByKey(TGBiomeKeys.thick_forest_biomes).and(StructureGenerationUtil.booleanToPredicate(config.structures.large_walled_graveyard)),
-                        context -> { context.getGenerationSettings().addBuiltInStructure(TGConfiguredFeatures.CONFIGURED_LARGE_WALLED_GRAVEYARD);
-                        });
-
-
-
     }
 
-    public static ItemGroup GROUP = FabricItemGroupBuilder.create(
-            new Identifier(MOD_ID, "group"))
-            .icon(() -> new ItemStack(Items.SKELETON_SKULL)).build();
+     */
+    public static final ItemGroup GROUP = new ItemGroup(TheGraveyard.MOD_ID + "group") {
+        @Override
+        public ItemStack makeIcon() {
+            return new ItemStack(Items.SKELETON_SKULL);
+        }
+
+    };
 
 
 

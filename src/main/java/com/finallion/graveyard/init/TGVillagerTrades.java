@@ -1,18 +1,10 @@
 package com.finallion.graveyard.init;
 
-import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.map.MapIcon;
-import net.minecraft.item.map.MapState;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.village.TradeOffer;
-import net.minecraft.village.TradeOffers;
-import net.minecraft.village.VillagerProfession;
 import net.minecraft.world.gen.feature.StructureFeature;
 
 import java.util.List;
@@ -21,6 +13,7 @@ import java.util.Locale;
 public class TGVillagerTrades {
 
 
+    /*
     private static TradeOffer createMapTrade(int price, StructureFeature<?> structure, MapIcon.Type iconType, int maxUses, int experience, Entity entity) {
         if (!(entity.world instanceof ServerWorld)) {
             return null;
@@ -52,6 +45,8 @@ public class TGVillagerTrades {
         }));
 
     }
+
+     */
 
 
 }

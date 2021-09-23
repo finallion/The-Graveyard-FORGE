@@ -3,32 +3,30 @@ package com.finallion.graveyard.structures;
 import com.finallion.graveyard.TheGraveyard;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
-import net.minecraft.structure.MarginedStructureStart;
-import net.minecraft.structure.PoolStructurePiece;
-import net.minecraft.structure.StructureManager;
-import net.minecraft.structure.StructurePiece;
-import net.minecraft.structure.pool.StructurePoolBasedGenerator;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockBox;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.registry.DynamicRegistryManager;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.Heightmap;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.BiomeSource;
-import net.minecraft.world.gen.ChunkRandom;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.chunk.StructureConfig;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
+import net.minecraft.world.biome.provider.BiomeProvider;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
-import net.minecraft.world.gen.feature.StructurePoolFeatureConfig;
+import net.minecraft.world.gen.feature.jigsaw.JigsawManager;
+import net.minecraft.world.gen.feature.structure.*;
+import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.gen.settings.StructureSeparationSettings;
 
 import java.util.Set;
 
-public class TGBaseStructure extends StructureFeature<DefaultFeatureConfig> {
+public class TGBaseStructure extends Structure<NoFeatureConfig> {
     private final int SUNKEN_IN;
     private final double SIZE;
     private final String NAME;
@@ -38,7 +36,7 @@ public class TGBaseStructure extends StructureFeature<DefaultFeatureConfig> {
     private final int MAX_TERRAIN_DIFFERENCE_LG = 5;
     private final int OFFSET_WATER_CHECK_LG = 25;
 
-    public TGBaseStructure(Codec<DefaultFeatureConfig> codec, String name, double size, int sunkenIn) {
+    public TGBaseStructure(Codec<NoFeatureConfig> codec, String name, double size, int sunkenIn) {
         super(codec);
         this.SUNKEN_IN = sunkenIn;
         this.SIZE = size;
@@ -46,15 +44,20 @@ public class TGBaseStructure extends StructureFeature<DefaultFeatureConfig> {
 
     }
 
-
     @Override
-    public StructureStartFactory<DefaultFeatureConfig> getStructureStartFactory() {
+    public  IStartFactory<NoFeatureConfig> getStartFactory() {
         return Start::new;
     }
 
+    @Override
+    public GenerationStage.Decoration step() {
+        return GenerationStage.Decoration.SURFACE_STRUCTURES;
+    }
+
+
 
     @Override
-    protected boolean shouldStartAt(ChunkGenerator chunkGenerator, BiomeSource biomeSource, long seed, ChunkRandom chunkRandom, int chunkX, int chunkZ, Biome biome, ChunkPos chunkPos, DefaultFeatureConfig featureConfig) {
+    protected boolean isFeatureChunk(ChunkGenerator chunkGenerator, BiomeProvider biomeSource, long seed, SharedSeedRandom chunkRandom, int chunkX, int chunkZ, Biome biome, ChunkPos chunkPos, NoFeatureConfig featureConfig) {
         BlockPos centerOfChunk = new BlockPos(chunkPos.x * 16, 0, chunkPos.z * 16);
 
 
@@ -90,11 +93,11 @@ public class TGBaseStructure extends StructureFeature<DefaultFeatureConfig> {
         if (SIZE > 2) {
             offset += OFFSET_WATER_CHECK_LG;
 
-            Set<Biome> biomesInAreaOne = generator.getBiomeSource().getBiomesInArea(chunkX, 0, chunkZ, 156);
-            Set<Biome> biomesInAreaTwo = generator.getBiomeSource().getBiomesInArea(chunkX, 0, chunkZ, 28);
+            Set<Biome> biomesInAreaOne = generator.getBiomeSource().getBiomesWithin(chunkX, 0, chunkZ, 156);
+            Set<Biome> biomesInAreaTwo = generator.getBiomeSource().getBiomesWithin(chunkX, 0, chunkZ, 28);
 
             for (Biome biome : biomesInAreaOne) {
-                if (biome.getCategory() == Biome.Category.OCEAN) {
+                if (biome.getBiomeCategory() == Biome.Category.OCEAN) {
                     return false;
                 }
             }
@@ -102,7 +105,7 @@ public class TGBaseStructure extends StructureFeature<DefaultFeatureConfig> {
             // clears the inner circle of generation from water sources
             // following checks clear the outer circle from possible water
             for (Biome biome : biomesInAreaTwo) {
-                if (biome.getCategory() == Biome.Category.RIVER) {
+                if (biome.getBiomeCategory() == Biome.Category.RIVER) {
                     return false;
                 }
             }
@@ -110,35 +113,35 @@ public class TGBaseStructure extends StructureFeature<DefaultFeatureConfig> {
         }
 
 
-        int i1 = generator.getHeightInGround(chunkX, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
-        int j1 = generator.getHeightInGround(chunkX, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int k1 = generator.getHeightInGround(chunkX + offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
-        int l1 = generator.getHeightInGround(chunkX + offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int m1 = generator.getHeightInGround(chunkX - offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int n1 = generator.getHeightInGround(chunkX + offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int o1 = generator.getHeightInGround(chunkX, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int p1 = generator.getHeightInGround(chunkX - offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
-        int q1 = generator.getHeightInGround(chunkX - offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int i1 = generator.getFirstOccupiedHeight(chunkX, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
+        int j1 = generator.getFirstOccupiedHeight(chunkX, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int k1 = generator.getFirstOccupiedHeight(chunkX + offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
+        int l1 = generator.getFirstOccupiedHeight(chunkX + offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int m1 = generator.getFirstOccupiedHeight(chunkX - offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int n1 = generator.getFirstOccupiedHeight(chunkX + offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int o1 = generator.getFirstOccupiedHeight(chunkX, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int p1 = generator.getFirstOccupiedHeight(chunkX - offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
+        int q1 = generator.getFirstOccupiedHeight(chunkX - offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
 
-        BlockView vi1 = generator.getColumnSample(chunkX, chunkZ);
-        BlockView vj1 = generator.getColumnSample(chunkX, chunkZ + offset);
-        BlockView vk1 = generator.getColumnSample(chunkX + offset, chunkZ);
-        BlockView vl1 = generator.getColumnSample(chunkX + offset, chunkZ + offset);
-        BlockView vm1 = generator.getColumnSample(chunkX - offset, chunkZ + offset);
-        BlockView vn1 = generator.getColumnSample(chunkX + offset, chunkZ - offset);
-        BlockView vo1 = generator.getColumnSample(chunkX, chunkZ - offset);
-        BlockView vp1 = generator.getColumnSample(chunkX - offset, chunkZ);
-        BlockView vq1 = generator.getColumnSample(chunkX - offset, chunkZ - offset);
+        IBlockReader vi1 = generator.getBaseColumn(chunkX, chunkZ);
+        IBlockReader vj1 = generator.getBaseColumn(chunkX, chunkZ + offset);
+        IBlockReader vk1 = generator.getBaseColumn(chunkX + offset, chunkZ);
+        IBlockReader vl1 = generator.getBaseColumn(chunkX + offset, chunkZ + offset);
+        IBlockReader vm1 = generator.getBaseColumn(chunkX - offset, chunkZ + offset);
+        IBlockReader vn1 = generator.getBaseColumn(chunkX + offset, chunkZ - offset);
+        IBlockReader vo1 = generator.getBaseColumn(chunkX, chunkZ - offset);
+        IBlockReader vp1 = generator.getBaseColumn(chunkX - offset, chunkZ);
+        IBlockReader vq1 = generator.getBaseColumn(chunkX - offset, chunkZ - offset);
 
-        BlockState bi1 = vi1.getBlockState(centerOfChunk.up(i1));
-        BlockState bj1 = vj1.getBlockState(centerOfChunk.up(j1));
-        BlockState bk1 = vk1.getBlockState(centerOfChunk.up(k1));
-        BlockState bl1 = vl1.getBlockState(centerOfChunk.up(l1));
-        BlockState bm1 = vm1.getBlockState(centerOfChunk.up(m1));
-        BlockState bn1 = vn1.getBlockState(centerOfChunk.up(n1));
-        BlockState bo1 = vo1.getBlockState(centerOfChunk.up(o1));
-        BlockState bp1 = vp1.getBlockState(centerOfChunk.up(p1));
-        BlockState bq1 = vq1.getBlockState(centerOfChunk.up(q1));
+        BlockState bi1 = vi1.getBlockState(centerOfChunk.above(i1));
+        BlockState bj1 = vj1.getBlockState(centerOfChunk.above(j1));
+        BlockState bk1 = vk1.getBlockState(centerOfChunk.above(k1));
+        BlockState bl1 = vl1.getBlockState(centerOfChunk.above(l1));
+        BlockState bm1 = vm1.getBlockState(centerOfChunk.above(m1));
+        BlockState bn1 = vn1.getBlockState(centerOfChunk.above(n1));
+        BlockState bo1 = vo1.getBlockState(centerOfChunk.above(o1));
+        BlockState bp1 = vp1.getBlockState(centerOfChunk.above(p1));
+        BlockState bq1 = vq1.getBlockState(centerOfChunk.above(q1));
 
         /*
         System.out.println("Water hits results: ");
@@ -180,15 +183,15 @@ public class TGBaseStructure extends StructureFeature<DefaultFeatureConfig> {
 
         int offset = (int) SIZE * 8;
 
-        int i1 = generator.getHeight(chunkX, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
-        int j1 = generator.getHeight(chunkX, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int k1 = generator.getHeight(chunkX + offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
-        int l1 = generator.getHeight(chunkX + offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int m1 = generator.getHeight(chunkX - offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int n1 = generator.getHeight(chunkX + offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int o1 = generator.getHeight(chunkX, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int p1 = generator.getHeight(chunkX - offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
-        int q1 = generator.getHeight(chunkX - offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int i1 = generator.getFirstFreeHeight(chunkX, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
+        int j1 = generator.getFirstFreeHeight(chunkX, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int k1 = generator.getFirstFreeHeight(chunkX + offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
+        int l1 = generator.getFirstFreeHeight(chunkX + offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int m1 = generator.getFirstFreeHeight(chunkX - offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int n1 = generator.getFirstFreeHeight(chunkX + offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int o1 = generator.getFirstFreeHeight(chunkX, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int p1 = generator.getFirstFreeHeight(chunkX - offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
+        int q1 = generator.getFirstFreeHeight(chunkX - offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
 
         /*
         System.out.println("Terrain flatness results: ");
@@ -221,8 +224,8 @@ public class TGBaseStructure extends StructureFeature<DefaultFeatureConfig> {
     }
 
 
-    public boolean checkForOtherStructures(ChunkGenerator generator, long seed, ChunkRandom rand, int chunkX, int chunkZ) {
-        StructureConfig structureConfig = generator.getStructuresConfig().getForType(StructureFeature.VILLAGE);
+    public boolean checkForOtherStructures(ChunkGenerator generator, long seed, SharedSeedRandom rand, int chunkX, int chunkZ) {
+        StructureSeparationSettings structureConfig = generator.getSettings().getConfig(Structure.VILLAGE);
         if (structureConfig == null) {
             return false;
         } else {
@@ -234,7 +237,7 @@ public class TGBaseStructure extends StructureFeature<DefaultFeatureConfig> {
             int blocksAwayToCheck = 15;
             for (int k = chunkX - blocksAwayToCheck; k <= chunkX + blocksAwayToCheck; ++k) {
                 for (int l = chunkZ - blocksAwayToCheck; l <= chunkZ + blocksAwayToCheck; ++l) {
-                    ChunkPos chunkPos = StructureFeature.VILLAGE.getStartChunk(structureConfig, seed, rand, k, l);
+                    ChunkPos chunkPos = Structure.VILLAGE.getPotentialFeatureChunk(structureConfig, seed, rand, k, l);
                     if (k == chunkPos.x && l == chunkPos.z) {
                         return false;
                     }
@@ -262,14 +265,14 @@ public class TGBaseStructure extends StructureFeature<DefaultFeatureConfig> {
     }
 
 
-    public static class Start extends MarginedStructureStart<DefaultFeatureConfig> {
+    public static class Start extends StructureStart<NoFeatureConfig> {
         private final int SUNKEN_IN;
         private final double SIZE;
         private final String NAME;
         private int averageHeight;
 
 
-        public Start(StructureFeature<DefaultFeatureConfig> structureIn, int chunkX, int chunkZ, BlockBox blockBox, int referenceIn, long seedIn, String name, double size, int sunkenIn, int averageHeight) {
+        public Start(Structure<NoFeatureConfig> structureIn, int chunkX, int chunkZ, MutableBoundingBox blockBox, int referenceIn, long seedIn, String name, double size, int sunkenIn, int averageHeight) {
             super(structureIn, chunkX, chunkZ, blockBox, referenceIn, seedIn);
             this.SIZE = size;
             this.SUNKEN_IN = sunkenIn;
@@ -279,46 +282,46 @@ public class TGBaseStructure extends StructureFeature<DefaultFeatureConfig> {
         }
 
 
-        public Start(StructureFeature<DefaultFeatureConfig> structureIn, int chunkX, int chunkZ, BlockBox blockBox, int referenceIn, long seed) {
+        public Start(Structure<NoFeatureConfig> structureIn, int chunkX, int chunkZ, MutableBoundingBox blockBox, int referenceIn, long seed) {
             this(structureIn, chunkX, chunkZ, blockBox, referenceIn, seed, ((TGBaseStructure) structureIn).getStructureName(), ((TGBaseStructure) structureIn).getSize(), ((TGBaseStructure) structureIn).getSunkenIn(), ((TGBaseStructure) structureIn).getAverageHeight());
 
         }
 
         @Override
-        public void init(DynamicRegistryManager dynamicRegistryManager, ChunkGenerator chunkGenerator, StructureManager structureManager, int chunkX, int chunkZ, Biome biome, DefaultFeatureConfig defaultFeatureConfig) {
+        public void generatePieces(DynamicRegistries dynamicRegistryManager, ChunkGenerator chunkGenerator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig config) {
             int x = chunkX * 16;
             int z = chunkZ * 16;
 
             BlockPos.Mutable centerPos = new BlockPos.Mutable(x, averageHeight, z);
 
-            StructurePoolBasedGenerator.method_30419(
+            JigsawManager.addPieces(
                     dynamicRegistryManager,
-                    new StructurePoolFeatureConfig(() -> dynamicRegistryManager.get(Registry.TEMPLATE_POOL_WORLDGEN)
-                            .get(new Identifier(TheGraveyard.MOD_ID, NAME + "/start_pool")),
+                    new VillageConfig(() -> dynamicRegistryManager.registryOrThrow(Registry.TEMPLATE_POOL_REGISTRY)
+                            .get(new ResourceLocation(TheGraveyard.MOD_ID, NAME + "/start_pool")),
                             10),
-                    PoolStructurePiece::new,
+                    AbstractVillagePiece::new,
                     chunkGenerator,
-                    structureManager,
+                    templateManagerIn,
                     centerPos,
-                    this.children,
+                    this.pieces,
                     this.random,
                     false,
                     false);
 
 
-            //this.randomUpwardTranslation(random, -SUNKEN_IN, -SUNKEN_IN + 1);
-            this.children.forEach(piece -> piece.translate(0, 1, 0));
-            this.children.forEach(piece -> piece.getBoundingBox().move(0, SUNKEN_IN, 0));
+            this.pieces.forEach(piece -> piece.move(0, 1, 0));
+            this.pieces.forEach(piece -> piece.getBoundingBox().y0 -= 1);
+            this.pieces.forEach(piece -> piece.getBoundingBox().move(0, SUNKEN_IN, 0));
 
-            Vec3i structureCenter = this.children.get(0).getBoundingBox().getCenter();
+
+            Vector3i structureCenter = this.pieces.get(0).getBoundingBox().getCenter();
             int xOffset = centerPos.getX() - structureCenter.getX();
             int zOffset = centerPos.getZ() - structureCenter.getZ();
-            for (StructurePiece structurePiece : this.children) {
-                structurePiece.translate(xOffset, 0, zOffset);
+            for(StructurePiece structurePiece : this.pieces){
+                structurePiece.move(xOffset, 0, zOffset);
             }
 
-
-            this.setBoundingBoxFromChildren();
+            this.calculateBoundingBox();
 
         }
 
