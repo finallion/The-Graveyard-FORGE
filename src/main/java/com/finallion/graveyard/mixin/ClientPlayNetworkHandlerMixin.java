@@ -1,22 +1,16 @@
 package com.finallion.graveyard.mixin;
 
 import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
-import com.finallion.graveyard.client.gui.GravestoneScreen;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.network.handshake.ClientHandshakeNetHandler;
 import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.NetworkThreadUtils;
 import net.minecraft.network.PacketThreadUtil;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.network.packet.s2c.play.SignEditorOpenS2CPacket;
+import net.minecraft.network.play.IServerPlayNetHandler;
+import net.minecraft.network.play.client.CUpdateSignPacket;
 import net.minecraft.network.play.server.SOpenSignMenuPacket;
-import net.minecraft.tileentity.SignTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.*;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,7 +29,7 @@ public class ClientPlayNetworkHandlerMixin {
 
     @Inject(method = "handleOpenSignEditor", at = @At(value = "HEAD"), cancellable = true)
     public void openSignEditor(SOpenSignMenuPacket packet, CallbackInfo info) {
-        PacketThreadUtil.ensureRunningOnSameThread(packet, this, this.minecraft);
+        PacketThreadUtil.ensureRunningOnSameThread(packet, (ClientPlayNetHandler) (Object) this, this.minecraft);
         TileEntity tileentity = this.level.getBlockEntity(packet.getPos());
         if (!(tileentity instanceof GravestoneBlockEntity)) {
             tileentity = new GravestoneBlockEntity();
@@ -46,12 +40,13 @@ public class ClientPlayNetworkHandlerMixin {
     }
 
     @Inject(method = "onBlockEntityUpdate", at = @At(value = "HEAD"), cancellable = true)
-    public void onEntityUpdate(BlockEntityUpdateS2CPacket packet, CallbackInfo info) {
-        NetworkThreadUtils.forceMainThread(packet, (ClientPlayPacketListener) this, this.client);
-        BlockPos blockPos = packet.getPos();
-        BlockEntity blockEntity = this.world.getBlockEntity(blockPos);
-        if (blockEntity instanceof GravestoneBlockEntity) {
-            blockEntity.fromTag(this.client.world.getBlockState(blockPos), packet.getNbt());
+    public void onEntityUpdate(SUpdateTileEntityPacket p_147273_1_, CallbackInfo info) {
+        PacketThreadUtil.ensureRunningOnSameThread(p_147273_1_, (ClientPlayNetHandler) (Object) this, this.minecraft);
+        BlockPos blockpos = p_147273_1_.getPos();
+        TileEntity tileentity = this.minecraft.level.getBlockEntity(blockpos);
+
+        if (tileentity instanceof GravestoneBlockEntity) {
+            tileentity.load(this.level.getBlockState(blockpos), p_147273_1_.getTag());
             info.cancel();
         }
     }

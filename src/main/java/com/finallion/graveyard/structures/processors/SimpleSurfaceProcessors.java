@@ -1,7 +1,6 @@
 package com.finallion.graveyard.structures.processors;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.init.TGProcessors;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;

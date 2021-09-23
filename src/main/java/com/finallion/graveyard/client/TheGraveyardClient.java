@@ -3,10 +3,7 @@ package com.finallion.graveyard.client;
 
 import com.finallion.graveyard.blockentities.render.GravestoneBlockEntityRenderer;
 import com.finallion.graveyard.entites.renders.SkeletonCreeperRender;
-import com.finallion.graveyard.init.TGBlocks;
-import com.finallion.graveyard.init.TGEntities;
-import com.finallion.graveyard.init.TGItems;
-import com.finallion.graveyard.init.TGParticles;
+import com.finallion.graveyard.init.*;
 import com.finallion.graveyard.utils.SpriteIdentifierRegistry;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -58,8 +55,6 @@ public class TheGraveyardClient {
     @SubscribeEvent
     public static void clientInit() {
 
-        TGParticles.init();
-
         RenderTypeLookup.setRenderLayer(TGBlocks.DARK_IRON_BARS, CUTOUT_MIPPED);
         RenderTypeLookup.setRenderLayer(TGBlocks.TG_GRASS_BLOCK, CUTOUT_MIPPED);
 
@@ -67,10 +62,10 @@ public class TheGraveyardClient {
         ResourceLocation texture = TGBlocks.GRAVESTONE_TEXTURE;
         SpriteIdentifierRegistry.INSTANCE.addRenderMaterial(new RenderMaterial(Atlases.SIGN_SHEET, texture));
 
-        ClientRegistry.bindTileEntityRenderer(TGBlocks.GRAVESTONE_BLOCK_ENTITY.get(), GravestoneBlockEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(TGTileEntities.GRAVESTONE_BLOCK_ENTITY.get(), GravestoneBlockEntityRenderer::new);
 
         // entities
-        RenderingRegistry.registerEntityRenderingHandler(TGEntities.SKELETON_CREEPER.get(), SkeletonCreeperRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(TGEntities.SKELETON_CREEPER, SkeletonCreeperRender::new);
 
     }
 

@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.AbstractSignBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -40,13 +41,10 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class GravestoneBlockEntityRenderer extends TileEntityRenderer<GravestoneBlockEntity> {
-    private final ItemRenderer itemRenderer;
-
     private static ItemStack stack = new ItemStack(TGBlocks.GRAVESTONE.asItem(), 1);
 
-    public GravestoneBlockEntityRenderer(TileEntityRendererDispatcher blockEntityRenderDispatcher, ItemRenderer itemRenderer) {
+    public GravestoneBlockEntityRenderer(TileEntityRendererDispatcher blockEntityRenderDispatcher) {
         super(blockEntityRenderDispatcher);
-        this.itemRenderer = itemRenderer;
     }
 
 
@@ -102,7 +100,7 @@ public class GravestoneBlockEntityRenderer extends TileEntityRenderer<Gravestone
         float rotation = -((float)state.getValue(GravestoneBlock.FACING).toYRot());
         matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
 
-        this.itemRenderer.renderStatic(stack, ItemCameraTransforms.TransformType.GROUND, i, OverlayTexture.NO_OVERLAY, matrixStack, vertexConsumerProvider);
+        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemCameraTransforms.TransformType.GROUND, i, OverlayTexture.NO_OVERLAY, matrixStack, vertexConsumerProvider);
 
         matrixStack.popPose();
     }

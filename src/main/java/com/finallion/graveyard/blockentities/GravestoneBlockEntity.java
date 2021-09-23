@@ -37,7 +37,7 @@ public class GravestoneBlockEntity extends TileEntity {
 
 
 	public GravestoneBlockEntity() {
-        super(TGTileEntities.GRAVESTONE_BLOCK_ENTITY);
+        super(TGTileEntities.GRAVESTONE_BLOCK_ENTITY.get());
     }
 
 

@@ -33,7 +33,7 @@ public class TGStructures {
     public static RegistryObject<Structure<NoFeatureConfig>> MEDIUM_WALLED_GRAVEYARD = DEFERRED_REGISTRY_STRUCTURE.register("medium_walled_graveyard", () -> (new MediumWalledGraveyard(NoFeatureConfig.CODEC)));
     public static RegistryObject<Structure<NoFeatureConfig>> LARGE_WALLED_GRAVEYARD = DEFERRED_REGISTRY_STRUCTURE.register("large_walled_graveyard", () -> (new LargeWalledGraveyard(NoFeatureConfig.CODEC)));
 
-    public static void setupStructures() {
+    public static void register() {
         setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD.get(), TheGraveyard.CONFIG.small_walled_graveyard_separation.get(), TheGraveyard.CONFIG.small_walled_graveyard_spacing.get(), TheGraveyard.CONFIG.small_walled_graveyard_salt.get(), true);
         setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD_SAVANNA.get(), TheGraveyard.CONFIG.small_walled_graveyard_savanna_separation.get(), TheGraveyard.CONFIG.small_walled_graveyard_savanna_spacing.get(), TheGraveyard.CONFIG.small_walled_graveyard_savanna_salt.get(), true);
         setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD_DESERT.get(), TheGraveyard.CONFIG.small_walled_graveyard_desert_separation.get(), TheGraveyard.CONFIG.small_walled_graveyard_desert_spacing.get(), TheGraveyard.CONFIG.small_walled_graveyard_desert_salt.get(), true);
@@ -57,8 +57,7 @@ public class TGStructures {
         Structure.STRUCTURES_REGISTRY.put(structure.getRegistryName().toString(), structure);
 
         if (transformSurroundingLand) {
-            Structure.NOISE_AFFECTING_FEATURES =
-                    ImmutableList.<Structure<?>>builder()
+            Structure.NOISE_AFFECTING_FEATURES = ImmutableList.<Structure<?>>builder()
                             .addAll(Structure.NOISE_AFFECTING_FEATURES)
                             .add(structure)
                             .build();

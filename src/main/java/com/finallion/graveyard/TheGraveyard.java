@@ -43,6 +43,8 @@ public class TheGraveyard {
 
         modEventBus.addListener(EventPriority.HIGH, this::biomeModification);
 
+        TGStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
+        TGTileEntities.TILE_ENTITIES.register(modEventBus);
         TGParticles.PARTICLES.register(modEventBus);
     }
 
