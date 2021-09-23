@@ -1,6 +1,7 @@
 package com.finallion.graveyard;
 
 import com.finallion.graveyard.client.TheGraveyardClient;
+import com.finallion.graveyard.config.ConfigHelper;
 import com.finallion.graveyard.config.TheGraveyardConfig;
 import com.finallion.graveyard.init.*;
 import com.finallion.graveyard.structures.processors.SimpleSurfaceProcessors;
@@ -20,6 +21,7 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -36,6 +38,7 @@ public class TheGraveyard {
     ));
 
     public TheGraveyard() {
+        CONFIG = ConfigHelper.register(ModConfig.Type.COMMON, TheGraveyardConfig::new, "graveyard-forge-config-v1.toml");
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();

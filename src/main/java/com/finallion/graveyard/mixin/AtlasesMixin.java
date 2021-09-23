@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 
 @Mixin(Atlases.class)
 public class AtlasesMixin {
-    @Inject(method = "getAllMaterials", at = @At("RETURN"))
+    @Inject(method = "collectAllMaterials", at = @At("RETURN"))
     private static void injectTGSigns(Consumer<RenderMaterial> consumer, CallbackInfo info) {
         for(RenderMaterial identifier: SpriteIdentifierRegistry.INSTANCE.getSprites()) {
             consumer.accept(identifier);

@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(CreeperEntity.class)
-public abstract class CreeperEntityMixin {
+public class CreeperEntityMixin {
 
     @Inject(method="explodeCreeper", at = @At("HEAD"), cancellable = true)
     private void explode(CallbackInfo info) {

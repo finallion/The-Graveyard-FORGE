@@ -20,12 +20,17 @@ import java.util.Random;
 @Mixin(LakesFeature.class)
 public class LakeFeatureMixin {
 
-    @Inject(at = @At("HEAD"), method = "place", cancellable = true)
-    public void structures_fixLake(ISeedReader world, ChunkGenerator p_241855_2_, Random p_241855_3_, BlockPos blockPos, BlockStateFeatureConfig config, CallbackInfoReturnable<Boolean> info) {
+    @Inject(
+            method = "place(Lnet/minecraft/world/ISeedReader;Lnet/minecraft/world/gen/ChunkGenerator;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/gen/feature/BlockStateFeatureConfig;)Z",
+            at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/util/math/BlockPos;below(I)Lnet/minecraft/util/math/BlockPos;"),
+            cancellable = true
+    )
+    public void noLakesInStructures(ISeedReader world, ChunkGenerator p_241855_2_, Random p_241855_3_, BlockPos blockPos, BlockStateFeatureConfig config, CallbackInfoReturnable<Boolean> info) {
         SectionPos sectionPos = SectionPos.of(blockPos);
         for (Structure<?> structure : TGStructures.MOD_STRUCTURES) {
             if (world.startsForFeature(sectionPos, structure).findAny().isPresent()) {
                 info.setReturnValue(false);
+                break;
             }
         }
     }

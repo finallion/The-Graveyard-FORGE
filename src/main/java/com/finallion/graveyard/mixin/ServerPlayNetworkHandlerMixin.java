@@ -31,7 +31,7 @@ public class ServerPlayNetworkHandlerMixin {
     @Shadow
     public ServerPlayerEntity player;
 
-    @Inject(method = "updateSignText", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "processUpdateSign", at = @At(value = "HEAD"), cancellable = true)
     private void signUpdate(CUpdateSignPacket packet, List<String> signText, CallbackInfo info) {
         this.player.resetLastActionTime();
         ServerWorld serverworld = this.player.getLevel();

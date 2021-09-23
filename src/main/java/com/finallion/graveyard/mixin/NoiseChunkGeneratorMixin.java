@@ -20,7 +20,7 @@ import java.util.List;
 @Mixin(NoiseChunkGenerator.class)
 public class NoiseChunkGeneratorMixin {
 
-    @Inject(at = @At("HEAD"), method = "getMobsAt", cancellable = true)
+    @Inject(method = "getMobsAt(Lnet/minecraft/world/biome/Biome;Lnet/minecraft/world/gen/feature/structure/StructureManager;Lnet/minecraft/entity/EntityClassification;Lnet/minecraft/util/math/BlockPos;)Ljava/util/List;", at = @At(value = "HEAD"), cancellable = true)
     public void injectSpawnList(Biome biome, StructureManager accessor, EntityClassification group, BlockPos pos, CallbackInfoReturnable<List<MobSpawnInfo.Spawners>> info) {
         if (accessor.getStructureAt(pos, false, TGConfiguredFeatures.CONFIGURED_MEDIUM_WALLED_GRAVEYARD.feature).isValid()) {
             if (group == EntityClassification.MONSTER) {
