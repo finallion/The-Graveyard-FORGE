@@ -186,15 +186,15 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
 
         int offset = (int) SIZE * 8;
 
-        int i1 = generator.getFirstOccupiedHeight(chunkX, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
-        int j1 = generator.getFirstOccupiedHeight(chunkX, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int k1 = generator.getFirstOccupiedHeight(chunkX + offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
-        int l1 = generator.getFirstOccupiedHeight(chunkX + offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int m1 = generator.getFirstOccupiedHeight(chunkX - offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int n1 = generator.getFirstOccupiedHeight(chunkX + offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int o1 = generator.getFirstOccupiedHeight(chunkX, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int p1 = generator.getFirstOccupiedHeight(chunkX - offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
-        int q1 = generator.getFirstOccupiedHeight(chunkX - offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int i1 = generator.getFirstFreeHeight(chunkX, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
+        int j1 = generator.getFirstFreeHeight(chunkX, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int k1 = generator.getFirstFreeHeight(chunkX + offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
+        int l1 = generator.getFirstFreeHeight(chunkX + offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int m1 = generator.getFirstFreeHeight(chunkX - offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int n1 = generator.getFirstFreeHeight(chunkX + offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int o1 = generator.getFirstFreeHeight(chunkX, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int p1 = generator.getFirstFreeHeight(chunkX - offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
+        int q1 = generator.getFirstFreeHeight(chunkX - offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
 
         /*
         System.out.println("Terrain flatness results: ");
@@ -316,7 +316,7 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
 
 
             this.pieces.forEach(piece -> piece.move(0, 1, 0));
-            this.pieces.forEach(piece -> piece.getBoundingBox().y0 -= SUNKEN_IN);
+            this.pieces.forEach(piece -> piece.getBoundingBox().move(0, SUNKEN_IN, 0));
             //this.pieces.forEach(piece -> piece.getBoundingBox().move(0, SUNKEN_IN, 0));
 
 

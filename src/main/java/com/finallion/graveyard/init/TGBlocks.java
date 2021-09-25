@@ -40,10 +40,7 @@ public class TGBlocks {
 
     public static Block registerBlockWithoutGroup(Block block, String name) {
         block.setRegistryName(new ResourceLocation(TheGraveyard.MOD_ID, name));
-
-        // block item registry
-        Item.Properties properties = new Item.Properties().tab(TheGraveyard.GROUP);
-        BlockItem item = new BlockItem(block, properties);
+        BlockItem item = new BlockItem(block, new Item.Properties());
         item.setRegistryName(new ResourceLocation(TheGraveyard.MOD_ID, name));
 
         blocks_list.add(block);

@@ -15,15 +15,12 @@ public class GraveyardFogParticle extends SpriteTexturedParticle {
     GraveyardFogParticle(ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
         super(clientWorld, d, e, f, g, h, i);
         this.hasPhysics = false;
-        //this.quadSize *= 6.0D;
+        this.quadSize *= 5.0D;
         this.yd *= 0.002999999552965164D;
         this.startY = y;
     }
 
-    @Override
-    public Particle scale(float p_70541_1_) {
-        return super.scale(6.0F);
-    }
+
 
     public IParticleRenderType getRenderType() {
         return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
@@ -37,11 +34,14 @@ public class GraveyardFogParticle extends SpriteTexturedParticle {
         this.yo = this.y;
         this.zo = this.z;
 
-        this.move(0, this.yo, 0);
+        this.move(0, this.yd, 0);
+
 
         if (this.y >= startY + 1.0D + random.nextDouble()) {
             this.remove();
         }
+
+
 
     }
 

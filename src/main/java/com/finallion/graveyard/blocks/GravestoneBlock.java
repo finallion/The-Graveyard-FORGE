@@ -42,7 +42,8 @@ public class GravestoneBlock extends StandingSignBlock {
     public static final IntegerProperty ROTATION = BlockStateProperties.ROTATION_16;
     public static final DirectionProperty FACING = HorizontalFaceBlock.FACING;
     public static final BooleanProperty FLOOR = BlockStateProperties.BOTTOM;
-    private static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 0.0D, 8.0D, 16.0D, 16.0D);
+    private static final VoxelShape SHAPE_FACING_EW = Block.box(4.0D, 0.0D, 0.0D, 12.0D, 16.0D, 16.0D);
+    private static final VoxelShape SHAPE_FACING_NS = Block.box(0.0D, 0.0D, 4.0D, 16.0D, 16.0D, 12.0D);
     private final ResourceLocation texture;
 
     public GravestoneBlock(ResourceLocation texture) {
@@ -56,8 +57,12 @@ public class GravestoneBlock extends StandingSignBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
-        return SHAPE;
+    public VoxelShape getShape(BlockState state, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
+        if (Direction.NORTH == state.getValue(FACING) || Direction.SOUTH == state.getValue(FACING)) {
+            return SHAPE_FACING_NS;
+        } else {
+            return SHAPE_FACING_EW;
+        }
     }
 
     public BlockState rotate(BlockState state, Rotation rotation) {
@@ -120,14 +125,14 @@ public class GravestoneBlock extends StandingSignBlock {
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState p_220071_1_, IBlockReader p_220071_2_, BlockPos p_220071_3_, ISelectionContext p_220071_4_) {
-        return SHAPE;
+    public VoxelShape getCollisionShape(BlockState state, IBlockReader p_220071_2_, BlockPos p_220071_3_, ISelectionContext p_220071_4_) {
+        if (Direction.NORTH == state.getValue(FACING) || Direction.SOUTH == state.getValue(FACING)) {
+            return SHAPE_FACING_NS;
+        } else {
+            return SHAPE_FACING_EW;
+        }
     }
 
-    @Override
-    public VoxelShape getVisualShape(BlockState p_230322_1_, IBlockReader p_230322_2_, BlockPos p_230322_3_, ISelectionContext p_230322_4_) {
-        return SHAPE;
-    }
 
     public BlockState updateShape(BlockState p_196271_1_, Direction p_196271_2_, BlockState p_196271_3_, IWorld p_196271_4_, BlockPos p_196271_5_, BlockPos p_196271_6_) {
         if (p_196271_1_.getValue(WATERLOGGED)) {

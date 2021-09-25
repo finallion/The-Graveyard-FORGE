@@ -63,7 +63,7 @@ public class UrnBlockEntity extends LockableLootTileEntity {
     }
 
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("container.barrel");
+        return new TranslationTextComponent("container.urn");
     }
 
     protected Container createMenu(int p_213906_1_, PlayerInventory p_213906_2_) {
@@ -102,7 +102,7 @@ public class UrnBlockEntity extends LockableLootTileEntity {
             this.scheduleRecheck();
         } else {
             BlockState blockstate = this.getBlockState();
-            if (!blockstate.is(Blocks.BARREL)) {
+            if (!(blockstate.getBlock() instanceof UrnBlock)) {
                 this.setRemoved();
                 return;
             }

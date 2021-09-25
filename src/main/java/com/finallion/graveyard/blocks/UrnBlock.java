@@ -37,10 +37,11 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class UrnBlock extends BarrelBlock implements IWaterLoggable {
+public class UrnBlock extends ContainerBlock implements IWaterLoggable {
     public static final BooleanProperty WATERLOGGED;
     public static final DirectionProperty FACING;
     public static final BooleanProperty OPEN;
+    private static final VoxelShape LARGE_URN = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
     private static final VoxelShape SMALL_URN = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 10.0D, 14.0D);
 
     public UrnBlock() {
@@ -62,7 +63,7 @@ public class UrnBlock extends BarrelBlock implements IWaterLoggable {
         if (this.getBlock().toString().contains("small")) {
             return SMALL_URN;
         }
-        return super.getShape(p_220053_1_, p_220053_2_, p_220053_3_, p_220053_4_);
+        return LARGE_URN;
     }
 
     @Override
@@ -70,7 +71,7 @@ public class UrnBlock extends BarrelBlock implements IWaterLoggable {
         if (this.getBlock().toString().contains("small")) {
             return SMALL_URN;
         }
-        return super.getCollisionShape(p_220071_1_, p_220071_2_, p_220071_3_, p_220071_4_);
+        return LARGE_URN;
     }
 
     public FluidState getFluidState(BlockState state) {
@@ -113,11 +114,6 @@ public class UrnBlock extends BarrelBlock implements IWaterLoggable {
 
     }
 
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return TGTileEntities.URN_BLOCK_ENTITY.get().create();
-    }
 
     public BlockRenderType getRenderShape(BlockState p_149645_1_) {
         return BlockRenderType.MODEL;
@@ -171,4 +167,11 @@ public class UrnBlock extends BarrelBlock implements IWaterLoggable {
     }
 
 
+
+
+    @Nullable
+    @Override
+    public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
+        return TGTileEntities.URN_BLOCK_ENTITY.get().create();
+    }
 }
