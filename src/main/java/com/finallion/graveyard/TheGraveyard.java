@@ -143,7 +143,7 @@ public class TheGraveyard {
     }
 
 
-    public static final ItemGroup GROUP = new ItemGroup(TheGraveyard.MOD_ID + "group") {
+    public static final ItemGroup GROUP = new ItemGroup("group") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(Items.SKELETON_SKULL);

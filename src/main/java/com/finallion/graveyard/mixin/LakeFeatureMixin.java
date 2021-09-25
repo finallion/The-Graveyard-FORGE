@@ -28,10 +28,12 @@ public class LakeFeatureMixin {
     public void noLakesInStructures(ISeedReader world, ChunkGenerator p_241855_2_, Random p_241855_3_, BlockPos blockPos, BlockStateFeatureConfig config, CallbackInfoReturnable<Boolean> info) {
         SectionPos sectionPos = SectionPos.of(blockPos);
         for (Structure<?> structure : TGStructures.MOD_STRUCTURES) {
+
             if (world.startsForFeature(sectionPos, structure).findAny().isPresent()) {
                 info.setReturnValue(false);
                 break;
             }
+
         }
     }
 }

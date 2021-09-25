@@ -45,7 +45,7 @@ public class UrnBlock extends ContainerBlock implements IWaterLoggable {
     private static final VoxelShape SMALL_URN = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 10.0D, 14.0D);
 
     public UrnBlock() {
-        super(AbstractBlock.Properties.of(Material.GLASS).noOcclusion().sound(SoundType.BASALT).strength(0.3F));
+        super(AbstractBlock.Properties.of(Material.GLASS).noOcclusion().sound(SoundType.METAL).strength(0.3F));
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false).setValue(OPEN, false));
     }
 

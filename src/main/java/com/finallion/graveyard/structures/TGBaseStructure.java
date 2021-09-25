@@ -35,7 +35,7 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
     private int averageHeight;
     private final int MAX_WATER_HITS = 8;
     private final int MAX_TERRAIN_DIFFERENCE_BASE = 2;
-    private final int MAX_TERRAIN_DIFFERENCE_LG = 5;
+    private final int MAX_TERRAIN_DIFFERENCE_LG = 4;
     private final int OFFSET_WATER_CHECK_LG = 25;
 
     public TGBaseStructure(Codec<NoFeatureConfig> codec, String name, double size, int sunkenIn) {
@@ -217,7 +217,7 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
         int maxSides = Math.max(Math.max(j1, p1), Math.max(o1, k1));
         int maxHeight = Math.max(Math.max(maxCorners, maxSides), i1);
 
-        averageHeight = Math.abs((maxHeight + minHeight) / 2);
+        averageHeight = Math.abs((maxHeight + minHeight) / 2) - 1;
 
         if (SIZE > 2) {
             return Math.abs(maxHeight - minHeight) <= MAX_TERRAIN_DIFFERENCE_LG;

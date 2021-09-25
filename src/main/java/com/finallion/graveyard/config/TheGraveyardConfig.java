@@ -50,6 +50,21 @@ public class TheGraveyardConfig {
 
 
     public TheGraveyardConfig(ForgeConfigSpec.Builder builder, ConfigHelper.Subscriber subscriber) {
+        builder.comment(
+                "Welcome to The Graveyard Config!\n" + "\n" +
+                "Here, you can disable structures to spawn, change their chance of spawning, change their separation and also change their salt.\n" +
+                "Additionally, you can turn the graveyard fog particles on and set the chance of spawning them (higher numbers = lower chance of spawning).\n" +
+                "Graveyard fog particles spawn from graveyard moss and add an atmospheric and spooky element while exploring.\n" +
+                "\n" +
+                "To disable a structure to spawn, simply go to the corresponding structure and change true to false.\n" +
+                "\n" +
+                "The Graveyard uses the vanilla structure spawning system. That is -\n" +
+                "- Separation is the minimum chunks between structures\n" +
+                "- Spacing is the average chunks between structures (Spacing value needs to be higher than Separation value!)\n" +
+                "- Salt is a special field that gives structures unique spawning positions. (Only change if you know what you are doing!)\n" +
+                "\n" +
+                "Notice: reducing the generation settings will increase the risk of structures overlapping. Especially jigsaw structures are unpredictable!"
+                );
 
         builder.push("Large Birch Tree");
         large_birch_tree = booleanConfigValue(builder, subscriber, "Large Birch Tree Generation", "large_birch_tree", true);
@@ -110,7 +125,7 @@ public class TheGraveyardConfig {
 
         builder.push("Graveyard Fog Particle");
         fog_particle = booleanConfigValue(builder, subscriber, "Graveyard Fog Particle Generation", "fog_particle", true);
-        fog_particle_chance = integerConfigValue(builder, subscriber, "Graveyard Fog Particle Generation Chance", "fog_particle_chance", 50);
+        fog_particle_chance = integerConfigValue(builder, subscriber, "Graveyard Fog Particle Generation Chance (1 in ...)", "fog_particle_chance", 50);
         builder.pop();
 
         builder.build();

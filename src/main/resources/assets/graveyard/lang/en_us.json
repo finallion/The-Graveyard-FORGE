@@ -97,7 +97,7 @@
   "entity.graveyard.skeleton_creeper": "Skeleton Creeper",
   "item.graveyard.skeleton_creeper_spawn_egg": "Skeleton Creeper Spawn Egg",
   "filled_map.graveyard:large_walled_graveyard": "Large Graveyard Explorer Map",
-  "itemGroup.graveyard.group": "The Graveyard",
+  "itemGroup.group": "The Graveyard",
   "gravestone.edit": "Edit Gravestone"
 
 }
