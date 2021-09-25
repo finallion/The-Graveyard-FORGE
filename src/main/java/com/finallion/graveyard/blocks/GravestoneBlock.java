@@ -1,16 +1,20 @@
 package com.finallion.graveyard.blocks;
 
 import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
+import com.finallion.graveyard.init.TGTileEntities;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
+import net.minecraft.network.play.client.CUpdateSignPacket;
+import net.minecraft.network.play.server.SOpenSignMenuPacket;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IntegerProperty;
@@ -38,9 +42,8 @@ public class GravestoneBlock extends StandingSignBlock {
     public static final IntegerProperty ROTATION = BlockStateProperties.ROTATION_16;
     public static final DirectionProperty FACING = HorizontalFaceBlock.FACING;
     public static final BooleanProperty FLOOR = BlockStateProperties.BOTTOM;
+    private static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 0.0D, 8.0D, 16.0D, 16.0D);
     private final ResourceLocation texture;
-
-    private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 16, 16);
 
     public GravestoneBlock(ResourceLocation texture) {
         super(AbstractBlock.Properties.of(Material.STONE).noCollission().noOcclusion().sound(SoundType.BASALT).strength(1.5F), WoodType.OAK);
@@ -91,33 +94,40 @@ public class GravestoneBlock extends StandingSignBlock {
         super.onPlace(p_220082_1_, p_220082_2_, p_220082_3_, p_220082_4_, p_220082_5_);
     }
 
-    @Nullable
+
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
         return new GravestoneBlockEntity();
     }
 
-    //public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
-    //    return new GravestoneBlockEntity();
-    //}
-
-    /*
     @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
+
+    @Override
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         if (placer != null && placer instanceof PlayerEntity) {
             GravestoneBlockEntity sign = (GravestoneBlockEntity) world.getBlockEntity(pos);
-            if (!world.isClient) {
-                sign.setEditor(((PlayerEntity) placer).inventory.player);
-                ((ServerPlayerEntity) placer).networkHandler.connection.send(new SignEditorOpenS2CPacket(pos));
+            if (!world.isClientSide) {
+                sign.setAllowedPlayerEditor(((PlayerEntity) placer).inventory.player);
+                ((ServerPlayerEntity) placer).connection.send(new SOpenSignMenuPacket(pos));
             }
             else
                 sign.setEditable(true);
         }
     }
 
-     */
+    @Override
+    public VoxelShape getCollisionShape(BlockState p_220071_1_, IBlockReader p_220071_2_, BlockPos p_220071_3_, ISelectionContext p_220071_4_) {
+        return SHAPE;
+    }
 
-
+    @Override
+    public VoxelShape getVisualShape(BlockState p_230322_1_, IBlockReader p_230322_2_, BlockPos p_230322_3_, ISelectionContext p_230322_4_) {
+        return SHAPE;
+    }
 
     public BlockState updateShape(BlockState p_196271_1_, Direction p_196271_2_, BlockState p_196271_3_, IWorld p_196271_4_, BlockPos p_196271_5_, BlockPos p_196271_6_) {
         if (p_196271_1_.getValue(WATERLOGGED)) {
@@ -130,7 +140,7 @@ public class GravestoneBlock extends StandingSignBlock {
 
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
-        Direction direction = context.getNearestLookingDirection();
+        Direction direction = context.getHorizontalDirection();
         return this.defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(WATERLOGGED, Boolean.valueOf(fluidstate.getType() == Fluids.WATER));
     }
 

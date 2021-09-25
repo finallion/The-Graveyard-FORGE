@@ -34,19 +34,15 @@ public class BoneDisplayBlock extends Block implements IWaterLoggable {
         builder.add(FACING, WATERLOGGED);
     }
 
-
-    /*
     @Override
-    public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos) {
+    public boolean propagatesSkylightDown(BlockState p_200123_1_, IBlockReader p_200123_2_, BlockPos p_200123_3_) {
         return true;
     }
 
     @Override
-    public float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos) {
+    public float getShadeBrightness(BlockState p_220080_1_, IBlockReader p_220080_2_, BlockPos p_220080_3_) {
         return 1.0F;
     }
-
-     */
 
     @Nullable
     @Override

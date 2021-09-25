@@ -107,7 +107,7 @@ public class UrnBlockEntity extends LockableLootTileEntity {
                 return;
             }
 
-            boolean flag = blockstate.getValue(BarrelBlock.OPEN);
+            boolean flag = blockstate.getValue(UrnBlock.OPEN);
             if (flag) {
                 this.playSound(blockstate, SoundEvents.BARREL_CLOSE);
                 this.updateBlockState(blockstate, false);
@@ -124,11 +124,11 @@ public class UrnBlockEntity extends LockableLootTileEntity {
     }
 
     private void updateBlockState(BlockState p_213963_1_, boolean p_213963_2_) {
-        this.level.setBlock(this.getBlockPos(), p_213963_1_.setValue(BarrelBlock.OPEN, Boolean.valueOf(p_213963_2_)), 3);
+        this.level.setBlock(this.getBlockPos(), p_213963_1_.setValue(UrnBlock.OPEN, Boolean.valueOf(p_213963_2_)), 3);
     }
 
     private void playSound(BlockState p_213965_1_, SoundEvent p_213965_2_) {
-        Vector3i vector3i = p_213965_1_.getValue(BarrelBlock.FACING).getNormal();
+        Vector3i vector3i = p_213965_1_.getValue(UrnBlock.FACING).getNormal();
         double d0 = (double)this.worldPosition.getX() + 0.5D + (double)vector3i.getX() / 2.0D;
         double d1 = (double)this.worldPosition.getY() + 0.5D + (double)vector3i.getY() / 2.0D;
         double d2 = (double)this.worldPosition.getZ() + 0.5D + (double)vector3i.getZ() / 2.0D;

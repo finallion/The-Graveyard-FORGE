@@ -4,9 +4,9 @@ package com.finallion.graveyard.client;
 import com.finallion.graveyard.blockentities.render.GravestoneBlockEntityRenderer;
 import com.finallion.graveyard.entites.renders.SkeletonCreeperRender;
 import com.finallion.graveyard.init.*;
-import com.finallion.graveyard.utils.SpriteIdentifierRegistry;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screen.inventory.ChestScreen;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -36,18 +36,20 @@ public class TheGraveyardClient {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.addListener(this::clientInit);
+        modEventBus.addListener(this::onBlockColorsInit);
+        modEventBus.addListener(this::onItemColorsInit);
     }
 
 
     @SubscribeEvent
-    public static void onBlockColorsInit(ColorHandlerEvent.Item event) {
+    public void onBlockColorsInit(ColorHandlerEvent.Item event) {
         final BlockColors blockColors = event.getBlockColors();
 
         blockColors.register((unknown, lightReader, pos, unknown2) -> lightReader != null && pos != null ? BiomeColors.getAverageGrassColor(lightReader, pos) : GrassColors.get(0.5D, 1.0D), TGBlocks.TG_GRASS_BLOCK);
     }
 
     @SubscribeEvent
-    public static void onItemColorsInit(ColorHandlerEvent.Item event) {
+    public void onItemColorsInit(ColorHandlerEvent.Item event) {
         final BlockColors blockColors = event.getBlockColors();
         final ItemColors itemColors = event.getItemColors();
 
@@ -62,13 +64,8 @@ public class TheGraveyardClient {
 
     @SubscribeEvent
     public void clientInit(FMLClientSetupEvent event) {
-
         RenderTypeLookup.setRenderLayer(TGBlocks.DARK_IRON_BARS, CUTOUT_MIPPED);
         RenderTypeLookup.setRenderLayer(TGBlocks.TG_GRASS_BLOCK, CUTOUT_MIPPED);
-
-        // texture of the edit screen of the gravestone
-        ResourceLocation texture = TGBlocks.GRAVESTONE_TEXTURE;
-        SpriteIdentifierRegistry.INSTANCE.addRenderMaterial(new RenderMaterial(Atlases.SIGN_SHEET, texture));
 
         ClientRegistry.bindTileEntityRenderer(TGTileEntities.GRAVESTONE_BLOCK_ENTITY.get(), GravestoneBlockEntityRenderer::new);
 

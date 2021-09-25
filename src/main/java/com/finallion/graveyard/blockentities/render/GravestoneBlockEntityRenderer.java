@@ -1,8 +1,10 @@
 package com.finallion.graveyard.blockentities.render;
 
+import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
 import com.finallion.graveyard.blocks.GravestoneBlock;
 import com.finallion.graveyard.init.TGBlocks;
+import com.google.common.collect.Maps;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.AbstractSignBlock;
@@ -12,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.model.ModelBakery;
@@ -25,8 +28,10 @@ import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.SignTileEntity;
 import net.minecraft.util.IReorderingProcessor;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.registry.Registry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -35,12 +40,16 @@ import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelBuilder;
 import net.minecraftforge.common.ForgeConfig;
+import net.minecraftforge.registries.RegistryManager;
 
+import java.util.HashMap;
 import java.util.List;
 
 
 @OnlyIn(Dist.CLIENT)
 public class GravestoneBlockEntityRenderer extends TileEntityRenderer<GravestoneBlockEntity> {
+    private static final HashMap<Block, RenderType> LAYERS = Maps.newHashMap();
+    private static RenderType defaultLayer;
     private static ItemStack stack = new ItemStack(TGBlocks.GRAVESTONE.asItem(), 1);
 
     public GravestoneBlockEntityRenderer(TileEntityRendererDispatcher blockEntityRenderDispatcher) {
@@ -103,6 +112,19 @@ public class GravestoneBlockEntityRenderer extends TileEntityRenderer<Gravestone
         Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemCameraTransforms.TransformType.GROUND, i, OverlayTexture.NO_OVERLAY, matrixStack, vertexConsumerProvider);
 
         matrixStack.popPose();
+    }
+
+    static {
+        defaultLayer = RenderType.entitySolid(new ResourceLocation("textures/entity/signs/oak.png"));
+        RenderType layer = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/polished_basalt.png"));
+        LAYERS.put(TGBlocks.GRAVESTONE, layer);
+
+    }
+
+
+
+    public static IVertexBuilder getConsumer(IRenderTypeBuffer provider, Block block) {
+        return provider.getBuffer(LAYERS.getOrDefault(block, defaultLayer));
     }
 
 

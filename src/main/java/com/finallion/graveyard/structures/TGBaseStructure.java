@@ -1,6 +1,8 @@
 package com.finallion.graveyard.structures;
 
 import com.finallion.graveyard.TheGraveyard;
+import com.finallion.graveyard.init.TGConfiguredFeatures;
+import com.finallion.graveyard.init.TGStructures;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.ResourceLocation;
@@ -154,7 +156,8 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
         System.out.println("Seven: " + bo1 + " Height: " + o1 + " at: " + chunkX + " " + (chunkZ - offset));
         System.out.println("Eight: " + bp1 + " Height: " + p1 + " at: " + (chunkX - offset) + " " + chunkZ);
         System.out.println("Nine: " + bq1 + " Height: " + q1 + " at: " + (chunkX - offset) + " " + (chunkZ - offset));
-        */
+
+         */
 
         return countWaterMatches(bi1, bj1, bk1, bl1, bm1, bn1, bo1, bq1, bp1);
 
@@ -183,15 +186,15 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
 
         int offset = (int) SIZE * 8;
 
-        int i1 = generator.getFirstFreeHeight(chunkX, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
-        int j1 = generator.getFirstFreeHeight(chunkX, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int k1 = generator.getFirstFreeHeight(chunkX + offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
-        int l1 = generator.getFirstFreeHeight(chunkX + offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int m1 = generator.getFirstFreeHeight(chunkX - offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int n1 = generator.getFirstFreeHeight(chunkX + offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int o1 = generator.getFirstFreeHeight(chunkX, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int p1 = generator.getFirstFreeHeight(chunkX - offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
-        int q1 = generator.getFirstFreeHeight(chunkX - offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int i1 = generator.getFirstOccupiedHeight(chunkX, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
+        int j1 = generator.getFirstOccupiedHeight(chunkX, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int k1 = generator.getFirstOccupiedHeight(chunkX + offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
+        int l1 = generator.getFirstOccupiedHeight(chunkX + offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int m1 = generator.getFirstOccupiedHeight(chunkX - offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int n1 = generator.getFirstOccupiedHeight(chunkX + offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int o1 = generator.getFirstOccupiedHeight(chunkX, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
+        int p1 = generator.getFirstOccupiedHeight(chunkX - offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
+        int q1 = generator.getFirstOccupiedHeight(chunkX - offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
 
         /*
         System.out.println("Terrain flatness results: ");
@@ -224,7 +227,8 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
     }
 
 
-    public boolean checkForOtherStructures(ChunkGenerator generator, long seed, SharedSeedRandom rand, int chunkX, int chunkZ) {
+    public boolean checkForOtherStructures(ChunkGenerator generator, long seed, SharedSeedRandom random, int chunkX, int chunkZ) {
+
         StructureSeparationSettings structureConfig = generator.getSettings().getConfig(Structure.VILLAGE);
         if (structureConfig == null) {
             return false;
@@ -237,7 +241,7 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
             int blocksAwayToCheck = 15;
             for (int k = chunkX - blocksAwayToCheck; k <= chunkX + blocksAwayToCheck; ++k) {
                 for (int l = chunkZ - blocksAwayToCheck; l <= chunkZ + blocksAwayToCheck; ++l) {
-                    ChunkPos chunkPos = Structure.VILLAGE.getPotentialFeatureChunk(structureConfig, seed, rand, k, l);
+                    ChunkPos chunkPos = Structure.VILLAGE.getPotentialFeatureChunk(structureConfig, seed, random, k, l);
                     if (k == chunkPos.x && l == chunkPos.z) {
                         return false;
                     }
@@ -246,6 +250,8 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
 
             return true;
         }
+
+
     }
 
     private int getSunkenIn() {
@@ -310,8 +316,9 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
 
 
             this.pieces.forEach(piece -> piece.move(0, 1, 0));
-            this.pieces.forEach(piece -> piece.getBoundingBox().y0 -= 1);
-            this.pieces.forEach(piece -> piece.getBoundingBox().move(0, SUNKEN_IN, 0));
+            this.pieces.forEach(piece -> piece.getBoundingBox().y0 -= SUNKEN_IN);
+            //this.pieces.forEach(piece -> piece.getBoundingBox().move(0, SUNKEN_IN, 0));
+
 
 
             Vector3i structureCenter = this.pieces.get(0).getBoundingBox().getCenter();
@@ -320,6 +327,8 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
             for(StructurePiece structurePiece : this.pieces){
                 structurePiece.move(xOffset, 0, zOffset);
             }
+
+
 
             this.calculateBoundingBox();
 

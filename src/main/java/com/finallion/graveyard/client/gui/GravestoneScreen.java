@@ -3,12 +3,14 @@ package com.finallion.graveyard.client.gui;
 import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
 import com.finallion.graveyard.blockentities.render.GravestoneBlockEntityRenderer;
 import com.finallion.graveyard.blocks.GravestoneBlock;
+import com.finallion.graveyard.init.TGBlocks;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.StandingSignBlock;
+import net.minecraft.block.WoodType;
 import net.minecraft.client.gui.DialogTexts;
 import net.minecraft.client.gui.fonts.TextInputUtil;
 import net.minecraft.client.gui.screen.Screen;
@@ -21,6 +23,7 @@ import net.minecraft.client.renderer.tileentity.SignTileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.network.play.client.CUpdateSignPacket;
 import net.minecraft.tileentity.SignTileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
@@ -36,7 +39,7 @@ import java.util.stream.IntStream;
 @OnlyIn(Dist.CLIENT)
 public class GravestoneScreen extends Screen {
     private final GravestoneBlockEntity sign;
-    private SignTileEntityRenderer.SignModel model;
+    private final SignTileEntityRenderer.SignModel model = new SignTileEntityRenderer.SignModel();
     private int frame;
     private int line;
     private TextInputUtil signField;
@@ -80,6 +83,7 @@ public class GravestoneScreen extends Screen {
     }
 
     public void tick() {
+
         ++this.frame;
         if (!this.sign.getType().isValid(this.sign.getBlockState().getBlock())) {
             this.onDone();
@@ -124,20 +128,15 @@ public class GravestoneScreen extends Screen {
         float f = 93.75F;
         p_230430_1_.scale(93.75F, -93.75F, 93.75F);
         p_230430_1_.translate(0.0D, -1.3125D, 0.0D);
-        BlockState blockstate = this.sign.getBlockState();
-        boolean flag = blockstate.getBlock() instanceof StandingSignBlock;
-        if (!flag) {
-            p_230430_1_.translate(0.0D, -0.3125D, 0.0D);
-        }
 
         boolean flag1 = this.frame / 6 % 2 == 0;
         float f1 = 0.6666667F;
         p_230430_1_.pushPose();
         p_230430_1_.scale(0.6666667F, -0.6666667F, -0.6666667F);
         IRenderTypeBuffer.Impl irendertypebuffer$impl = this.minecraft.renderBuffers().bufferSource();
-        //RenderMaterial rendermaterial = SignTileEntityRenderer.getMaterial(blockstate.getBlock());
-        RenderMaterial rendermaterial = new RenderMaterial(Atlases.SIGN_SHEET, ((GravestoneBlock) sign.getBlockState().getBlock()).getTexture());
-        IVertexBuilder ivertexbuilder = rendermaterial.buffer(irendertypebuffer$impl, this.model::renderType);
+        IVertexBuilder ivertexbuilder = GravestoneBlockEntityRenderer.getConsumer(irendertypebuffer$impl, sign.getBlockState().getBlock());
+        //RenderMaterial rendermaterial = new RenderMaterial(Atlases.SIGN_SHEET, ((GravestoneBlock) sign.getBlockState().getBlock()).getTexture());
+        //IVertexBuilder ivertexbuilder = rendermaterial.buffer(irendertypebuffer$impl, this.model::renderType);
         this.model.sign.render(p_230430_1_, ivertexbuilder, 15728880, OverlayTexture.NO_OVERLAY);
 
         p_230430_1_.popPose();
