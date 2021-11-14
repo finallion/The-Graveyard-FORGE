@@ -26,8 +26,9 @@ import java.util.Locale;
 import java.util.Random;
 
 
-@Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID)
+//@Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID)
 public class TGVillagerTrades {
+    /*
     private static final int NOVICE = 1;
 
     public static void addVillagerTrades(VillagerTradesEvent event, int level, VillagerTrades.ITrade... trades) {
@@ -82,5 +83,7 @@ public class TGVillagerTrades {
         }
     }
 
+
+     */
 
 }

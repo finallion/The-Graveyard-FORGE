@@ -1,8 +1,6 @@
 package com.finallion.graveyard.structures;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.init.TGConfiguredFeatures;
-import com.finallion.graveyard.init.TGStructures;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.ResourceLocation;
@@ -20,7 +18,6 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.jigsaw.JigsawManager;
 import net.minecraft.world.gen.feature.structure.*;
 import net.minecraft.world.gen.feature.template.TemplateManager;

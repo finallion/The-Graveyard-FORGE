@@ -5,9 +5,12 @@ import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
 import com.finallion.graveyard.blockentities.UrnBlockEntity;
 import com.finallion.graveyard.blocks.*;
+import com.sun.scenario.Settings;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
@@ -22,7 +25,11 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TGBlocks {
     public static List<Block> blocks_list = new ArrayList<Block>();
+
     public static final ResourceLocation GRAVESTONE_TEXTURE = new ResourceLocation("minecraft", "block/polished_basalt_side");
+    public static final ResourceLocation COBBLESTONE_GRAVESTONE_TEXTURE = new ResourceLocation("minecraft", "block/cobblestone");
+    public static final ResourceLocation MOSSY_COBBLESTONE_GRAVESTONE_TEXTURE = new ResourceLocation("minecraft", "block/mossy_cobblestone");
+    public static final ResourceLocation DEEPSLATE_GRAVESTONE_TEXTURE = new ResourceLocation("graveyard", "block/deepslate");
 
     public static Block registerBlock(Block block, String name) {
         block.setRegistryName(new ResourceLocation(TheGraveyard.MOD_ID, name));
@@ -86,6 +93,9 @@ public class TGBlocks {
 
     public static Block TG_CHISELED_DEEPSLATE;
 
+    public static Block MOSS_BLOCK;
+    public static Block MOSS_CARPET;
+
 
     // helper blocks that get don't get replaced on world generation, generate ores or generate trees on
     public static Block TG_GRASS_BLOCK;
@@ -115,6 +125,9 @@ public class TGBlocks {
     public static Block VASE_BLOCK;
 
     public static Block GRAVESTONE;
+    public static Block COBBLESTONE_GRAVESTONE;
+    public static Block MOSSY_COBBLESTONE_GRAVESTONE;
+    public static Block DEEPSLATE_GRAVESTONE;
 
     public static Block BLACK_URN;
     public static Block WHITE_URN;
@@ -181,6 +194,9 @@ public class TGBlocks {
 
         TG_CHISELED_DEEPSLATE = registerBlock(new Block(AbstractBlock.Properties.copy(Blocks.STONE_BRICKS)), "tg_chiseled_deepslate");
 
+        MOSS_BLOCK = registerBlock(new VanillaMossBlock(AbstractBlock.Properties.copy(TGBlocks.TG_MOSS_BLOCK)), "moss_block");
+        MOSS_CARPET = registerBlock(new CarpetBlock(DyeColor.GREEN, AbstractBlock.Properties.of(Material.PLANT, MaterialColor.COLOR_GREEN).strength(0.1F).sound(SoundType.GRASS)), "moss_block");
+
         // helper blocks that get don't get replaced on world generation, generate ores or generate trees on
         TG_GRASS_BLOCK = registerBlockWithoutGroup(new TGGrassBlock(AbstractBlock.Properties.copy(Blocks.GRASS_BLOCK).lootFrom(() -> Blocks.GRASS_BLOCK)), "tg_grass_block");
         TG_DIRT = registerBlockWithoutGroup(new TGStoneBlock(() -> Blocks.DIRT, AbstractBlock.Properties.copy(Blocks.DIRT).lootFrom(() -> Blocks.DIRT)), "tg_dirt");
@@ -210,6 +226,9 @@ public class TGBlocks {
         VASE_BLOCK = registerBlock(new VaseBlock(), "vase_block");
 
         GRAVESTONE = registerBlock(new GravestoneBlock(GRAVESTONE_TEXTURE), "gravestone");
+        COBBLESTONE_GRAVESTONE = registerBlock(new GravestoneBlock(COBBLESTONE_GRAVESTONE_TEXTURE), "cobblestone_gravestone");
+        MOSSY_COBBLESTONE_GRAVESTONE = registerBlock(new GravestoneBlock(MOSSY_COBBLESTONE_GRAVESTONE_TEXTURE), "mossy_cobblestone_gravestone");
+        DEEPSLATE_GRAVESTONE = registerBlock(new GravestoneBlock(DEEPSLATE_GRAVESTONE_TEXTURE), "deepslate_gravestone");
 
         BLACK_URN = registerBlock(new UrnBlock(), "black_urn");
         BROWN_URN = registerBlock(new UrnBlock(), "brown_urn");

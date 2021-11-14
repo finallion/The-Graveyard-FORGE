@@ -109,15 +109,22 @@ public class GravestoneBlockEntityRenderer extends TileEntityRenderer<Gravestone
         float rotation = -((float)state.getValue(GravestoneBlock.FACING).toYRot());
         matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
 
-        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemCameraTransforms.TransformType.GROUND, i, OverlayTexture.NO_OVERLAY, matrixStack, vertexConsumerProvider);
+        //Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemCameraTransforms.TransformType.GROUND, i, OverlayTexture.NO_OVERLAY, matrixStack, vertexConsumerProvider);
+        Minecraft.getInstance().getItemRenderer().renderStatic(new ItemStack(state.getBlock().asItem(), 1), ItemCameraTransforms.TransformType.GROUND, i, OverlayTexture.NO_OVERLAY, matrixStack, vertexConsumerProvider);
 
         matrixStack.popPose();
     }
 
     static {
         defaultLayer = RenderType.entitySolid(new ResourceLocation("textures/entity/signs/oak.png"));
-        RenderType layer = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/polished_basalt.png"));
-        LAYERS.put(TGBlocks.GRAVESTONE, layer);
+        RenderType layer1 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/polished_basalt.png"));
+        RenderType layer2 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/cobblestone.png"));
+        RenderType layer3 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/mossy_cobblestone.png"));
+        RenderType layer4 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/deepslate.png"));
+        LAYERS.put(TGBlocks.GRAVESTONE, layer1);
+        LAYERS.put(TGBlocks.GRAVESTONE, layer2);
+        LAYERS.put(TGBlocks.GRAVESTONE, layer3);
+        LAYERS.put(TGBlocks.GRAVESTONE, layer4);
 
     }
 
