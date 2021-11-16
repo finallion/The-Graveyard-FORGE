@@ -9,13 +9,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.monster.GhastEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +27,37 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TGEntities {
 
-    public static List<EntityType<?>> entities = new ArrayList<EntityType<?>>();
-    public static final EntityType<SkeletonCreeper> SKELETON_CREEPER = registerEntity(EntityType.Builder.of(SkeletonCreeper::new, EntityClassification.MONSTER).sized(0.6F, 1.7F), "skeleton_creeper");
-    public static final EntityType<SkeletonCreeper> ACOLYTE = registerEntity(EntityType.Builder.of(AcolyteEntity::new, EntityClassification.MONSTER).sized(0.6F, 1.9F), "acolyte");
-    public static final EntityType<SkeletonCreeper> REAPER = registerEntity(EntityType.Builder.of(ReaperEntity::new, EntityClassification.MONSTER).sized(0.5F, 1.4F), "reaper");
-    public static final EntityType<SkeletonCreeper> GHOUL = registerEntity(EntityType.Builder.of(BaseGhoulEntity::new, EntityClassification.MONSTER).sized(1.0F, 2.15F), "ghoul");
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, TheGraveyard.MOD_ID);
+
+    public static final RegistryObject<EntityType<SkeletonCreeper>> SKELETON_CREEPER = ENTITY_TYPES.register("skeleton_creeper",
+            () -> EntityType.Builder.<SkeletonCreeper>of(SkeletonCreeper::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.7F)
+                    .build(new ResourceLocation(TheGraveyard.MOD_ID, "skeleton_creeper").toString()));
+
+    public static final RegistryObject<EntityType<AcolyteEntity>> ACOLYTE = ENTITY_TYPES.register("acolyte",
+            () -> EntityType.Builder.<AcolyteEntity>of(AcolyteEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.9F)
+                    .build(new ResourceLocation(TheGraveyard.MOD_ID, "acolyte").toString()));
+
+    public static final RegistryObject<EntityType<BaseGhoulEntity>> GHOUL = ENTITY_TYPES.register("ghoul",
+            () -> EntityType.Builder.<BaseGhoulEntity>of(BaseGhoulEntity::new, EntityClassification.MONSTER)
+                    .sized(1.0F, 2.15F)
+                    .build(new ResourceLocation(TheGraveyard.MOD_ID, "ghoul").toString()));
+
+    public static final RegistryObject<EntityType<ReaperEntity>> REAPER = ENTITY_TYPES.register("reaper",
+            () -> EntityType.Builder.<ReaperEntity>of(ReaperEntity::new, EntityClassification.MONSTER)
+                    .sized(0.5F, 1.4F)
+                    .build(new ResourceLocation(TheGraveyard.MOD_ID, "reaper").toString()));
+
 
     /*
+    public static List<EntityType<?>> entities = new ArrayList<EntityType<?>>();
+    public static final EntityType<SkeletonCreeper> SKELETON_CREEPER = registerEntity(EntityType.Builder.of(SkeletonCreeper::new, EntityClassification.MONSTER).sized(0.6F, 1.7F), "skeleton_creeper");
+    public static final EntityType<AcolyteEntity> ACOLYTE = registerEntity(EntityType.Builder.of(AcolyteEntity::new, EntityClassification.MONSTER).sized(0.6F, 1.9F), "acolyte");
+    public static final EntityType<ReaperEntity> REAPER = registerEntity(EntityType.Builder.of(ReaperEntity::new, EntityClassification.MONSTER).sized(0.5F, 1.4F), "reaper");
+    public static final EntityType<BaseGhoulEntity> GHOUL = registerEntity(EntityType.Builder.of(BaseGhoulEntity::new, EntityClassification.MONSTER).sized(1.0F, 2.15F), "ghoul");
+
+
     public static final EntityType<BaseGhoulEntity> GHOUL = FabricEntityTypeBuilder.createMob()
             .spawnGroup(SpawnGroup.MONSTER)
             .entityFactory(BaseGhoulEntity::new)
@@ -37,7 +65,7 @@ public class TGEntities {
             .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, BaseGhoulEntity::canSpawn)
             .build();
 
-     */
+
 
     public static <T extends Entity> EntityType<T> registerEntity(EntityType.Builder<?> builder, String name) {
         EntityType<T> entity = (EntityType<T>) builder.build(name).setRegistryName(new ResourceLocation(TheGraveyard.MOD_ID, name));
@@ -54,7 +82,12 @@ public class TGEntities {
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(SKELETON_CREEPER, SkeletonCreeper.createAttributes().build());
+        event.put(ACOLYTE, AcolyteEntity.createAttributes().build());
+        event.put(GHOUL, BaseGhoulEntity.createAttributes().build());
+        event.put(REAPER, ReaperEntity.createAttributes().build());
     }
+
+     */
 
 
 }

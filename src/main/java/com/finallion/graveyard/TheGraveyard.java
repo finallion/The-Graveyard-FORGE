@@ -56,19 +56,23 @@ public class TheGraveyard {
             new SimpleSurfaceProcessors()
     ));
 
+
+    // TODO: Items null
+    // TODO: WorldRenderer mixin
     public TheGraveyard() {
         GeckoLib.initialize();
         CONFIG = ConfigHelper.register(ModConfig.Type.COMMON, TheGraveyardConfig::new, "graveyard-forge-config-v1.toml");
 
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> TheGraveyardClient::new);
+
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
-
         modEventBus.addListener(this::setup);
 
         forgeBus.addListener(EventPriority.HIGH, this::biomeModification);
         forgeBus.addListener(EventPriority.NORMAL, this::addDimensionalSpacing);
 
+        TGEntities.ENTITY_TYPES.register(modEventBus);
         TGStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
         TGTileEntities.TILE_ENTITIES.register(modEventBus);
         TGParticles.PARTICLES.register(modEventBus);
@@ -104,6 +108,7 @@ public class TheGraveyard {
                 add(event, TGConfiguredStructureFeatures.CONFIGURED_LARGE_WALLED_GRAVEYARD, CONFIG.large_walled_graveyard.get());
                 add(event, TGConfiguredStructureFeatures.CONFIGURED_MEDIUM_WALLED_GRAVEYARD, CONFIG.medium_walled_graveyard.get());
                 add(event, TGConfiguredStructureFeatures.CONFIGURED_LARGE_BIRCH_TREE, CONFIG.large_birch_tree.get());
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_HAUNTED_HOUSE, CONFIG.haunted_house.get());
                 break;
             case TAIGA:
                 add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_GRAVE, CONFIG.small_grave.get());
@@ -121,6 +126,7 @@ public class TheGraveyard {
                 break;
             case SWAMP:
                 add(event, TGConfiguredStructureFeatures.CONFIGURED_MUSHROOM_GRAVE, CONFIG.mushroom_grave.get());
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_HAUNTED_HOUSE, CONFIG.haunted_house.get());
                 break;
             default:
                 break;
@@ -178,6 +184,7 @@ public class TheGraveyard {
             tempMap.putIfAbsent(TGStructures.LARGE_BIRCH_TREE.get(), DimensionStructuresSettings.DEFAULTS.get(TGStructures.LARGE_BIRCH_TREE.get()));
             tempMap.putIfAbsent(TGStructures.MUSHROOM_GRAVE.get(), DimensionStructuresSettings.DEFAULTS.get(TGStructures.MUSHROOM_GRAVE.get()));
             tempMap.putIfAbsent(TGStructures.MUSHROOM_GRAVE.get(), DimensionStructuresSettings.DEFAULTS.get(TGStructures.MUSHROOM_GRAVE.get()));
+            tempMap.putIfAbsent(TGStructures.HAUNTED_HOUSE.get(), DimensionStructuresSettings.DEFAULTS.get(TGStructures.HAUNTED_HOUSE.get()));
 
 
             serverWorld.getChunkSource().generator.getSettings().structureConfig = tempMap;

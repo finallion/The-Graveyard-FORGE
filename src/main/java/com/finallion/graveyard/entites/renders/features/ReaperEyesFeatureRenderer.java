@@ -12,10 +12,12 @@ import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.AbstractEyesLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
-
+@OnlyIn(Dist.CLIENT)
 public class ReaperEyesFeatureRenderer extends GeoLayerRenderer<ReaperEntity> {
     private final RenderType TEXTURE = RenderType.eyes(new ResourceLocation("graveyard:textures/entity/reaper_eyes.png"));
     private final IGeoRenderer<ReaperEntity> renderer;

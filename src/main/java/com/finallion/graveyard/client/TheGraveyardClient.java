@@ -2,6 +2,9 @@ package com.finallion.graveyard.client;
 
 
 import com.finallion.graveyard.blockentities.render.GravestoneBlockEntityRenderer;
+import com.finallion.graveyard.entites.renders.AcolyteRender;
+import com.finallion.graveyard.entites.renders.GhoulRenderer;
+import com.finallion.graveyard.entites.renders.ReaperRenderer;
 import com.finallion.graveyard.entites.renders.SkeletonCreeperRender;
 import com.finallion.graveyard.init.*;
 import net.minecraft.block.BlockState;
@@ -70,7 +73,10 @@ public class TheGraveyardClient {
         ClientRegistry.bindTileEntityRenderer(TGTileEntities.GRAVESTONE_BLOCK_ENTITY.get(), GravestoneBlockEntityRenderer::new);
 
         // entities
-        RenderingRegistry.registerEntityRenderingHandler(TGEntities.SKELETON_CREEPER, SkeletonCreeperRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(TGEntities.SKELETON_CREEPER.get(), SkeletonCreeperRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(TGEntities.ACOLYTE.get(), AcolyteRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(TGEntities.GHOUL.get(), GhoulRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(TGEntities.REAPER.get(), ReaperRenderer::new);
 
     }
 

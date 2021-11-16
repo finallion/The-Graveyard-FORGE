@@ -32,6 +32,7 @@ public class TGStructures {
     public static RegistryObject<Structure<NoFeatureConfig>> LARGE_BIRCH_TREE = DEFERRED_REGISTRY_STRUCTURE.register("large_birch_tree", () -> (new LargeBirchTree(NoFeatureConfig.CODEC)));
     public static RegistryObject<Structure<NoFeatureConfig>> MEDIUM_WALLED_GRAVEYARD = DEFERRED_REGISTRY_STRUCTURE.register("medium_walled_graveyard", () -> (new MediumWalledGraveyard(NoFeatureConfig.CODEC)));
     public static RegistryObject<Structure<NoFeatureConfig>> LARGE_WALLED_GRAVEYARD = DEFERRED_REGISTRY_STRUCTURE.register("large_walled_graveyard", () -> (new LargeWalledGraveyard(NoFeatureConfig.CODEC)));
+    public static RegistryObject<Structure<NoFeatureConfig>> HAUNTED_HOUSE = DEFERRED_REGISTRY_STRUCTURE.register("haunted_forest", () -> (new HauntedHouse(NoFeatureConfig.CODEC)));
 
     public static void register() {
         setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD.get(), TheGraveyard.CONFIG.small_walled_graveyard_separation.get(), TheGraveyard.CONFIG.small_walled_graveyard_spacing.get(), TheGraveyard.CONFIG.small_walled_graveyard_salt.get(), true);
@@ -42,6 +43,7 @@ public class TGStructures {
         setupMapSpacingAndLand(LARGE_BIRCH_TREE.get(), TheGraveyard.CONFIG.large_birch_tree_separation.get(), TheGraveyard.CONFIG.large_birch_tree_spacing.get(), TheGraveyard.CONFIG.large_birch_tree_salt.get(), true);
         setupMapSpacingAndLand(MEDIUM_WALLED_GRAVEYARD.get(), TheGraveyard.CONFIG.medium_walled_graveyard_separation.get(), TheGraveyard.CONFIG.medium_walled_graveyard_spacing.get(), TheGraveyard.CONFIG.medium_walled_graveyard_salt.get(), true);
         setupMapSpacingAndLand(LARGE_WALLED_GRAVEYARD.get(), TheGraveyard.CONFIG.large_walled_graveyard_separation.get(), TheGraveyard.CONFIG.large_walled_graveyard_spacing.get(), TheGraveyard.CONFIG.large_walled_graveyard_salt.get(), true);
+        setupMapSpacingAndLand(HAUNTED_HOUSE.get(), TheGraveyard.CONFIG.haunted_house_separation.get(), TheGraveyard.CONFIG.haunted_house_spacing.get(), TheGraveyard.CONFIG.haunted_house_salt.get(), true);
 
 
     }

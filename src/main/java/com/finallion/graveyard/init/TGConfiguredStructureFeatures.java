@@ -18,6 +18,7 @@ public class TGConfiguredStructureFeatures {
     public static StructureFeature<?, ?> CONFIGURED_LARGE_BIRCH_TREE = TGStructures.LARGE_BIRCH_TREE.get().configured(IFeatureConfig.NONE);
     public static StructureFeature<?, ?> CONFIGURED_MEDIUM_WALLED_GRAVEYARD = TGStructures.MEDIUM_WALLED_GRAVEYARD.get().configured(IFeatureConfig.NONE);
     public static StructureFeature<?, ?> CONFIGURED_LARGE_WALLED_GRAVEYARD = TGStructures.LARGE_WALLED_GRAVEYARD.get().configured(IFeatureConfig.NONE);
+    public static StructureFeature<?, ?> CONFIGURED_HAUNTED_HOUSE = TGStructures.HAUNTED_HOUSE.get().configured(IFeatureConfig.NONE);
 
     public static void registerConfiguredStructures() {
 
@@ -31,6 +32,7 @@ public class TGConfiguredStructureFeatures {
         Registry.register(registry, new ResourceLocation(TheGraveyard.MOD_ID, "configured_large_birch_tree"), CONFIGURED_LARGE_BIRCH_TREE);
         Registry.register(registry, new ResourceLocation(TheGraveyard.MOD_ID, "configured_medium_walled_graveyard"), CONFIGURED_MEDIUM_WALLED_GRAVEYARD);
         Registry.register(registry, new ResourceLocation(TheGraveyard.MOD_ID, "configured_large_walled_graveyard"), CONFIGURED_LARGE_WALLED_GRAVEYARD);
+        Registry.register(registry, new ResourceLocation(TheGraveyard.MOD_ID, "configured_haunted_house"), CONFIGURED_HAUNTED_HOUSE);
 
 
 

@@ -12,7 +12,8 @@
     "NoiseChunkGeneratorMixin"
   ],
   "client": [
-    "ClientPlayNetworkHandlerMixin"
+    "ClientPlayNetworkHandlerMixin",
+    "WorldRendererMixin"
 
 
   ],
