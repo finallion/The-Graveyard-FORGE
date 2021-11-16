@@ -1,10 +1,7 @@
 package com.finallion.graveyard.entites;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IAngerable;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
@@ -26,7 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-public class AnimatedGraveyardEntity extends MobEntity implements IAngerable {
+public class AnimatedGraveyardEntity extends CreatureEntity implements IAngerable {
     private static final UUID SPEED_MODIFIER_ATTACKING_UUID = UUID.fromString("020E0DFB-87AE-4653-9556-831010E291A0");
     private static final AttributeModifier SPEED_MODIFIER_ATTACKING = new AttributeModifier(SPEED_MODIFIER_ATTACKING_UUID, "Attacking speed boost", (double)0.15F, AttributeModifier.Operation.ADDITION);
     private static final DataParameter<Boolean> DATA_CREEPY = EntityDataManager.defineId(EndermanEntity.class, DataSerializers.BOOLEAN);
@@ -39,7 +36,7 @@ public class AnimatedGraveyardEntity extends MobEntity implements IAngerable {
     private UUID persistentAngerTarget;
 
 
-    protected AnimatedGraveyardEntity(EntityType<? extends MobEntity> entityType, World world) {
+    protected AnimatedGraveyardEntity(EntityType<? extends CreatureEntity> entityType, World world) {
         super(entityType, world);
     }
 
@@ -98,6 +95,10 @@ public class AnimatedGraveyardEntity extends MobEntity implements IAngerable {
         super.aiStep();
     }
 
+    @Override
+    public boolean isAngry() {
+        return this.remainingPersistentAngerTime > 0;
+    }
 
     public void setTarget(@Nullable LivingEntity p_70624_1_) {
         ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);

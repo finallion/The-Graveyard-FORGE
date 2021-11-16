@@ -9,11 +9,21 @@ import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.util.*;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
 
 public class AcolyteEntity extends AbstractIllagerEntity {
 
@@ -47,17 +57,18 @@ public class AcolyteEntity extends AbstractIllagerEntity {
         return SoundEvents.VINDICATOR_CELEBRATE;
     }
 
-    protected void mobTick() {
-        if (!this.isAiDisabled() && NavigationConditions.hasMobNavigation(this)) {
-            boolean bl = ((ServerWorld)this.world).hasRaidAt(this.getBlockPos());
-            ((MobNavigation)this.getNavigation()).setCanPathThroughDoors(bl);
+    protected void customServerAiStep() {
+        if (!this.isNoAi() && GroundPathHelper.hasGroundPathNavigation(this)) {
+            boolean flag = ((ServerWorld)this.level).isRaided(this.blockPosition());
+            ((GroundPathNavigator)this.getNavigation()).setCanOpenDoors(flag);
         }
 
-        super.mobTick();
+        super.customServerAiStep();
     }
 
+
     @Override
-    public boolean canLead() {
+    public boolean canBeLeader() {
         return false;
     }
 
@@ -67,35 +78,38 @@ public class AcolyteEntity extends AbstractIllagerEntity {
     }
 
 
-    public IllagerEntity.State getState() {
-        if (this.isAttacking()) {
-            return IllagerEntity.State.ATTACKING;
+    @OnlyIn(Dist.CLIENT)
+    public AbstractIllagerEntity.ArmPose getArmPose() {
+        if (this.isAggressive()) {
+            return AbstractIllagerEntity.ArmPose.ATTACKING;
         } else {
-            return this.isCelebrating() ? IllagerEntity.State.CELEBRATING : IllagerEntity.State.CROSSED;
+            return this.isCelebrating() ? AbstractIllagerEntity.ArmPose.CELEBRATING : AbstractIllagerEntity.ArmPose.CROSSED;
         }
     }
+
 
     @Nullable
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        EntityData entityData2 = super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
-        ((MobNavigation)this.getNavigation()).setCanPathThroughDoors(true);
-        this.initEquipment(difficulty);
-        this.updateEnchantments(difficulty);
-        return entityData2;
+    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
+        ILivingEntityData ilivingentitydata = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
+        ((GroundPathNavigator)this.getNavigation()).setCanOpenDoors(true);
+        this.populateDefaultEquipmentSlots(p_213386_2_);
+        this.populateDefaultEquipmentEnchantments(p_213386_2_);
+        return ilivingentitydata;
     }
 
-    protected void initEquipment(LocalDifficulty difficulty) {
-        if (this.getRaid() == null) {
-            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Registry.ITEM.get(new Identifier(TheGraveyard.MOD_ID, "bone_dagger"))));
+
+    protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
+        if (this.getCurrentRaid() == null) {
+            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Registry.ITEM.get(new ResourceLocation(TheGraveyard.MOD_ID, "bone_dagger"))));
         }
 
     }
 
-    public boolean isTeammate(Entity other) {
-        if (super.isTeammate(other)) {
+    public boolean isAlliedTo(Entity p_184191_1_) {
+        if (super.isAlliedTo(p_184191_1_)) {
             return true;
-        } else if (other instanceof LivingEntity && ((LivingEntity)other).getGroup() == EntityGroup.ILLAGER) {
-            return this.getScoreboardTeam() == null && other.getScoreboardTeam() == null;
+        } else if (p_184191_1_ instanceof LivingEntity && ((LivingEntity)p_184191_1_).getMobType() == CreatureAttribute.ILLAGER) {
+            return this.getTeam() == null && p_184191_1_.getTeam() == null;
         } else {
             return false;
         }
@@ -103,19 +117,20 @@ public class AcolyteEntity extends AbstractIllagerEntity {
 
     @Override
     public void playAmbientSound() {
-        this.playSound(SoundEvents.ENTITY_VINDICATOR_AMBIENT, 1.0F, 1.0F);
+        this.playSound(SoundEvents.VINDICATOR_AMBIENT, 1.0F, 1.0F);
     }
 
     @Override
-    protected void playHurtSound(DamageSource source) {
-        this.playSound(SoundEvents.ENTITY_VINDICATOR_HURT, 1.0F, 1.0F);
+    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+        return SoundEvents.VINDICATOR_HURT;
     }
 
     @Override
-    public void onDeath(DamageSource source) {
-        super.onDeath(source);
-        this.playSound(SoundEvents.ENTITY_VINDICATOR_DEATH, 1.0F, 1.0F);
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.VINDICATOR_DEATH;
     }
+
+
 
     class AttackGoal extends MeleeAttackGoal {
         public AttackGoal(AcolyteEntity p_i50577_2_) {
