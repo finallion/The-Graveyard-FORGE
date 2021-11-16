@@ -1,27 +1,35 @@
 package com.finallion.graveyard.entites.renders;
 
-import com.finallion.graveyard.entities.AcolyteEntity;
-import com.finallion.graveyard.entities.renders.features.AcolyteEyes;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.IllagerEntityRenderer;
-import net.minecraft.client.render.entity.feature.HeldItemFeatureRenderer;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.render.entity.model.IllagerEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
+import com.finallion.graveyard.TheGraveyard;
+import com.finallion.graveyard.entites.AcolyteEntity;
+import com.finallion.graveyard.entites.renders.features.SkeletonCreeperEyes;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.IllagerRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.layers.CreeperChargeLayer;
+import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
+import net.minecraft.client.renderer.entity.model.CreeperModel;
+import net.minecraft.client.renderer.entity.model.IllagerModel;
+import net.minecraft.entity.monster.CreeperEntity;
+import net.minecraft.entity.monster.VindicatorEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class AcolyteRender extends IllagerEntityRenderer<AcolyteEntity> {
-    private static final Identifier TEXTURE = new Identifier("graveyard:textures/entity/acolyte.png");
+@OnlyIn(Dist.CLIENT)
+public class AcolyteRender extends IllagerRenderer<AcolyteEntity> {
+    private static final ResourceLocation TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID,"textures/entity/acolyte.png");
 
-    public AcolyteRender(EntityRendererFactory.Context ctx) {
-        super(ctx, new IllagerEntityModel<>(ctx.getPart(EntityModelLayers.VINDICATOR)), 0.5F);
-        this.addFeature(new AcolyteEyes(this));
+    public AcolyteRender(EntityRendererManager context) {
+        super(context, new IllagerModel<>(0.0F, 0.0F, 64, 64), 0.5F);
         this.model.getHat().visible = true;
-        this.addFeature(new HeldItemFeatureRenderer<AcolyteEntity, IllagerEntityModel<AcolyteEntity>>(this) {
-            public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, AcolyteEntity acolyte, float f, float g, float h, float j, float k, float l) {
-                if (acolyte.isAttacking()) {
-                    super.render(matrixStack, vertexConsumerProvider, i, acolyte, f, g, h, j, k, l);
+        this.addLayer(new HeldItemLayer<AcolyteEntity, IllagerModel<AcolyteEntity>>(this) {
+            public void render(MatrixStack p_225628_1_, IRenderTypeBuffer p_225628_2_, int p_225628_3_, AcolyteEntity p_225628_4_, float p_225628_5_, float p_225628_6_, float p_225628_7_, float p_225628_8_, float p_225628_9_, float p_225628_10_) {
+                if (p_225628_4_.isAggressive()) {
+                    super.render(p_225628_1_, p_225628_2_, p_225628_3_, p_225628_4_, p_225628_5_, p_225628_6_, p_225628_7_, p_225628_8_, p_225628_9_, p_225628_10_);
                 }
 
             }
@@ -29,9 +37,8 @@ public class AcolyteRender extends IllagerEntityRenderer<AcolyteEntity> {
     }
 
     @Override
-    public Identifier getTexture(AcolyteEntity entity) {
+    public ResourceLocation getTextureLocation(AcolyteEntity p_110775_1_) {
         return TEXTURE;
     }
-
 
 }

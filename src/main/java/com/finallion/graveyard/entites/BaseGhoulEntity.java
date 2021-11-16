@@ -90,9 +90,12 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
     }
 
 
+    /*
     public static boolean canSpawn(EntityType<SlimeEntity> p_223366_0_, IWorld p_223366_1_, SpawnReason p_223366_2_, BlockPos p_223366_3_, Random p_223366_4_) {
         return isSpawnDark(world, pos, random);
     }
+
+     */
 
 
     public void addAdditionalSaveData(CompoundNBT tag) {

@@ -1,19 +1,23 @@
 package com.finallion.graveyard.entites.renders.features;
 
 
-import com.finallion.graveyard.entities.ReaperEntity;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
+import com.finallion.graveyard.TheGraveyard;
+import com.finallion.graveyard.entites.ReaperEntity;
+import com.finallion.graveyard.entites.models.ReaperModel;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.IEntityRenderer;
+import net.minecraft.client.renderer.entity.layers.AbstractEyesLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 
 public class ReaperEyesFeatureRenderer extends GeoLayerRenderer<ReaperEntity> {
-    private final RenderLayer TEXTURE = RenderLayer.getEyes(new Identifier("graveyard:textures/entity/reaper_eyes.png"));
+    private final RenderType TEXTURE = RenderType.eyes(new ResourceLocation("graveyard:textures/entity/reaper_eyes.png"));
     private final IGeoRenderer<ReaperEntity> renderer;
 
     public ReaperEyesFeatureRenderer(IGeoRenderer<ReaperEntity> entityRendererIn) {
@@ -22,22 +26,23 @@ public class ReaperEyesFeatureRenderer extends GeoLayerRenderer<ReaperEntity> {
     }
 
     @Override
-    public void render(MatrixStack matrixStackIn, VertexConsumerProvider bufferIn, int packedLightIn, ReaperEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        VertexConsumer vertexConsumer = bufferIn.getBuffer(TEXTURE);
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, ReaperEntity entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        IVertexBuilder vertexConsumer = bufferIn.getBuffer(TEXTURE);
         renderer.render(
-                getEntityModel().getModel(getEntityModel().getModelLocation(entitylivingbaseIn)),
-                entitylivingbaseIn,
+                getEntityModel().getModel(new ResourceLocation(TheGraveyard.MOD_ID, "geo/reaper.geo.json")),
+                entityLivingBaseIn,
                 partialTicks,
                 TEXTURE,
                 matrixStackIn,
                 bufferIn,
                 vertexConsumer,
                 15728640,
-                OverlayTexture.DEFAULT_UV,
+                OverlayTexture.NO_OVERLAY,
                 1.0F, 1.0F, 1.0F, 1.0F
         );
     }
 
 
 }
+
 
