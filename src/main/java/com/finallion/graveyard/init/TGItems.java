@@ -46,10 +46,10 @@ public class TGItems {
     @SubscribeEvent
     public static void initItems(RegistryEvent.Register<Item> event) {
 
-        createSpawnEgg(TGEntities.SKELETON_CREEPER.get(), 7960171, 15263976, "skeleton_creeper");
-        createSpawnEgg(TGEntities.ACOLYTE.get(), 2688830, 5898240, "acolyte");
-        createSpawnEgg(TGEntities.GHOUL.get(), 6239802, 16487198, "ghoul");
-        createSpawnEgg(TGEntities.REAPER.get(), 1381653, 5898240, "reaper");
+        //createSpawnEgg(TGEntities.SKELETON_CREEPER.get(), 7960171, 15263976, "skeleton_creeper");
+        //createSpawnEgg(TGEntities.ACOLYTE.get(), 2688830, 5898240, "acolyte");
+        //createSpawnEgg(TGEntities.GHOUL.get(), 6239802, 16487198, "ghoul");
+        //createSpawnEgg(TGEntities.REAPER.get(), 1381653, 5898240, "reaper");
 
         items_list.forEach((e) -> event.getRegistry().register(e));
     }

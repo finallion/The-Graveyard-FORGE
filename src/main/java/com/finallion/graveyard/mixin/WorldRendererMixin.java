@@ -38,7 +38,9 @@ public abstract class WorldRendererMixin {
     @Shadow
     private Minecraft minecraft;
 
-    @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/FogRenderer;setupFog(Lnet/minecraft/client/render/ActiveRenderInfo;Lnet/minecraft/client/render/FogRenderer;FZ)V", ordinal = 0, shift = At.Shift.AFTER))
+    //public net.minecraft.client.renderer.FogRenderer func_228372_a_(Lnet/minecraft/client/renderer/ActiveRenderInfo;Lnet/minecraft/client/renderer/FogRenderer$FogType;FZ)V # setupFog
+    //renderLevel = func_228426_a_
+    @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/FogRenderer;func_228372_a_(Lnet/minecraft/client/renderer/ActiveRenderInfo;Lnet/minecraft/client/renderer/FogRenderer$FogType;FZ)V", ordinal = 1, shift = At.Shift.AFTER))
     public void renderLevel(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, ActiveRenderInfo camera, GameRenderer gameRenderer, LightTexture lightmapTextureManager, Matrix4f matrix4f, CallbackInfo callback) {
         BlockPos pos = camera.getBlockPosition();
         String biomeName = this.minecraft.level.getBiomeName(pos).get().toString();
@@ -72,12 +74,12 @@ public abstract class WorldRendererMixin {
         double d0 = vector3d.x();
         double d1 = vector3d.y();
         boolean flag1 = this.minecraft.level.effects().isFoggyAt(MathHelper.floor(d0), MathHelper.floor(d1)) || this.minecraft.gui.getBossOverlay().shouldCreateWorldFog();
-        applyCustomFog(camera, FogRenderer.FogType.FOG_TERRAIN, Math.max(f - 16.0F, 32.0F), flag1, fogDensity);
+        applyCustomFog(camera, FogRenderer.FogType.FOG_TERRAIN, Math.max(f - 16.0F, 32.0F), flag1, tickDelta, fogDensity);
 
     }
 
     // copy of the BackgroundRenderer method applyFog with density parameter
-    private static void applyCustomFog(ActiveRenderInfo camera, FogRenderer.FogType fogType, float viewDistance, boolean thickFog, double density) {
+    private static void applyCustomFog(ActiveRenderInfo camera, FogRenderer.FogType fogType, float viewDistance, boolean thickFog, float particleTicks, double density) {
         FluidState fluidstate = camera.getFluidInCamera();
         Entity entity = camera.getEntity();
 

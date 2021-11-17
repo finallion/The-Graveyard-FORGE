@@ -3,6 +3,7 @@ package com.finallion.graveyard;
 import com.finallion.graveyard.client.TheGraveyardClient;
 import com.finallion.graveyard.config.ConfigHelper;
 import com.finallion.graveyard.config.TheGraveyardConfig;
+import com.finallion.graveyard.events.BiomeEvents;
 import com.finallion.graveyard.init.*;
 import com.finallion.graveyard.structures.processors.SimpleSurfaceProcessors;
 import com.finallion.graveyard.utils.ProcessorRegistry;

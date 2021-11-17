@@ -29,7 +29,7 @@ public class TGBlocks {
     public static final ResourceLocation GRAVESTONE_TEXTURE = new ResourceLocation("minecraft", "block/polished_basalt_side");
     public static final ResourceLocation COBBLESTONE_GRAVESTONE_TEXTURE = new ResourceLocation("minecraft", "block/cobblestone");
     public static final ResourceLocation MOSSY_COBBLESTONE_GRAVESTONE_TEXTURE = new ResourceLocation("minecraft", "block/mossy_cobblestone");
-    public static final ResourceLocation DEEPSLATE_GRAVESTONE_TEXTURE = new ResourceLocation("graveyard", "block/deepslate");
+    public static final ResourceLocation DEEPSLATE_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "block/deepslate");
 
     public static Block registerBlock(Block block, String name) {
         block.setRegistryName(new ResourceLocation(TheGraveyard.MOD_ID, name));
@@ -194,8 +194,8 @@ public class TGBlocks {
 
         TG_CHISELED_DEEPSLATE = registerBlock(new Block(AbstractBlock.Properties.copy(Blocks.STONE_BRICKS)), "tg_chiseled_deepslate");
 
-        MOSS_BLOCK = registerBlock(new VanillaMossBlock(AbstractBlock.Properties.copy(TGBlocks.TG_MOSS_BLOCK)), "moss_block");
-        MOSS_CARPET = registerBlock(new CarpetBlock(DyeColor.GREEN, AbstractBlock.Properties.of(Material.PLANT, MaterialColor.COLOR_GREEN).strength(0.1F).sound(SoundType.GRASS)), "moss_block");
+        MOSS_BLOCK = registerBlock(new VanillaMossBlock(AbstractBlock.Properties.of(Material.GRASS)), "moss_block");
+        MOSS_CARPET = registerBlock(new CarpetBlock(DyeColor.GREEN, AbstractBlock.Properties.of(Material.PLANT, MaterialColor.COLOR_GREEN).strength(0.1F).sound(SoundType.GRASS)), "moss_carpet");
 
         // helper blocks that get don't get replaced on world generation, generate ores or generate trees on
         TG_GRASS_BLOCK = registerBlockWithoutGroup(new TGGrassBlock(AbstractBlock.Properties.copy(Blocks.GRASS_BLOCK).lootFrom(() -> Blocks.GRASS_BLOCK)), "tg_grass_block");
