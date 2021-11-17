@@ -26,6 +26,7 @@ import java.util.List;
 
 @Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TGEntities {
+    /*
 
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, TheGraveyard.MOD_ID);
 
@@ -50,7 +51,9 @@ public class TGEntities {
                     .build(new ResourceLocation(TheGraveyard.MOD_ID, "reaper").toString()));
 
 
-    /*
+
+     */
+
     public static List<EntityType<?>> entities = new ArrayList<EntityType<?>>();
     public static final EntityType<SkeletonCreeper> SKELETON_CREEPER = registerEntity(EntityType.Builder.of(SkeletonCreeper::new, EntityClassification.MONSTER).sized(0.6F, 1.7F), "skeleton_creeper");
     public static final EntityType<AcolyteEntity> ACOLYTE = registerEntity(EntityType.Builder.of(AcolyteEntity::new, EntityClassification.MONSTER).sized(0.6F, 1.9F), "acolyte");
@@ -58,12 +61,14 @@ public class TGEntities {
     public static final EntityType<BaseGhoulEntity> GHOUL = registerEntity(EntityType.Builder.of(BaseGhoulEntity::new, EntityClassification.MONSTER).sized(1.0F, 2.15F), "ghoul");
 
 
-    public static final EntityType<BaseGhoulEntity> GHOUL = FabricEntityTypeBuilder.createMob()
+    /*
+    public static final EntityType<BaseGhoulEntity> GHOUL = EntityType.Builder.of(BaseGhoulEntity::new)
             .spawnGroup(SpawnGroup.MONSTER)
             .entityFactory(BaseGhoulEntity::new)
             .dimensions(EntityDimensions.changing(1.0F, 2.15F))
             .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, BaseGhoulEntity::canSpawn)
             .build();
+*/
 
 
 
@@ -87,7 +92,7 @@ public class TGEntities {
         event.put(REAPER, ReaperEntity.createAttributes().build());
     }
 
-     */
+
 
 
 }

@@ -73,10 +73,10 @@ public class TheGraveyardClient {
         ClientRegistry.bindTileEntityRenderer(TGTileEntities.GRAVESTONE_BLOCK_ENTITY.get(), GravestoneBlockEntityRenderer::new);
 
         // entities
-        RenderingRegistry.registerEntityRenderingHandler(TGEntities.SKELETON_CREEPER.get(), SkeletonCreeperRender::new);
-        RenderingRegistry.registerEntityRenderingHandler(TGEntities.ACOLYTE.get(), AcolyteRender::new);
-        RenderingRegistry.registerEntityRenderingHandler(TGEntities.GHOUL.get(), GhoulRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(TGEntities.REAPER.get(), ReaperRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(TGEntities.SKELETON_CREEPER, SkeletonCreeperRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(TGEntities.ACOLYTE, AcolyteRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(TGEntities.GHOUL, GhoulRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(TGEntities.REAPER, ReaperRenderer::new);
 
     }
 

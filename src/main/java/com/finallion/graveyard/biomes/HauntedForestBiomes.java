@@ -17,8 +17,8 @@ public class HauntedForestBiomes {
 
     public static Biome HauntedForestBiome() {
         MobSpawnInfo.Builder spawnSettings = new MobSpawnInfo.Builder();
-        spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(TGEntities.GHOUL.get(), 45, 2, 5));
-        spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(TGEntities.SKELETON_CREEPER.get(), 40, 1, 2));
+        spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(TGEntities.GHOUL, 45, 2, 5));
+        spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(TGEntities.SKELETON_CREEPER, 40, 1, 2));
         spawnSettings.addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.FOX, 8, 2, 3));
         spawnSettings.addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.WOLF, 8, 3, 5));
         spawnSettings.addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.SHEEP, 10, 3, 5));
@@ -84,8 +84,8 @@ public class HauntedForestBiomes {
 
     public static Biome HauntedForestLakeBiome() {
         MobSpawnInfo.Builder spawnSettings = new MobSpawnInfo.Builder();
-        spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(TGEntities.GHOUL.get(), 25, 2, 5));
-        spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(TGEntities.SKELETON_CREEPER.get(), 15, 1, 2));
+        spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(TGEntities.GHOUL, 25, 2, 5));
+        spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(TGEntities.SKELETON_CREEPER, 15, 1, 2));
         spawnSettings.addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.FOX, 8, 2, 3));
         spawnSettings.addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.WOLF, 8, 3, 5));
         spawnSettings.addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.SHEEP, 10, 3, 5));
@@ -158,9 +158,9 @@ public class HauntedForestBiomes {
 
     public static Biome ErodedHauntedForestBiome() {
         MobSpawnInfo.Builder spawnSettings = new MobSpawnInfo.Builder();
-        spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(TGEntities.GHOUL.get(), 10, 2, 5));
-        spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(TGEntities.REAPER.get(), 1, 1, 1));
-        spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(TGEntities.SKELETON_CREEPER.get(), 10, 1, 2));
+        spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(TGEntities.GHOUL, 10, 2, 5));
+        spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(TGEntities.REAPER, 1, 1, 1));
+        spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(TGEntities.SKELETON_CREEPER, 10, 1, 2));
         spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(EntityType.WITHER_SKELETON, 8, 2, 3));
         spawnSettings.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(EntityType.SKELETON, 8, 1, 2));
         spawnSettings.addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.BAT, 10, 1, 1));

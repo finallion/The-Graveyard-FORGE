@@ -11,11 +11,14 @@ import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.HashSet;
 import java.util.Set;
 
+
+@Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TGSurfaceBuilders {
     private static final Set<SurfaceBuilder<?>> SURFACE_BUILDERS = new HashSet<>();
 
@@ -27,11 +30,12 @@ public class TGSurfaceBuilders {
         }
     }
 
-    public static final SurfaceBuilder<SurfaceBuilderConfig> HAUNTED_FOREST_SURFACE = registerSurfaceBuilder(new ResourceLocation("haunted_forest_surface"), new HauntedForestSurfaceBuilder(SurfaceBuilderConfig.CODEC));
-    public static final ConfiguredSurfaceBuilder HAUNTED_FOREST_SURFACE_CONFIG = registerConfiguredSurfaceBuilder("haunted_forest_surface_config", new ConfiguredSurfaceBuilder<>(HAUNTED_FOREST_SURFACE, Configs.MOSS_CONFIG));
+    public static final SurfaceBuilder<SurfaceBuilderConfig> HAUNTED_FOREST_SURFACE = registerSurfaceBuilder(new ResourceLocation(TheGraveyard.MOD_ID, "haunted_forest_surface"), new HauntedForestSurfaceBuilder(SurfaceBuilderConfig.CODEC));
+    public static final ConfiguredSurfaceBuilder<?> HAUNTED_FOREST_SURFACE_CONFIG = registerConfiguredSurfaceBuilder("haunted_forest_surface", new ConfiguredSurfaceBuilder<>(HAUNTED_FOREST_SURFACE, SurfaceBuilder.CONFIG_COARSE_DIRT));
+    //Configs.MOSS_CONFIG
 
-    public static final SurfaceBuilder<SurfaceBuilderConfig> ERODED_HAUNTED_FOREST_SURFACE = registerSurfaceBuilder(new ResourceLocation("eroded_haunted_forest_surface"), new ErodedHauntedForestSurfaceBuilder(SurfaceBuilderConfig.CODEC));
-    public static final ConfiguredSurfaceBuilder ERODED_HAUNTED_FOREST_SURFACE_CONFIG = registerConfiguredSurfaceBuilder("eroded_haunted_forest_surface_config", new ConfiguredSurfaceBuilder<>(ERODED_HAUNTED_FOREST_SURFACE, Configs.MOSS_CONFIG));
+    public static final SurfaceBuilder<SurfaceBuilderConfig> ERODED_HAUNTED_FOREST_SURFACE = registerSurfaceBuilder(new ResourceLocation(TheGraveyard.MOD_ID,"eroded_haunted_forest_surface"), new ErodedHauntedForestSurfaceBuilder(SurfaceBuilderConfig.CODEC));
+    public static final ConfiguredSurfaceBuilder<?> ERODED_HAUNTED_FOREST_SURFACE_CONFIG = registerConfiguredSurfaceBuilder("eroded_haunted_forest_surface", new ConfiguredSurfaceBuilder<>(ERODED_HAUNTED_FOREST_SURFACE, SurfaceBuilder.CONFIG_COARSE_DIRT));
 
 
     public static SurfaceBuilder<SurfaceBuilderConfig> registerSurfaceBuilder(ResourceLocation location, SurfaceBuilder<SurfaceBuilderConfig> builder) {

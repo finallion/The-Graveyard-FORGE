@@ -1,5 +1,6 @@
 package com.finallion.graveyard;
 
+import com.finallion.graveyard.biomes.surfacebuilders.TGSurfaceBuilders;
 import com.finallion.graveyard.client.TheGraveyardClient;
 import com.finallion.graveyard.config.ConfigHelper;
 import com.finallion.graveyard.config.TheGraveyardConfig;
@@ -60,6 +61,8 @@ public class TheGraveyard {
 
     // TODO: Items null
     // TODO: WorldRenderer mixin
+    // TODO: lang
+    // TODO: Gravestones, texture deepslate, moss carpet, sound moss, surface builder, gravestone feature, mobs
     public TheGraveyard() {
         GeckoLib.initialize();
         CONFIG = ConfigHelper.register(ModConfig.Type.COMMON, TheGraveyardConfig::new, "graveyard-forge-config-v1.toml");
@@ -73,7 +76,6 @@ public class TheGraveyard {
         forgeBus.addListener(EventPriority.HIGH, this::biomeModification);
         forgeBus.addListener(EventPriority.NORMAL, this::addDimensionalSpacing);
 
-        TGEntities.ENTITY_TYPES.register(modEventBus);
         TGStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
         TGTileEntities.TILE_ENTITIES.register(modEventBus);
         TGParticles.PARTICLES.register(modEventBus);
