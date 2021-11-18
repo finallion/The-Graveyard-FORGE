@@ -1,6 +1,8 @@
-package com.finallion.graveyard.biomes.surfacebuilders;
+package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
+import com.finallion.graveyard.biomes.surfacebuilders.ErodedHauntedForestSurfaceBuilder;
+import com.finallion.graveyard.biomes.surfacebuilders.HauntedForestSurfaceBuilder;
 import com.finallion.graveyard.init.TGBlocks;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
@@ -14,20 +16,19 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
 @Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TGSurfaceBuilders {
-    private static final Set<SurfaceBuilder<?>> SURFACE_BUILDERS = new HashSet<>();
+    public static List<SurfaceBuilder<?>> surfaceBuilders = new ArrayList<>();
 
     @SubscribeEvent
-    public static void forgeRegister(RegistryEvent.Register<SurfaceBuilder<?>> event) {
-        IForgeRegistry<SurfaceBuilder<?>> registry = event.getRegistry();
-        for (SurfaceBuilder<?> entry : SURFACE_BUILDERS) {
-            registry.register(entry);
-        }
+    public static void registerSurfaceBuilders(RegistryEvent.Register<SurfaceBuilder<?>> event) {
+        surfaceBuilders.forEach(surfaceBuilder -> event.getRegistry().register(surfaceBuilder));
     }
 
     public static final SurfaceBuilder<SurfaceBuilderConfig> HAUNTED_FOREST_SURFACE = registerSurfaceBuilder(new ResourceLocation(TheGraveyard.MOD_ID, "haunted_forest_surface"), new HauntedForestSurfaceBuilder(SurfaceBuilderConfig.CODEC));
@@ -40,7 +41,7 @@ public class TGSurfaceBuilders {
 
     public static SurfaceBuilder<SurfaceBuilderConfig> registerSurfaceBuilder(ResourceLocation location, SurfaceBuilder<SurfaceBuilderConfig> builder) {
         builder.setRegistryName(location);
-        SURFACE_BUILDERS.add(builder);
+        surfaceBuilders.add(builder);
         return builder;
     }
 

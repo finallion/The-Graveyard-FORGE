@@ -3,27 +3,20 @@ package com.finallion.graveyard.biomes.features.surfaceFeatures;
 import com.finallion.graveyard.init.TGBlocks;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.blockstateprovider.WeightedBlockStateProvider;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraftforge.common.Tags;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class GraveFeature extends Feature<NoFeatureConfig> {
-
-    private static WeightedBlockStateProvider graveStones = new WeightedBlockStateProvider();
-
-    static {
-        graveStones.add(TGBlocks.GRAVESTONE.defaultBlockState(), 25);
-        graveStones.add(TGBlocks.COBBLESTONE_GRAVESTONE.defaultBlockState(), 25);
-        graveStones.add(TGBlocks.DEEPSLATE_GRAVESTONE.defaultBlockState(), 25);
-        graveStones.add(TGBlocks.MOSSY_COBBLESTONE_GRAVESTONE.defaultBlockState(), 25);
-    }
-
-
 
     public GraveFeature(Codec<NoFeatureConfig> configCodec) {
         super(configCodec);
@@ -31,8 +24,15 @@ public class GraveFeature extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, NoFeatureConfig config) {
+
+
         if (FeatureHelper.canBePlaced(world.getBlockState(pos.below())) && world.getBlockState(pos).isAir() && random.nextInt(10) == 0) {
-            world.setBlock(pos, graveStones.getState(random, pos), 2);
+            switch (random.nextInt(4)) {
+                case 1: world.setBlock(pos, TGBlocks.COBBLESTONE_GRAVESTONE.defaultBlockState(), 2); break;
+                case 2: world.setBlock(pos, TGBlocks.MOSSY_COBBLESTONE_GRAVESTONE.defaultBlockState(), 2); break;
+                case 3: world.setBlock(pos, TGBlocks.DEEPSLATE_GRAVESTONE.defaultBlockState(), 2); break;
+                default: world.setBlock(pos, TGBlocks.GRAVESTONE.defaultBlockState(), 2); break;
+            }
         }
 
 

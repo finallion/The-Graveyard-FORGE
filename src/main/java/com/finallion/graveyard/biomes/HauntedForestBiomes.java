@@ -1,7 +1,6 @@
 package com.finallion.graveyard.biomes;
 
-import com.finallion.graveyard.biomes.surfacebuilders.TGSurfaceBuilders;
-import com.finallion.graveyard.init.TGConfiguredFeatures;
+import com.finallion.graveyard.init.TGSurfaceBuilders;
 import com.finallion.graveyard.init.TGConfiguredFeatures;
 import com.finallion.graveyard.init.TGEntities;
 import net.minecraft.client.audio.BackgroundMusicTracks;
@@ -114,7 +113,6 @@ public class HauntedForestBiomes {
         DefaultBiomeFeatures.addSwampClayDisk(generationSettings);
         DefaultBiomeFeatures.addDefaultMushrooms(generationSettings);
         DefaultBiomeFeatures.addDefaultSeagrass(generationSettings);
-        DefaultBiomeFeatures.addSwampVegetation(generationSettings);
 
         generationSettings.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.SEAGRASS_SWAMP);
         generationSettings.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.PATCH_WATERLILLY);

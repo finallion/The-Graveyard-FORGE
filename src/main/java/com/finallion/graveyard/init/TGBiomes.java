@@ -10,6 +10,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -34,7 +35,7 @@ public class TGBiomes {
     }
 
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOW)
     public static void onBiomeRegister(RegistryEvent.Register<Biome> event) {
         IForgeRegistry<Biome> biomeRegistry = event.getRegistry();
         BIOMES.values().forEach(biomeRegistry::register);

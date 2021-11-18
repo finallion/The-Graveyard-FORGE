@@ -1,7 +1,7 @@
 {
 	"textures": {
-		"3": "minecraft:block/deepslate",
-		"particle": "minecraft:block/deepslate"
+		"3": "graveyard:block/deepslate",
+		"particle": "graveyard:block/deepslate"
 	},
 	"elements": [
 		{

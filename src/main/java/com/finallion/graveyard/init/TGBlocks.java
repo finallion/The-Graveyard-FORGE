@@ -15,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -264,9 +265,7 @@ public class TGBlocks {
         SMALL_GREEN_URN = registerBlock(new UrnBlock(), "small_green_urn");
         SMALL_LIME_URN = registerBlock(new UrnBlock(), "small_lime_urn");
 
-
         event.getRegistry().registerAll(blocks_list.toArray(new Block[0]));
-
     }
 
 

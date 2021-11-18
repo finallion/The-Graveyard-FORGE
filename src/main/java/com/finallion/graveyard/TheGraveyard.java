@@ -1,15 +1,20 @@
 package com.finallion.graveyard;
 
-import com.finallion.graveyard.biomes.surfacebuilders.TGSurfaceBuilders;
 import com.finallion.graveyard.client.TheGraveyardClient;
 import com.finallion.graveyard.config.ConfigHelper;
 import com.finallion.graveyard.config.TheGraveyardConfig;
-import com.finallion.graveyard.events.BiomeEvents;
+import com.finallion.graveyard.entites.AcolyteEntity;
+import com.finallion.graveyard.entites.BaseGhoulEntity;
+import com.finallion.graveyard.entites.ReaperEntity;
+import com.finallion.graveyard.entites.SkeletonCreeper;
 import com.finallion.graveyard.init.*;
 import com.finallion.graveyard.structures.processors.SimpleSurfaceProcessors;
 import com.finallion.graveyard.utils.ProcessorRegistry;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -19,20 +24,25 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.FlatChunkGenerator;
+import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraft.world.gen.feature.template.StructureProcessorList;
 import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
+import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Lazy;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -47,6 +57,7 @@ import java.util.Map;
 
 
 @Mod("graveyard")
+@Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TheGraveyard {
     public static final String MOD_ID = "graveyard";
     public static TheGraveyardConfig CONFIG;
@@ -59,10 +70,10 @@ public class TheGraveyard {
     ));
 
 
-    // TODO: Items null
     // TODO: WorldRenderer mixin
     // TODO: lang
-    // TODO: Gravestones, texture deepslate, moss carpet, sound moss, surface builder, gravestone feature, mobs
+    // TODO: Gravestones, texture deepslate, moss carpet double, sound moss, mobs spawn, bone dagger
+    // TODO: house rebuild
     public TheGraveyard() {
         GeckoLib.initialize();
         CONFIG = ConfigHelper.register(ModConfig.Type.COMMON, TheGraveyardConfig::new, "graveyard-forge-config-v1.toml");
@@ -79,7 +90,6 @@ public class TheGraveyard {
         TGStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
         TGTileEntities.TILE_ENTITIES.register(modEventBus);
         TGParticles.PARTICLES.register(modEventBus);
-
     }
 
     public void setup(final FMLCommonSetupEvent event) {

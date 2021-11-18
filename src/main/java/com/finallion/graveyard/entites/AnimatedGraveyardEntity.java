@@ -26,8 +26,8 @@ import java.util.function.Predicate;
 public class AnimatedGraveyardEntity extends CreatureEntity implements IAngerable {
     private static final UUID SPEED_MODIFIER_ATTACKING_UUID = UUID.fromString("020E0DFB-87AE-4653-9556-831010E291A0");
     private static final AttributeModifier SPEED_MODIFIER_ATTACKING = new AttributeModifier(SPEED_MODIFIER_ATTACKING_UUID, "Attacking speed boost", (double)0.15F, AttributeModifier.Operation.ADDITION);
-    private static final DataParameter<Boolean> DATA_CREEPY = EntityDataManager.defineId(EndermanEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> DATA_STARED_AT = EntityDataManager.defineId(EndermanEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> DATA_CREEPY = EntityDataManager.defineId(AnimatedGraveyardEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> DATA_STARED_AT = EntityDataManager.defineId(AnimatedGraveyardEntity.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Byte> ANIMATION_MOVE_STATE = EntityDataManager.defineId(AnimatedGraveyardEntity.class, DataSerializers.BYTE);
     private int lastStareSound = Integer.MIN_VALUE;
     private int targetChangeTime;

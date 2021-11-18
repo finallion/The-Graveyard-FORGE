@@ -13,11 +13,15 @@ import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
 import net.minecraft.world.gen.placement.ConfiguredPlacement;
 import net.minecraft.world.gen.placement.Placement;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TGConfiguredFeatures {
 
     public static List<Feature<?>> features = new ArrayList<>();
@@ -49,7 +53,7 @@ public class TGConfiguredFeatures {
     public static final ConfiguredFeature<?, ?> COBWEB_CONFIG = registerConfiguredFeatures("cobweb_feature_config", COBWEB_FEATURE.configured(new NoFeatureConfig()).decorated(Features.Placements.HEIGHTMAP.decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(60, 0.1F, 1)))));
     public static final ConfiguredFeature<?, ?> BUSH_CONFIG = registerConfiguredFeatures("bush_feature_config", BUSH_FEATURE.configured(new NoFeatureConfig()).decorated(Features.Placements.HEIGHTMAP.decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(35, 0.1F, 1)))));
     public static final ConfiguredFeature<?, ?> GRAVESTONE_CONFIG = registerConfiguredFeatures("gravestone_feature_config", GRAVESTONE_FEATURE.configured(new NoFeatureConfig()).decorated(Features.Placements.HEIGHTMAP.decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(1, 0.1F, 1)))));
-    public static final ConfiguredFeature<?, ?> SOUL_LIGHT_CONFIG = registerConfiguredFeatures("soul_light_feature_config", SOUL_LIGHT_FEATURE.configured(new NoFeatureConfig()).decorated(Features.Placements.HEIGHTMAP.decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(100, 0.1F, 1)))));
+    public static final ConfiguredFeature<?, ?> SOUL_LIGHT_CONFIG = registerConfiguredFeatures("soul_light_feature_config", SOUL_LIGHT_FEATURE.configured(new NoFeatureConfig()).decorated(Features.Placements.HEIGHTMAP.decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(50, 0.1F, 1)))));
 
 
 
@@ -124,6 +128,13 @@ public class TGConfiguredFeatures {
         Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, resourceLocation, configuredFeature);
         return configuredFeature;
     }
+
+    @SubscribeEvent
+    public static void registerFeaturesAndConfigFeatures(RegistryEvent.Register<Feature<?>> event) {
+        features.forEach(feature -> event.getRegistry().register(feature));
+    }
+
+
 
 
 }

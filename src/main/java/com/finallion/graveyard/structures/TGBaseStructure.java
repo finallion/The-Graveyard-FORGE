@@ -40,7 +40,6 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
         this.SUNKEN_IN = sunkenIn;
         this.SIZE = size;
         this.NAME = name;
-
     }
 
     @Override

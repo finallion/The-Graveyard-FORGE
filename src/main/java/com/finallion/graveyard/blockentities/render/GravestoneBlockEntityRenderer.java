@@ -122,9 +122,9 @@ public class GravestoneBlockEntityRenderer extends TileEntityRenderer<Gravestone
         RenderType layer3 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/mossy_cobblestone.png"));
         RenderType layer4 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/deepslate.png"));
         LAYERS.put(TGBlocks.GRAVESTONE, layer1);
-        LAYERS.put(TGBlocks.GRAVESTONE, layer2);
-        LAYERS.put(TGBlocks.GRAVESTONE, layer3);
-        LAYERS.put(TGBlocks.GRAVESTONE, layer4);
+        LAYERS.put(TGBlocks.COBBLESTONE_GRAVESTONE, layer2);
+        LAYERS.put(TGBlocks.MOSSY_COBBLESTONE_GRAVESTONE, layer3);
+        LAYERS.put(TGBlocks.DEEPSLATE_GRAVESTONE, layer4);
 
     }
 
