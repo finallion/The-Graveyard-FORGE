@@ -195,7 +195,7 @@ public class TGBlocks {
 
         TG_CHISELED_DEEPSLATE = registerBlock(new Block(AbstractBlock.Properties.copy(Blocks.STONE_BRICKS)), "tg_chiseled_deepslate");
 
-        MOSS_BLOCK = registerBlock(new VanillaMossBlock(AbstractBlock.Properties.of(Material.GRASS)), "moss_block");
+        MOSS_BLOCK = registerBlock(new VanillaMossBlock(AbstractBlock.Properties.of(Material.GRASS).sound(SoundType.GRASS)), "moss_block");
         MOSS_CARPET = registerBlock(new CarpetBlock(DyeColor.GREEN, AbstractBlock.Properties.of(Material.PLANT, MaterialColor.COLOR_GREEN).strength(0.1F).sound(SoundType.GRASS)), "moss_carpet");
 
         // helper blocks that get don't get replaced on world generation, generate ores or generate trees on

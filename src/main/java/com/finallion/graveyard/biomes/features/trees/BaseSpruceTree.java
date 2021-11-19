@@ -95,194 +95,194 @@ public abstract class BaseSpruceTree extends Feature<TGTreeFeatureConfig> {
 
 
 
-    public void randomSpreadOne(ISeedReader world, BlockPos pos, boolean beSquare, int chance) {
-        setLeavesRandomized(world, pos.offset(1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
+    public void randomSpreadOne(ISeedReader world, BlockPos pos, boolean beSquare, int chance, TGTreeFeatureConfig config) {
+        setLeavesRandomized(world, pos.offset(1, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, -1), config.leafState, chance);
 
     }
 
-    public void randomSpreadTwo(ISeedReader world, BlockPos pos, boolean beSquare, int chance) {
-        setLeavesRandomized(world, pos.offset(1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
+    public void randomSpreadTwo(ISeedReader world, BlockPos pos, boolean beSquare, int chance, TGTreeFeatureConfig config) {
+        setLeavesRandomized(world, pos.offset(1, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, -1), config.leafState, chance);
 
         if (!beSquare) {
-            setLeavesRandomized(world, pos.offset(2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-            setLeavesRandomized(world, pos.offset(0, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-            setLeavesRandomized(world, pos.offset(-2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-            setLeavesRandomized(world, pos.offset(0, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
+            setLeavesRandomized(world, pos.offset(2, 0, 0), config.leafState, chance);
+            setLeavesRandomized(world, pos.offset(0, 0, 2), config.leafState, chance);
+            setLeavesRandomized(world, pos.offset(-2, 0, 0), config.leafState, chance);
+            setLeavesRandomized(world, pos.offset(0, 0, -2), config.leafState, chance);
         }
     }
 
-    public void randomSpreadThree(ISeedReader world, BlockPos pos, boolean beSquare, int chance) {
-        setLeavesRandomized(world, pos.offset(1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(2, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-2, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(2, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-2, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
+    public void randomSpreadThree(ISeedReader world, BlockPos pos, boolean beSquare, int chance, TGTreeFeatureConfig config) {
+        setLeavesRandomized(world, pos.offset(1, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(2, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, 2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-2, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, -2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(2, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, 2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-2, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, -2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(2, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, 2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-2, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, -2), config.leafState, chance);
 
         if (!beSquare) {
-            setLeavesRandomized(world, pos.offset(3, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-            setLeavesRandomized(world, pos.offset(0, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-            setLeavesRandomized(world, pos.offset(-3, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-            setLeavesRandomized(world, pos.offset(0, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
+            setLeavesRandomized(world, pos.offset(3, 0, 0), config.leafState, chance);
+            setLeavesRandomized(world, pos.offset(0, 0, 3), config.leafState, chance);
+            setLeavesRandomized(world, pos.offset(-3, 0, 0), config.leafState, chance);
+            setLeavesRandomized(world, pos.offset(0, 0, -3), config.leafState, chance);
         }
     }
 
-    public void randomSpreadFour(ISeedReader world, BlockPos pos, boolean beSquare, int chance) {
-        setLeavesRandomized(world, pos.offset(1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
+    public void randomSpreadFour(ISeedReader world, BlockPos pos, boolean beSquare, int chance, TGTreeFeatureConfig config) {
+        setLeavesRandomized(world, pos.offset(1, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, -1), config.leafState, chance);
 
-        setLeavesRandomized(world, pos.offset(2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(2, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-2, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(2, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-2, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(2, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-2, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-2, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(2, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
+        setLeavesRandomized(world, pos.offset(2, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, 2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-2, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, -2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(2, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, 2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-2, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, -2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(2, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, 2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-2, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, -2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(2, 0, 2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-2, 0, 2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-2, 0, -2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(2, 0, -2), config.leafState, chance);
 
-        setLeavesRandomized(world, pos.offset(3, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-3, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(3, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-3, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(3, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-3, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
+        setLeavesRandomized(world, pos.offset(3, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, 3), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-3, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, -3), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(3, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, 3), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-3, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, -3), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(3, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, 3), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-3, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, -3), config.leafState, chance);
 
         if (!beSquare) {
-            setLeavesRandomized(world, pos.offset(4, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-            setLeavesRandomized(world, pos.offset(0, 0, 4), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-            setLeavesRandomized(world, pos.offset(-4, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-            setLeavesRandomized(world, pos.offset(0, 0, -4), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
+            setLeavesRandomized(world, pos.offset(4, 0, 0), config.leafState, chance);
+            setLeavesRandomized(world, pos.offset(0, 0, 4), config.leafState, chance);
+            setLeavesRandomized(world, pos.offset(-4, 0, 0), config.leafState, chance);
+            setLeavesRandomized(world, pos.offset(0, 0, -4), config.leafState, chance);
         }
     }
 
-    public void randomSpreadFive(ISeedReader world, BlockPos pos, boolean beSquare, int chance) {
-        setLeavesRandomized(world, pos.offset(1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
+    public void randomSpreadFive(ISeedReader world, BlockPos pos, boolean beSquare, int chance, TGTreeFeatureConfig config) {
+        setLeavesRandomized(world, pos.offset(1, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, -1), config.leafState, chance);
 
-        setLeavesRandomized(world, pos.offset(2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(2, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-2, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(2, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-2, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(2, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-2, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-2, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(2, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
+        setLeavesRandomized(world, pos.offset(2, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, 2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-2, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, -2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(2, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, 2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-2, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, -2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(2, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, 2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-2, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, -2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(2, 0, 2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-2, 0, 2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-2, 0, -2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(2, 0, -2), config.leafState, chance);
 
-        setLeavesRandomized(world, pos.offset(3, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-3, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(3, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-3, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(3, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-3, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(3, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(2, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-3, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(2, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(3, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-2, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-3, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-2, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
+        setLeavesRandomized(world, pos.offset(3, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, 3), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-3, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, -3), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(3, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, 3), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-3, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, -3), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(3, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, 3), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-3, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, -3), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(3, 0, 2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(2, 0, 3), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-3, 0, 2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(2, 0, -3), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(3, 0, -2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-2, 0, 3), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-3, 0, -2), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-2, 0, -3), config.leafState, chance);
 
-        setLeavesRandomized(world, pos.offset(4, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, 4), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-4, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(0, 0, -4), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(4, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, 4), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-4, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(1, 0, -4), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(4, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, 4), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-4, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-        setLeavesRandomized(world, pos.offset(-1, 0, -4), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
+        setLeavesRandomized(world, pos.offset(4, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, 4), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-4, 0, 0), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(0, 0, -4), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(4, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, 4), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-4, 0, 1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(1, 0, -4), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(4, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, 4), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-4, 0, -1), config.leafState, chance);
+        setLeavesRandomized(world, pos.offset(-1, 0, -4), config.leafState, chance);
 
         if (!beSquare) {
-            setLeavesRandomized(world, pos.offset(5, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-            setLeavesRandomized(world, pos.offset(0, 0, 5), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-            setLeavesRandomized(world, pos.offset(-5, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
-            setLeavesRandomized(world, pos.offset(0, 0, -5), Blocks.SPRUCE_LEAVES.defaultBlockState(), chance);
+            setLeavesRandomized(world, pos.offset(5, 0, 0), config.leafState, chance);
+            setLeavesRandomized(world, pos.offset(0, 0, 5), config.leafState, chance);
+            setLeavesRandomized(world, pos.offset(-5, 0, 0), config.leafState, chance);
+            setLeavesRandomized(world, pos.offset(0, 0, -5), config.leafState, chance);
         }
     }
 
-    public void generateOneStar(ISeedReader world, BlockPos pos, boolean beSquare) {
+    public void generateOneStar(ISeedReader world, BlockPos pos, boolean beSquare, TGTreeFeatureConfig config) {
         /*
                 #
               # o #
                 #
          */
-        setLeaves(world, pos.offset(1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
+        setLeaves(world, pos.offset(1, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, -1), config.leafState);
 
     }
 
 
-    public void generateTwoStar(ISeedReader world, BlockPos pos, boolean beSquare) {
+    public void generateTwoStar(ISeedReader world, BlockPos pos, boolean beSquare, TGTreeFeatureConfig config) {
         /*
                 #
               # # #
@@ -291,26 +291,26 @@ public abstract class BaseSpruceTree extends Feature<TGTreeFeatureConfig> {
                 #
          */
 
-        setLeaves(world, pos.offset(1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
+        setLeaves(world, pos.offset(1, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, -1), config.leafState);
 
         if (!beSquare) {
-            setLeaves(world, pos.offset(2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-            setLeaves(world, pos.offset(0, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-            setLeaves(world, pos.offset(-2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-            setLeaves(world, pos.offset(0, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
+            setLeaves(world, pos.offset(2, 0, 0), config.leafState);
+            setLeaves(world, pos.offset(0, 0, 2), config.leafState);
+            setLeaves(world, pos.offset(-2, 0, 0), config.leafState);
+            setLeaves(world, pos.offset(0, 0, -2), config.leafState);
         }
     }
 
 
 
-    public void generateThreeStar(ISeedReader world, BlockPos pos, boolean beSquare) {
+    public void generateThreeStar(ISeedReader world, BlockPos pos, boolean beSquare, TGTreeFeatureConfig config) {
         /*
                 #
               # # #
@@ -321,38 +321,38 @@ public abstract class BaseSpruceTree extends Feature<TGTreeFeatureConfig> {
                 #
          */
 
-        setLeaves(world, pos.offset(1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(2, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-2, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(2, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-2, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
+        setLeaves(world, pos.offset(1, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(2, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, 2), config.leafState);
+        setLeaves(world, pos.offset(-2, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, -2), config.leafState);
+        setLeaves(world, pos.offset(2, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, 2), config.leafState);
+        setLeaves(world, pos.offset(-2, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, -2), config.leafState);
+        setLeaves(world, pos.offset(2, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, 2), config.leafState);
+        setLeaves(world, pos.offset(-2, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, -2), config.leafState);
 
         if (!beSquare) {
-            setLeaves(world, pos.offset(3, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-            setLeaves(world, pos.offset(0, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState());
-            setLeaves(world, pos.offset(-3, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-            setLeaves(world, pos.offset(0, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState());
+            setLeaves(world, pos.offset(3, 0, 0), config.leafState);
+            setLeaves(world, pos.offset(0, 0, 3), config.leafState);
+            setLeaves(world, pos.offset(-3, 0, 0), config.leafState);
+            setLeaves(world, pos.offset(0, 0, -3), config.leafState);
         }
 
     }
 
 
-    public void generateFourStar(ISeedReader world, BlockPos pos, boolean beSquare) {
+    public void generateFourStar(ISeedReader world, BlockPos pos, boolean beSquare, TGTreeFeatureConfig config) {
         /*
                   #
                 # # #
@@ -365,54 +365,54 @@ public abstract class BaseSpruceTree extends Feature<TGTreeFeatureConfig> {
                   #
          */
 
-        setLeaves(world, pos.offset(1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
+        setLeaves(world, pos.offset(1, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, -1), config.leafState);
 
-        setLeaves(world, pos.offset(2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(2, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-2, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(2, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-2, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(2, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-2, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-2, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(2, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
+        setLeaves(world, pos.offset(2, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, 2), config.leafState);
+        setLeaves(world, pos.offset(-2, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, -2), config.leafState);
+        setLeaves(world, pos.offset(2, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, 2), config.leafState);
+        setLeaves(world, pos.offset(-2, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, -2), config.leafState);
+        setLeaves(world, pos.offset(2, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, 2), config.leafState);
+        setLeaves(world, pos.offset(-2, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, -2), config.leafState);
+        setLeaves(world, pos.offset(2, 0, 2), config.leafState);
+        setLeaves(world, pos.offset(-2, 0, 2), config.leafState);
+        setLeaves(world, pos.offset(-2, 0, -2), config.leafState);
+        setLeaves(world, pos.offset(2, 0, -2), config.leafState);
 
-        setLeaves(world, pos.offset(3, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-3, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(3, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-3, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(3, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-3, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState());
+        setLeaves(world, pos.offset(3, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, 3), config.leafState);
+        setLeaves(world, pos.offset(-3, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, -3), config.leafState);
+        setLeaves(world, pos.offset(3, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, 3), config.leafState);
+        setLeaves(world, pos.offset(-3, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, -3), config.leafState);
+        setLeaves(world, pos.offset(3, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, 3), config.leafState);
+        setLeaves(world, pos.offset(-3, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, -3), config.leafState);
 
         if (!beSquare) {
-            setLeaves(world, pos.offset(4, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-            setLeaves(world, pos.offset(0, 0, 4), Blocks.SPRUCE_LEAVES.defaultBlockState());
-            setLeaves(world, pos.offset(-4, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-            setLeaves(world, pos.offset(0, 0, -4), Blocks.SPRUCE_LEAVES.defaultBlockState());
+            setLeaves(world, pos.offset(4, 0, 0), config.leafState);
+            setLeaves(world, pos.offset(0, 0, 4), config.leafState);
+            setLeaves(world, pos.offset(-4, 0, 0), config.leafState);
+            setLeaves(world, pos.offset(0, 0, -4), config.leafState);
         }
     }
 
-    public void generateFiveStar(ISeedReader world, BlockPos pos, boolean beSquare) {
+    public void generateFiveStar(ISeedReader world, BlockPos pos, boolean beSquare, TGTreeFeatureConfig config) {
         /*
                     #
                   # # #
@@ -426,71 +426,71 @@ public abstract class BaseSpruceTree extends Feature<TGTreeFeatureConfig> {
                   # # #
                     #
          */
-        setLeaves(world, pos.offset(1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
+        setLeaves(world, pos.offset(1, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, -1), config.leafState);
 
-        setLeaves(world, pos.offset(2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-2, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(2, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-2, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(2, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-2, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(2, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-2, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-2, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(2, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
+        setLeaves(world, pos.offset(2, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, 2), config.leafState);
+        setLeaves(world, pos.offset(-2, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, -2), config.leafState);
+        setLeaves(world, pos.offset(2, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, 2), config.leafState);
+        setLeaves(world, pos.offset(-2, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, -2), config.leafState);
+        setLeaves(world, pos.offset(2, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, 2), config.leafState);
+        setLeaves(world, pos.offset(-2, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, -2), config.leafState);
+        setLeaves(world, pos.offset(2, 0, 2), config.leafState);
+        setLeaves(world, pos.offset(-2, 0, 2), config.leafState);
+        setLeaves(world, pos.offset(-2, 0, -2), config.leafState);
+        setLeaves(world, pos.offset(2, 0, -2), config.leafState);
 
-        setLeaves(world, pos.offset(3, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-3, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(3, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-3, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(3, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-3, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(3, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(2, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-3, 0, 2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(2, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(3, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-2, 0, 3), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-3, 0, -2), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-2, 0, -3), Blocks.SPRUCE_LEAVES.defaultBlockState());
+        setLeaves(world, pos.offset(3, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, 3), config.leafState);
+        setLeaves(world, pos.offset(-3, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, -3), config.leafState);
+        setLeaves(world, pos.offset(3, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, 3), config.leafState);
+        setLeaves(world, pos.offset(-3, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, -3), config.leafState);
+        setLeaves(world, pos.offset(3, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, 3), config.leafState);
+        setLeaves(world, pos.offset(-3, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, -3), config.leafState);
+        setLeaves(world, pos.offset(3, 0, 2), config.leafState);
+        setLeaves(world, pos.offset(2, 0, 3), config.leafState);
+        setLeaves(world, pos.offset(-3, 0, 2), config.leafState);
+        setLeaves(world, pos.offset(2, 0, -3), config.leafState);
+        setLeaves(world, pos.offset(3, 0, -2), config.leafState);
+        setLeaves(world, pos.offset(-2, 0, 3), config.leafState);
+        setLeaves(world, pos.offset(-3, 0, -2), config.leafState);
+        setLeaves(world, pos.offset(-2, 0, -3), config.leafState);
 
-        setLeaves(world, pos.offset(4, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, 4), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-4, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(0, 0, -4), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(4, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, 4), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-4, 0, 1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(1, 0, -4), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(4, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, 4), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-4, 0, -1), Blocks.SPRUCE_LEAVES.defaultBlockState());
-        setLeaves(world, pos.offset(-1, 0, -4), Blocks.SPRUCE_LEAVES.defaultBlockState());
+        setLeaves(world, pos.offset(4, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, 4), config.leafState);
+        setLeaves(world, pos.offset(-4, 0, 0), config.leafState);
+        setLeaves(world, pos.offset(0, 0, -4), config.leafState);
+        setLeaves(world, pos.offset(4, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, 4), config.leafState);
+        setLeaves(world, pos.offset(-4, 0, 1), config.leafState);
+        setLeaves(world, pos.offset(1, 0, -4), config.leafState);
+        setLeaves(world, pos.offset(4, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, 4), config.leafState);
+        setLeaves(world, pos.offset(-4, 0, -1), config.leafState);
+        setLeaves(world, pos.offset(-1, 0, -4), config.leafState);
 
         if (!beSquare) {
-            setLeaves(world, pos.offset(5, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-            setLeaves(world, pos.offset(0, 0, 5), Blocks.SPRUCE_LEAVES.defaultBlockState());
-            setLeaves(world, pos.offset(-5, 0, 0), Blocks.SPRUCE_LEAVES.defaultBlockState());
-            setLeaves(world, pos.offset(0, 0, -5), Blocks.SPRUCE_LEAVES.defaultBlockState());
+            setLeaves(world, pos.offset(5, 0, 0), config.leafState);
+            setLeaves(world, pos.offset(0, 0, 5), config.leafState);
+            setLeaves(world, pos.offset(-5, 0, 0), config.leafState);
+            setLeaves(world, pos.offset(0, 0, -5), config.leafState);
         }
 
     }

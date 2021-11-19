@@ -53,22 +53,22 @@ public class TheGraveyardConfig {
 
     public final ConfigHelper.ConfigValueListener<Boolean> haunted_forest;
     public final ConfigHelper.ConfigValueListener<Boolean> haunted_forest_fog;
-    public final ConfigHelper.ConfigValueListener<Double> haunted_forest_fog_density;
-    public final ConfigHelper.ConfigValueListener<Double> haunted_forest_chance;
+    public final ConfigHelper.ConfigValueListener<Float> haunted_forest_fog_density;
+    public final ConfigHelper.ConfigValueListener<Integer> haunted_forest_chance;
     public final ConfigHelper.ConfigValueListener<Integer> haunted_forest_fogMaxY;
     public final ConfigHelper.ConfigValueListener<Integer> haunted_forest_fogMinY;
 
     public final ConfigHelper.ConfigValueListener<Boolean> haunted_lakes;
     public final ConfigHelper.ConfigValueListener<Boolean> haunted_lakes_fog;
-    public final ConfigHelper.ConfigValueListener<Double> haunted_lakes_fog_density;
-    public final ConfigHelper.ConfigValueListener<Double> haunted_lakes_chance;
+    public final ConfigHelper.ConfigValueListener<Float> haunted_lakes_fog_density;
+    public final ConfigHelper.ConfigValueListener<Integer> haunted_lakes_chance;
     public final ConfigHelper.ConfigValueListener<Integer> haunted_lakes_fogMaxY;
     public final ConfigHelper.ConfigValueListener<Integer> haunted_lakes_fogMinY;
 
     public final ConfigHelper.ConfigValueListener<Boolean> eroded_haunted_forest;
     public final ConfigHelper.ConfigValueListener<Boolean> eroded_haunted_forest_fog;
-    public final ConfigHelper.ConfigValueListener<Double> eroded_haunted_forest_fog_density;
-    public final ConfigHelper.ConfigValueListener<Double> eroded_haunted_forest_chance;
+    public final ConfigHelper.ConfigValueListener<Float> eroded_haunted_forest_fog_density;
+    public final ConfigHelper.ConfigValueListener<Integer> eroded_haunted_forest_chance;
     public final ConfigHelper.ConfigValueListener<Integer> eroded_haunted_forest_fogMaxY;
     public final ConfigHelper.ConfigValueListener<Integer> eroded_haunted_forest_fogMinY;
 
@@ -164,8 +164,8 @@ public class TheGraveyardConfig {
         builder.push("Haunted Forest");
         haunted_forest = booleanConfigValue(builder, subscriber, "Haunted Forest Generation", "haunted_forest", true);
         haunted_forest_fog = booleanConfigValue(builder, subscriber, "Haunted Forest Fog", "haunted_forest_fog", true);
-        haunted_forest_fog_density = doubleConfigValue(builder, subscriber, "Haunted Forest Fog Density", "haunted_forest_fog_density", 0.5F);
-        haunted_forest_chance = doubleConfigValue(builder, subscriber, "Haunted Forest Chance", "haunted_forest_chance", 0.15F);
+        haunted_forest_fog_density = floatConfigValue(builder, subscriber, "Haunted Forest Fog Density", "haunted_forest_fog_density", 0.07F);
+        haunted_forest_chance = integerConfigValue(builder, subscriber, "Haunted Forest Chance", "haunted_forest_chance", 3);
         haunted_forest_fogMaxY = integerConfigValue(builder, subscriber, "Haunted Forest Fog MaxY", "haunted_forest_fogMaxY", 256);
         haunted_forest_fogMinY = integerConfigValue(builder, subscriber, "Haunted Forest Fog MinY", "haunted_forest_fogMinY", 62);
         builder.pop();
@@ -173,8 +173,8 @@ public class TheGraveyardConfig {
         builder.push("Haunted Lakes");
         haunted_lakes = booleanConfigValue(builder, subscriber, "Haunted Lakes Generation", "haunted_lakes", true);
         haunted_lakes_fog = booleanConfigValue(builder, subscriber, "Haunted Lakes Fog", "haunted_lakes_fog", true);
-        haunted_lakes_fog_density = doubleConfigValue(builder, subscriber, "Haunted Lakes Fog Density", "haunted_lakes_fog_density", 0.7F);
-        haunted_lakes_chance = doubleConfigValue(builder, subscriber, "Haunted Lakes Chance", "haunted_lakes_chance", 0.15F);
+        haunted_lakes_fog_density = floatConfigValue(builder, subscriber, "Haunted Lakes Fog Density", "haunted_lakes_fog_density", 0.01F);
+        haunted_lakes_chance = integerConfigValue(builder, subscriber, "Haunted Lakes Chance", "haunted_lakes_chance", 3);
         haunted_lakes_fogMaxY = integerConfigValue(builder, subscriber, "Haunted Lakes Fog MaxY", "haunted_lakes_fogMaxY", 256);
         haunted_lakes_fogMinY = integerConfigValue(builder, subscriber, "Haunted Lakes Fog MinY", "haunted_lakes_fogMinY", 62);
         builder.pop();
@@ -182,8 +182,8 @@ public class TheGraveyardConfig {
         builder.push("Eroded Haunted Forest");
         eroded_haunted_forest = booleanConfigValue(builder, subscriber, "Eroded Haunted Forest Generation", "eroded_haunted_forest", true);
         eroded_haunted_forest_fog = booleanConfigValue(builder, subscriber, "Eroded Haunted Forest Fog", "eroded_haunted_forest_fog", true);
-        eroded_haunted_forest_fog_density = doubleConfigValue(builder, subscriber, "Eroded Haunted Forest Fog Density", "eroded_haunted_forest_fog_density", 0.9F);
-        eroded_haunted_forest_chance = doubleConfigValue(builder, subscriber, "Eroded Haunted Forest Chance", "eroded_haunted_forest_chance", 0.1F);
+        eroded_haunted_forest_fog_density = floatConfigValue(builder, subscriber, "Eroded Haunted Forest Fog Density", "eroded_haunted_forest_fog_density", 0.005F);
+        eroded_haunted_forest_chance = integerConfigValue(builder, subscriber, "Eroded Haunted Forest Chance", "eroded_haunted_forest_chance", 2);
         eroded_haunted_forest_fogMaxY = integerConfigValue(builder, subscriber, "Eroded Haunted Forest Fog MaxY", "eroded_haunted_forest_fogMaxY", 256);
         eroded_haunted_forest_fogMinY = integerConfigValue(builder, subscriber, "Eroded Haunted Forest Fog MinY", "eroded_haunted_forest_fogMinY", 62);
         builder.pop();
@@ -210,6 +210,13 @@ public class TheGraveyardConfig {
     }
 
     public static ConfigHelper.ConfigValueListener<Double> doubleConfigValue(ForgeConfigSpec.Builder builder, ConfigHelper.Subscriber subscriber, String comment, String name, double value) {
+        return subscriber.subscribe(builder
+                .comment(comment)
+                .define(name, value)
+        );
+    }
+
+    public static ConfigHelper.ConfigValueListener<Float> floatConfigValue(ForgeConfigSpec.Builder builder, ConfigHelper.Subscriber subscriber, String comment, String name, float value) {
         return subscriber.subscribe(builder
                 .comment(comment)
                 .define(name, value)

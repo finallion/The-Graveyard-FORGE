@@ -2,6 +2,7 @@ package com.finallion.graveyard.events;
 
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.utils.ConfigConsts;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -15,7 +16,7 @@ public class BiomeEvents {
     @SubscribeEvent
     public static void FogDensityEvent(EntityViewRenderEvent.FogDensity event) {
         BlockPos pos = event.getRenderer().getMainCamera().getBlockPosition();
-        String biomeName = event.getInfo().getEntity().level.getBiome(pos).toString();
+        String biomeName = event.getInfo().getEntity().level.getBiome(pos).getRegistryName().toString();
 
         if (!ConfigConsts.enableFogLakes && !ConfigConsts.enableFogEroded && !ConfigConsts.enableFogForest) {
             return;

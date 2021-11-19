@@ -71,8 +71,7 @@ public class TheGraveyard {
 
 
     // TODO: WorldRenderer mixin
-    // TODO: lang
-    // TODO: Gravestones, texture deepslate, moss carpet double, sound moss, mobs spawn, bone dagger
+    // TODO: mobs spawn, bone dagger
     // TODO: house rebuild
     public TheGraveyard() {
         GeckoLib.initialize();

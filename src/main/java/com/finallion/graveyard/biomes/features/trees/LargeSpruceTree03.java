@@ -43,42 +43,42 @@ public class LargeSpruceTree03 extends BaseSpruceTree {
         setLeaves(world, mutable.offset(0, 3, 0), leaf);
         setLeaves(world, mutable.offset(0, 2, 0), leaf);
         setLeaves(world, mutable.offset(0, 1, 0), leaf);
-        randomSpreadOne(world, mutable.offset(0, 1, 0), false, 4);
+        randomSpreadOne(world, mutable.offset(0, 1, 0), false, 4, config);
         setLeaves(world, mutable.offset(0, 0, 0), leaf);
-        generateOneStar(world, mutable.offset(0, 0, 0), false);
-        randomSpreadOne(world, mutable.offset(0, -1, 0), false, 2);
-        randomSpreadTwo(world, mutable.offset(0, -2, 0), true, 2);
-        randomSpreadOne(world, mutable.offset(0, -3, 0), false, 2);
-        generateTwoStar(world, mutable.offset(0, -4, 0), false);
-        randomSpreadThree(world, mutable.offset(0, -5, 0), true, 2);
-        randomSpreadThree(world, mutable.offset(0, -6, 0), false, 2);
-        generateTwoStar(world, mutable.offset(0, -7, 0), false);
-        generateThreeStar(world, mutable.offset(0, -8, 0), true);
-        randomSpreadThree(world, mutable.offset(0, -9, 0), true, 2);
-        randomSpreadThree(world, mutable.offset(0, -10, 0), false, 2);
-        randomSpreadTwo(world, mutable.offset(0, -11, 0), false, 2);
+        generateOneStar(world, mutable.offset(0, 0, 0), false, config);
+        randomSpreadOne(world, mutable.offset(0, -1, 0), false, 2, config);
+        randomSpreadTwo(world, mutable.offset(0, -2, 0), true, 2, config);
+        randomSpreadOne(world, mutable.offset(0, -3, 0), false, 2, config);
+        generateTwoStar(world, mutable.offset(0, -4, 0), false, config);
+        randomSpreadThree(world, mutable.offset(0, -5, 0), true, 2, config);
+        randomSpreadThree(world, mutable.offset(0, -6, 0), false, 2, config);
+        generateTwoStar(world, mutable.offset(0, -7, 0), false, config);
+        generateThreeStar(world, mutable.offset(0, -8, 0), true, config);
+        randomSpreadThree(world, mutable.offset(0, -9, 0), true, 2, config);
+        randomSpreadThree(world, mutable.offset(0, -10, 0), false, 2, config);
+        randomSpreadTwo(world, mutable.offset(0, -11, 0), false, 2, config);
 
-        generateThreeStar(world, mutable.offset(0, -12, 0), false);
-        randomSpreadFour(world, mutable.offset(0, -13, 0), true, 2);
-        randomSpreadFour(world, mutable.offset(0, -14, 0), false, 2);
-        generateTwoStar(world, mutable.offset(0, -15, 0), false);
+        generateThreeStar(world, mutable.offset(0, -12, 0), false, config);
+        randomSpreadFour(world, mutable.offset(0, -13, 0), true, 2, config);
+        randomSpreadFour(world, mutable.offset(0, -14, 0), false, 2, config);
+        generateTwoStar(world, mutable.offset(0, -15, 0), false, config);
 
-        randomSpreadFour(world, mutable.offset(0, -12, 0), true, 2);
-        randomSpreadFour(world, mutable.offset(0, -13, 0), true, 4);
-        randomSpreadFour(world, mutable.offset(0, -14, 0), false, 2);
-        generateTwoStar(world, mutable.offset(0, -15, 0), false);
+        randomSpreadFour(world, mutable.offset(0, -12, 0), true, 2, config);
+        randomSpreadFour(world, mutable.offset(0, -13, 0), true, 4, config);
+        randomSpreadFour(world, mutable.offset(0, -14, 0), false, 2, config);
+        generateTwoStar(world, mutable.offset(0, -15, 0), false, config);
 
-        generateFiveStar(world, mutable.offset(0, -16, 0), true);
-        randomSpreadFive(world, mutable.offset(0, -17, 0), false, 2);
-        randomSpreadFour(world, mutable.offset(0, -18, 0), false, 2);
+        generateFiveStar(world, mutable.offset(0, -16, 0), true, config);
+        randomSpreadFive(world, mutable.offset(0, -17, 0), false, 2, config);
+        randomSpreadFour(world, mutable.offset(0, -18, 0), false, 2, config);
 
-        generateFiveStar(world, mutable.offset(0, -19, 0), false);
-        randomSpreadFive(world, mutable.offset(0, -20, 0), false, 2);
-        randomSpreadFour(world, mutable.offset(0, -21, 0), false, 2);
+        generateFiveStar(world, mutable.offset(0, -19, 0), false, config);
+        randomSpreadFive(world, mutable.offset(0, -20, 0), false, 2, config);
+        randomSpreadFour(world, mutable.offset(0, -21, 0), false, 2, config);
 
-        randomSpreadFive(world, mutable.offset(0, -22, 0), false, 2);
-        generateFiveStar(world, mutable.offset(0, -23, 0), false);
-        randomSpreadFour(world, mutable.offset(0, -24, 0), false, 2);
+        randomSpreadFive(world, mutable.offset(0, -22, 0), false, 2, config);
+        generateFiveStar(world, mutable.offset(0, -23, 0), false, config);
+        randomSpreadFour(world, mutable.offset(0, -24, 0), false, 2, config);
         return false;
     }
 }

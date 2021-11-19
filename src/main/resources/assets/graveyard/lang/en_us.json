@@ -13,6 +13,9 @@
   "block.graveyard.tg_rooted_dirt": "Graveyard Rooted Dirt",
   "block.graveyard.tg_moss_block": "Graveyard Moss",
 
+  "block.graveyard.moss_block": "Moss",
+  "block.graveyard.moss_carpet": "Moss Carpet",
+
   "block.graveyard.tg_cobbled_deepslate": "Graveyard Cobbled Deepslate",
   "block.graveyard.tg_cobbled_deepslate_slab": "Graveyard Cobbled Deepslate Slab",
   "block.graveyard.tg_cobbled_deepslate_stairs": "Graveyard Cobbled Deepslate Stairs",
@@ -91,12 +94,21 @@
   "block.graveyard.creeper_skeleton": "Creeper Skeleton",
 
   "block.graveyard.dark_iron_bars": "Dark Iron Bars",
-  "block.graveyard.gravestone": "Gravestone",
+  "block.graveyard.gravestone": "Polished Basalt Gravestone",
+  "block.graveyard.cobblestone_gravestone": "Cobblestone Gravestone",
+  "block.graveyard.mossy_cobblestone_gravestone": "Mossy Cobblestone Gravestone",
+  "block.graveyard.deepslate_gravestone": "Deepslate Gravestone",
 
+  "item.graveyard.bone_dagger": "Bone Dagger",
 
   "entity.graveyard.skeleton_creeper": "Skeleton Creeper",
+  "entity.graveyard.acolyte": "Acolyte",
+  "entity.graveyard.ghoul": "Ghoul",
+  "entity.graveyard.reaper": "Reaper",
   "item.graveyard.skeleton_creeper_spawn_egg": "Skeleton Creeper Spawn Egg",
-  "filled_map.graveyard:large_walled_graveyard": "Large Graveyard Explorer Map",
+  "item.graveyard.acolyte_spawn_egg": "Acolyte Spawn Egg",
+  "item.graveyard.ghoul_spawn_egg": "Ghoul Spawn Egg",
+  "item.graveyard.reaper_spawn_egg": "Reaper Spawn Egg",
   "itemGroup.group": "The Graveyard",
   "gravestone.edit": "Edit Gravestone"
 

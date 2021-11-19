@@ -44,23 +44,23 @@ public class SmallSpruceTree01 extends BaseSpruceTree {
         setLeaves(world, mutable.offset(0, 1, 0), leaf);
         setLeaves(world, mutable.offset(0, 0, 0), leaf);
 
-        generateOneStar(world, mutable.offset(0, 0, 0), false);
-        randomSpreadTwo(world, mutable.offset(0, -1, 0), true, 2);
+        generateOneStar(world, mutable.offset(0, 0, 0), false, config);
+        randomSpreadTwo(world, mutable.offset(0, -1, 0), true, 2, config);
 
         // second layer
-        generateOneStar(world, mutable.offset(0, -3, 0), false);
-        generateTwoStar(world, mutable.offset(0, -4, 0), false);
-        randomSpreadTwo(world, mutable.offset(0, -5, 0), false, 2);
+        generateOneStar(world, mutable.offset(0, -3, 0), false, config);
+        generateTwoStar(world, mutable.offset(0, -4, 0), false, config);
+        randomSpreadTwo(world, mutable.offset(0, -5, 0), false, 2, config);
 
         // third layer
-        generateTwoStar(world, mutable.offset(0, -6, 0), false);
-        generateThreeStar(world, mutable.offset(0, -7, 0), true);
+        generateTwoStar(world, mutable.offset(0, -6, 0), false, config);
+        generateThreeStar(world, mutable.offset(0, -7, 0), true, config);
 
-        randomSpreadOne(world, mutable.offset(0, -8, 0), false, 4);
+        randomSpreadOne(world, mutable.offset(0, -8, 0), false, 4, config);
 
         // forth layer
-        generateTwoStar(world, mutable.offset(0, -9, 0), false);
-        generateThreeStar(world, mutable.offset(0, -10, 0), false);
+        generateTwoStar(world, mutable.offset(0, -9, 0), false, config);
+        generateThreeStar(world, mutable.offset(0, -10, 0), false, config);
 
 
         return false;

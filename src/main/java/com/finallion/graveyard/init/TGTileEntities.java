@@ -25,7 +25,13 @@ public class TGTileEntities {
 
     public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, TheGraveyard.MOD_ID);
 
-    public static final RegistryObject<TileEntityType<GravestoneBlockEntity>> GRAVESTONE_BLOCK_ENTITY = register("gravestone_block_entity", () -> TileEntityType.Builder.of(GravestoneBlockEntity::new, TGBlocks.GRAVESTONE).build(null));
+    public static final RegistryObject<TileEntityType<GravestoneBlockEntity>> GRAVESTONE_BLOCK_ENTITY = register("gravestone_block_entity", () -> TileEntityType.Builder.of(GravestoneBlockEntity::new,
+            TGBlocks.GRAVESTONE,
+            TGBlocks.DEEPSLATE_GRAVESTONE,
+            TGBlocks.MOSSY_COBBLESTONE_GRAVESTONE,
+            TGBlocks.COBBLESTONE_GRAVESTONE
+    ).build(null));
+
     public static final RegistryObject<TileEntityType<UrnBlockEntity>> URN_BLOCK_ENTITY = register("urn_block_entity", () -> TileEntityType.Builder.of(UrnBlockEntity::new,  TGBlocks.BLACK_URN,
             TGBlocks.BLUE_URN,
             TGBlocks.LIGHT_BLUE_URN,
