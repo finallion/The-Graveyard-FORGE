@@ -34,7 +34,7 @@ credits="" #optional
 authors="Finallion" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-The Graveyard adds new biomes, structures, mobs and blocks to your minecraft world, themed around... well... the graveyard!
+The Graveyard adds new biomes, structures, mobs and blocks to your minecraft world, themed around the graveyard!
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.graveyard]] #optional
