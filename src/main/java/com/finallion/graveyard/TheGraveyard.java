@@ -70,9 +70,6 @@ public class TheGraveyard {
     ));
 
 
-    // TODO: WorldRenderer mixin
-    // TODO: mobs spawn, bone dagger
-    // TODO: house rebuild
     public TheGraveyard() {
         GeckoLib.initialize();
         CONFIG = ConfigHelper.register(ModConfig.Type.COMMON, TheGraveyardConfig::new, "graveyard-forge-config-v1.toml");

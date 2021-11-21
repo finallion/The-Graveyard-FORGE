@@ -5,6 +5,6 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 public class HauntedHouse extends TGBaseStructure {
     public HauntedHouse(Codec<NoFeatureConfig> codec) {
-        super(codec, "haunted_house", 2, 0);
+        super(codec, "haunted_house", 1.5, 0);
     }
 }

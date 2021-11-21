@@ -2,7 +2,6 @@ package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.biomes.HauntedForestBiomes;
-import com.finallion.graveyard.utils.ConfigConsts;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
@@ -35,16 +34,15 @@ public class TGBiomes {
     }
 
 
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent()
     public static void onBiomeRegister(RegistryEvent.Register<Biome> event) {
         IForgeRegistry<Biome> biomeRegistry = event.getRegistry();
         BIOMES.values().forEach(biomeRegistry::register);
 
+        registerBiome(HAUNTED_FOREST, 3, BiomeManager.BiomeType.COOL, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.OVERWORLD);
+        registerBiome(HAUNTED_LAKES, 3, BiomeManager.BiomeType.COOL, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.OVERWORLD);
+        registerBiome(ERODED_HAUNTED_FOREST, 2, BiomeManager.BiomeType.COOL, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.OVERWORLD);
 
-        // ConfigConsts.chanceForest
-        registerBiome(HAUNTED_FOREST, (int) 1, BiomeManager.BiomeType.COOL, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.OVERWORLD);
-        registerBiome(HAUNTED_LAKES, (int) 1, BiomeManager.BiomeType.COOL, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.OVERWORLD);
-        registerBiome(ERODED_HAUNTED_FOREST, (int) 1, BiomeManager.BiomeType.COOL, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.OVERWORLD);
     }
 
     private static void registerBiome(RegistryKey<Biome> key, int weight, BiomeManager.BiomeType type, BiomeDictionary.Type... types) {

@@ -95,6 +95,10 @@ public class AnimatedGraveyardEntity extends CreatureEntity implements IAngerabl
         super.aiStep();
     }
 
+    public boolean isCreepy() {
+        return this.entityData.get(DATA_CREEPY);
+    }
+
     @Override
     public boolean isAngry() {
         return this.remainingPersistentAngerTime > 0;

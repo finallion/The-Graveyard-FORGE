@@ -51,24 +51,24 @@ public class TheGraveyardConfig {
     public final ConfigHelper.ConfigValueListener<Boolean> fog_particle;
     public final ConfigHelper.ConfigValueListener<Integer> fog_particle_chance;
 
-    public final ConfigHelper.ConfigValueListener<Boolean> haunted_forest;
+    //public final ConfigHelper.ConfigValueListener<Boolean> haunted_forest;
     public final ConfigHelper.ConfigValueListener<Boolean> haunted_forest_fog;
     public final ConfigHelper.ConfigValueListener<Float> haunted_forest_fog_density;
-    public final ConfigHelper.ConfigValueListener<Integer> haunted_forest_chance;
+    //public final ConfigHelper.ConfigValueListener<Integer> haunted_forest_chance;
     public final ConfigHelper.ConfigValueListener<Integer> haunted_forest_fogMaxY;
     public final ConfigHelper.ConfigValueListener<Integer> haunted_forest_fogMinY;
 
-    public final ConfigHelper.ConfigValueListener<Boolean> haunted_lakes;
+    //public final ConfigHelper.ConfigValueListener<Boolean> haunted_lakes;
     public final ConfigHelper.ConfigValueListener<Boolean> haunted_lakes_fog;
     public final ConfigHelper.ConfigValueListener<Float> haunted_lakes_fog_density;
-    public final ConfigHelper.ConfigValueListener<Integer> haunted_lakes_chance;
+    //public final ConfigHelper.ConfigValueListener<Integer> haunted_lakes_chance;
     public final ConfigHelper.ConfigValueListener<Integer> haunted_lakes_fogMaxY;
     public final ConfigHelper.ConfigValueListener<Integer> haunted_lakes_fogMinY;
 
-    public final ConfigHelper.ConfigValueListener<Boolean> eroded_haunted_forest;
+    //public final ConfigHelper.ConfigValueListener<Boolean> eroded_haunted_forest;
     public final ConfigHelper.ConfigValueListener<Boolean> eroded_haunted_forest_fog;
     public final ConfigHelper.ConfigValueListener<Float> eroded_haunted_forest_fog_density;
-    public final ConfigHelper.ConfigValueListener<Integer> eroded_haunted_forest_chance;
+    //public final ConfigHelper.ConfigValueListener<Integer> eroded_haunted_forest_chance;
     public final ConfigHelper.ConfigValueListener<Integer> eroded_haunted_forest_fogMaxY;
     public final ConfigHelper.ConfigValueListener<Integer> eroded_haunted_forest_fogMinY;
 
@@ -81,6 +81,7 @@ public class TheGraveyardConfig {
                 "Here, you can disable structures to spawn, change their chance of spawning, change their separation and also change their salt.\n" +
                 "Additionally, you can turn the graveyard fog particles on and set the chance of spawning them (higher numbers = lower chance of spawning).\n" +
                 "Graveyard fog particles spawn from graveyard moss and add an atmospheric and spooky element while exploring.\n" +
+                "Furthermore, you can disable biomes, set their spawning weight and remove/edit the biome fog.\n" +
                 "\n" +
                 "To disable a structure to spawn, simply go to the corresponding structure and change true to false.\n" +
                 "\n" +
@@ -162,28 +163,28 @@ public class TheGraveyardConfig {
         builder.pop();
 
         builder.push("Haunted Forest");
-        haunted_forest = booleanConfigValue(builder, subscriber, "Haunted Forest Generation", "haunted_forest", true);
+        //haunted_forest = booleanConfigValue(builder, subscriber, "Haunted Forest Generation", "haunted_forest", true);
         haunted_forest_fog = booleanConfigValue(builder, subscriber, "Haunted Forest Fog", "haunted_forest_fog", true);
-        haunted_forest_fog_density = floatConfigValue(builder, subscriber, "Haunted Forest Fog Density", "haunted_forest_fog_density", 0.07F);
-        haunted_forest_chance = integerConfigValue(builder, subscriber, "Haunted Forest Chance", "haunted_forest_chance", 3);
+        haunted_forest_fog_density = floatConfigValue(builder, subscriber, "Haunted Forest Fog Density", "haunted_forest_fog_density", 0.02F);
+        //haunted_forest_chance = integerConfigValue(builder, subscriber, "Haunted Forest Chance", "haunted_forest_chance", 3);
         haunted_forest_fogMaxY = integerConfigValue(builder, subscriber, "Haunted Forest Fog MaxY", "haunted_forest_fogMaxY", 256);
         haunted_forest_fogMinY = integerConfigValue(builder, subscriber, "Haunted Forest Fog MinY", "haunted_forest_fogMinY", 62);
         builder.pop();
 
         builder.push("Haunted Lakes");
-        haunted_lakes = booleanConfigValue(builder, subscriber, "Haunted Lakes Generation", "haunted_lakes", true);
+        //haunted_lakes = booleanConfigValue(builder, subscriber, "Haunted Lakes Generation", "haunted_lakes", true);
         haunted_lakes_fog = booleanConfigValue(builder, subscriber, "Haunted Lakes Fog", "haunted_lakes_fog", true);
-        haunted_lakes_fog_density = floatConfigValue(builder, subscriber, "Haunted Lakes Fog Density", "haunted_lakes_fog_density", 0.01F);
-        haunted_lakes_chance = integerConfigValue(builder, subscriber, "Haunted Lakes Chance", "haunted_lakes_chance", 3);
+        haunted_lakes_fog_density = floatConfigValue(builder, subscriber, "Haunted Lakes Fog Density", "haunted_lakes_fog_density", 0.015F);
+        //haunted_lakes_chance = integerConfigValue(builder, subscriber, "Haunted Lakes Chance", "haunted_lakes_chance", 3);
         haunted_lakes_fogMaxY = integerConfigValue(builder, subscriber, "Haunted Lakes Fog MaxY", "haunted_lakes_fogMaxY", 256);
         haunted_lakes_fogMinY = integerConfigValue(builder, subscriber, "Haunted Lakes Fog MinY", "haunted_lakes_fogMinY", 62);
         builder.pop();
 
         builder.push("Eroded Haunted Forest");
-        eroded_haunted_forest = booleanConfigValue(builder, subscriber, "Eroded Haunted Forest Generation", "eroded_haunted_forest", true);
+        //eroded_haunted_forest = booleanConfigValue(builder, subscriber, "Eroded Haunted Forest Generation", "eroded_haunted_forest", true);
         eroded_haunted_forest_fog = booleanConfigValue(builder, subscriber, "Eroded Haunted Forest Fog", "eroded_haunted_forest_fog", true);
-        eroded_haunted_forest_fog_density = floatConfigValue(builder, subscriber, "Eroded Haunted Forest Fog Density", "eroded_haunted_forest_fog_density", 0.005F);
-        eroded_haunted_forest_chance = integerConfigValue(builder, subscriber, "Eroded Haunted Forest Chance", "eroded_haunted_forest_chance", 2);
+        eroded_haunted_forest_fog_density = floatConfigValue(builder, subscriber, "Eroded Haunted Forest Fog Density", "eroded_haunted_forest_fog_density", 0.01F);
+        //eroded_haunted_forest_chance = integerConfigValue(builder, subscriber, "Eroded Haunted Forest Chance", "eroded_haunted_forest_chance", 2);
         eroded_haunted_forest_fogMaxY = integerConfigValue(builder, subscriber, "Eroded Haunted Forest Fog MaxY", "eroded_haunted_forest_fogMaxY", 256);
         eroded_haunted_forest_fogMinY = integerConfigValue(builder, subscriber, "Eroded Haunted Forest Fog MinY", "eroded_haunted_forest_fogMinY", 62);
         builder.pop();

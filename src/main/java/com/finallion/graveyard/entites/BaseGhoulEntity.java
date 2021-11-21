@@ -24,8 +24,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -89,13 +88,19 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
         return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.195D).add(Attributes.FOLLOW_RANGE, 20.0D).add(Attributes.ATTACK_DAMAGE, 4.0D).add(Attributes.ARMOR, 3.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.5D);
     }
 
-
-    /*
-    public static boolean canSpawn(EntityType<SlimeEntity> p_223366_0_, IWorld p_223366_1_, SpawnReason p_223366_2_, BlockPos p_223366_3_, Random p_223366_4_) {
-        return isSpawnDark(world, pos, random);
+    public static boolean isDarkEnoughToSpawn(IServerWorld p_223323_0_, BlockPos p_223323_1_, Random p_223323_2_) {
+        if (p_223323_0_.getBrightness(LightType.SKY, p_223323_1_) > p_223323_2_.nextInt(32)) {
+            return false;
+        } else {
+            int i = p_223323_0_.getLevel().isThundering() ? p_223323_0_.getMaxLocalRawBrightness(p_223323_1_, 10) : p_223323_0_.getMaxLocalRawBrightness(p_223323_1_);
+            return i <= p_223323_2_.nextInt(8);
+        }
     }
 
-     */
+    public static boolean checkMonsterSpawnRules(EntityType<? extends AnimatedGraveyardEntity> p_223325_0_, IServerWorld p_223325_1_, SpawnReason p_223325_2_, BlockPos p_223325_3_, Random p_223325_4_) {
+        return p_223325_1_.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(p_223325_1_, p_223325_3_, p_223325_4_) && checkMobSpawnRules(p_223325_0_, p_223325_1_, p_223325_2_, p_223325_3_, p_223325_4_);
+    }
+
 
 
     public void addAdditionalSaveData(CompoundNBT tag) {
@@ -138,7 +143,7 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
     }
 
     private void stopAttackAnimation() {
-        if (!isAngry()) {
+        if (!isCreepy()) {
             setState(ANIMATION_RAGE);
         }
     }
@@ -160,7 +165,6 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
         }
 
         if (getAnimationState() == ANIMATION_RAGE  && !(this.isDeadOrDying() || this.getHealth() < 0.01) && isInRageDistance() && getAnimationState() != ANIMATION_WALK) {
-            //this.playSound(SoundEvents.ENTITY_ENDERMAN_SCREAM, 1.0F, -5.0F);
             event.getController().setAnimation(RAGE_ANIMATION);
             return PlayState.CONTINUE;
         }
@@ -267,9 +271,7 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
 
         @Override
         protected void checkAndPerformAttack(LivingEntity target, double squaredDistance) {
-            double d = ATTACK_RANGE;
-
-            if (squaredDistance <= d && attackTimer <= 0) {
+            if (squaredDistance <= ATTACK_RANGE && attackTimer <= 0) {
                 ghoul.setState(ANIMATION_ATTACK);
                 attackTimer = ATTACK_DURATION;
                 this.mob.doHurtTarget(target);

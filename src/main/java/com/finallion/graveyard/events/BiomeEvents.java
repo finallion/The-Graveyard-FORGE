@@ -1,7 +1,6 @@
 package com.finallion.graveyard.events;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.utils.ConfigConsts;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
@@ -18,26 +17,26 @@ public class BiomeEvents {
         BlockPos pos = event.getRenderer().getMainCamera().getBlockPosition();
         String biomeName = event.getInfo().getEntity().level.getBiome(pos).getRegistryName().toString();
 
-        if (!ConfigConsts.enableFogLakes && !ConfigConsts.enableFogEroded && !ConfigConsts.enableFogForest) {
+        if (!TheGraveyard.CONFIG.haunted_lakes_fog.get() && !TheGraveyard.CONFIG.eroded_haunted_forest_fog.get() && !TheGraveyard.CONFIG.haunted_forest_fog.get()) {
             return;
         }
 
 
-        if (biomeName.contains("graveyard:haunted_lakes") && ConfigConsts.enableFogLakes) {
-            if (pos.getY() > ConfigConsts.fogLakesMaxY || pos.getY() < ConfigConsts.fogLakesMinY) {
+        if (biomeName.contains("graveyard:haunted_lakes") && TheGraveyard.CONFIG.haunted_lakes_fog.get()) {
+            if (pos.getY() > TheGraveyard.CONFIG.haunted_lakes_fogMaxY.get() || pos.getY() < TheGraveyard.CONFIG.haunted_lakes_fogMinY.get()) {
                 return;
             }
-            fogDensity = ConfigConsts.fogDensityLakes;
-        } else if (biomeName.contains("graveyard:eroded_haunted") && ConfigConsts.enableFogEroded) {
-            if (pos.getY() > ConfigConsts.fogErodedMaxY || pos.getY() < ConfigConsts.fogErodedMinY) {
+            fogDensity = TheGraveyard.CONFIG.haunted_lakes_fog_density.get();
+        } else if (biomeName.contains("graveyard:eroded_haunted") && TheGraveyard.CONFIG.eroded_haunted_forest_fog.get()) {
+            if (pos.getY() > TheGraveyard.CONFIG.eroded_haunted_forest_fogMaxY.get() || pos.getY() < TheGraveyard.CONFIG.eroded_haunted_forest_fogMinY.get()) {
                 return;
             }
-            fogDensity = ConfigConsts.fogDensityEroded;
-        } else if (biomeName.contains("graveyard:haunted_forest") && ConfigConsts.enableFogForest) {
-            if (pos.getY() > ConfigConsts.fogForestMaxY || pos.getY() < ConfigConsts.fogForestMinY) {
+            fogDensity = TheGraveyard.CONFIG.eroded_haunted_forest_fog_density.get();
+        } else if (biomeName.contains("graveyard:haunted_forest") && TheGraveyard.CONFIG.haunted_forest_fog.get()) {
+            if (pos.getY() > TheGraveyard.CONFIG.haunted_forest_fogMaxY.get() || pos.getY() < TheGraveyard.CONFIG.haunted_forest_fogMinY.get()) {
                 return;
             }
-            fogDensity = ConfigConsts.fogDensityForest;
+            fogDensity = TheGraveyard.CONFIG.haunted_forest_fog_density.get();
         } else {
             return;
         }

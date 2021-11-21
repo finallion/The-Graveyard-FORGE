@@ -5,11 +5,9 @@ import com.finallion.graveyard.entites.AcolyteEntity;
 import com.finallion.graveyard.entites.BaseGhoulEntity;
 import com.finallion.graveyard.entites.ReaperEntity;
 import com.finallion.graveyard.entites.SkeletonCreeper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
+import net.minecraft.entity.*;
 import net.minecraft.entity.monster.GhastEntity;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.Heightmap;
@@ -28,7 +26,6 @@ import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TGEntities {
-
     public static Set<EntityType<?>> entities = new HashSet<>();
 
     public static final EntityType<SkeletonCreeper> SKELETON_CREEPER = createEntity("skeleton_creeper", EntityType.Builder.of(SkeletonCreeper::new, EntityClassification.MONSTER).sized(0.6F, 1.7F).build(TheGraveyard.MOD_ID + ":skeleton_creeper"));
@@ -56,7 +53,12 @@ public class TGEntities {
     }
 
 
-
+    static {
+        EntitySpawnPlacementRegistry.register(SKELETON_CREEPER, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::checkMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(GHOUL, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, BaseGhoulEntity::checkMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(ACOLYTE, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::checkMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(REAPER, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::checkMonsterSpawnRules);
+    }
 
     /*
     public static final EntityType<BaseGhoulEntity> GHOUL = EntityType.Builder.of(BaseGhoulEntity::new)

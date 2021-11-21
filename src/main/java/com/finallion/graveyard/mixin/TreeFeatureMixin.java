@@ -23,7 +23,7 @@ public class TreeFeatureMixin {
     @Inject(method = "place", at = @At(value = "HEAD"), cancellable = true)
     private void noTreesInStructuresGenerate(ISeedReader world, ChunkGenerator p_241855_2_, Random p_241855_3_, BlockPos pos, BaseTreeFeatureConfig p_241855_5_, CallbackInfoReturnable<Boolean> info) {
         BlockState state = world.getBlockState(pos.below());
-        if (state.getBlock().is(TGBlocks.TG_DIRT) || state.getBlock().is(TGBlocks.TG_COARSE_DIRT) || state.getBlock().is(TGBlocks.TG_GRASS_BLOCK) || state.getBlock().is(TGBlocks.TG_MOSS_BLOCK) || state.getBlock().is(TGBlocks.TG_ROOTED_DIRT) || state.getBlock().is(TGBlocks.TG_PODZOL)) {
+        if (state.getBlock().is(TGBlocks.TG_DIRT) || state.getBlock().is(TGBlocks.TG_COARSE_DIRT) || state.getBlock().is(TGBlocks.TG_GRASS_BLOCK) || state.getBlock().is(TGBlocks.TG_MOSS_BLOCK) || state.getBlock().is(TGBlocks.TG_ROOTED_DIRT) || state.getBlock().is(TGBlocks.TG_PODZOL) || state.getBlock().is(TGBlocks.MOSS_BLOCK)) {
             info.setReturnValue(false);
         }
     }
