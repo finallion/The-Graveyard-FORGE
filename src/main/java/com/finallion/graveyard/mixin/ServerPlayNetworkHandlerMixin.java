@@ -31,6 +31,7 @@ public class ServerPlayNetworkHandlerMixin {
     @Shadow
     public ServerPlayerEntity player;
 
+    //func_244542_a(Lnet/minecraft/network/play/client/CUpdateSignPacket;Ljava/util/List;)V
     @Inject(method = "updateSignText", at = @At(value = "HEAD"), cancellable = true)
     private void signUpdate(CUpdateSignPacket packet, List<String> signText, CallbackInfo info) {
         this.player.resetLastActionTime();

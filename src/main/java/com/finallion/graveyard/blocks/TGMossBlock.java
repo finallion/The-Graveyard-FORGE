@@ -1,6 +1,7 @@
 package com.finallion.graveyard.blocks;
 
 import com.finallion.graveyard.TheGraveyard;
+import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.TGParticles;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -31,9 +32,9 @@ public class TGMossBlock extends Block implements IGrowable {
     public void animateTick(BlockState p_180655_1_, World world, BlockPos pos, Random random) {
         super.animateTick(p_180655_1_, world, pos, random);
         // can spawn
-        if (TheGraveyard.CONFIG.fog_particle.get()) {
+        if (GraveyardConfig.INSTANCE.ENABLE_GRAVEYARD_FOG) {
             // how much will spawn
-            if (random.nextInt(TheGraveyard.CONFIG.fog_particle_chance.get()) == 0) {
+            if (random.nextInt(GraveyardConfig.INSTANCE.FOG_CHANCE) == 0) {
                 world.addParticle(TGParticles.GRAVEYARD_FOG_PARTICLE.get(), (double) pos.getX() + random.nextDouble(), (double) pos.getY() + random.nextDouble(), (double) pos.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
             }
         }

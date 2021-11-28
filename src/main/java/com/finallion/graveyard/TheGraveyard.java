@@ -1,20 +1,12 @@
 package com.finallion.graveyard;
 
 import com.finallion.graveyard.client.TheGraveyardClient;
-import com.finallion.graveyard.config.ConfigHelper;
-import com.finallion.graveyard.config.TheGraveyardConfig;
-import com.finallion.graveyard.entites.AcolyteEntity;
-import com.finallion.graveyard.entites.BaseGhoulEntity;
-import com.finallion.graveyard.entites.ReaperEntity;
-import com.finallion.graveyard.entites.SkeletonCreeper;
+import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.*;
 import com.finallion.graveyard.structures.processors.SimpleSurfaceProcessors;
 import com.finallion.graveyard.utils.ProcessorRegistry;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -24,31 +16,31 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.FlatChunkGenerator;
-import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraft.world.gen.feature.template.StructureProcessorList;
 import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
-import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
 import software.bernie.geckolib3.GeckoLib;
 
 import java.lang.reflect.Method;
@@ -57,10 +49,9 @@ import java.util.Map;
 
 
 @Mod("graveyard")
-@Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TheGraveyard {
     public static final String MOD_ID = "graveyard";
-    public static TheGraveyardConfig CONFIG;
+    //public static TheGraveyardConfig CONFIG;
     private static Method GETCODEC_METHOD;
 
 
@@ -70,11 +61,14 @@ public class TheGraveyard {
     ));
 
 
+    // TODO: add new small walled graveyard structure
     public TheGraveyard() {
         GeckoLib.initialize();
-        CONFIG = ConfigHelper.register(ModConfig.Type.COMMON, TheGraveyardConfig::new, "graveyard-forge-config-v1.toml");
-
+        //CONFIG = ConfigHelper.register(ModConfig.Type.COMMON, TheGraveyardConfig::new, "graveyard-forge-config-v1.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> TheGraveyardClient::new);
+
+        //TGBiomes.init();
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
@@ -86,6 +80,7 @@ public class TheGraveyard {
         TGStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
         TGTileEntities.TILE_ENTITIES.register(modEventBus);
         TGParticles.PARTICLES.register(modEventBus);
+
     }
 
     public void setup(final FMLCommonSetupEvent event) {
@@ -106,36 +101,36 @@ public class TheGraveyard {
 
         switch (category) {
             case PLAINS:
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_WALLED_GRAVEYARD, CONFIG.small_walled_graveyard.get());
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_GRAVE, CONFIG.small_grave.get());
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_WALLED_GRAVEYARD, GraveyardConfig.INSTANCE.ENABLE_SMALL_GRAVEYARD);
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_GRAVE, GraveyardConfig.INSTANCE.ENABLE_GRAVE);
                 break;
             case SAVANNA:
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_WALLED_GRAVEYARD_SAVANNA, CONFIG.small_walled_graveyard_savanna.get());
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_WALLED_GRAVEYARD_SAVANNA, GraveyardConfig.INSTANCE.ENABLE_SMALL_GRAVEYARD_SAVANNA);
                 break;
             case FOREST:
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_GRAVE, CONFIG.small_grave.get());
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_LARGE_WALLED_GRAVEYARD, CONFIG.large_walled_graveyard.get());
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_MEDIUM_WALLED_GRAVEYARD, CONFIG.medium_walled_graveyard.get());
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_LARGE_BIRCH_TREE, CONFIG.large_birch_tree.get());
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_HAUNTED_HOUSE, CONFIG.haunted_house.get());
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_GRAVE, GraveyardConfig.INSTANCE.ENABLE_GRAVE);
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_LARGE_WALLED_GRAVEYARD, GraveyardConfig.INSTANCE.ENABLE_LARGE_GRAVEYARD);
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_MEDIUM_WALLED_GRAVEYARD, GraveyardConfig.INSTANCE.ENABLE_MEDIUM_GRAVEYARD);
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_LARGE_BIRCH_TREE, GraveyardConfig.INSTANCE.ENABLE_BIRCH_TREE);
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_HAUNTED_HOUSE, GraveyardConfig.INSTANCE.ENABLE_HAUNTED_HOUSE);
                 break;
             case TAIGA:
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_GRAVE, CONFIG.small_grave.get());
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_LARGE_WALLED_GRAVEYARD, CONFIG.large_walled_graveyard.get());
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_MEDIUM_WALLED_GRAVEYARD, CONFIG.medium_walled_graveyard.get());
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_GRAVE, GraveyardConfig.INSTANCE.ENABLE_GRAVE);
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_LARGE_WALLED_GRAVEYARD, GraveyardConfig.INSTANCE.ENABLE_LARGE_GRAVEYARD);
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_MEDIUM_WALLED_GRAVEYARD, GraveyardConfig.INSTANCE.ENABLE_MEDIUM_GRAVEYARD);
                 break;
             case MUSHROOM:
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_MUSHROOM_GRAVE, CONFIG.mushroom_grave.get());
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_MUSHROOM_GRAVE, GraveyardConfig.INSTANCE.ENABLE_MUSHROOM_GRAVE);
                 break;
             case DESERT:
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_WALLED_GRAVEYARD_DESERT, CONFIG.small_walled_graveyard_desert.get());
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_WALLED_GRAVEYARD_DESERT, GraveyardConfig.INSTANCE.ENABLE_SMALL_GRAVEYARD_DESERT);
                 break;
             case JUNGLE:
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_MUSHROOM_GRAVE, CONFIG.mushroom_grave.get());
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_MUSHROOM_GRAVE, GraveyardConfig.INSTANCE.ENABLE_MUSHROOM_GRAVE);
                 break;
             case SWAMP:
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_MUSHROOM_GRAVE, CONFIG.mushroom_grave.get());
-                add(event, TGConfiguredStructureFeatures.CONFIGURED_HAUNTED_HOUSE, CONFIG.haunted_house.get());
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_MUSHROOM_GRAVE, GraveyardConfig.INSTANCE.ENABLE_MUSHROOM_GRAVE);
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_HAUNTED_HOUSE, GraveyardConfig.INSTANCE.ENABLE_HAUNTED_HOUSE);
                 break;
             default:
                 break;
@@ -146,6 +141,8 @@ public class TheGraveyard {
 
 
     }
+
+
 
     public static void add(final BiomeLoadingEvent e, StructureFeature<?, ?> s, boolean config) {
         if (config) {

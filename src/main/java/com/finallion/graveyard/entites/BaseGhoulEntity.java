@@ -54,7 +54,7 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
     protected static final DataParameter<Byte> VARIANT = EntityDataManager.defineId(BaseGhoulEntity.class, DataSerializers.BYTE);
     private AnimationFactory factory = new AnimationFactory(this);
     private static boolean isInRange = false;
-    private static final double ATTACK_RANGE = 3.5D;
+    private static final double ATTACK_RANGE = 2.0D;
     //private TargetPredicate targetPredicate = TargetPredicate.createAttackable().setBaseMaxDistance(25.0D).ignoreVisibility();
     private EntityPredicate targetPredicate = (new EntityPredicate()).range(25.0D).allowUnseeable();
 

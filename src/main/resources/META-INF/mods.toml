@@ -53,6 +53,6 @@ The Graveyard adds new biomes, structures, mobs and blocks to your minecraft wor
 [[dependencies.graveyard]]
     modId="geckolib3"
     mandatory=true
-    versionRange="[3.0.39,)"
+    versionRange="[3.0.0,)"
     ordering="NONE"
     side="BOTH"

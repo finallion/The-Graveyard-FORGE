@@ -1,6 +1,7 @@
 package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
+import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.structures.*;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -35,15 +36,15 @@ public class TGStructures {
     public static RegistryObject<Structure<NoFeatureConfig>> HAUNTED_HOUSE = DEFERRED_REGISTRY_STRUCTURE.register("haunted_house", () -> (new HauntedHouse(NoFeatureConfig.CODEC)));
 
     public static void register() {
-        setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD.get(), TheGraveyard.CONFIG.small_walled_graveyard_separation.get(), TheGraveyard.CONFIG.small_walled_graveyard_spacing.get(), TheGraveyard.CONFIG.small_walled_graveyard_salt.get(), true);
-        setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD_SAVANNA.get(), TheGraveyard.CONFIG.small_walled_graveyard_savanna_separation.get(), TheGraveyard.CONFIG.small_walled_graveyard_savanna_spacing.get(), TheGraveyard.CONFIG.small_walled_graveyard_savanna_salt.get(), true);
-        setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD_DESERT.get(), TheGraveyard.CONFIG.small_walled_graveyard_desert_separation.get(), TheGraveyard.CONFIG.small_walled_graveyard_desert_spacing.get(), TheGraveyard.CONFIG.small_walled_graveyard_desert_salt.get(), true);
-        setupMapSpacingAndLand(SMALL_GRAVE.get(), TheGraveyard.CONFIG.small_grave_separation.get(), TheGraveyard.CONFIG.small_grave_spacing.get(), TheGraveyard.CONFIG.small_grave_salt.get(), true);
-        setupMapSpacingAndLand(MUSHROOM_GRAVE.get(), TheGraveyard.CONFIG.mushroom_grave_separation.get(), TheGraveyard.CONFIG.mushroom_grave_spacing.get(), TheGraveyard.CONFIG.mushroom_grave_salt.get(), true);
-        setupMapSpacingAndLand(LARGE_BIRCH_TREE.get(), TheGraveyard.CONFIG.large_birch_tree_separation.get(), TheGraveyard.CONFIG.large_birch_tree_spacing.get(), TheGraveyard.CONFIG.large_birch_tree_salt.get(), true);
-        setupMapSpacingAndLand(MEDIUM_WALLED_GRAVEYARD.get(), TheGraveyard.CONFIG.medium_walled_graveyard_separation.get(), TheGraveyard.CONFIG.medium_walled_graveyard_spacing.get(), TheGraveyard.CONFIG.medium_walled_graveyard_salt.get(), true);
-        setupMapSpacingAndLand(LARGE_WALLED_GRAVEYARD.get(), TheGraveyard.CONFIG.large_walled_graveyard_separation.get(), TheGraveyard.CONFIG.large_walled_graveyard_spacing.get(), TheGraveyard.CONFIG.large_walled_graveyard_salt.get(), true);
-        setupMapSpacingAndLand(HAUNTED_HOUSE.get(), TheGraveyard.CONFIG.haunted_house_separation.get(), TheGraveyard.CONFIG.haunted_house_spacing.get(), TheGraveyard.CONFIG.haunted_house_salt.get(), true);
+        setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD.get(), GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_SEPARATION, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_SPACING, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_SALT, true);
+        setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD_SAVANNA.get(), GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_SAVANNA_SEPARATION, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_SAVANNA_SPACING, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_SAVANNA_SALT, true);
+        setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD_DESERT.get(), GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_DESERT_SEPARATION, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_DESERT_SPACING, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_DESERT_SALT, true);
+        setupMapSpacingAndLand(SMALL_GRAVE.get(), GraveyardConfig.INSTANCE.GRAVE_SEPARATION, GraveyardConfig.INSTANCE.GRAVE_SPACING, GraveyardConfig.INSTANCE.GRAVE_SALT, true);
+        setupMapSpacingAndLand(MUSHROOM_GRAVE.get(), GraveyardConfig.INSTANCE.MUSHROOM_GRAVE_SEPARATION, GraveyardConfig.INSTANCE.MUSHROOM_GRAVE_SPACING, GraveyardConfig.INSTANCE.MUSHROOM_GRAVE_SALT, true);
+        setupMapSpacingAndLand(LARGE_BIRCH_TREE.get(), GraveyardConfig.INSTANCE.BIRCH_TREE_SEPARATION, GraveyardConfig.INSTANCE.BIRCH_TREE_SPACING, GraveyardConfig.INSTANCE.BIRCH_TREE_SALT, true);
+        setupMapSpacingAndLand(MEDIUM_WALLED_GRAVEYARD.get(), GraveyardConfig.INSTANCE.MEDIUM_GRAVEYARD_SEPARATION, GraveyardConfig.INSTANCE.MEDIUM_GRAVEYARD_SPACING, GraveyardConfig.INSTANCE.MEDIUM_GRAVEYARD_SALT, true);
+        setupMapSpacingAndLand(LARGE_WALLED_GRAVEYARD.get(), GraveyardConfig.INSTANCE.LARGE_GRAVEYARD_SEPARATION, GraveyardConfig.INSTANCE.LARGE_GRAVEYARD_SPACING, GraveyardConfig.INSTANCE.LARGE_GRAVEYARD_SALT, true);
+        setupMapSpacingAndLand(HAUNTED_HOUSE.get(), GraveyardConfig.INSTANCE.HAUNTED_HOUSE_SEPARATION, GraveyardConfig.INSTANCE.HAUNTED_HOUSE_SPACING, GraveyardConfig.INSTANCE.HAUNTED_HOUSE_SALT, true);
 
 
     }

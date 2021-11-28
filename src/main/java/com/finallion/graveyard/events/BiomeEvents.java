@@ -1,8 +1,12 @@
 package com.finallion.graveyard.events;
 
 import com.finallion.graveyard.TheGraveyard;
+import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.TGBiomes;
 import net.minecraft.block.SoundType;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
@@ -21,10 +25,11 @@ public class BiomeEvents {
     @SubscribeEvent
     public static void FogDensityEvent(EntityViewRenderEvent.FogDensity event) {
         BlockPos pos = event.getRenderer().getMainCamera().getBlockPosition();
-        ResourceLocation location = event.getInfo().getEntity().level.getBiome(pos).getRegistryName();
+        Entity entity = event.getInfo().getEntity();
+        ResourceLocation location = entity.level.getBiome(pos).getRegistryName();
+        int additionalFog = 0;
 
-
-        if (!TheGraveyard.CONFIG.haunted_lakes_fog.get() && !TheGraveyard.CONFIG.eroded_haunted_forest_fog.get() && !TheGraveyard.CONFIG.haunted_forest_fog.get()) {
+        if (!GraveyardConfig.INSTANCE.ENABLE_HAUNTED_FOREST_FOG && !GraveyardConfig.INSTANCE.ENABLE_HAUNTED_LAKES_FOG && !GraveyardConfig.INSTANCE.ENABLE_ERODED_HAUNTED_FOREST_FOG) {
             return;
         }
 
@@ -33,21 +38,26 @@ public class BiomeEvents {
         }
 
 
-        if (location.equals(HAUNTED_LAKES_LOC) && TheGraveyard.CONFIG.haunted_lakes_fog.get()) {
-            if (pos.getY() > TheGraveyard.CONFIG.haunted_lakes_fogMaxY.get() || pos.getY() < TheGraveyard.CONFIG.haunted_lakes_fogMinY.get()) {
+        if (entity instanceof LivingEntity && ((LivingEntity)entity).hasEffect(Effects.BLINDNESS)) {
+            return;
+        }
+
+
+        if (location.equals(HAUNTED_FOREST_LOC) && GraveyardConfig.INSTANCE.ENABLE_HAUNTED_FOREST_FOG) {
+            if (pos.getY() > GraveyardConfig.INSTANCE.HAUNTED_FOREST_FOG_MAXY || pos.getY() < GraveyardConfig.INSTANCE.HAUNTED_FOREST_FOG_MINY) {
                 return;
             }
-            fogDensity = TheGraveyard.CONFIG.haunted_lakes_fog_density.get();
-        } else if (location.equals(ERODED_FOREST_LOC) && TheGraveyard.CONFIG.eroded_haunted_forest_fog.get()) {
-            if (pos.getY() > TheGraveyard.CONFIG.eroded_haunted_forest_fogMaxY.get() || pos.getY() < TheGraveyard.CONFIG.eroded_haunted_forest_fogMinY.get()) {
+            fogDensity = GraveyardConfig.INSTANCE.HAUNTED_FOREST_FOG_DENSITY;
+        } else if (location.equals(HAUNTED_LAKES_LOC) && GraveyardConfig.INSTANCE.ENABLE_HAUNTED_LAKES_FOG) {
+            if (pos.getY() > GraveyardConfig.INSTANCE.HAUNTED_LAKES_FOG_MAXY || pos.getY() < GraveyardConfig.INSTANCE.HAUNTED_LAKES_FOG_MINY) {
                 return;
             }
-            fogDensity = TheGraveyard.CONFIG.eroded_haunted_forest_fog_density.get();
-        } else if (location.equals(HAUNTED_FOREST_LOC) && TheGraveyard.CONFIG.haunted_forest_fog.get()) {
-            if (pos.getY() > TheGraveyard.CONFIG.haunted_forest_fogMaxY.get() || pos.getY() < TheGraveyard.CONFIG.haunted_forest_fogMinY.get()) {
+            fogDensity = GraveyardConfig.INSTANCE.HAUNTED_LAKES_FOG_DENSITY;
+        } else if (location.equals(ERODED_FOREST_LOC) && GraveyardConfig.INSTANCE.ENABLE_ERODED_HAUNTED_FOREST_FOG) {
+            if (pos.getY() > GraveyardConfig.INSTANCE.ERODED_HAUNTED_FOREST_FOG_MAXY || pos.getY() < GraveyardConfig.INSTANCE.ERODED_HAUNTED_FOREST_FOG_MINY) {
                 return;
             }
-            fogDensity = TheGraveyard.CONFIG.haunted_forest_fog_density.get();
+            fogDensity = GraveyardConfig.INSTANCE.ERODED_HAUNTED_FOREST_FOG_DENSITY;
         } else {
             return;
         }

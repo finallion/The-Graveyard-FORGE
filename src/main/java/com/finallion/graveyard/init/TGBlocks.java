@@ -14,6 +14,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -171,8 +172,8 @@ public class TGBlocks {
         TG_MOSS_BLOCK = registerBlock(new TGMossBlock(AbstractBlock.Properties.copy(Blocks.GRASS_BLOCK)), "tg_moss_block");
 
         // no particle vanilla moss block used in biome gen
-        MOSS_BLOCK = registerBlock(new VanillaMossBlock(AbstractBlock.Properties.of(Material.GRASS).sound(SoundType.GRASS).strength(0.5F)), "moss_block");
-        MOSS_CARPET = registerBlock(new CarpetBlock(DyeColor.GREEN, AbstractBlock.Properties.of(Material.PLANT, MaterialColor.COLOR_GREEN).strength(0.1F).sound(SoundType.GRASS)), "moss_carpet");
+        MOSS_BLOCK = registerBlock(new VanillaMossBlock(AbstractBlock.Properties.of(Material.GRASS).sound(SoundType.GRASS).strength(0.5F).harvestTool(ToolType.HOE)), "moss_block");
+        MOSS_CARPET = registerBlock(new CarpetBlock(DyeColor.GREEN, AbstractBlock.Properties.of(Material.PLANT, MaterialColor.COLOR_GREEN).strength(0.1F).sound(SoundType.GRASS).harvestTool(ToolType.HOE)), "moss_carpet");
 
         TG_DEEPSLATE = registerBlock(new TGDeepslateBlock(AbstractBlock.Properties.copy(Blocks.STONE)), "tg_deepslate");
 
@@ -201,14 +202,14 @@ public class TGBlocks {
         TG_CHISELED_DEEPSLATE = registerBlock(new Block(AbstractBlock.Properties.copy(Blocks.STONE_BRICKS)), "tg_chiseled_deepslate");
 
         // helper blocks that get don't get replaced on world generation, generate ores or generate trees on
-        TG_GRASS_BLOCK = registerBlockWithoutGroup(new TGGrassBlock(AbstractBlock.Properties.copy(Blocks.GRASS_BLOCK).lootFrom(() -> Blocks.GRASS_BLOCK)), "tg_grass_block");
-        TG_DIRT = registerBlockWithoutGroup(new TGStoneBlock(() -> Blocks.DIRT, AbstractBlock.Properties.copy(Blocks.DIRT).lootFrom(() -> Blocks.DIRT)), "tg_dirt");
-        TG_COARSE_DIRT = registerBlockWithoutGroup(new TGStoneBlock(() -> Blocks.COARSE_DIRT, AbstractBlock.Properties.copy(Blocks.COARSE_DIRT).lootFrom(() -> Blocks.COARSE_DIRT)), "tg_coarse_dirt");
-        TG_ANDESITE = registerBlockWithoutGroup(new TGStoneBlock(() -> Blocks.ANDESITE, AbstractBlock.Properties.copy(Blocks.ANDESITE).lootFrom(() -> Blocks.ANDESITE)), "tg_andesite");
-        TG_GRANITE = registerBlockWithoutGroup(new TGStoneBlock(() -> Blocks.GRANITE, AbstractBlock.Properties.copy(Blocks.GRANITE).lootFrom(() -> Blocks.GRANITE)), "tg_granite");
-        TG_DIORITE = registerBlockWithoutGroup(new TGStoneBlock(() -> Blocks.DIORITE, AbstractBlock.Properties.copy(Blocks.DIORITE).lootFrom(() -> Blocks.DIORITE)), "tg_diorite");
-        TG_STONE = registerBlockWithoutGroup(new TGStoneBlock(() -> Blocks.STONE, AbstractBlock.Properties.copy(Blocks.STONE).lootFrom(() -> Blocks.STONE)), "tg_stone");
-        TG_PODZOL = registerBlockWithoutGroup(new TGStoneBlock(() -> Blocks.PODZOL, AbstractBlock.Properties.copy(Blocks.PODZOL).lootFrom(() -> Blocks.PODZOL)), "tg_podzol");
+        TG_GRASS_BLOCK = registerBlockWithoutGroup(new TGGrassBlock(AbstractBlock.Properties.copy(Blocks.GRASS_BLOCK).lootFrom(() -> Blocks.GRASS_BLOCK).harvestTool(ToolType.SHOVEL)), "tg_grass_block");
+        TG_DIRT = registerBlockWithoutGroup(new TGStoneBlock(() -> Blocks.DIRT, AbstractBlock.Properties.copy(Blocks.DIRT).lootFrom(() -> Blocks.DIRT).harvestTool(ToolType.SHOVEL)), "tg_dirt");
+        TG_COARSE_DIRT = registerBlockWithoutGroup(new TGStoneBlock(() -> Blocks.COARSE_DIRT, AbstractBlock.Properties.copy(Blocks.COARSE_DIRT).lootFrom(() -> Blocks.COARSE_DIRT).harvestTool(ToolType.SHOVEL)), "tg_coarse_dirt");
+        TG_ANDESITE = registerBlockWithoutGroup(new TGStoneBlock(() -> Blocks.ANDESITE, AbstractBlock.Properties.copy(Blocks.ANDESITE).lootFrom(() -> Blocks.ANDESITE).harvestTool(ToolType.PICKAXE)), "tg_andesite");
+        TG_GRANITE = registerBlockWithoutGroup(new TGStoneBlock(() -> Blocks.GRANITE, AbstractBlock.Properties.copy(Blocks.GRANITE).lootFrom(() -> Blocks.GRANITE).harvestTool(ToolType.PICKAXE)), "tg_granite");
+        TG_DIORITE = registerBlockWithoutGroup(new TGStoneBlock(() -> Blocks.DIORITE, AbstractBlock.Properties.copy(Blocks.DIORITE).lootFrom(() -> Blocks.DIORITE).harvestTool(ToolType.PICKAXE)), "tg_diorite");
+        TG_STONE = registerBlockWithoutGroup(new TGStoneBlock(() -> Blocks.STONE, AbstractBlock.Properties.copy(Blocks.STONE).lootFrom(() -> Blocks.STONE).harvestTool(ToolType.PICKAXE)), "tg_stone");
+        TG_PODZOL = registerBlockWithoutGroup(new TGStoneBlock(() -> Blocks.PODZOL, AbstractBlock.Properties.copy(Blocks.PODZOL).lootFrom(() -> Blocks.PODZOL).harvestTool(ToolType.SHOVEL)), "tg_podzol");
 
 
         DARK_IRON_BARS = registerBlock(new DarkIronBars(AbstractBlock.Properties.of(Material.METAL).strength(1.0F).noOcclusion()), "dark_iron_bars");

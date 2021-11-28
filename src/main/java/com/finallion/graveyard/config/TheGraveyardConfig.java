@@ -1,7 +1,10 @@
 package com.finallion.graveyard.config;
 
+import com.finallion.graveyard.TheGraveyard;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TheGraveyardConfig {
     public final ConfigHelper.ConfigValueListener<Boolean> large_birch_tree;
     public final ConfigHelper.ConfigValueListener<Integer> large_birch_tree_separation;
@@ -72,7 +75,7 @@ public class TheGraveyardConfig {
     public final ConfigHelper.ConfigValueListener<Integer> eroded_haunted_forest_fogMaxY;
     public final ConfigHelper.ConfigValueListener<Integer> eroded_haunted_forest_fogMinY;
 
-
+    public ForgeConfigSpec.BooleanValue ENABLE_HAUNTED_FOREST, ENABLE_HAUNTED_LAKES, ENABLE_ERODED_HAUNTED_FOREST;
 
 
     public TheGraveyardConfig(ForgeConfigSpec.Builder builder, ConfigHelper.Subscriber subscriber) {
@@ -188,6 +191,11 @@ public class TheGraveyardConfig {
         eroded_haunted_forest_fogMaxY = integerConfigValue(builder, subscriber, "Eroded Haunted Forest Fog MaxY", "eroded_haunted_forest_fogMaxY", 256);
         eroded_haunted_forest_fogMinY = integerConfigValue(builder, subscriber, "Eroded Haunted Forest Fog MinY", "eroded_haunted_forest_fogMinY", 62);
         builder.pop();
+
+        ENABLE_HAUNTED_FOREST = builder.comment("Allow haunted forest biome to spawn")
+                .translation(TheGraveyard.MOD_ID + ".config.haunted_forest")
+                .worldRestart()
+                .define("ENABLE_HAUNTED_FOREST", true);
 
 
         builder.build();
