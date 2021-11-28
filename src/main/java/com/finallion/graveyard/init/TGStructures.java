@@ -29,6 +29,9 @@ public class TGStructures {
     public static RegistryObject<Structure<NoFeatureConfig>> SMALL_WALLED_GRAVEYARD_SAVANNA = DEFERRED_REGISTRY_STRUCTURE.register("small_walled_graveyard_savanna", () -> (new SmallWalledGraveyardSavanna(NoFeatureConfig.CODEC)));
     public static RegistryObject<Structure<NoFeatureConfig>> SMALL_WALLED_GRAVEYARD_DESERT = DEFERRED_REGISTRY_STRUCTURE.register("small_walled_graveyard_desert", () -> (new SmallWalledGraveyardDesert(NoFeatureConfig.CODEC)));
     public static RegistryObject<Structure<NoFeatureConfig>> SMALL_GRAVE = DEFERRED_REGISTRY_STRUCTURE.register("small_grave", () -> (new SmallGrave(NoFeatureConfig.CODEC)));
+    public static RegistryObject<Structure<NoFeatureConfig>> SMALL_DESERT_GRAVE = DEFERRED_REGISTRY_STRUCTURE.register("small_desert_grave", () -> (new SmallDesertGrave(NoFeatureConfig.CODEC)));
+    public static RegistryObject<Structure<NoFeatureConfig>> SMALL_SAVANNA_GRAVE = DEFERRED_REGISTRY_STRUCTURE.register("small_savanna_grave", () -> (new SmallSavannaGrave(NoFeatureConfig.CODEC)));
+    public static RegistryObject<Structure<NoFeatureConfig>> SMALL_MOUNTAIN_GRAVE = DEFERRED_REGISTRY_STRUCTURE.register("small_mountain_grave", () -> (new SmallMountainGrave(NoFeatureConfig.CODEC)));
     public static RegistryObject<Structure<NoFeatureConfig>> MUSHROOM_GRAVE = DEFERRED_REGISTRY_STRUCTURE.register("mushroom_grave", () -> (new MushroomGrave(NoFeatureConfig.CODEC)));
     public static RegistryObject<Structure<NoFeatureConfig>> LARGE_BIRCH_TREE = DEFERRED_REGISTRY_STRUCTURE.register("large_birch_tree", () -> (new LargeBirchTree(NoFeatureConfig.CODEC)));
     public static RegistryObject<Structure<NoFeatureConfig>> MEDIUM_WALLED_GRAVEYARD = DEFERRED_REGISTRY_STRUCTURE.register("medium_walled_graveyard", () -> (new MediumWalledGraveyard(NoFeatureConfig.CODEC)));
@@ -40,6 +43,9 @@ public class TGStructures {
         setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD_SAVANNA.get(), GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_SAVANNA_SEPARATION, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_SAVANNA_SPACING, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_SAVANNA_SALT, true);
         setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD_DESERT.get(), GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_DESERT_SEPARATION, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_DESERT_SPACING, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_DESERT_SALT, true);
         setupMapSpacingAndLand(SMALL_GRAVE.get(), GraveyardConfig.INSTANCE.GRAVE_SEPARATION, GraveyardConfig.INSTANCE.GRAVE_SPACING, GraveyardConfig.INSTANCE.GRAVE_SALT, true);
+        setupMapSpacingAndLand(SMALL_DESERT_GRAVE.get(), GraveyardConfig.INSTANCE.DESERT_GRAVE_SEPARATION, GraveyardConfig.INSTANCE.DESERT_GRAVE_SPACING, GraveyardConfig.INSTANCE.DESERT_GRAVE_SALT, true);
+        setupMapSpacingAndLand(SMALL_SAVANNA_GRAVE.get(), GraveyardConfig.INSTANCE.SAVANNA_GRAVE_SEPARATION, GraveyardConfig.INSTANCE.SAVANNA_GRAVE_SPACING, GraveyardConfig.INSTANCE.SAVANNA_GRAVE_SALT, true);
+        setupMapSpacingAndLand(SMALL_MOUNTAIN_GRAVE.get(), GraveyardConfig.INSTANCE.MOUNTAIN_GRAVE_SEPARATION, GraveyardConfig.INSTANCE.MOUNTAIN_GRAVE_SPACING, GraveyardConfig.INSTANCE.MOUNTAIN_GRAVE_SALT, true);
         setupMapSpacingAndLand(MUSHROOM_GRAVE.get(), GraveyardConfig.INSTANCE.MUSHROOM_GRAVE_SEPARATION, GraveyardConfig.INSTANCE.MUSHROOM_GRAVE_SPACING, GraveyardConfig.INSTANCE.MUSHROOM_GRAVE_SALT, true);
         setupMapSpacingAndLand(LARGE_BIRCH_TREE.get(), GraveyardConfig.INSTANCE.BIRCH_TREE_SEPARATION, GraveyardConfig.INSTANCE.BIRCH_TREE_SPACING, GraveyardConfig.INSTANCE.BIRCH_TREE_SALT, true);
         setupMapSpacingAndLand(MEDIUM_WALLED_GRAVEYARD.get(), GraveyardConfig.INSTANCE.MEDIUM_GRAVEYARD_SEPARATION, GraveyardConfig.INSTANCE.MEDIUM_GRAVEYARD_SPACING, GraveyardConfig.INSTANCE.MEDIUM_GRAVEYARD_SALT, true);

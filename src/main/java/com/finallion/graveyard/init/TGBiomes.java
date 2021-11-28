@@ -38,7 +38,10 @@ public class TGBiomes {
     }
 
     public static void addToDictionaries() {
-        BIOMES.forEach((biome -> BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(RegistryKey.create(Registry.BIOME_REGISTRY, biome.getRegistryName()), 2))));
+        BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(RegistryKey.create(Registry.BIOME_REGISTRY, HAUNTED_FOREST.getRegistryName()), (int) GraveyardConfig.HAUNTED_FOREST.weight()));
+        BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(RegistryKey.create(Registry.BIOME_REGISTRY, HAUNTED_LAKES.getRegistryName()), (int) GraveyardConfig.HAUNTED_LAKES.weight()));
+        BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(RegistryKey.create(Registry.BIOME_REGISTRY, ERODED_HAUNTED_FOREST.getRegistryName()), (int) GraveyardConfig.ERODED_HAUNTED_FOREST.weight()));
+
         BIOMES.forEach((biome -> BiomeDictionary.addTypes(RegistryKey.create(Registry.BIOME_REGISTRY, biome.getRegistryName()), BiomeDictionary.Type.OVERWORLD, BiomeDictionary.Type.FOREST, BiomeDictionary.Type.CONIFEROUS, BiomeDictionary.Type.SPOOKY)));
     }
 

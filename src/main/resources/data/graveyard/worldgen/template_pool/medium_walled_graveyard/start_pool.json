@@ -5,10 +5,18 @@
 
   "elements": [
     {
-
       "weight": 1,
       "element": {
         "location": "graveyard:bp_medium_walled_graveyard_01",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "graveyard:bp_medium_walled_graveyard_02",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"

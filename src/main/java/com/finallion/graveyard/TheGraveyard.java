@@ -39,6 +39,7 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import software.bernie.geckolib3.GeckoLib;
@@ -65,10 +66,7 @@ public class TheGraveyard {
     public TheGraveyard() {
         GeckoLib.initialize();
         //CONFIG = ConfigHelper.register(ModConfig.Type.COMMON, TheGraveyardConfig::new, "graveyard-forge-config-v1.toml");
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> TheGraveyardClient::new);
-
-        //TGBiomes.init();
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
@@ -80,6 +78,9 @@ public class TheGraveyard {
         TGStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
         TGTileEntities.TILE_ENTITIES.register(modEventBus);
         TGParticles.PARTICLES.register(modEventBus);
+
+        GraveyardConfig.loadConfig(GraveyardConfig.COMMON_SPEC, FMLPaths.CONFIGDIR.get().resolve(MOD_ID + "-common.toml"));
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC);
 
     }
 
@@ -106,6 +107,13 @@ public class TheGraveyard {
                 break;
             case SAVANNA:
                 add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_WALLED_GRAVEYARD_SAVANNA, GraveyardConfig.INSTANCE.ENABLE_SMALL_GRAVEYARD_SAVANNA);
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_SAVANNA_GRAVE, GraveyardConfig.INSTANCE.ENABLE_SAVANNA_GRAVE);
+                break;
+            case MESA:
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_SAVANNA_GRAVE, GraveyardConfig.INSTANCE.ENABLE_SAVANNA_GRAVE);
+                break;
+            case EXTREME_HILLS:
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_MOUNTAIN_GRAVE, GraveyardConfig.INSTANCE.ENABLE_MOUNTAIN_GRAVE);
                 break;
             case FOREST:
                 add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_GRAVE, GraveyardConfig.INSTANCE.ENABLE_GRAVE);
@@ -124,6 +132,7 @@ public class TheGraveyard {
                 break;
             case DESERT:
                 add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_WALLED_GRAVEYARD_DESERT, GraveyardConfig.INSTANCE.ENABLE_SMALL_GRAVEYARD_DESERT);
+                add(event, TGConfiguredStructureFeatures.CONFIGURED_SMALL_DESERT_GRAVE, GraveyardConfig.INSTANCE.ENABLE_DESERT_GRAVE);
                 break;
             case JUNGLE:
                 add(event, TGConfiguredStructureFeatures.CONFIGURED_MUSHROOM_GRAVE, GraveyardConfig.INSTANCE.ENABLE_MUSHROOM_GRAVE);
