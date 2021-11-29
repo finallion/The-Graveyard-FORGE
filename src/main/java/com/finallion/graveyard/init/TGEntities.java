@@ -31,7 +31,7 @@ public class TGEntities {
     public static final EntityType<SkeletonCreeper> SKELETON_CREEPER = createEntity("skeleton_creeper", EntityType.Builder.of(SkeletonCreeper::new, EntityClassification.MONSTER).sized(0.6F, 1.7F).build(TheGraveyard.MOD_ID + ":skeleton_creeper"));
     public static final EntityType<AcolyteEntity> ACOLYTE = createEntity("acolyte", EntityType.Builder.of(AcolyteEntity::new, EntityClassification.MONSTER).sized(0.6F, 1.9F).build(TheGraveyard.MOD_ID + ":acolyte"));
     public static final EntityType<ReaperEntity> REAPER = createEntity("reaper", EntityType.Builder.of(ReaperEntity::new, EntityClassification.MONSTER).sized(0.5F, 1.4F).build(TheGraveyard.MOD_ID + ":reaper"));
-    public static final EntityType<BaseGhoulEntity> GHOUL = createEntity("ghoul", EntityType.Builder.of(BaseGhoulEntity::new, EntityClassification.MONSTER).sized(0.95F, 1.95F).build(TheGraveyard.MOD_ID + ":ghoul"));
+    public static final EntityType<BaseGhoulEntity> GHOUL = createEntity("ghoul", EntityType.Builder.of(BaseGhoulEntity::new, EntityClassification.MONSTER).sized(0.8F, 2.1F).build(TheGraveyard.MOD_ID + ":ghoul")); // if hitbox is set to 0.9 the ghoul wont move
 
     public static <E extends Entity, ET extends EntityType<E>> ET createEntity(String id, ET entityType) {
         entityType.setRegistryName(new ResourceLocation(TheGraveyard.MOD_ID, id));
@@ -59,15 +59,6 @@ public class TGEntities {
         EntitySpawnPlacementRegistry.register(ACOLYTE, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::checkMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(REAPER, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::checkMonsterSpawnRules);
     }
-
-    /*
-    public static final EntityType<BaseGhoulEntity> GHOUL = EntityType.Builder.of(BaseGhoulEntity::new)
-            .spawnGroup(SpawnGroup.MONSTER)
-            .entityFactory(BaseGhoulEntity::new)
-            .dimensions(EntityDimensions.changing(1.0F, 2.15F))
-            .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, BaseGhoulEntity::canSpawn)
-            .build();
-*/
 
 
 

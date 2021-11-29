@@ -30,10 +30,8 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
     private final double SIZE;
     private final String NAME;
     private int averageHeight;
-    private final int MAX_WATER_HITS = 8;
     private final int MAX_TERRAIN_DIFFERENCE_BASE = 2;
     private final int MAX_TERRAIN_DIFFERENCE_LG = 4;
-    private final int OFFSET_WATER_CHECK_LG = 25;
 
     public TGBaseStructure(Codec<NoFeatureConfig> codec, String name, double size, int sunkenIn) {
         super(codec);
@@ -63,112 +61,31 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
             return false;
         }
 
-        if (!isWater(chunkGenerator, centerOfChunk.getX(), centerOfChunk.getZ(), centerOfChunk)) {
+        if (!isWater(chunkGenerator, centerOfChunk.getX(), centerOfChunk.getZ())) {
             return false;
         }
 
-        if (!checkForOtherStructures(chunkGenerator, seed, chunkRandom, centerOfChunk.getX(), centerOfChunk.getZ())) {
-            return false;
+        if (SIZE > 2) {
+            if (!checkForOtherStructures(chunkGenerator, seed, chunkRandom, centerOfChunk.getX(), centerOfChunk.getZ())) {
+                return false;
+            }
         }
 
         return true;
     }
 
-    protected boolean isWater(ChunkGenerator generator, int chunkX, int chunkZ, BlockPos centerOfChunk) {
-        // center of generation is chunkX 0 chunkZ (i)
-        // checks:
-        //
-        // n    j    l
-        // o    i    k
-        // q    p    m
+    protected boolean isWater(ChunkGenerator generator, int chunkX, int chunkZ) {
+        int offset = (int) SIZE * 15;
 
+        Set<Biome> biomesInArea = generator.getBiomeSource().getBiomesWithin(chunkX, 0, chunkZ, offset);
 
-        int offset = (int) SIZE * 8;
-
-        // checks are in a larger radius if the structure spawns above water
-        // needed for the large graveyard to make ugly generation over rivers and in oceans less likely
-        // additionally checks are for oceans
-        if (SIZE > 2) {
-            offset += OFFSET_WATER_CHECK_LG;
-
-            Set<Biome> biomesInAreaOne = generator.getBiomeSource().getBiomesWithin(chunkX, 0, chunkZ, 156);
-            Set<Biome> biomesInAreaTwo = generator.getBiomeSource().getBiomesWithin(chunkX, 0, chunkZ, 28);
-
-            for (Biome biome : biomesInAreaOne) {
-                if (biome.getBiomeCategory() == Biome.Category.OCEAN) {
-                    return false;
-                }
+        for (Biome biome : biomesInArea) {
+            if (biome.getBiomeCategory() == Biome.Category.OCEAN || biome.getBiomeCategory() == Biome.Category.RIVER) {
+                return false;
             }
-
-            // clears the inner circle of generation from water sources
-            // following checks clear the outer circle from possible water
-            for (Biome biome : biomesInAreaTwo) {
-                if (biome.getBiomeCategory() == Biome.Category.RIVER) {
-                    return false;
-                }
-            }
-
         }
 
-
-        int i1 = generator.getFirstOccupiedHeight(chunkX, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
-        int j1 = generator.getFirstOccupiedHeight(chunkX, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int k1 = generator.getFirstOccupiedHeight(chunkX + offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
-        int l1 = generator.getFirstOccupiedHeight(chunkX + offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int m1 = generator.getFirstOccupiedHeight(chunkX - offset, chunkZ + offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int n1 = generator.getFirstOccupiedHeight(chunkX + offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int o1 = generator.getFirstOccupiedHeight(chunkX, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
-        int p1 = generator.getFirstOccupiedHeight(chunkX - offset, chunkZ, Heightmap.Type.WORLD_SURFACE_WG);
-        int q1 = generator.getFirstOccupiedHeight(chunkX - offset, chunkZ - offset, Heightmap.Type.WORLD_SURFACE_WG);
-
-        IBlockReader vi1 = generator.getBaseColumn(chunkX, chunkZ);
-        IBlockReader vj1 = generator.getBaseColumn(chunkX, chunkZ + offset);
-        IBlockReader vk1 = generator.getBaseColumn(chunkX + offset, chunkZ);
-        IBlockReader vl1 = generator.getBaseColumn(chunkX + offset, chunkZ + offset);
-        IBlockReader vm1 = generator.getBaseColumn(chunkX - offset, chunkZ + offset);
-        IBlockReader vn1 = generator.getBaseColumn(chunkX + offset, chunkZ - offset);
-        IBlockReader vo1 = generator.getBaseColumn(chunkX, chunkZ - offset);
-        IBlockReader vp1 = generator.getBaseColumn(chunkX - offset, chunkZ);
-        IBlockReader vq1 = generator.getBaseColumn(chunkX - offset, chunkZ - offset);
-
-        BlockState bi1 = vi1.getBlockState(centerOfChunk.above(i1));
-        BlockState bj1 = vj1.getBlockState(centerOfChunk.above(j1));
-        BlockState bk1 = vk1.getBlockState(centerOfChunk.above(k1));
-        BlockState bl1 = vl1.getBlockState(centerOfChunk.above(l1));
-        BlockState bm1 = vm1.getBlockState(centerOfChunk.above(m1));
-        BlockState bn1 = vn1.getBlockState(centerOfChunk.above(n1));
-        BlockState bo1 = vo1.getBlockState(centerOfChunk.above(o1));
-        BlockState bp1 = vp1.getBlockState(centerOfChunk.above(p1));
-        BlockState bq1 = vq1.getBlockState(centerOfChunk.above(q1));
-
-        /*
-        System.out.println("Water hits results: ");
-        System.out.println("One: " + bi1 + " Height: " + i1 + " at: " + chunkX + " " + chunkZ);
-        System.out.println("Two: " + bj1 + " Height: " + j1 + " at: " + chunkX + " " + (chunkZ + offset));
-        System.out.println("Three: " + bk1 + " Height: " + k1 + " at: " + (chunkX + offset) + " " + chunkZ);
-        System.out.println("Four: " + bl1 + " Height: " + l1 + " at: " + (chunkX + offset) + " " + (chunkZ + offset));
-        System.out.println("Five: " + bm1 + " Height: " + m1 + " at: " + (chunkX - offset) + " " + (chunkZ + offset));
-        System.out.println("Six: " + bn1 + " Height: " + n1 + " at: " + (chunkX + offset) + " " + (chunkZ - offset));
-        System.out.println("Seven: " + bo1 + " Height: " + o1 + " at: " + chunkX + " " + (chunkZ - offset));
-        System.out.println("Eight: " + bp1 + " Height: " + p1 + " at: " + (chunkX - offset) + " " + chunkZ);
-        System.out.println("Nine: " + bq1 + " Height: " + q1 + " at: " + (chunkX - offset) + " " + (chunkZ - offset));
-
-         */
-
-        return countWaterMatches(bi1, bj1, bk1, bl1, bm1, bn1, bo1, bq1, bp1);
-
-    }
-
-    private boolean countWaterMatches(BlockState... blockStates) {
-        // counts how many blockstates are in water
-        // if there are more than two or equal to four return true and allow structure to spawn
-        // if more checks are added the threshold number should be raised
-        int count = 0;
-        for (BlockState blockState : blockStates) {
-            count += (blockState.getFluidState().isEmpty() ? 1 : 0);
-        }
-
-        return count >= MAX_WATER_HITS;
+        return true;
     }
 
 
@@ -224,16 +141,11 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
 
 
     public boolean checkForOtherStructures(ChunkGenerator generator, long seed, SharedSeedRandom random, int chunkX, int chunkZ) {
-
         StructureSeparationSettings structureConfig = generator.getSettings().getConfig(Structure.VILLAGE);
+
         if (structureConfig == null) {
             return false;
         } else {
-            if (SIZE <= 2) {
-                return true;
-            }
-
-
             int blocksAwayToCheck = 15;
             for (int k = chunkX - blocksAwayToCheck; k <= chunkX + blocksAwayToCheck; ++k) {
                 for (int l = chunkZ - blocksAwayToCheck; l <= chunkZ + blocksAwayToCheck; ++l) {
@@ -243,7 +155,6 @@ public class TGBaseStructure extends Structure<NoFeatureConfig> {
                     }
                 }
             }
-
             return true;
         }
 

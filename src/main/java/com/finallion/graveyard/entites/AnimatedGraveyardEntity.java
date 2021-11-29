@@ -123,4 +123,11 @@ public class AnimatedGraveyardEntity extends CreatureEntity implements IAngerabl
     }
 
 
+    @Override
+    protected boolean shouldDespawnInPeaceful() {
+        return true;
+    }
+
+
+
 }

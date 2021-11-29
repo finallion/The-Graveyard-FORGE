@@ -18,9 +18,8 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -115,7 +114,7 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
 
     private void isInAttackDistance() {
         if (this.getTarget() != null) {
-            if (this.getTarget().distanceToSqr(this) > ATTACK_RANGE) {
+            if (this.getTarget().distanceToSqr(this) > 4.5D) {
                 isInRange = false;
                 setState(ANIMATION_RAGE);
             }
@@ -159,12 +158,12 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
     }
 
     private <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
-        if (getAnimationState() == ANIMATION_ATTACK && !(this.isDeadOrDying() || this.getHealth() < 0.01) && isInRange) {
+        if (this.entityData.get(ANIMATION_MOVE_STATE) == ANIMATION_ATTACK && !(this.isDeadOrDying() || this.getHealth() < 0.01) && isInRange) {
             event.getController().setAnimation(ATTACK_ANIMATION);
             return PlayState.CONTINUE;
         }
 
-        if (getAnimationState() == ANIMATION_RAGE  && !(this.isDeadOrDying() || this.getHealth() < 0.01) && isInRageDistance() && getAnimationState() != ANIMATION_WALK) {
+        if (this.entityData.get(ANIMATION_MOVE_STATE) == ANIMATION_RAGE  && !(this.isDeadOrDying() || this.getHealth() < 0.01) && isInRageDistance() && this.entityData.get(ANIMATION_MOVE_STATE) != ANIMATION_WALK) {
             event.getController().setAnimation(RAGE_ANIMATION);
             return PlayState.CONTINUE;
         }

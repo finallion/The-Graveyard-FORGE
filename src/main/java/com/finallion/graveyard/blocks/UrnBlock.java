@@ -41,8 +41,8 @@ public class UrnBlock extends ContainerBlock implements IWaterLoggable {
     public static final BooleanProperty WATERLOGGED;
     public static final DirectionProperty FACING;
     public static final BooleanProperty OPEN;
-    private static final VoxelShape LARGE_URN = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
-    private static final VoxelShape SMALL_URN = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 10.0D, 14.0D);
+    private static final VoxelShape LARGE_URN = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
+    private static final VoxelShape SMALL_URN = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 10.0D, 13.0D);
 
     public UrnBlock() {
         super(AbstractBlock.Properties.of(Material.GLASS).noOcclusion().sound(SoundType.METAL).strength(0.3F));

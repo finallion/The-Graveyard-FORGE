@@ -25,7 +25,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class UrnBlockEntity extends LockableLootTileEntity {
-    private NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
+    private NonNullList<ItemStack> items = NonNullList.withSize(54, ItemStack.EMPTY);
     private int openCount;
 
     public UrnBlockEntity() {
@@ -51,7 +51,7 @@ public class UrnBlockEntity extends LockableLootTileEntity {
     }
 
     public int getContainerSize() {
-        return 27;
+        return 54;
     }
 
     protected NonNullList<ItemStack> getItems() {
@@ -67,7 +67,7 @@ public class UrnBlockEntity extends LockableLootTileEntity {
     }
 
     protected Container createMenu(int p_213906_1_, PlayerInventory p_213906_2_) {
-        return ChestContainer.threeRows(p_213906_1_, p_213906_2_, this);
+        return ChestContainer.sixRows(p_213906_1_, p_213906_2_, this);
     }
 
     public void startOpen(PlayerEntity p_174889_1_) {
