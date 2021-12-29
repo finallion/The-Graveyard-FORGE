@@ -1,28 +1,34 @@
 package com.finallion.graveyard.entites;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import com.finallion.graveyard.entites.ReaperEntity;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Vex;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -34,7 +40,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class ReaperEntity extends MonsterEntity implements IAnimatable {
+public class ReaperEntity extends Monster implements IAnimatable {
     private AnimationFactory factory = new AnimationFactory(this);
     private final AnimationBuilder DEATH_ANIMATION = new AnimationBuilder().addAnimation("death", false);
     private final AnimationBuilder IDLE_ANIMATION = new AnimationBuilder().addAnimation("idle", true);
@@ -46,16 +52,16 @@ public class ReaperEntity extends MonsterEntity implements IAnimatable {
     protected final byte ANIMATION_SPAWN = 2;
     protected final byte ANIMATION_DEATH = 3;
     protected final byte ANIMATION_ATTACK = 4;
-    protected static final DataParameter<Byte> ANIMATION = EntityDataManager.defineId(ReaperEntity.class, DataSerializers.BYTE);
-    protected static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(ReaperEntity.class, DataSerializers.BYTE);
+    protected static final EntityDataAccessor<Byte> ANIMATION = SynchedEntityData.defineId(ReaperEntity.class, EntityDataSerializers.BYTE);
+    protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(ReaperEntity.class, EntityDataSerializers.BYTE);
     private BlockPos boundOrigin;
-    MobEntity owner;
+    Mob owner;
     @Nullable
     private BlockPos bounds;
 
-    public ReaperEntity(EntityType<? extends MonsterEntity> entityType, World world) {
+    public ReaperEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
-        this.moveControl = new ReaperEntity.MoveHelperController(this);
+        this.moveControl = new MoveHelperController(this);
     }
 
 
@@ -65,39 +71,40 @@ public class ReaperEntity extends MonsterEntity implements IAnimatable {
         this.entityData.define(ANIMATION, ANIMATION_IDLE);
     }
 
-    public void readAdditionalSaveData(CompoundNBT p_70037_1_) {
-        super.readAdditionalSaveData(p_70037_1_);
-        if (p_70037_1_.contains("BoundX")) {
-            this.boundOrigin = new BlockPos(p_70037_1_.getInt("BoundX"), p_70037_1_.getInt("BoundY"), p_70037_1_.getInt("BoundZ"));
+    public void readAdditionalSaveData(CompoundTag p_34008_) {
+        super.readAdditionalSaveData(p_34008_);
+        if (p_34008_.contains("BoundX")) {
+            this.boundOrigin = new BlockPos(p_34008_.getInt("BoundX"), p_34008_.getInt("BoundY"), p_34008_.getInt("BoundZ"));
         }
+
     }
 
-    public void addAdditionalSaveData(CompoundNBT p_213281_1_) {
-        super.addAdditionalSaveData(p_213281_1_);
+    public void addAdditionalSaveData(CompoundTag p_34015_) {
+        super.addAdditionalSaveData(p_34015_);
         if (this.boundOrigin != null) {
-            p_213281_1_.putInt("BoundX", this.boundOrigin.getX());
-            p_213281_1_.putInt("BoundY", this.boundOrigin.getY());
-            p_213281_1_.putInt("BoundZ", this.boundOrigin.getZ());
+            p_34015_.putInt("BoundX", this.boundOrigin.getX());
+            p_34015_.putInt("BoundY", this.boundOrigin.getY());
+            p_34015_.putInt("BoundZ", this.boundOrigin.getZ());
         }
-
     }
 
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(4, new ReaperEntity.ChargeAttackGoal());
-        this.goalSelector.addGoal(8, new ReaperEntity.MoveRandomGoal());
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, new ReaperEntity.CopyOwnerTargetGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(4, new ChargeAttackGoal());
+        this.goalSelector.addGoal(8, new MoveRandomGoal());
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, Raider.class)).setAlertOthers());
+        this.targetSelector.addGoal(2, new CopyOwnerTargetGoal(this));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
 
-    public void move(MoverType p_213315_1_, Vector3d p_213315_2_) {
-        super.move(p_213315_1_, p_213315_2_);
+
+    public void move(MoverType p_33997_, Vec3 p_33998_) {
+        super.move(p_33997_, p_33998_);
         this.checkInsideBlocks();
     }
 
@@ -108,11 +115,6 @@ public class ReaperEntity extends MonsterEntity implements IAnimatable {
         this.setNoGravity(true);
     }
 
-    @Nullable
-    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
-        setAnimation(ANIMATION_SPAWN);
-        return super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
-    }
 
 
     @SuppressWarnings("rawtypes")
@@ -175,8 +177,8 @@ public class ReaperEntity extends MonsterEntity implements IAnimatable {
         this.setVexFlag(1, p_190648_1_);
     }
 
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.ATTACK_DAMAGE, 4.0D).add(Attributes.MAX_HEALTH, 20.0D);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.ATTACK_DAMAGE, 4.0D).add(Attributes.MAX_HEALTH, 20.0D);
     }
 
     public byte getAnimation() {
@@ -220,9 +222,9 @@ public class ReaperEntity extends MonsterEntity implements IAnimatable {
     }
 
     class CopyOwnerTargetGoal extends TargetGoal {
-        private final EntityPredicate copyOwnerTargeting = (new EntityPredicate()).allowUnseeable().ignoreInvisibilityTesting();
+        private final TargetingConditions copyOwnerTargeting = TargetingConditions.forNonCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
 
-        public CopyOwnerTargetGoal(CreatureEntity p_i47231_2_) {
+        public CopyOwnerTargetGoal(PathfinderMob p_i47231_2_) {
             super(p_i47231_2_, false);
         }
 
@@ -236,35 +238,37 @@ public class ReaperEntity extends MonsterEntity implements IAnimatable {
         }
     }
 
-    class MoveHelperController extends MovementController {
-        public MoveHelperController(ReaperEntity p_i47230_2_) {
-            super(p_i47230_2_);
+
+    class MoveHelperController extends MoveControl {
+        public MoveHelperController(ReaperEntity p_34062_) {
+            super(p_34062_);
         }
 
         public void tick() {
-            if (this.operation == MovementController.Action.MOVE_TO) {
-                Vector3d vector3d = new Vector3d(this.wantedX - ReaperEntity.this.getX(), this.wantedY - ReaperEntity.this.getY(), this.wantedZ - ReaperEntity.this.getZ());
-                double d0 = vector3d.length();
+            if (this.operation == MoveControl.Operation.MOVE_TO) {
+                Vec3 vec3 = new Vec3(this.wantedX - ReaperEntity.this.getX(), this.wantedY - ReaperEntity.this.getY(), this.wantedZ - ReaperEntity.this.getZ());
+                double d0 = vec3.length();
                 if (d0 < ReaperEntity.this.getBoundingBox().getSize()) {
-                    this.operation = MovementController.Action.WAIT;
+                    this.operation = MoveControl.Operation.WAIT;
                     ReaperEntity.this.setDeltaMovement(ReaperEntity.this.getDeltaMovement().scale(0.5D));
                 } else {
-                    ReaperEntity.this.setDeltaMovement(ReaperEntity.this.getDeltaMovement().add(vector3d.scale(this.speedModifier * 0.05D / d0)));
+                    ReaperEntity.this.setDeltaMovement(ReaperEntity.this.getDeltaMovement().add(vec3.scale(this.speedModifier * 0.05D / d0)));
                     if (ReaperEntity.this.getTarget() == null) {
-                        Vector3d vector3d1 = ReaperEntity.this.getDeltaMovement();
-                        ReaperEntity.this.yRot = -((float)MathHelper.atan2(vector3d1.x, vector3d1.z)) * (180F / (float)Math.PI);
-                        ReaperEntity.this.yBodyRot = ReaperEntity.this.yRot;
+                        Vec3 vec31 = ReaperEntity.this.getDeltaMovement();
+                        ReaperEntity.this.setYRot(-((float) Mth.atan2(vec31.x, vec31.z)) * (180F / (float)Math.PI));
+                        ReaperEntity.this.yBodyRot = ReaperEntity.this.getYRot();
                     } else {
                         double d2 = ReaperEntity.this.getTarget().getX() - ReaperEntity.this.getX();
                         double d1 = ReaperEntity.this.getTarget().getZ() - ReaperEntity.this.getZ();
-                        ReaperEntity.this.yRot = -((float)MathHelper.atan2(d2, d1)) * (180F / (float)Math.PI);
-                        ReaperEntity.this.yBodyRot = ReaperEntity.this.yRot;
+                        ReaperEntity.this.setYRot(-((float)Mth.atan2(d2, d1)) * (180F / (float)Math.PI));
+                        ReaperEntity.this.yBodyRot = ReaperEntity.this.getYRot();
                     }
                 }
 
             }
         }
     }
+
 
     class MoveRandomGoal extends Goal {
         public MoveRandomGoal() {
@@ -316,12 +320,16 @@ public class ReaperEntity extends MonsterEntity implements IAnimatable {
             return ReaperEntity.this.getMoveControl().hasWanted() && ReaperEntity.this.isCharging() && ReaperEntity.this.getTarget() != null && ReaperEntity.this.getTarget().isAlive();
         }
 
+
         public void start() {
             LivingEntity livingentity = ReaperEntity.this.getTarget();
-            Vector3d vector3d = livingentity.getEyePosition(1.0F);
-            ReaperEntity.this.moveControl.setWantedPosition(vector3d.x, vector3d.y, vector3d.z, 1.0D);
+            if (livingentity != null) {
+                Vec3 vec3 = livingentity.getEyePosition();
+                ReaperEntity.this.moveControl.setWantedPosition(vec3.x, vec3.y, vec3.z, 1.0D);
+            }
+
             ReaperEntity.this.setIsCharging(true);
-            ReaperEntity.this.playSound(SoundEvents.VEX_CHARGE, 1.0F, 1.0F);
+            ReaperEntity.this.playSound(SoundEvents.VEX_CHARGE, 1.0F, -10.0F);
         }
 
         public void stop() {
@@ -330,17 +338,19 @@ public class ReaperEntity extends MonsterEntity implements IAnimatable {
 
         public void tick() {
             LivingEntity livingentity = ReaperEntity.this.getTarget();
-            if (ReaperEntity.this.getBoundingBox().intersects(livingentity.getBoundingBox())) {
-                ReaperEntity.this.doHurtTarget(livingentity);
-                ReaperEntity.this.setIsCharging(false);
-            } else {
-                double d0 = ReaperEntity.this.distanceToSqr(livingentity);
-                if (d0 < 9.0D) {
-                    Vector3d vector3d = livingentity.getEyePosition(1.0F);
-                    ReaperEntity.this.moveControl.setWantedPosition(vector3d.x, vector3d.y, vector3d.z, 1.0D);
+            if (livingentity != null) {
+                if (ReaperEntity.this.getBoundingBox().intersects(livingentity.getBoundingBox())) {
+                    ReaperEntity.this.doHurtTarget(livingentity);
+                    ReaperEntity.this.setIsCharging(false);
+                } else {
+                    double d0 = ReaperEntity.this.distanceToSqr(livingentity);
+                    if (d0 < 9.0D) {
+                        Vec3 vec3 = livingentity.getEyePosition();
+                        ReaperEntity.this.moveControl.setWantedPosition(vec3.x, vec3.y, vec3.z, 1.0D);
+                    }
                 }
-            }
 
+            }
         }
     }
 

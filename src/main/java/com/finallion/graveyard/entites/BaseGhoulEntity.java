@@ -1,30 +1,30 @@
 package com.finallion.graveyard.entites;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.SlimeEntity;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.monster.ZombifiedPiglinEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.passive.TurtleEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.*;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraftforge.event.world.NoteBlockEvent;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -50,14 +50,14 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
     protected static final byte ANIMATION_DEATH = 3;
     protected static final byte ANIMATION_RUNNING = 4;
     protected static final byte ANIMATION_ATTACK = 5;
-    protected static final DataParameter<Byte> VARIANT = EntityDataManager.defineId(BaseGhoulEntity.class, DataSerializers.BYTE);
+    protected static final EntityDataAccessor<Byte> VARIANT = SynchedEntityData.defineId(BaseGhoulEntity.class, EntityDataSerializers.BYTE);
     private AnimationFactory factory = new AnimationFactory(this);
     private static boolean isInRange = false;
     private static final double ATTACK_RANGE = 4.5D;
     //private TargetPredicate targetPredicate = TargetPredicate.createAttackable().setBaseMaxDistance(25.0D).ignoreVisibility();
-    private EntityPredicate targetPredicate = (new EntityPredicate()).range(25.0D).allowUnseeable();
+    private TargetingConditions targetPredicate = TargetingConditions.DEFAULT.range(25.0D).ignoreLineOfSight();
 
-    public BaseGhoulEntity(EntityType<? extends BaseGhoulEntity> entityType, World world) {
+    public BaseGhoulEntity(EntityType<? extends BaseGhoulEntity> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -71,43 +71,28 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
 
 
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new SwimGoal(this));
+        this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new GhoulMeleeAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));;
-        this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));;
+        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(BaseGhoulEntity.class));
     }
 
 
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.195D).add(Attributes.FOLLOW_RANGE, 20.0D).add(Attributes.ATTACK_DAMAGE, 4.0D).add(Attributes.ARMOR, 3.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.5D);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.195D).add(Attributes.FOLLOW_RANGE, 20.0D).add(Attributes.ATTACK_DAMAGE, 4.0D).add(Attributes.ARMOR, 3.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.5D);
     }
 
-    public static boolean isDarkEnoughToSpawn(IServerWorld p_223323_0_, BlockPos p_223323_1_, Random p_223323_2_) {
-        if (p_223323_0_.getBrightness(LightType.SKY, p_223323_1_) > p_223323_2_.nextInt(32)) {
-            return false;
-        } else {
-            int i = p_223323_0_.getLevel().isThundering() ? p_223323_0_.getMaxLocalRawBrightness(p_223323_1_, 10) : p_223323_0_.getMaxLocalRawBrightness(p_223323_1_);
-            return i <= p_223323_2_.nextInt(8);
-        }
-    }
-
-    public static boolean checkMonsterSpawnRules(EntityType<? extends AnimatedGraveyardEntity> p_223325_0_, IServerWorld p_223325_1_, SpawnReason p_223325_2_, BlockPos p_223325_3_, Random p_223325_4_) {
-        return p_223325_1_.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(p_223325_1_, p_223325_3_, p_223325_4_) && checkMobSpawnRules(p_223325_0_, p_223325_1_, p_223325_2_, p_223325_3_, p_223325_4_);
-    }
-
-
-
-    public void addAdditionalSaveData(CompoundNBT tag) {
+    public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putByte("ghoulVariant", getVariant());
     }
 
-    public void readAdditionalSaveData(CompoundNBT tag) {
+    public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         setVariant(tag.getByte("ghoulVariant"));
     }
@@ -124,10 +109,10 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
 
     private boolean isInRageDistance() {
         // TODO: clean up!
-        AxisAlignedBB box = new AxisAlignedBB(new BlockPos(this.getX(), this.getY(), this.getZ())).inflate(15.0, 5.0, 15.0);
-        PlayerEntity player = this.level.getNearestPlayer(targetPredicate, this);
-        LivingEntity villager = this.level.getNearestLoadedEntity(AbstractVillagerEntity.class, targetPredicate, this, this.getX(), this.getY(), this.getZ(), box);
-        LivingEntity ironGolem = this.level.getNearestLoadedEntity(IronGolemEntity.class, targetPredicate, this, this.getX(), this.getY(), this.getZ(), box);
+        AABB box = new AABB(new BlockPos(this.getX(), this.getY(), this.getZ())).inflate(15.0, 5.0, 15.0);
+        Player player = this.level.getNearestPlayer(targetPredicate, this);
+        LivingEntity villager = this.level.getNearestEntity(AbstractVillager.class, targetPredicate, this, this.getX(), this.getY(), this.getZ(), box);
+        LivingEntity ironGolem = this.level.getNearestEntity(IronGolem.class, targetPredicate, this, this.getX(), this.getY(), this.getZ(), box);
 
         // getTarget is useless because it returns sometimes null, even when the mob is tracking
         if (player != null) {

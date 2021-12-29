@@ -1,11 +1,12 @@
 package com.finallion.graveyard.blocks;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.GrassBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.GrassBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class TGGrassBlock extends GrassBlock {
 
@@ -15,10 +16,12 @@ public class TGGrassBlock extends GrassBlock {
     }
 
 
-
-    public ItemStack getCloneItemStack(IBlockReader p_185473_1_, BlockPos p_185473_2_, BlockState p_185473_3_) {
+    @Override
+    public ItemStack getCloneItemStack(BlockGetter p_49823_, BlockPos p_49824_, BlockState p_49825_) {
         return new ItemStack(Items.GRASS_BLOCK);
     }
+
+
 
 
 

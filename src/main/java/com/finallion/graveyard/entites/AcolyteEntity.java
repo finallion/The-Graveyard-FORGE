@@ -1,52 +1,63 @@
 package com.finallion.graveyard.entites;
 
 import com.finallion.graveyard.TheGraveyard;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.*;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.util.*;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.util.GoalUtils;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Ravager;
+import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import software.bernie.geckolib3.core.IAnimatable;
 
 import javax.annotation.Nullable;
 
-public class AcolyteEntity extends AbstractIllagerEntity {
+public class AcolyteEntity extends AbstractIllager {
 
-    public AcolyteEntity(EntityType<? extends AbstractIllagerEntity> entityType, World world) {
+    public AcolyteEntity(EntityType<? extends AbstractIllager> entityType, Level world) {
         super(entityType, world);
     }
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(2, new AbstractIllagerEntity.RaidOpenDoorGoal(this));
-        this.goalSelector.addGoal(3, new AbstractRaiderEntity.FindTargetGoal(this, 10.0F));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(2, new AbstractIllager.RaiderOpenDoorGoal(this));
+        this.goalSelector.addGoal(3, new Raider.HoldGroundAttackGoal(this, 10.0F));
         this.goalSelector.addGoal(3, new AttackGoal(this));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
-        this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 0.6D));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, Raider.class)).setAlertOthers());
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
+        this.goalSelector.addGoal(8, new RandomStrollGoal(this, 0.6D));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
     }
+
 
     @Override
     public void applyRaidBuffs(int p_213660_1_, boolean p_213660_2_) {
@@ -59,9 +70,9 @@ public class AcolyteEntity extends AbstractIllagerEntity {
     }
 
     protected void customServerAiStep() {
-        if (!this.isNoAi() && GroundPathHelper.hasGroundPathNavigation(this)) {
-            boolean flag = ((ServerWorld)this.level).isRaided(this.blockPosition());
-            ((GroundPathNavigator)this.getNavigation()).setCanOpenDoors(flag);
+        if (!this.isNoAi() && GoalUtils.hasGroundPathNavigation(this)) {
+            boolean flag = ((ServerLevel)this.level).isRaided(this.blockPosition());
+            ((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(flag);
         }
 
         super.customServerAiStep();
@@ -74,34 +85,33 @@ public class AcolyteEntity extends AbstractIllagerEntity {
     }
 
 
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.3499999940395355D).add(Attributes.FOLLOW_RANGE, 12.0D).add(Attributes.ATTACK_DAMAGE, 5.0D).add(Attributes.MAX_HEALTH, 24.0D);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.3499999940395355D).add(Attributes.FOLLOW_RANGE, 12.0D).add(Attributes.ATTACK_DAMAGE, 5.0D).add(Attributes.MAX_HEALTH, 24.0D);
     }
 
 
-    @OnlyIn(Dist.CLIENT)
-    public AbstractIllagerEntity.ArmPose getArmPose() {
+    public AbstractIllager.IllagerArmPose getArmPose() {
         if (this.isAggressive()) {
-            return AbstractIllagerEntity.ArmPose.ATTACKING;
+            return AbstractIllager.IllagerArmPose.ATTACKING;
         } else {
-            return this.isCelebrating() ? AbstractIllagerEntity.ArmPose.CELEBRATING : AbstractIllagerEntity.ArmPose.CROSSED;
+            return this.isCelebrating() ? AbstractIllager.IllagerArmPose.CELEBRATING : AbstractIllager.IllagerArmPose.CROSSED;
         }
     }
 
 
     @Nullable
-    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
-        ILivingEntityData ilivingentitydata = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
-        ((GroundPathNavigator)this.getNavigation()).setCanOpenDoors(true);
-        this.populateDefaultEquipmentSlots(p_213386_2_);
-        this.populateDefaultEquipmentEnchantments(p_213386_2_);
-        return ilivingentitydata;
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_34088_, DifficultyInstance p_34089_, MobSpawnType p_34090_, @Nullable SpawnGroupData p_34091_, @Nullable CompoundTag p_34092_) {
+        SpawnGroupData spawngroupdata = super.finalizeSpawn(p_34088_, p_34089_, p_34090_, p_34091_, p_34092_);
+        ((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(true);
+        this.populateDefaultEquipmentSlots(p_34089_);
+        this.populateDefaultEquipmentEnchantments(p_34089_);
+        return spawngroupdata;
     }
 
 
-    protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
+    protected void populateDefaultEquipmentSlots(DifficultyInstance p_34084_) {
         if (this.getCurrentRaid() == null) {
-            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Registry.ITEM.get(new ResourceLocation(TheGraveyard.MOD_ID, "bone_dagger"))));
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Registry.ITEM.get(new ResourceLocation(TheGraveyard.MOD_ID, "bone_dagger"))));
         }
 
     }
@@ -109,7 +119,7 @@ public class AcolyteEntity extends AbstractIllagerEntity {
     public boolean isAlliedTo(Entity p_184191_1_) {
         if (super.isAlliedTo(p_184191_1_)) {
             return true;
-        } else if (p_184191_1_ instanceof LivingEntity && ((LivingEntity)p_184191_1_).getMobType() == CreatureAttribute.ILLAGER) {
+        } else if (p_184191_1_ instanceof LivingEntity && ((LivingEntity)p_184191_1_).getMobType() == MobType.ILLAGER) {
             return this.getTeam() == null && p_184191_1_.getTeam() == null;
         } else {
             return false;
@@ -139,7 +149,7 @@ public class AcolyteEntity extends AbstractIllagerEntity {
         }
 
         protected double getAttackReachSqr(LivingEntity p_179512_1_) {
-            if (this.mob.getVehicle() instanceof RavagerEntity) {
+            if (this.mob.getVehicle() instanceof Ravager) {
                 float f = this.mob.getVehicle().getBbWidth() - 0.1F;
                 return (double)(f * 2.0F * f * 2.0F + p_179512_1_.getBbWidth());
             } else {

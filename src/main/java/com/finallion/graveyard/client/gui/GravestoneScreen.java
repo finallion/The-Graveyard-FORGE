@@ -2,33 +2,27 @@ package com.finallion.graveyard.client.gui;
 
 import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
 import com.finallion.graveyard.blockentities.render.GravestoneBlockEntityRenderer;
-import com.finallion.graveyard.blocks.GravestoneBlock;
-import com.finallion.graveyard.init.TGBlocks;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.StandingSignBlock;
-import net.minecraft.block.WoodType;
-import net.minecraft.client.gui.DialogTexts;
-import net.minecraft.client.gui.fonts.TextInputUtil;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.network.play.ClientPlayNetHandler;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.model.RenderMaterial;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.font.TextFieldHelper;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.tileentity.SignTileEntityRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.network.play.client.CUpdateSignPacket;
-import net.minecraft.tileentity.SignTileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ServerboundSignUpdatePacket;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -39,53 +33,56 @@ import java.util.stream.IntStream;
 @OnlyIn(Dist.CLIENT)
 public class GravestoneScreen extends Screen {
     private final GravestoneBlockEntity sign;
-    private final SignTileEntityRenderer.SignModel model = new SignTileEntityRenderer.SignModel();
+    private SignRenderer.SignModel model;
     private int frame;
     private int line;
-    private TextInputUtil signField;
+    private WoodType woodType;
+    private TextFieldHelper signField;
     private final String[] messages;
 
-
-    public GravestoneScreen(GravestoneBlockEntity sign) {
-        super(new TranslationTextComponent("gravestone.edit"));
-        this.messages = IntStream.range(0, 4).mapToObj(sign::getMessage).map(ITextComponent::getString).toArray((p_243354_0_) -> {
-            return new String[p_243354_0_];
+    public GravestoneScreen(GravestoneBlockEntity sign, boolean filtered) {
+        super(new TranslatableComponent("gravestone.edit"));
+        this.messages = IntStream.range(0, 4).mapToObj((p_169818_) -> {
+            return sign.getMessage(p_169818_, filtered);
+        }).map(Component::getString).toArray((p_169814_) -> {
+            return new String[p_169814_];
         });
         this.sign = sign;
     }
 
 
-
     protected void init() {
         this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
-        this.addButton(new Button(this.width / 2 - 100, this.height / 4 + 120, 200, 20, DialogTexts.GUI_DONE, (p_238847_1_) -> {
+        this.addRenderableWidget(new Button(this.width / 2 - 100, this.height / 4 + 120, 200, 20, CommonComponents.GUI_DONE, (p_169820_) -> {
             this.onDone();
         }));
         this.sign.setEditable(false);
-        this.signField = new TextInputUtil(() -> {
+        this.signField = new TextFieldHelper(() -> {
             return this.messages[this.line];
-        }, (p_238850_1_) -> {
-            this.messages[this.line] = p_238850_1_;
-            this.sign.setMessage(this.line, new StringTextComponent(p_238850_1_));
-        }, TextInputUtil.createClipboardGetter(this.minecraft), TextInputUtil.createClipboardSetter(this.minecraft), (p_238848_1_) -> {
-            return this.minecraft.font.width(p_238848_1_) <= 90;
+        }, (p_169824_) -> {
+            this.messages[this.line] = p_169824_;
+            this.sign.setMessage(this.line, new TextComponent(p_169824_));
+        }, TextFieldHelper.createClipboardGetter(this.minecraft), TextFieldHelper.createClipboardSetter(this.minecraft), (p_169822_) -> {
+            return this.minecraft.font.width(p_169822_) <= 90;
         });
+        BlockState blockstate = this.sign.getBlockState();
+        this.woodType = GravestoneBlockEntityRenderer.getSignType(blockstate.getBlock());
+        this.model = GravestoneBlockEntityRenderer.createSignModel(this.minecraft.getEntityModels(), this.woodType);
     }
 
     public void removed() {
         this.minecraft.keyboardHandler.setSendRepeatsToGui(false);
-        ClientPlayNetHandler clientplaynethandler = this.minecraft.getConnection();
-        if (clientplaynethandler != null) {
-            clientplaynethandler.send(new CUpdateSignPacket(this.sign.getBlockPos(), this.messages[0], this.messages[1], this.messages[2], this.messages[3]));
+        ClientPacketListener clientpacketlistener = this.minecraft.getConnection();
+        if (clientpacketlistener != null) {
+            clientpacketlistener.send(new ServerboundSignUpdatePacket(this.sign.getBlockPos(), this.messages[0], this.messages[1], this.messages[2], this.messages[3]));
         }
 
         this.sign.setEditable(true);
     }
 
     public void tick() {
-
         ++this.frame;
-        if (!this.sign.getType().isValid(this.sign.getBlockState().getBlock())) {
+        if (!this.sign.getType().isValid(this.sign.getBlockState())) {
             this.onDone();
         }
 
@@ -96,8 +93,8 @@ public class GravestoneScreen extends Screen {
         this.minecraft.setScreen((Screen)null);
     }
 
-    public boolean charTyped(char p_231042_1_, int p_231042_2_) {
-        this.signField.charTyped(p_231042_1_);
+    public boolean charTyped(char p_99262_, int p_99263_) {
+        this.signField.charTyped(p_99262_);
         return true;
     }
 
@@ -105,13 +102,13 @@ public class GravestoneScreen extends Screen {
         this.onDone();
     }
 
-    public boolean keyPressed(int p_231046_1_, int p_231046_2_, int p_231046_3_) {
-        if (p_231046_1_ == 265) {
+    public boolean keyPressed(int p_99267_, int p_99268_, int p_99269_) {
+        if (p_99267_ == 265) {
             this.line = this.line - 1 & 3;
             this.signField.setCursorToEnd();
             return true;
-        } else if (p_231046_1_ != 264 && p_231046_1_ != 257 && p_231046_1_ != 335) {
-            return this.signField.keyPressed(p_231046_1_) ? true : super.keyPressed(p_231046_1_, p_231046_2_, p_231046_3_);
+        } else if (p_99267_ != 264 && p_99267_ != 257 && p_99267_ != 335) {
+            return this.signField.keyPressed(p_99267_) ? true : super.keyPressed(p_99267_, p_99268_, p_99269_);
         } else {
             this.line = this.line + 1 & 3;
             this.signField.setCursorToEnd();
@@ -119,8 +116,8 @@ public class GravestoneScreen extends Screen {
         }
     }
 
-    public void render(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
-        RenderHelper.setupForFlatItems();
+    public void render(PoseStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
+        Lighting.setupForFlatItems();
         this.renderBackground(p_230430_1_);
         drawCenteredString(p_230430_1_, this.font, this.title, this.width / 2, 40, 16777215);
         p_230430_1_.pushPose();
@@ -133,11 +130,10 @@ public class GravestoneScreen extends Screen {
         float f1 = 0.6666667F;
         p_230430_1_.pushPose();
         p_230430_1_.scale(0.6666667F, -0.6666667F, -0.6666667F);
-        IRenderTypeBuffer.Impl irendertypebuffer$impl = this.minecraft.renderBuffers().bufferSource();
-        IVertexBuilder ivertexbuilder = GravestoneBlockEntityRenderer.getConsumer(irendertypebuffer$impl, sign.getBlockState().getBlock());
-        //RenderMaterial rendermaterial = new RenderMaterial(Atlases.SIGN_SHEET, ((GravestoneBlock) sign.getBlockState().getBlock()).getTexture());
-        //IVertexBuilder ivertexbuilder = rendermaterial.buffer(irendertypebuffer$impl, this.model::renderType);
-        this.model.sign.render(p_230430_1_, ivertexbuilder, 15728880, OverlayTexture.NO_OVERLAY);
+        MultiBufferSource.BufferSource irendertypebuffer$impl = this.minecraft.renderBuffers().bufferSource();
+        VertexConsumer ivertexbuilder = GravestoneBlockEntityRenderer.getConsumer(irendertypebuffer$impl, sign.getBlockState().getBlock());
+        this.model.stick.visible = false;
+        this.model.root.render(p_230430_1_, ivertexbuilder, 15728880, OverlayTexture.NO_OVERLAY);
 
         p_230430_1_.popPose();
         float f2 = 0.010416667F;
@@ -186,18 +182,19 @@ public class GravestoneScreen extends Screen {
                     int j2 = this.minecraft.font.width(s1.substring(0, l1)) - this.minecraft.font.width(s1) / 2;
                     int k2 = Math.min(i2, j2);
                     int l2 = Math.max(i2, j2);
-                    Tessellator tessellator = Tessellator.getInstance();
-                    BufferBuilder bufferbuilder = tessellator.getBuilder();
+                    Tesselator tesselator = Tesselator.getInstance();
+                    BufferBuilder bufferbuilder = tesselator.getBuilder();
+                    RenderSystem.setShader(GameRenderer::getPositionColorShader);
                     RenderSystem.disableTexture();
                     RenderSystem.enableColorLogicOp();
                     RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
-                    bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+                    bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
                     bufferbuilder.vertex(matrix4f, (float)k2, (float)(l + 9), 0.0F).color(0, 0, 255, 255).endVertex();
                     bufferbuilder.vertex(matrix4f, (float)l2, (float)(l + 9), 0.0F).color(0, 0, 255, 255).endVertex();
                     bufferbuilder.vertex(matrix4f, (float)l2, (float)l, 0.0F).color(0, 0, 255, 255).endVertex();
                     bufferbuilder.vertex(matrix4f, (float)k2, (float)l, 0.0F).color(0, 0, 255, 255).endVertex();
                     bufferbuilder.end();
-                    WorldVertexBufferUploader.end(bufferbuilder);
+                    BufferUploader.end(bufferbuilder);
                     RenderSystem.disableColorLogicOp();
                     RenderSystem.enableTexture();
                 }
@@ -205,7 +202,7 @@ public class GravestoneScreen extends Screen {
         }
 
         p_230430_1_.popPose();
-        RenderHelper.setupFor3DItems();
+        Lighting.setupFor3DItems();
         super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
     }
 

@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "graveyard:block/tg_tuff"
+      "model": "minecraft:block/tuff"
     }
   }
 }

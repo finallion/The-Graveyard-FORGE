@@ -3,135 +3,140 @@ package com.finallion.graveyard.blockentities;
 import com.finallion.graveyard.blocks.UrnBlock;
 import com.finallion.graveyard.init.TGBlocks;
 import com.finallion.graveyard.init.TGTileEntities;
-import net.minecraft.block.BarrelBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.ChestContainer;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.LockableLootTileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.Vec3i;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.CompoundContainer;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BarrelBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
 
-public class UrnBlockEntity extends LockableLootTileEntity {
+public class UrnBlockEntity extends RandomizableContainerBlockEntity {
+    private static final int EVENT_SET_OPEN_COUNT = 1;
     private NonNullList<ItemStack> items = NonNullList.withSize(54, ItemStack.EMPTY);
-    private int openCount;
 
-    public UrnBlockEntity() {
-        super(TGTileEntities.URN_BLOCK_ENTITY.get());
-    }
-
-    public CompoundNBT save(CompoundNBT p_189515_1_) {
-        super.save(p_189515_1_);
-        if (!this.trySaveLootTable(p_189515_1_)) {
-            ItemStackHelper.saveAllItems(p_189515_1_, this.items);
+    private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
+        protected void onOpen(Level p_155357_, BlockPos p_155358_, BlockState p_155359_) {
+            UrnBlockEntity.playSound(p_155357_, p_155358_, p_155359_, SoundEvents.BARREL_OPEN);
         }
 
-        return p_189515_1_;
-    }
-
-    public void load(BlockState p_230337_1_, CompoundNBT p_230337_2_) {
-        super.load(p_230337_1_, p_230337_2_);
-        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        if (!this.tryLoadLootTable(p_230337_2_)) {
-            ItemStackHelper.loadAllItems(p_230337_2_, this.items);
+        protected void onClose(Level p_155367_, BlockPos p_155368_, BlockState p_155369_) {
+            UrnBlockEntity.playSound(p_155367_, p_155368_, p_155369_, SoundEvents.BARREL_CLOSE);
         }
 
+        protected void openerCountChanged(Level p_155361_, BlockPos p_155362_, BlockState p_155363_, int p_155364_, int p_155365_) {
+
+        }
+
+        protected boolean isOwnContainer(Player p_155355_) {
+            if (!(p_155355_.containerMenu instanceof ChestMenu)) {
+                return false;
+            } else {
+                Container container = ((ChestMenu)p_155355_.containerMenu).getContainer();
+                return container == UrnBlockEntity.this || container instanceof CompoundContainer && ((CompoundContainer)container).contains(UrnBlockEntity.this);
+            }
+        }
+    };
+
+    protected UrnBlockEntity(BlockEntityType<?> p_155327_, BlockPos p_155328_, BlockState p_155329_) {
+        super(p_155327_, p_155328_, p_155329_);
+    }
+
+    public UrnBlockEntity(BlockPos p_155331_, BlockState p_155332_) {
+        this(TGTileEntities.URN_BLOCK_ENTITY.get(), p_155331_, p_155332_);
     }
 
     public int getContainerSize() {
         return 54;
     }
 
+    protected Component getDefaultName() {
+        return new TranslatableComponent("container.urn");
+    }
+
+    public void load(CompoundTag p_155349_) {
+        super.load(p_155349_);
+        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        if (!this.tryLoadLootTable(p_155349_)) {
+            ContainerHelper.loadAllItems(p_155349_, this.items);
+        }
+
+    }
+
+    protected void saveAdditional(CompoundTag p_187489_) {
+        super.saveAdditional(p_187489_);
+        if (!this.trySaveLootTable(p_187489_)) {
+            ContainerHelper.saveAllItems(p_187489_, this.items);
+        }
+
+    }
+
+
+    static void playSound(Level p_155339_, BlockPos p_155340_, BlockState p_155341_, SoundEvent p_155342_) {
+        double d0 = (double)p_155340_.getX() + 0.5D;
+        double d1 = (double)p_155340_.getY() + 0.5D;
+        double d2 = (double)p_155340_.getZ() + 0.5D;
+
+        p_155339_.playSound((Player)null, d0, d1, d2, p_155342_, SoundSource.BLOCKS, 0.5F, p_155339_.random.nextFloat() * 0.1F + 0.9F);
+
+    }
+
     protected NonNullList<ItemStack> getItems() {
         return this.items;
     }
 
-    protected void setItems(NonNullList<ItemStack> p_199721_1_) {
-        this.items = p_199721_1_;
+    protected void setItems(NonNullList<ItemStack> p_59110_) {
+        this.items = p_59110_;
     }
 
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("container.urn");
+    protected AbstractContainerMenu createMenu(int p_59082_, Inventory p_59083_) {
+        return ChestMenu.sixRows(p_59082_, p_59083_, this);
     }
 
-    protected Container createMenu(int p_213906_1_, PlayerInventory p_213906_2_) {
-        return ChestContainer.sixRows(p_213906_1_, p_213906_2_, this);
-    }
-
-    public void startOpen(PlayerEntity p_174889_1_) {
-        if (!p_174889_1_.isSpectator()) {
-            if (this.openCount < 0) {
-                this.openCount = 0;
-            }
-
-            ++this.openCount;
-            BlockState blockstate = this.getBlockState();
-            boolean flag = blockstate.getValue(BarrelBlock.OPEN);
-            if (!flag) {
-                this.playSound(blockstate, SoundEvents.BARREL_OPEN);
-                this.updateBlockState(blockstate, true);
-            }
-
-            this.scheduleRecheck();
+    public void startOpen(Player p_58616_) {
+        if (!this.remove && !p_58616_.isSpectator()) {
+            this.openersCounter.incrementOpeners(p_58616_, this.getLevel(), this.getBlockPos(), this.getBlockState());
         }
 
     }
 
-    private void scheduleRecheck() {
-        this.level.getBlockTicks().scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), 5);
+    public void stopOpen(Player p_58614_) {
+        if (!this.remove && !p_58614_.isSpectator()) {
+            this.openersCounter.decrementOpeners(p_58614_, this.getLevel(), this.getBlockPos(), this.getBlockState());
+        }
+
     }
 
     public void recheckOpen() {
-        int i = this.worldPosition.getX();
-        int j = this.worldPosition.getY();
-        int k = this.worldPosition.getZ();
-        this.openCount = ChestTileEntity.getOpenCount(this.level, this, i, j, k);
-        if (this.openCount > 0) {
-            this.scheduleRecheck();
-        } else {
-            BlockState blockstate = this.getBlockState();
-            if (!(blockstate.getBlock() instanceof UrnBlock)) {
-                this.setRemoved();
-                return;
-            }
-
-            boolean flag = blockstate.getValue(UrnBlock.OPEN);
-            if (flag) {
-                this.playSound(blockstate, SoundEvents.BARREL_CLOSE);
-                this.updateBlockState(blockstate, false);
-            }
+        if (!this.remove) {
+            this.openersCounter.recheckOpeners(this.getLevel(), this.getBlockPos(), this.getBlockState());
         }
 
     }
 
-    public void stopOpen(PlayerEntity p_174886_1_) {
-        if (!p_174886_1_.isSpectator()) {
-            --this.openCount;
-        }
-
+    void updateBlockState(BlockState p_58607_, boolean p_58608_) {
+        this.level.setBlock(this.getBlockPos(), p_58607_.setValue(BarrelBlock.OPEN, Boolean.valueOf(p_58608_)), 3);
     }
 
-    private void updateBlockState(BlockState p_213963_1_, boolean p_213963_2_) {
-        this.level.setBlock(this.getBlockPos(), p_213963_1_.setValue(UrnBlock.OPEN, Boolean.valueOf(p_213963_2_)), 3);
-    }
 
-    private void playSound(BlockState p_213965_1_, SoundEvent p_213965_2_) {
-        Vector3i vector3i = p_213965_1_.getValue(UrnBlock.FACING).getNormal();
-        double d0 = (double)this.worldPosition.getX() + 0.5D + (double)vector3i.getX() / 2.0D;
-        double d1 = (double)this.worldPosition.getY() + 0.5D + (double)vector3i.getY() / 2.0D;
-        double d2 = (double)this.worldPosition.getZ() + 0.5D + (double)vector3i.getZ() / 2.0D;
-        this.level.playSound((PlayerEntity)null, d0, d1, d2, p_213965_2_, SoundCategory.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
-    }
+
 }

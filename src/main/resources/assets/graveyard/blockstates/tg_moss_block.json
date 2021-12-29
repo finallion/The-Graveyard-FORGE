@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "graveyard:block/tg_moss_block"
+      "model": "minecraft:block/moss_block"
     }
   }
 }

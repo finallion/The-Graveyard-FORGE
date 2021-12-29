@@ -2,7 +2,7 @@ package com.finallion.graveyard.entites.models;
 
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.entites.BaseGhoulEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 

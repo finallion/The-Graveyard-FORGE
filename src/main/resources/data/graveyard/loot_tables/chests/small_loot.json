@@ -26,6 +26,11 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 1,
+          "name": "minecraft:spyglass"
+        },
+        {
+          "type": "minecraft:item",
           "weight": 5,
           "functions": [
             {
@@ -159,17 +164,22 @@
         {
           "type": "minecraft:item",
           "weight": 20,
-          "name": "graveyard:tg_moss_block"
+          "name": "minecraft:moss_block"
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
+          "weight": 10,
+          "name": "minecraft:glow_berries"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
+                "min": 2.0,
                 "max": 4.0
               },
               "add": false
@@ -186,12 +196,28 @@
               "count": {
                 "type": "minecraft:uniform",
                 "min": 1.0,
+                "max": 8.0
+              },
+              "add": false
+            }
+          ],
+          "name": "minecraft:amethyst_shard"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1.0,
                 "max": 4.0
               },
               "add": false
             }
           ],
-          "name": "minecraft:emerald"
+          "name": "minecraft:copper_ingot"
         },
         {
           "type": "minecraft:item",

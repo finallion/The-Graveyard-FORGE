@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "graveyard:block/deepslate_bricks",
-    "top": "graveyard:block/deepslate_bricks",
-    "side": "graveyard:block/deepslate_bricks"
-  }
-}

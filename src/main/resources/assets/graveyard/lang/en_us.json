@@ -1,43 +1,16 @@
 {
-  "block.graveyard.tg_stone": "Graveyard Stone",
-  "block.graveyard.tg_granite": "Graveyard Granite",
-  "block.graveyard.tg_diorite": "Graveyard Diorite",
-  "block.graveyard.tg_andesite": "Graveyard Andesite",
-  "block.graveyard.tg_grass_block": "Graveyard Grass Block",
-  "block.graveyard.tg_podzol": "Graveyard Podzol",
-  "block.graveyard.tg_dirt": "Graveyard Dirt",
-  "block.graveyard.tg_coarse_dirt": "Graveyard Coarse Dirt",
-
-  "block.graveyard.tg_deepslate": "Graveyard Deepslate",
-  "block.graveyard.tg_tuff": "Graveyard Tuff",
-  "block.graveyard.tg_rooted_dirt": "Graveyard Rooted Dirt",
-  "block.graveyard.tg_moss_block": "Graveyard Moss",
-
-  "block.graveyard.moss_block": "Moss",
-  "block.graveyard.moss_carpet": "Moss Carpet",
-
-  "block.graveyard.tg_cobbled_deepslate": "Graveyard Cobbled Deepslate",
-  "block.graveyard.tg_cobbled_deepslate_slab": "Graveyard Cobbled Deepslate Slab",
-  "block.graveyard.tg_cobbled_deepslate_stairs": "Graveyard Cobbled Deepslate Stairs",
-  "block.graveyard.tg_cobbled_deepslate_wall": "Graveyard Cobbled Deepslate Wall",
-  "block.graveyard.tg_chiseled_deepslate": "Graveyard Chiseled Deepslate",
-
-  "block.graveyard.tg_polished_deepslate": "Graveyard Polished Deepslate",
-  "block.graveyard.tg_polished_deepslate_slab": "Graveyard Polished Deepslate Slab",
-  "block.graveyard.tg_polished_deepslate_stairs": "Graveyard Polished Deepslate Stairs",
-  "block.graveyard.tg_polished_deepslate_wall": "Graveyard Polished Deepslate Wall",
-
-  "block.graveyard.tg_deepslate_bricks": "Graveyard Deepslate Bricks",
-  "block.graveyard.tg_deepslate_brick_slab": "Graveyard Deepslate Brick Slab",
-  "block.graveyard.tg_deepslate_brick_stairs": "Graveyard Deepslate Brick Stairs",
-  "block.graveyard.tg_deepslate_brick_wall": "Graveyard Deepslate Brick Wall",
-  "block.graveyard.tg_cracked_deepslate_bricks": "Graveyard Cracked Deepslate Bricks",
-
-  "block.graveyard.tg_deepslate_tiles": "Graveyard Deepslate Tiles",
-  "block.graveyard.tg_deepslate_tile_slab": "Graveyard Deepslate Tile Slab",
-  "block.graveyard.tg_deepslate_tile_stairs": "Graveyard Deepslate Tile Stairs",
-  "block.graveyard.tg_deepslate_tile_wall": "Graveyard Deepslate Tile Wall",
-  "block.graveyard.tg_cracked_deepslate_tiles": "Graveyard Cracked Deepslate Tiles",
+  "block.graveyard.tg_grass_block": "Grass Block",
+  "block.graveyard.tg_moss_block": "Moss Block",
+  "block.graveyard.tg_podzol": "Podzol",
+  "block.graveyard.tg_deepslate": "Deepslate",
+  "block.graveyard.tg_coarse_dirt": "Coarse Dirt",
+  "block.graveyard.tg_rooted_dirt": "Rooted Dirt",
+  "block.graveyard.tg_stone": "Stone",
+  "block.graveyard.tg_granite": "Granite",
+  "block.graveyard.tg_andesite": "Andesite",
+  "block.graveyard.tg_diorite": "Diorite",
+  "block.graveyard.tg_tuff": "Tuff",
+  "block.graveyard.tg_dirt": "Dirt",
 
 
 
@@ -102,13 +75,19 @@
   "item.graveyard.bone_dagger": "Bone Dagger",
 
   "entity.graveyard.skeleton_creeper": "Skeleton Creeper",
-  "entity.graveyard.acolyte": "Acolyte",
-  "entity.graveyard.ghoul": "Ghoul",
-  "entity.graveyard.reaper": "Reaper",
   "item.graveyard.skeleton_creeper_spawn_egg": "Skeleton Creeper Spawn Egg",
+  "entity.graveyard.acolyte": "Acolyte",
   "item.graveyard.acolyte_spawn_egg": "Acolyte Spawn Egg",
+  "entity.graveyard.ghoul": "Ghoul",
   "item.graveyard.ghoul_spawn_egg": "Ghoul Spawn Egg",
+  "entity.graveyard.reaper": "Reaper",
   "item.graveyard.reaper_spawn_egg": "Reaper Spawn Egg",
+
+  "biome.graveyard.haunted_forest": "Haunted Forest",
+  "biome.graveyard.haunted_lakes": "Haunted Lakes",
+  "biome.graveyard.eroded_haunted_forest": "Eroded Haunted Forest",
+
+
   "itemGroup.group": "The Graveyard",
   "gravestone.edit": "Edit Gravestone"
 

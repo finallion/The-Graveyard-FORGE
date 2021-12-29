@@ -1,15 +1,15 @@
 {
   "variants": {
-    "pickles=1": {
+    "candles=1": {
       "model": "graveyard:block/vase_one"
     },
-    "pickles=2": {
+    "candles=2": {
       "model": "graveyard:block/vase_two"
     },
-    "pickles=3": {
+    "candles=3": {
       "model": "graveyard:block/vase_three"
     },
-    "pickles=4": {
+    "candles=4": {
       "model": "graveyard:block/vase_four"
     }
   }

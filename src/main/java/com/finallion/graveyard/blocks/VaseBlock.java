@@ -1,28 +1,29 @@
 package com.finallion.graveyard.blocks;
 
-import com.finallion.graveyard.TheGraveyard;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
 
-public class VaseBlock extends Block implements IWaterLoggable {
+public class VaseBlock extends Block implements SimpleWaterloggedBlock {
     public static final IntegerProperty VASES;
     public static final BooleanProperty WATERLOGGED;
     private static final VoxelShape VASE_SHAPE_ONE;
@@ -33,15 +34,15 @@ public class VaseBlock extends Block implements IWaterLoggable {
 
 
     public VaseBlock() {
-        super(AbstractBlock.Properties.of(Material.GLASS).instabreak().noCollission().noOcclusion().sound(SoundType.GLASS));
+        super(BlockBehaviour.Properties.of(Material.GLASS).instabreak().noCollission().noOcclusion().sound(SoundType.GLASS));
         this.registerDefaultState(this.getStateDefinition().any().setValue(VASES, 1).setValue(WATERLOGGED, false));
     }
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> p_206840_1_) {
-        p_206840_1_.add(VASES, WATERLOGGED);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(VASES, WATERLOGGED);
     }
 
     @Nullable
-    public BlockState getStateForPlacement(BlockItemUseContext p_196258_1_) {
+    public BlockState getStateForPlacement(BlockPlaceContext p_196258_1_) {
         BlockState blockstate = p_196258_1_.getLevel().getBlockState(p_196258_1_.getClickedPos());
         if (blockstate.is(this)) {
             return blockstate.setValue(VASES, Integer.valueOf(Math.min(4, blockstate.getValue(VASES) + 1)));
@@ -53,16 +54,18 @@ public class VaseBlock extends Block implements IWaterLoggable {
     }
 
 
+
     public FluidState getFluidState(BlockState state) {
         return (Boolean)state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
-    public boolean canBeReplaced(BlockState p_196253_1_, BlockItemUseContext p_196253_2_) {
-        return p_196253_2_.getItemInHand().getItem() == this.asItem() && p_196253_1_.getValue(VASES) < 4 ? true : super.canBeReplaced(p_196253_1_, p_196253_2_);
+    public boolean canBeReplaced(BlockState p_152814_, BlockPlaceContext p_152815_) {
+        return !p_152815_.isSecondaryUseActive() && p_152815_.getItemInHand().getItem() == this.asItem() && p_152814_.getValue(VASES) < 4 ? true : super.canBeReplaced(p_152814_, p_152815_);
     }
 
-    public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
-        switch(p_220053_1_.getValue(VASES)) {
+
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter p_220071_2_, BlockPos p_220071_3_, CollisionContext p_220071_4_) {
+        switch(state.getValue(VASES)) {
             case 1:
             default:
                 return VASE_SHAPE_ONE;
@@ -75,19 +78,12 @@ public class VaseBlock extends Block implements IWaterLoggable {
         }
     }
 
-
-
-    protected boolean mayPlaceOn(BlockState p_200014_1_, IBlockReader p_200014_2_, BlockPos p_200014_3_) {
-        return !p_200014_1_.getCollisionShape(p_200014_2_, p_200014_3_).getFaceShape(Direction.UP).isEmpty() || p_200014_1_.isFaceSturdy(p_200014_2_, p_200014_3_, Direction.UP);
-    }
-
-    public boolean canSurvive(BlockState p_196260_1_, IWorldReader p_196260_2_, BlockPos p_196260_3_) {
-        BlockPos blockpos = p_196260_3_.below();
-        return this.mayPlaceOn(p_196260_2_.getBlockState(blockpos), p_196260_2_, blockpos);
+    public boolean canSurvive(BlockState p_152829_, LevelReader p_152830_, BlockPos p_152831_) {
+        return Block.canSupportCenter(p_152830_, p_152831_.below(), Direction.UP);
     }
 
     static {
-        VASES = BlockStateProperties.PICKLES;
+        VASES = BlockStateProperties.CANDLES;
         WATERLOGGED = BlockStateProperties.WATERLOGGED;
         VASE_SHAPE_ONE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 12.0D, 12.0D);
         VASE_SHAPE_TWO = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 15.0D, 13.0D);

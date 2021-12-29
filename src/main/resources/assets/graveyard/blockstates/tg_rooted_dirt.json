@@ -2,18 +2,18 @@
   "variants": {
     "": [
       {
-        "model": "graveyard:block/tg_rooted_dirt"
+        "model": "minecraft:block/rooted_dirt"
       },
       {
-        "model": "graveyard:block/tg_rooted_dirt",
+        "model": "minecraft:block/rooted_dirt",
         "y": 90
       },
       {
-        "model": "graveyard:block/tg_rooted_dirt",
+        "model": "minecraft:block/rooted_dirt",
         "y": 180
       },
       {
-        "model": "graveyard:block/tg_rooted_dirt",
+        "model": "minecraft:block/rooted_dirt",
         "y": 270
       }
     ]

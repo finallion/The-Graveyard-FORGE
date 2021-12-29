@@ -2,7 +2,7 @@ package com.finallion.graveyard.entites.models;
 
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.entites.ReaperEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class ReaperModel extends AnimatedGeoModel<ReaperEntity> {

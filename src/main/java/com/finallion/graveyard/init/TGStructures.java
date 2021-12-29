@@ -1,18 +1,21 @@
 package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.config.GraveyardConfig;
-import com.finallion.graveyard.structures.*;
+import com.finallion.graveyard.world.structures.*;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.settings.DimensionStructuresSettings;
-import net.minecraft.world.gen.settings.StructureSeparationSettings;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.StructureSettings;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.StructureFeatureConfiguration;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,78 +23,87 @@ import java.util.List;
 import java.util.Map;
 
 public class TGStructures {
+    public static final List<StructureFeature<?>> MOD_STRUCTURES = new ArrayList<>();
 
-    public static final List<Structure> MOD_STRUCTURES = new ArrayList<>();
-
-    public static final DeferredRegister<Structure<?>> DEFERRED_REGISTRY_STRUCTURE = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, TheGraveyard.MOD_ID);
-
-    public static RegistryObject<Structure<NoFeatureConfig>> SMALL_WALLED_GRAVEYARD = DEFERRED_REGISTRY_STRUCTURE.register("small_walled_graveyard", () -> (new SmallWalledGraveyard(NoFeatureConfig.CODEC)));
-    public static RegistryObject<Structure<NoFeatureConfig>> SMALL_WALLED_GRAVEYARD_SAVANNA = DEFERRED_REGISTRY_STRUCTURE.register("small_walled_graveyard_savanna", () -> (new SmallWalledGraveyardSavanna(NoFeatureConfig.CODEC)));
-    public static RegistryObject<Structure<NoFeatureConfig>> SMALL_WALLED_GRAVEYARD_DESERT = DEFERRED_REGISTRY_STRUCTURE.register("small_walled_graveyard_desert", () -> (new SmallWalledGraveyardDesert(NoFeatureConfig.CODEC)));
-    public static RegistryObject<Structure<NoFeatureConfig>> SMALL_GRAVE = DEFERRED_REGISTRY_STRUCTURE.register("small_grave", () -> (new SmallGrave(NoFeatureConfig.CODEC)));
-    public static RegistryObject<Structure<NoFeatureConfig>> SMALL_DESERT_GRAVE = DEFERRED_REGISTRY_STRUCTURE.register("small_desert_grave", () -> (new SmallDesertGrave(NoFeatureConfig.CODEC)));
-    public static RegistryObject<Structure<NoFeatureConfig>> SMALL_SAVANNA_GRAVE = DEFERRED_REGISTRY_STRUCTURE.register("small_savanna_grave", () -> (new SmallSavannaGrave(NoFeatureConfig.CODEC)));
-    public static RegistryObject<Structure<NoFeatureConfig>> SMALL_MOUNTAIN_GRAVE = DEFERRED_REGISTRY_STRUCTURE.register("small_mountain_grave", () -> (new SmallMountainGrave(NoFeatureConfig.CODEC)));
-    public static RegistryObject<Structure<NoFeatureConfig>> MUSHROOM_GRAVE = DEFERRED_REGISTRY_STRUCTURE.register("mushroom_grave", () -> (new MushroomGrave(NoFeatureConfig.CODEC)));
-    public static RegistryObject<Structure<NoFeatureConfig>> LARGE_BIRCH_TREE = DEFERRED_REGISTRY_STRUCTURE.register("large_birch_tree", () -> (new LargeBirchTree(NoFeatureConfig.CODEC)));
-    public static RegistryObject<Structure<NoFeatureConfig>> MEDIUM_WALLED_GRAVEYARD = DEFERRED_REGISTRY_STRUCTURE.register("medium_walled_graveyard", () -> (new MediumWalledGraveyard(NoFeatureConfig.CODEC)));
-    public static RegistryObject<Structure<NoFeatureConfig>> LARGE_WALLED_GRAVEYARD = DEFERRED_REGISTRY_STRUCTURE.register("large_walled_graveyard", () -> (new LargeWalledGraveyard(NoFeatureConfig.CODEC)));
-    public static RegistryObject<Structure<NoFeatureConfig>> HAUNTED_HOUSE = DEFERRED_REGISTRY_STRUCTURE.register("haunted_house", () -> (new HauntedHouse(NoFeatureConfig.CODEC)));
-
-    public static void register() {
-        setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD.get(), GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_SEPARATION, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_SPACING, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_SALT, true);
-        setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD_SAVANNA.get(), GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_SAVANNA_SEPARATION, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_SAVANNA_SPACING, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_SAVANNA_SALT, true);
-        setupMapSpacingAndLand(SMALL_WALLED_GRAVEYARD_DESERT.get(), GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_DESERT_SEPARATION, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_DESERT_SPACING, GraveyardConfig.INSTANCE.SMALL_GRAVEYARD_DESERT_SALT, true);
-        setupMapSpacingAndLand(SMALL_GRAVE.get(), GraveyardConfig.INSTANCE.GRAVE_SEPARATION, GraveyardConfig.INSTANCE.GRAVE_SPACING, GraveyardConfig.INSTANCE.GRAVE_SALT, true);
-        setupMapSpacingAndLand(SMALL_DESERT_GRAVE.get(), GraveyardConfig.INSTANCE.DESERT_GRAVE_SEPARATION, GraveyardConfig.INSTANCE.DESERT_GRAVE_SPACING, GraveyardConfig.INSTANCE.DESERT_GRAVE_SALT, true);
-        setupMapSpacingAndLand(SMALL_SAVANNA_GRAVE.get(), GraveyardConfig.INSTANCE.SAVANNA_GRAVE_SEPARATION, GraveyardConfig.INSTANCE.SAVANNA_GRAVE_SPACING, GraveyardConfig.INSTANCE.SAVANNA_GRAVE_SALT, true);
-        setupMapSpacingAndLand(SMALL_MOUNTAIN_GRAVE.get(), GraveyardConfig.INSTANCE.MOUNTAIN_GRAVE_SEPARATION, GraveyardConfig.INSTANCE.MOUNTAIN_GRAVE_SPACING, GraveyardConfig.INSTANCE.MOUNTAIN_GRAVE_SALT, true);
-        setupMapSpacingAndLand(MUSHROOM_GRAVE.get(), GraveyardConfig.INSTANCE.MUSHROOM_GRAVE_SEPARATION, GraveyardConfig.INSTANCE.MUSHROOM_GRAVE_SPACING, GraveyardConfig.INSTANCE.MUSHROOM_GRAVE_SALT, true);
-        setupMapSpacingAndLand(LARGE_BIRCH_TREE.get(), GraveyardConfig.INSTANCE.BIRCH_TREE_SEPARATION, GraveyardConfig.INSTANCE.BIRCH_TREE_SPACING, GraveyardConfig.INSTANCE.BIRCH_TREE_SALT, true);
-        setupMapSpacingAndLand(MEDIUM_WALLED_GRAVEYARD.get(), GraveyardConfig.INSTANCE.MEDIUM_GRAVEYARD_SEPARATION, GraveyardConfig.INSTANCE.MEDIUM_GRAVEYARD_SPACING, GraveyardConfig.INSTANCE.MEDIUM_GRAVEYARD_SALT, true);
-        setupMapSpacingAndLand(LARGE_WALLED_GRAVEYARD.get(), GraveyardConfig.INSTANCE.LARGE_GRAVEYARD_SEPARATION, GraveyardConfig.INSTANCE.LARGE_GRAVEYARD_SPACING, GraveyardConfig.INSTANCE.LARGE_GRAVEYARD_SALT, true);
-        setupMapSpacingAndLand(HAUNTED_HOUSE.get(), GraveyardConfig.INSTANCE.HAUNTED_HOUSE_SEPARATION, GraveyardConfig.INSTANCE.HAUNTED_HOUSE_SPACING, GraveyardConfig.INSTANCE.HAUNTED_HOUSE_SALT, true);
+    public static final DeferredRegister<StructureFeature<?>> DEFERRED_REGISTRY_STRUCTURE = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, TheGraveyard.MOD_ID);
 
 
+    // structure features
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_GRAVEYARD_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("small_graveyard_structure", () -> (new SmallGraveyardStructure(JigsawConfiguration.CODEC)));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_DESERT_GRAVEYARD_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("small_desert_graveyard_structure", () -> (new SmallDesertGraveyardStructure(JigsawConfiguration.CODEC)));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_GRAVE_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("small_grave_structure", () -> (new SmallGraveStructure(JigsawConfiguration.CODEC)));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_DESERT_GRAVE_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("small_desert_grave_structure", () -> (new SmallDesertGraveStructure(JigsawConfiguration.CODEC)));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_SAVANNA_GRAVE_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("small_savanna_grave_structure", () -> (new SmallSavannaGraveStructure(JigsawConfiguration.CODEC)));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_MOUNTAIN_GRAVE_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("small_mountain_grave_structure", () -> (new SmallMountainGraveStructure(JigsawConfiguration.CODEC)));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> MUSHROOM_GRAVE_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("mushroom_grave_structure", () -> (new MushroomGraveStructure(JigsawConfiguration.CODEC)));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> MEMORIAL_TREE_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("memorial_tree_structure", () -> (new MemorialTreeStructure(JigsawConfiguration.CODEC)));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> MEDIUM_GRAVEYARD_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("medium_graveyard_structure", () -> (new MediumGraveyardStructure(JigsawConfiguration.CODEC)));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> LARGE_GRAVEYARD_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("large_graveyard_structure", () -> (new LargeGraveyardStructure(JigsawConfiguration.CODEC)));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> HAUNTED_HOUSE_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("haunted_house_structure", () -> (new HauntedHouseStructure(JigsawConfiguration.CODEC)));
+
+
+
+    public static void setupStructures() {
+        setupMapSpacingAndLand(MEDIUM_GRAVEYARD_STRUCTURE.get(), new StructureFeatureConfiguration(18, 16, 1690192399), true);
+        setupMapSpacingAndLand(SMALL_GRAVEYARD_STRUCTURE.get(), new StructureFeatureConfiguration(20, 18, 240451934), true);
+        setupMapSpacingAndLand(LARGE_GRAVEYARD_STRUCTURE.get(), new StructureFeatureConfiguration(12, 10, 304812394), true);
+        setupMapSpacingAndLand(MUSHROOM_GRAVE_STRUCTURE.get(), new StructureFeatureConfiguration(24, 18, 379123039), true);
+        setupMapSpacingAndLand(HAUNTED_HOUSE_STRUCTURE.get(), new StructureFeatureConfiguration(25, 20, 451235912), true);
+        setupMapSpacingAndLand(MEMORIAL_TREE_STRUCTURE.get(), new StructureFeatureConfiguration(14, 12, 529239621), true);
+        setupMapSpacingAndLand(SMALL_DESERT_GRAVEYARD_STRUCTURE.get(), new StructureFeatureConfiguration(32, 28, 598017285), true);
+        setupMapSpacingAndLand(SMALL_GRAVE_STRUCTURE.get(), new StructureFeatureConfiguration(12, 8, 661903018), true);
+        setupMapSpacingAndLand(SMALL_DESERT_GRAVE_STRUCTURE.get(), new StructureFeatureConfiguration(20, 16, 681236914), true);
+        setupMapSpacingAndLand(SMALL_SAVANNA_GRAVE_STRUCTURE.get(), new StructureFeatureConfiguration(12, 8, 709787761), true);
+        setupMapSpacingAndLand(SMALL_MOUNTAIN_GRAVE_STRUCTURE.get(), new StructureFeatureConfiguration(12, 8, 725689810), true);
+    }
+
+    public static void initGenerators() {
+        // link to the structure pools
+        MediumGraveyardStructure.MediumGraveyardGenerator.init();
+        SmallGraveyardStructure.SmallGraveyardGenerator.init();
+        LargeGraveyardStructure.LargeGraveyardGenerator.init();
+        MushroomGraveStructure.MushroomGraveGenerator.init();
+        HauntedHouseStructure.HauntedHouseGenerator.init();
+        MemorialTreeStructure.MemorialTreeGenerator.init();
+        SmallDesertGraveyardStructure.SmallDesertGraveyardGenerator.init();
+        SmallGraveStructure.SmallGraveGenerator.init();
+        SmallDesertGraveStructure.SmallDesertGraveGenerator.init();
+        SmallSavannaGraveStructure.SmallSavannaGraveGenerator.init();
+        SmallMountainGraveStructure.SmallMountainGraveGenerator.init();
     }
 
 
-    public static <F extends Structure<?>> void setupMapSpacingAndLand(F structure, int separation, int spacing, int salt, boolean transformSurroundingLand) {
+    public static <F extends StructureFeature<?>> void setupMapSpacingAndLand(F structure, StructureFeatureConfiguration structureFeatureConfiguration, boolean transformSurroundingLand) {
         MOD_STRUCTURES.add(structure);
-        setupMapSpacingAndLand(structure, new StructureSeparationSettings(spacing, separation, salt), transformSurroundingLand);
-    }
-
-    public static <F extends Structure<?>> void setupMapSpacingAndLand(F structure, StructureSeparationSettings structureSeparationSettings, boolean transformSurroundingLand) {
-
-        Structure.STRUCTURES_REGISTRY.put(structure.getRegistryName().toString(), structure);
+        StructureFeature.STRUCTURES_REGISTRY.put(structure.getRegistryName().toString(), structure);
 
         if (transformSurroundingLand) {
-            Structure.NOISE_AFFECTING_FEATURES = ImmutableList.<Structure<?>>builder()
-                            .addAll(Structure.NOISE_AFFECTING_FEATURES)
+            StructureFeature.NOISE_AFFECTING_FEATURES =
+                    ImmutableList.<StructureFeature<?>>builder()
+                            .addAll(StructureFeature.NOISE_AFFECTING_FEATURES)
                             .add(structure)
                             .build();
         }
 
-
-        DimensionStructuresSettings.DEFAULTS =
-                ImmutableMap.<Structure<?>, StructureSeparationSettings>builder()
-                        .putAll(DimensionStructuresSettings.DEFAULTS)
-                        .put(structure, structureSeparationSettings)
+        StructureSettings.DEFAULTS =
+                ImmutableMap.<StructureFeature<?>, StructureFeatureConfiguration>builder()
+                        .putAll(StructureSettings.DEFAULTS)
+                        .put(structure, structureFeatureConfiguration)
                         .build();
 
-        WorldGenRegistries.NOISE_GENERATOR_SETTINGS.entrySet().forEach(settings -> {
-            Map<Structure<?>, StructureSeparationSettings> structureMap = settings.getValue().structureSettings().structureConfig();
+        BuiltinRegistries.NOISE_GENERATOR_SETTINGS.entrySet().forEach(settings -> {
+            Map<StructureFeature<?>, StructureFeatureConfiguration> structureMap = settings.getValue().structureSettings().structureConfig();
 
-
-            if (structureMap instanceof ImmutableMap) {
-                Map<Structure<?>, StructureSeparationSettings> tempMap = new HashMap<>(structureMap);
-                tempMap.put(structure, structureSeparationSettings);
+            if (structureMap instanceof ImmutableMap){
+                Map<StructureFeature<?>, StructureFeatureConfiguration> tempMap = new HashMap<>(structureMap);
+                tempMap.put(structure, structureFeatureConfiguration);
                 settings.getValue().structureSettings().structureConfig = tempMap;
             } else {
-                structureMap.put(structure, structureSeparationSettings);
+                structureMap.put(structure, structureFeatureConfiguration);
             }
         });
     }
+
 
 
 }

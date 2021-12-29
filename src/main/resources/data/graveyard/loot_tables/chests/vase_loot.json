@@ -43,13 +43,13 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "graveyard:tg_moss_block"
+          "weight": 20,
+          "name": "minecraft:moss_block"
         },
         {
           "type": "minecraft:item",
-          "weight": 20,
-          "name": "minecraft:wither_rose"
+          "weight": 10,
+          "name": "minecraft:glow_berries"
         },
         {
           "type": "minecraft:item",
@@ -65,7 +65,23 @@
               "add": false
             }
           ],
-          "name": "minecraft:emerald"
+          "name": "minecraft:amethyst_shard"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2.0,
+                "max": 3.0
+              },
+              "add": false
+            }
+          ],
+          "name": "minecraft:copper_ingot"
         },
         {
           "type": "minecraft:item",

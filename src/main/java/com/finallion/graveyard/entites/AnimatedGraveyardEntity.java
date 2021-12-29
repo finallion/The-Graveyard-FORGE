@@ -1,42 +1,41 @@
 package com.finallion.graveyard.entites;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.monster.EndermanEntity;
-import net.minecraft.entity.monster.EndermiteEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.RangedInteger;
-import net.minecraft.util.TickRangeConverter;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.TimeUtil;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Predicate;
 
-public class AnimatedGraveyardEntity extends CreatureEntity implements IAngerable {
+public class AnimatedGraveyardEntity extends Monster implements NeutralMob {
     private static final UUID SPEED_MODIFIER_ATTACKING_UUID = UUID.fromString("020E0DFB-87AE-4653-9556-831010E291A0");
     private static final AttributeModifier SPEED_MODIFIER_ATTACKING = new AttributeModifier(SPEED_MODIFIER_ATTACKING_UUID, "Attacking speed boost", (double)0.15F, AttributeModifier.Operation.ADDITION);
-    private static final DataParameter<Boolean> DATA_CREEPY = EntityDataManager.defineId(AnimatedGraveyardEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> DATA_STARED_AT = EntityDataManager.defineId(AnimatedGraveyardEntity.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Byte> ANIMATION_MOVE_STATE = EntityDataManager.defineId(AnimatedGraveyardEntity.class, DataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> DATA_CREEPY = SynchedEntityData.defineId(AnimatedGraveyardEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_STARED_AT = SynchedEntityData.defineId(AnimatedGraveyardEntity.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Byte> ANIMATION_MOVE_STATE = SynchedEntityData.defineId(AnimatedGraveyardEntity.class, EntityDataSerializers.BYTE);
     private int lastStareSound = Integer.MIN_VALUE;
     private int targetChangeTime;
-    private static final RangedInteger PERSISTENT_ANGER_TIME = TickRangeConverter.rangeOfSeconds(20, 39);
+    private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(20, 39);
     private int remainingPersistentAngerTime;
     private UUID persistentAngerTarget;
 
 
-    protected AnimatedGraveyardEntity(EntityType<? extends CreatureEntity> entityType, World world) {
+    protected AnimatedGraveyardEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -56,7 +55,7 @@ public class AnimatedGraveyardEntity extends CreatureEntity implements IAngerabl
     }
 
     public void startPersistentAngerTimer() {
-        this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.randomValue(this.random));
+        this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
     }
 
     public void setRemainingPersistentAngerTime(int p_230260_1_) {
@@ -75,21 +74,23 @@ public class AnimatedGraveyardEntity extends CreatureEntity implements IAngerabl
         return this.persistentAngerTarget;
     }
 
-    public void addAdditionalSaveData(CompoundNBT p_213281_1_) {
-        super.addAdditionalSaveData(p_213281_1_);
-        this.addPersistentAngerSaveData(p_213281_1_);
+
+    public void addAdditionalSaveData(CompoundTag p_32520_) {
+        super.addAdditionalSaveData(p_32520_);
+        this.addPersistentAngerSaveData(p_32520_);
     }
 
-    public void readAdditionalSaveData(CompoundNBT p_70037_1_) {
-        super.readAdditionalSaveData(p_70037_1_);
-        if(!level.isClientSide) //FORGE: allow this entity to be read from nbt on client. (Fixes MC-189565)
-            this.readPersistentAngerSaveData((ServerWorld)this.level, p_70037_1_);
+    public void readAdditionalSaveData(CompoundTag p_32511_) {
+        super.readAdditionalSaveData(p_32511_);
+        if(!level.isClientSide) {
+            this.readPersistentAngerSaveData(this.level, p_32511_);
+        }
     }
 
 
     public void aiStep() {
         if (!this.level.isClientSide) {
-            this.updatePersistentAnger((ServerWorld)this.level, true);
+            this.updatePersistentAnger((ServerLevel) this.level, true);
         }
 
         super.aiStep();
@@ -104,22 +105,23 @@ public class AnimatedGraveyardEntity extends CreatureEntity implements IAngerabl
         return this.remainingPersistentAngerTime > 0;
     }
 
-    public void setTarget(@Nullable LivingEntity p_70624_1_) {
-        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-        if (p_70624_1_ == null) {
+
+    public void setTarget(@Nullable LivingEntity p_32537_) {
+        AttributeInstance attributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (p_32537_ == null) {
             this.targetChangeTime = 0;
             this.entityData.set(DATA_CREEPY, false);
             this.entityData.set(DATA_STARED_AT, false);
-            modifiableattributeinstance.removeModifier(SPEED_MODIFIER_ATTACKING);
+            attributeinstance.removeModifier(SPEED_MODIFIER_ATTACKING);
         } else {
             this.targetChangeTime = this.tickCount;
             this.entityData.set(DATA_CREEPY, true);
-            if (!modifiableattributeinstance.hasModifier(SPEED_MODIFIER_ATTACKING)) {
-                modifiableattributeinstance.addTransientModifier(SPEED_MODIFIER_ATTACKING);
+            if (!attributeinstance.hasModifier(SPEED_MODIFIER_ATTACKING)) {
+                attributeinstance.addTransientModifier(SPEED_MODIFIER_ATTACKING);
             }
         }
 
-        super.setTarget(p_70624_1_);
+        super.setTarget(p_32537_); //Forge: Moved down to allow event handlers to write data manager values.
     }
 
 
