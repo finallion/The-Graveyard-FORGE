@@ -53,7 +53,7 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
     protected static final DataParameter<Byte> VARIANT = EntityDataManager.defineId(BaseGhoulEntity.class, DataSerializers.BYTE);
     private AnimationFactory factory = new AnimationFactory(this);
     private static boolean isInRange = false;
-    private static final double ATTACK_RANGE = 2.0D;
+    private static final double ATTACK_RANGE = 4.5D;
     //private TargetPredicate targetPredicate = TargetPredicate.createAttackable().setBaseMaxDistance(25.0D).ignoreVisibility();
     private EntityPredicate targetPredicate = (new EntityPredicate()).range(25.0D).allowUnseeable();
 
@@ -114,7 +114,7 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
 
     private void isInAttackDistance() {
         if (this.getTarget() != null) {
-            if (this.getTarget().distanceToSqr(this) > 4.5D) {
+            if (this.getTarget().distanceToSqr(this) > ATTACK_RANGE) {
                 isInRange = false;
                 setState(ANIMATION_RAGE);
             }
@@ -131,11 +131,11 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
 
         // getTarget is useless because it returns sometimes null, even when the mob is tracking
         if (player != null) {
-            return !(this.distanceTo(player) < 4.5D);
+            return !(this.distanceTo(player) < ATTACK_RANGE);
         } else if (villager != null) {
-            return !(this.distanceTo(villager) < 4.5D);
+            return !(this.distanceTo(villager) < ATTACK_RANGE);
         } else if (ironGolem != null) {
-            return !(this.distanceTo(ironGolem) < 4.5D);
+            return !(this.distanceTo(ironGolem) < ATTACK_RANGE);
         }
 
         return true;
