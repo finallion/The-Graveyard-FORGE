@@ -16,6 +16,9 @@ public class CommonConfig {
 
 
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBiomes;
+    public final ForgeConfigSpec.BooleanValue enableHorde;
+    public final ForgeConfigSpec.IntValue sizeHorde;
+    public final ForgeConfigSpec.IntValue ticksUntilSpawnHorde;
 
 
     public CommonConfig(ForgeConfigSpec.Builder builder) {
@@ -41,6 +44,11 @@ public class CommonConfig {
 
         builder.pop();
 
+        builder.push("The Graveyard - Horde Config");
+        this.enableHorde = builder.comment("Enables large Graveyard mob groups to spawn: ").define("horde.generate", true);
+        this.sizeHorde = builder.comment("Set the size of the horde: ").defineInRange("horde.size", 40, 0, 200);
+        this.ticksUntilSpawnHorde = builder.comment("Set the ticks until the next horde spawn attempt: ").defineInRange("horde.ticksUntilSpawnHorde", 12000, 1, 1000000);
+        builder.pop();
     }
 
 

@@ -1,18 +1,22 @@
 package com.finallion.graveyard.entities.horde;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.TargetPredicate;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.PatrollingMonster;
+import net.minecraft.world.entity.raid.Raid;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -20,77 +24,74 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class GraveyardHordeEntity extends HostileEntity {
+public class GraveyardHordeEntity extends Monster {
+    @javax.annotation.Nullable
     private BlockPos patrolTarget;
-    private boolean patrolling;
     private boolean patrolLeader;
+    private boolean patrolling;
 
-    protected GraveyardHordeEntity(EntityType<? extends HostileEntity> entityType, World world) {
+    protected GraveyardHordeEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
 
-    protected void initGoals() {
-        super.initGoals();
-        this.goalSelector.add(2, new PatrolApproachGoal(this, 10.0F));
-        this.goalSelector.add(4, new PatrolGoal(this, 1.1D, 1.0D));
+    protected void registerGoals() {
+        super.registerGoals();
+        //this.goalSelector.add(2, new PatrolApproachGoal(this, 10.0F));
+        this.goalSelector.addGoal(4, new LongDistancePatrolGoal<>(this, 1.1D, 1.0D));
     }
 
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
+    public void addAdditionalSaveData(CompoundTag p_33063_) {
+        super.addAdditionalSaveData(p_33063_);
         if (this.patrolTarget != null) {
-            nbt.put("PatrolTarget", NbtHelper.fromBlockPos(this.patrolTarget));
+            p_33063_.put("PatrolTarget", NbtUtils.writeBlockPos(this.patrolTarget));
         }
 
-        nbt.putBoolean("PatrolLeader", this.patrolLeader);
-        nbt.putBoolean("Patrolling", this.patrolling);
+        p_33063_.putBoolean("PatrolLeader", this.patrolLeader);
+        p_33063_.putBoolean("Patrolling", this.patrolling);
     }
 
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
-        if (nbt.contains("PatrolTarget")) {
-            this.patrolTarget = NbtHelper.toBlockPos(nbt.getCompound("PatrolTarget"));
+    public void readAdditionalSaveData(CompoundTag p_33055_) {
+        super.readAdditionalSaveData(p_33055_);
+        if (p_33055_.contains("PatrolTarget")) {
+            this.patrolTarget = NbtUtils.readBlockPos(p_33055_.getCompound("PatrolTarget"));
         }
-        this.patrolLeader = nbt.getBoolean("PatrolLeader");
-        this.patrolling = nbt.getBoolean("Patrolling");
+
+        this.patrolLeader = p_33055_.getBoolean("PatrolLeader");
+        this.patrolling = p_33055_.getBoolean("Patrolling");
     }
 
-    public double getHeightOffset() {
+
+    public double getMyRidingOffset() {
         return -0.45D;
     }
 
-    public boolean canLead() {
+    public boolean canBeLeader() {
         return true;
     }
 
-    @Nullable
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        if (spawnReason != SpawnReason.PATROL && spawnReason != SpawnReason.EVENT && spawnReason != SpawnReason.STRUCTURE && this.random.nextFloat() < 0.06F && this.canLead()) {
+
+    @javax.annotation.Nullable
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_33049_, DifficultyInstance p_33050_, MobSpawnType p_33051_, @javax.annotation.Nullable SpawnGroupData p_33052_, @javax.annotation.Nullable CompoundTag p_33053_) {
+        if (p_33051_ != MobSpawnType.PATROL && p_33051_ != MobSpawnType.EVENT && p_33051_ != MobSpawnType.STRUCTURE && this.random.nextFloat() < 0.06F && this.canBeLeader()) {
             this.patrolLeader = true;
         }
 
-        if (spawnReason == SpawnReason.PATROL) {
+        if (p_33051_ == MobSpawnType.PATROL) {
             this.patrolling = true;
         }
 
-        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+        return super.finalizeSpawn(p_33049_, p_33050_, p_33051_, p_33052_, p_33053_);
     }
 
-    public boolean canImmediatelyDespawn(double distanceSquared) {
-        return !this.patrolling || distanceSquared > 16384.0D;
+
+    public boolean removeWhenFarAway(double p_33073_) {
+        return !this.patrolling || p_33073_ > 16384.0D;
     }
 
-    public void setPatrolTarget(BlockPos targetPos) {
-        this.patrolTarget = targetPos;
+
+    public void setPatrolTarget(BlockPos p_33071_) {
+        this.patrolTarget = p_33071_;
         this.patrolling = true;
-    }
-
-    public void setPatrolLeader(boolean patrolLeader) {
-        this.patrolLeader = patrolLeader;
-        this.patrolling = true;
-    }
-
-    public boolean isPatrolLeader() {
-        return this.patrolLeader;
     }
 
     public BlockPos getPatrolTarget() {
@@ -101,41 +102,50 @@ public class GraveyardHordeEntity extends HostileEntity {
         return this.patrolTarget != null;
     }
 
-    public void setRandomPatrolTarget() {
-        this.patrolTarget = this.getBlockPos().add(-500 + this.random.nextInt(1000), 0, -500 + this.random.nextInt(1000));
+    public void setPatrolLeader(boolean p_33076_) {
+        this.patrolLeader = p_33076_;
         this.patrolling = true;
     }
 
-    protected void setPatrolling(boolean patrolling) {
-        this.patrolling = patrolling;
+    public boolean isPatrolLeader() {
+        return this.patrolLeader;
     }
 
-    public boolean hasNoRaid() {
+    public boolean canJoinPatrol() {
         return true;
     }
 
-    protected boolean isRaidCenterSet() {
+
+    public void findPatrolTarget() {
+        this.patrolTarget = this.blockPosition().offset(-500 + this.random.nextInt(1000), 0, -500 + this.random.nextInt(1000));
+        this.patrolling = true;
+    }
+
+    protected boolean isPatrolling() {
         return this.patrolling;
     }
 
-    public static class PatrolGoal<T extends GraveyardHordeEntity> extends Goal {
-        private static final int field_30474 = 200;
-        private final T entity;
-        private final double leaderSpeed;
-        private final double followSpeed;
-        private long nextPatrolSearchTime;
+    protected void setPatrolling(boolean p_33078_) {
+        this.patrolling = p_33078_;
+    }
 
-        public PatrolGoal(T entity, double leaderSpeed, double followSpeed) {
-            this.entity = entity;
-            this.leaderSpeed = leaderSpeed;
-            this.followSpeed = followSpeed;
-            this.nextPatrolSearchTime = -1L;
-            this.setControls(EnumSet.of(Control.MOVE));
+    public static class LongDistancePatrolGoal<T extends GraveyardHordeEntity> extends Goal {
+        private final T mob;
+        private final double speedModifier;
+        private final double leaderSpeedModifier;
+        private long cooldownUntil;
+
+        public LongDistancePatrolGoal(T p_33084_, double p_33085_, double p_33086_) {
+            this.mob = p_33084_;
+            this.speedModifier = p_33085_;
+            this.leaderSpeedModifier = p_33086_;
+            this.cooldownUntil = -1L;
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
-        public boolean canStart() {
-            boolean bl = this.entity.world.getTime() < this.nextPatrolSearchTime;
-            return this.entity.isRaidCenterSet() && this.entity.getTarget() == null && !this.entity.hasPassengers() && this.entity.hasPatrolTarget() && !bl;
+        public boolean canUse() {
+            boolean flag = this.mob.level.getGameTime() < this.cooldownUntil;
+            return this.mob.isPatrolling() && this.mob.getTarget() == null && !this.mob.isVehicle() && this.mob.hasPatrolTarget() && !flag;
         }
 
         public void start() {
@@ -145,30 +155,28 @@ public class GraveyardHordeEntity extends HostileEntity {
         }
 
         public void tick() {
-            boolean bl = this.entity.isPatrolLeader();
-            EntityNavigation entityNavigation = this.entity.getNavigation();
-            if (entityNavigation.isIdle()) {
-                List<GraveyardHordeEntity> list = this.findPatrolTargets();
-                if (this.entity.isRaidCenterSet() && list.isEmpty()) {
-                    this.entity.setPatrolling(false);
-                } else if (bl && this.entity.getPatrolTarget().isWithinDistance(this.entity.getPos(), 10.0D)) {
-                    this.entity.setRandomPatrolTarget();
+            boolean flag = this.mob.isPatrolLeader();
+            PathNavigation pathnavigation = this.mob.getNavigation();
+            if (pathnavigation.isDone()) {
+                List<GraveyardHordeEntity> list = this.findPatrolCompanions();
+                if (this.mob.isPatrolling() && list.isEmpty()) {
+                    this.mob.setPatrolling(false);
+                } else if (flag && this.mob.getPatrolTarget().closerThan(this.mob.position(), 10.0D)) {
+                    this.mob.findPatrolTarget();
                 } else {
-                    Vec3d vec3d = Vec3d.ofBottomCenter(this.entity.getPatrolTarget());
-                    Vec3d vec3d2 = this.entity.getPos();
-                    Vec3d vec3d3 = vec3d2.subtract(vec3d);
-                    vec3d = vec3d3.rotateY(90.0F).multiply(0.4D).add(vec3d);
-                    Vec3d vec3d4 = vec3d.subtract(vec3d2).normalize().multiply(10.0D).add(vec3d2);
-                    BlockPos blockPos = new BlockPos(vec3d4);
-                    blockPos = this.entity.world.getTopPosition(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockPos);
-                    if (!entityNavigation.startMovingTo((double)blockPos.getX(), (double)blockPos.getY(), (double)blockPos.getZ(), bl ? this.followSpeed : this.leaderSpeed)) {
-                        this.wander();
-                        this.nextPatrolSearchTime = this.entity.world.getTime() + 200L;
-                    } else if (bl) {
-                        Iterator var9 = list.iterator();
-                        while(var9.hasNext()) {
-                            GraveyardHordeEntity patrolEntity = (GraveyardHordeEntity)var9.next();
-                            patrolEntity.setPatrolTarget(blockPos);
+                    Vec3 vec3 = Vec3.atBottomCenterOf(this.mob.getPatrolTarget());
+                    Vec3 vec31 = this.mob.position();
+                    Vec3 vec32 = vec31.subtract(vec3);
+                    vec3 = vec32.yRot(90.0F).scale(0.4D).add(vec3);
+                    Vec3 vec33 = vec3.subtract(vec31).normalize().scale(10.0D).add(vec31);
+                    BlockPos blockpos = new BlockPos(vec33);
+                    blockpos = this.mob.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, blockpos);
+                    if (!pathnavigation.moveTo((double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ(), flag ? this.leaderSpeedModifier : this.speedModifier)) {
+                        this.moveRandomly();
+                        this.cooldownUntil = this.mob.level.getGameTime() + 200L;
+                    } else if (flag) {
+                        for(GraveyardHordeEntity patrollingmonster : list) {
+                            patrollingmonster.setPatrolTarget(blockpos);
                         }
                     }
                 }
@@ -176,86 +184,20 @@ public class GraveyardHordeEntity extends HostileEntity {
 
         }
 
-        private List<GraveyardHordeEntity> findPatrolTargets() {
-            return this.entity.world.getEntitiesByClass(GraveyardHordeEntity.class, this.entity.getBoundingBox().expand(16.0D), (patrolEntity) -> {
-                return patrolEntity.hasNoRaid() && !patrolEntity.isPartOf(this.entity);
+
+        private List<GraveyardHordeEntity> findPatrolCompanions() {
+            return this.mob.level.getEntitiesOfClass(GraveyardHordeEntity.class, this.mob.getBoundingBox().inflate(16.0D), (p_33089_) -> {
+                return p_33089_.canJoinPatrol() && !p_33089_.is(this.mob);
             });
         }
 
-        private boolean wander() {
-            Random random = this.entity.getRandom();
-            BlockPos blockPos = this.entity.world.getTopPosition(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, this.entity.getBlockPos().add(-8 + random.nextInt(16), 0, -8 + random.nextInt(16)));
-            return this.entity.getNavigation().startMovingTo((double)blockPos.getX(), (double)blockPos.getY(), (double)blockPos.getZ(), this.leaderSpeed);
+        private boolean moveRandomly() {
+            Random random = this.mob.getRandom();
+            BlockPos blockpos = this.mob.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, this.mob.blockPosition().offset(-8 + random.nextInt(16), 0, -8 + random.nextInt(16)));
+            return this.mob.getNavigation().moveTo((double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ(), this.speedModifier);
         }
     }
 
-    protected class PatrolApproachGoal extends Goal {
-        private final GraveyardHordeEntity hordeEntity;
-        private final float squaredDistance;
-        public final TargetPredicate closeRaiderPredicate = TargetPredicate.createNonAttackable().setBaseMaxDistance(8.0D).ignoreVisibility().ignoreDistanceScalingFactor();
-
-        public PatrolApproachGoal(GraveyardHordeEntity hordeEntity, float distance) {
-            this.hordeEntity = hordeEntity;
-            this.squaredDistance = distance * distance;
-            this.setControls(EnumSet.of(Control.MOVE, Control.LOOK));
-        }
-
-        public boolean canStart() {
-            LivingEntity livingEntity = this.hordeEntity.getAttacker();
-            return this.hordeEntity.isRaidCenterSet() && this.hordeEntity.getTarget() != null && !this.hordeEntity.isAttacking() && (livingEntity == null || livingEntity.getType() != EntityType.PLAYER);
-        }
-
-        public void start() {
-            super.start();
-            this.hordeEntity.getNavigation().stop();
-            List<GraveyardHordeEntity> list = this.hordeEntity.world.getTargets(GraveyardHordeEntity.class, this.closeRaiderPredicate, this.hordeEntity, this.hordeEntity.getBoundingBox().expand(8.0D, 8.0D, 8.0D));
-            Iterator var2 = list.iterator();
-
-            while(var2.hasNext()) {
-                GraveyardHordeEntity hordeEntityEntity = (GraveyardHordeEntity)var2.next();
-                hordeEntityEntity.setTarget(this.hordeEntity.getTarget());
-            }
-
-        }
-
-        public void stop() {
-            super.stop();
-            LivingEntity livingEntity = this.hordeEntity.getTarget();
-            if (livingEntity != null) {
-                List<GraveyardHordeEntity> list = this.hordeEntity.world.getTargets(GraveyardHordeEntity.class, this.closeRaiderPredicate, this.hordeEntity, this.hordeEntity.getBoundingBox().expand(8.0D, 8.0D, 8.0D));
-                Iterator var3 = list.iterator();
-
-                while(var3.hasNext()) {
-                    GraveyardHordeEntity hordeEntityEntity = (GraveyardHordeEntity)var3.next();
-                    hordeEntityEntity.setTarget(livingEntity);
-                    hordeEntityEntity.setAttacking(true);
-                }
-
-                this.hordeEntity.setAttacking(true);
-            }
-
-        }
-
-        public boolean shouldRunEveryTick() {
-            return true;
-        }
-
-        public void tick() {
-            LivingEntity livingEntity = this.hordeEntity.getTarget();
-            if (livingEntity != null) {
-                if (this.hordeEntity.squaredDistanceTo(livingEntity) > (double)this.squaredDistance) {
-                    this.hordeEntity.getLookControl().lookAt(livingEntity, 30.0F, 30.0F);
-                    if (this.hordeEntity.random.nextInt(50) == 0) {
-                        this.hordeEntity.playAmbientSound();
-                    }
-                } else {
-                    this.hordeEntity.setAttacking(true);
-                }
-
-                super.tick();
-            }
-        }
-    }
 
 
 

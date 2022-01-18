@@ -1,10 +1,7 @@
 package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.entities.AcolyteEntity;
-import com.finallion.graveyard.entities.BaseGhoulEntity;
-import com.finallion.graveyard.entities.ReaperEntity;
-import com.finallion.graveyard.entities.SkeletonCreeper;
+import com.finallion.graveyard.entities.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -28,6 +25,10 @@ public class TGEntities {
     public static final EntityType<AcolyteEntity> ACOLYTE = createEntity("acolyte", EntityType.Builder.of(AcolyteEntity::new, MobCategory.MONSTER).sized(0.6F, 1.9F).build(TheGraveyard.MOD_ID + ":acolyte"));
     public static final EntityType<ReaperEntity> REAPER = createEntity("reaper", EntityType.Builder.of(ReaperEntity::new, MobCategory.MONSTER).sized(0.5F, 1.4F).build(TheGraveyard.MOD_ID + ":reaper"));
     public static final EntityType<BaseGhoulEntity> GHOUL = createEntity("ghoul", EntityType.Builder.of(BaseGhoulEntity::new, MobCategory.MONSTER).sized(0.8F, 2.1F).build(TheGraveyard.MOD_ID + ":ghoul")); // if hitbox is set to 0.9 the ghoul wont move
+    public static final EntityType<NightmareEntity> NIGHTMARE = createEntity("nightmare", EntityType.Builder.of(NightmareEntity::new, MobCategory.MONSTER).sized(0.6F, 2.6F).build(TheGraveyard.MOD_ID + ":nightmare"));
+    public static final EntityType<RevenantEntity> REVENANT = createEntity("revenant", EntityType.Builder.of(RevenantEntity::new, MobCategory.MONSTER).sized(0.6F, 1.9F).build(TheGraveyard.MOD_ID + ":revenant"));
+
+
 
     public static <E extends Entity, ET extends EntityType<E>> ET createEntity(String id, ET entityType) {
         entityType.setRegistryName(new ResourceLocation(TheGraveyard.MOD_ID, id));
@@ -46,6 +47,8 @@ public class TGEntities {
         event.put(ACOLYTE, AcolyteEntity.createAttributes().build());
         event.put(GHOUL, BaseGhoulEntity.createAttributes().build());
         event.put(REAPER, ReaperEntity.createAttributes().build());
+        event.put(NIGHTMARE, NightmareEntity.createAttributes().build());
+        event.put(REVENANT, RevenantEntity.createAttributes().build());
     }
 
 
@@ -54,6 +57,8 @@ public class TGEntities {
         SpawnPlacements.register(GHOUL, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
         SpawnPlacements.register(ACOLYTE, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkAnyLightMonsterSpawnRules);
         SpawnPlacements.register(REAPER, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
+        SpawnPlacements.register(NIGHTMARE, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
+        SpawnPlacements.register(REVENANT, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
     }
 
 
