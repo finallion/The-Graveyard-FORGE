@@ -1,8 +1,11 @@
 package com.finallion.graveyard;
 
 import com.finallion.graveyard.client.TheGraveyardClient;
+import com.finallion.graveyard.config.GraveyardConfig;
+import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.events.ServerEvents;
 import com.finallion.graveyard.init.*;
+import com.finallion.graveyard.world.structures.AbstractGraveyardStructure;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
@@ -29,6 +32,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -39,6 +43,7 @@ import software.bernie.geckolib3.GeckoLib;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -60,6 +65,7 @@ public class TheGraveyard {
         forgeBus.addListener(EventPriority.NORMAL, ServerEvents::setupStructureSpawns);
         //MinecraftForge.EVENT_BUS.register(new ServerEvents());
 
+        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC);
 
         TGStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
         TGTileEntities.TILE_ENTITIES.register(modEventBus);
@@ -86,65 +92,46 @@ public class TheGraveyard {
 
     private static Method GETCODEC_METHOD;
     public void addDimensionalSpacing(final WorldEvent.Load event) {
-        if(event.getWorld() instanceof ServerLevel serverLevel){
+        if (event.getWorld() instanceof ServerLevel serverLevel) {
             ChunkGenerator chunkGenerator = serverLevel.getChunkSource().getGenerator();
 
             if (chunkGenerator instanceof FlatLevelSource && serverLevel.dimension().equals(Level.OVERWORLD)) {
                 return;
             }
 
+
             StructureSettings worldStructureConfig = chunkGenerator.getSettings();
 
             HashMap<StructureFeature<?>, HashMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>> STStructureToMultiMap = new HashMap<>();
 
-            for(Map.Entry<ResourceKey<Biome>, Biome> biomeEntry : serverLevel.registryAccess().ownedRegistryOrThrow(Registry.BIOME_REGISTRY).entrySet()) {
+            biomeLoop: for (Map.Entry<ResourceKey<Biome>, Biome> biomeEntry : serverLevel.registryAccess().ownedRegistryOrThrow(Registry.BIOME_REGISTRY).entrySet()) {
                 Biome.BiomeCategory biomeCategory = biomeEntry.getValue().getBiomeCategory();
 
-                if (biomeEntry.getValue().getRegistryName().toString().contains("birch")) {
-                    associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.MEMORIAL_TREE_STRUCTURE_CONFIG, biomeEntry.getKey());
+                ResourceLocation name = biomeEntry.getValue().getRegistryName();
+
+                if (name == null) {
+                    continue;
                 }
 
-                switch (biomeCategory) {
-                    case PLAINS:
-                        associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.SMALL_GRAVEYARD_STRUCTURE_CONFIG, biomeEntry.getKey());
-                        associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.SMALL_GRAVE_STRUCTURE_CONFIG, biomeEntry.getKey());
-                        break;
-                    case SAVANNA:
-                    case MESA:
-                        associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.SMALL_SAVANNA_GRAVE_STRUCTURE_CONFIG, biomeEntry.getKey());
-                        break;
-                    case MOUNTAIN:
-                    case EXTREME_HILLS:
-                        associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.SMALL_MOUNTAIN_GRAVE_STRUCTURE_CONFIG, biomeEntry.getKey());
-                        break;
-                    case FOREST:
-                        if (!biomeEntry.getValue().getRegistryName().toString().contains("birch") && !biomeEntry.getValue().getRegistryName().toString().contains("dark_forest")) {
-                            associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.MEDIUM_GRAVEYARD_STRUCTURE_CONFIG, biomeEntry.getKey());
+                // check blacklist (mostly river and ocean biomes)
+                for (String biome : GraveyardConfig.COMMON.blacklistedBiomes.get()) {
+                    if (biome.equals(name.toString())) {
+                        continue biomeLoop;
+                    }
+                }
+
+
+                for (StructureFeature<?> structure : TGStructures.MOD_STRUCTURES) {
+                    AbstractGraveyardStructure abstractStructure = (AbstractGraveyardStructure) structure;
+                    StructureConfigEntry structureConfig = abstractStructure.getStructureConfigEntry();
+
+                    // check in config if structure is allowed to generate
+                    if (structureConfig.canGenerate.get()) {
+                        // check the biome blacklist
+                        if (checkBiome(structureConfig.biomeCategories.get(), structureConfig.blacklistedBiomes.get(), name, biomeCategory)) {
+                            associateBiomeToConfiguredStructure(STStructureToMultiMap, abstractStructure.getStructureFeature(), biomeEntry.getKey());
                         }
-                        if (biomeEntry.getValue().getRegistryName().toString().contains("dark_forest")) {
-                            associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.HAUNTED_HOUSE_STRUCTURE_CONFIG, biomeEntry.getKey());
-                            associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.LARGE_GRAVEYARD_STRUCTURE_CONFIG, biomeEntry.getKey());
-                        }
-                        associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.SMALL_GRAVE_STRUCTURE_CONFIG, biomeEntry.getKey());
-                        break;
-                    case TAIGA:
-                        associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.SMALL_GRAVE_STRUCTURE_CONFIG, biomeEntry.getKey());
-                        associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.LARGE_GRAVEYARD_STRUCTURE_CONFIG, biomeEntry.getKey());
-                        break;
-                    case MUSHROOM:
-                    case JUNGLE:
-                        associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.MUSHROOM_GRAVE_STRUCTURE_CONFIG, biomeEntry.getKey());
-                        break;
-                    case DESERT:
-                        associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.SMALL_DESERT_GRAVE_STRUCTURE_CONFIG, biomeEntry.getKey());
-                        associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.SMALL_DESERT_GRAVEYARD_STRUCTURE_CONFIG, biomeEntry.getKey());
-                        break;
-                    case SWAMP:
-                        associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.MUSHROOM_GRAVE_STRUCTURE_CONFIG, biomeEntry.getKey());
-                        associateBiomeToConfiguredStructure(STStructureToMultiMap, TGConfiguredStructures.HAUNTED_HOUSE_STRUCTURE_CONFIG, biomeEntry.getKey());
-                        break;
-                    default:
-                        break;
+                    }
 
                 }
             }
@@ -157,16 +144,14 @@ public class TheGraveyard {
             worldStructureConfig.configuredStructures = tempStructureToMultiMap.build();
 
             try {
-                if(GETCODEC_METHOD == null) GETCODEC_METHOD = ObfuscationReflectionHelper.findMethod(ChunkGenerator.class, "codec");
+                if (GETCODEC_METHOD == null) GETCODEC_METHOD = ObfuscationReflectionHelper.findMethod(ChunkGenerator.class, "codec");
                 ResourceLocation cgRL = Registry.CHUNK_GENERATOR.getKey((Codec<? extends ChunkGenerator>) GETCODEC_METHOD.invoke(chunkGenerator));
-                if(cgRL != null && cgRL.getNamespace().equals("terraforged")) return;
-            }
-            catch(Exception e){
+                if (cgRL != null && cgRL.getNamespace().equals("terraforged")) return;
+            } catch (Exception e) {
                 TheGraveyard.LOGGER.error("Was unable to check if " + serverLevel.dimension().location() + " is using Terraforged's ChunkGenerator.");
             }
 
-            if(chunkGenerator instanceof FlatLevelSource &&
-                    serverLevel.dimension().equals(Level.OVERWORLD)){
+            if (chunkGenerator instanceof FlatLevelSource && serverLevel.dimension().equals(Level.OVERWORLD)) {
                 return;
             }
 
@@ -208,5 +193,26 @@ public class TheGraveyard {
             configuredStructureToBiomeMultiMap.put(configuredStructureFeature, biomeRegistryKey);
         }
     }
+
+
+    private static boolean checkBiome(List<? extends String> allowedBiomeCategories, List<? extends String> blacklistedBiomes, ResourceLocation name, Biome.BiomeCategory category) {
+
+        // if the category of the now checked biome is in the allowed list of the structure and the blacklist is not empty
+        if (allowedBiomeCategories.contains(category.getName()) && !blacklistedBiomes.isEmpty()) {
+            // if the blacklist contains the biome (not category)
+            if (blacklistedBiomes.contains(name.getPath())) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        if (allowedBiomeCategories.contains(category.getName()) && blacklistedBiomes.isEmpty()) {
+            return true;
+        }
+
+        return false;
+    }
+
 
 }

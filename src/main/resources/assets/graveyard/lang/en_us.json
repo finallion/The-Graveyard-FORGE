@@ -13,7 +13,7 @@
   "block.graveyard.tg_dirt": "Dirt",
 
 
-
+  "container.sarcophagus": "Sarcophagus",
   "container.urn": "Urn",
 
   "block.graveyard.white_urn": "White Glazed Urn",
@@ -73,6 +73,8 @@
   "block.graveyard.deepslate_gravestone": "Deepslate Gravestone",
 
   "item.graveyard.bone_dagger": "Bone Dagger",
+  "item.graveyard.sarcophagus": "Sarcophagus",
+  "block.graveyard.sarcophagus": "Sarcophagus",
 
   "entity.graveyard.skeleton_creeper": "Skeleton Creeper",
   "item.graveyard.skeleton_creeper_spawn_egg": "Skeleton Creeper Spawn Egg",
@@ -82,11 +84,14 @@
   "item.graveyard.ghoul_spawn_egg": "Ghoul Spawn Egg",
   "entity.graveyard.reaper": "Reaper",
   "item.graveyard.reaper_spawn_egg": "Reaper Spawn Egg",
+  "entity.graveyard.revenant": "Revenant",
+  "item.graveyard.revenant_spawn_egg": "Revenant Spawn Egg",
+  "entity.graveyard.nightmare": "Nightmare",
+  "item.graveyard.nightmare_spawn_egg": "Nightmare Spawn Egg",
 
   "biome.graveyard.haunted_forest": "Haunted Forest",
   "biome.graveyard.haunted_lakes": "Haunted Lakes",
   "biome.graveyard.eroded_haunted_forest": "Eroded Haunted Forest",
-
 
   "itemGroup.group": "The Graveyard",
   "gravestone.edit": "Edit Gravestone"

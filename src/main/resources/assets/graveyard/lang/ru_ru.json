@@ -13,7 +13,7 @@
   "block.graveyard.tg_dirt": "Земля",
 
 
-
+  "container.sarcophagus": "Sarcophagus",
   "container.urn": "Урна",
 
   "block.graveyard.white_urn": "Белая глазированная урна",
@@ -73,6 +73,8 @@
   "block.graveyard.deepslate_gravestone": "Надгробие из глубинного сланца",
 
   "item.graveyard.bone_dagger": "Костянной кинжал",
+  "item.graveyard.sarcophagus": "Sarcophagus",
+  "block.graveyard.sarcophagus": "Sarcophagus",
 
   "entity.graveyard.skeleton_creeper": "Ползучий скелет",
   "item.graveyard.skeleton_creeper_spawn_egg": "Яйцо призыва Ползучего скелета",
@@ -82,11 +84,14 @@
   "item.graveyard.ghoul_spawn_egg": "Яйцо призыва Гуля",
   "entity.graveyard.reaper": "Жнец душ",
   "item.graveyard.reaper_spawn_egg": "Яйцо призыва Жнеца душ",
+  "entity.graveyard.revenant": "Revenant",
+  "item.graveyard.revenant_spawn_egg": "Revenant Spawn Egg",
+  "entity.graveyard.nightmare": "Nightmare",
+  "item.graveyard.nightmare_spawn_egg": "Nightmare Spawn Egg",
 
   "biome.graveyard.haunted_forest": "Лес с привидениями",
   "biome.graveyard.haunted_lakes": "Озера с привидениями",
   "biome.graveyard.eroded_haunted_forest": "Выветренный лес с привидениями",
-
 
   "itemGroup.group": "The Graveyard",
   "gravestone.edit": "Редактировать надгробие"

@@ -29,32 +29,27 @@ public class TGStructures {
 
 
     // structure features
-    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_GRAVEYARD_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("small_graveyard_structure", () -> (new SmallGraveyardStructure(JigsawConfiguration.CODEC)));
-    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_DESERT_GRAVEYARD_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("small_desert_graveyard_structure", () -> (new SmallDesertGraveyardStructure(JigsawConfiguration.CODEC)));
-    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_GRAVE_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("small_grave_structure", () -> (new SmallGraveStructure(JigsawConfiguration.CODEC)));
-    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_DESERT_GRAVE_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("small_desert_grave_structure", () -> (new SmallDesertGraveStructure(JigsawConfiguration.CODEC)));
-    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_SAVANNA_GRAVE_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("small_savanna_grave_structure", () -> (new SmallSavannaGraveStructure(JigsawConfiguration.CODEC)));
-    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_MOUNTAIN_GRAVE_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("small_mountain_grave_structure", () -> (new SmallMountainGraveStructure(JigsawConfiguration.CODEC)));
-    public static RegistryObject<StructureFeature<JigsawConfiguration>> MUSHROOM_GRAVE_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("mushroom_grave_structure", () -> (new MushroomGraveStructure(JigsawConfiguration.CODEC)));
-    public static RegistryObject<StructureFeature<JigsawConfiguration>> MEMORIAL_TREE_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("memorial_tree_structure", () -> (new MemorialTreeStructure(JigsawConfiguration.CODEC)));
-    public static RegistryObject<StructureFeature<JigsawConfiguration>> MEDIUM_GRAVEYARD_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("medium_graveyard_structure", () -> (new MediumGraveyardStructure(JigsawConfiguration.CODEC)));
-    public static RegistryObject<StructureFeature<JigsawConfiguration>> LARGE_GRAVEYARD_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("large_graveyard_structure", () -> (new LargeGraveyardStructure(JigsawConfiguration.CODEC)));
-    public static RegistryObject<StructureFeature<JigsawConfiguration>> HAUNTED_HOUSE_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("haunted_house_structure", () -> (new HauntedHouseStructure(JigsawConfiguration.CODEC)));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_GRAVEYARD_STRUCTURE = register("small_graveyard_structure", new SmallGraveyardStructure(JigsawConfiguration.CODEC));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_DESERT_GRAVEYARD_STRUCTURE = register("small_desert_graveyard_structure", new SmallDesertGraveyardStructure(JigsawConfiguration.CODEC));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_GRAVE_STRUCTURE = register("small_grave_structure", new SmallGraveStructure(JigsawConfiguration.CODEC));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_DESERT_GRAVE_STRUCTURE = register("small_desert_grave_structure", new SmallDesertGraveStructure(JigsawConfiguration.CODEC));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_SAVANNA_GRAVE_STRUCTURE = register("small_savanna_grave_structure", new SmallSavannaGraveStructure(JigsawConfiguration.CODEC));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_MOUNTAIN_GRAVE_STRUCTURE = register("small_mountain_grave_structure", new SmallMountainGraveStructure(JigsawConfiguration.CODEC));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> MUSHROOM_GRAVE_STRUCTURE = register("mushroom_grave_structure", new MushroomGraveStructure(JigsawConfiguration.CODEC));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> MEMORIAL_TREE_STRUCTURE = register("memorial_tree_structure", new MemorialTreeStructure(JigsawConfiguration.CODEC));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> MEDIUM_GRAVEYARD_STRUCTURE = register("medium_graveyard_structure", new MediumGraveyardStructure(JigsawConfiguration.CODEC));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> LARGE_GRAVEYARD_STRUCTURE = register("large_graveyard_structure", new LargeGraveyardStructure(JigsawConfiguration.CODEC));
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> HAUNTED_HOUSE_STRUCTURE = register("haunted_house_structure", new HauntedHouseStructure(JigsawConfiguration.CODEC));
 
-
+    public static RegistryObject<StructureFeature<JigsawConfiguration>> register(String name, StructureFeature<JigsawConfiguration> structureFeature) {
+        MOD_STRUCTURES.add(structureFeature);
+        return DEFERRED_REGISTRY_STRUCTURE.register(name, () -> structureFeature);
+    }
 
     public static void setupStructures() {
-        setupMapSpacingAndLand(MEDIUM_GRAVEYARD_STRUCTURE.get(), new StructureFeatureConfiguration(18, 16, 1690192399), true);
-        setupMapSpacingAndLand(SMALL_GRAVEYARD_STRUCTURE.get(), new StructureFeatureConfiguration(20, 18, 240451934), true);
-        setupMapSpacingAndLand(LARGE_GRAVEYARD_STRUCTURE.get(), new StructureFeatureConfiguration(12, 10, 304812394), true);
-        setupMapSpacingAndLand(MUSHROOM_GRAVE_STRUCTURE.get(), new StructureFeatureConfiguration(24, 18, 379123039), true);
-        setupMapSpacingAndLand(HAUNTED_HOUSE_STRUCTURE.get(), new StructureFeatureConfiguration(25, 20, 451235912), true);
-        setupMapSpacingAndLand(MEMORIAL_TREE_STRUCTURE.get(), new StructureFeatureConfiguration(14, 12, 529239621), true);
-        setupMapSpacingAndLand(SMALL_DESERT_GRAVEYARD_STRUCTURE.get(), new StructureFeatureConfiguration(32, 28, 598017285), true);
-        setupMapSpacingAndLand(SMALL_GRAVE_STRUCTURE.get(), new StructureFeatureConfiguration(12, 8, 661903018), true);
-        setupMapSpacingAndLand(SMALL_DESERT_GRAVE_STRUCTURE.get(), new StructureFeatureConfiguration(20, 16, 681236914), true);
-        setupMapSpacingAndLand(SMALL_SAVANNA_GRAVE_STRUCTURE.get(), new StructureFeatureConfiguration(12, 8, 709787761), true);
-        setupMapSpacingAndLand(SMALL_MOUNTAIN_GRAVE_STRUCTURE.get(), new StructureFeatureConfiguration(12, 8, 725689810), true);
+        for (StructureFeature<?> structure : MOD_STRUCTURES) {
+            setupMapSpacingAndLand(structure, ((AbstractGraveyardStructure) structure).getStructureFeatureConfiguration(), true);
+        }
     }
 
     public static void initGenerators() {
@@ -74,7 +69,6 @@ public class TGStructures {
 
 
     public static <F extends StructureFeature<?>> void setupMapSpacingAndLand(F structure, StructureFeatureConfiguration structureFeatureConfiguration, boolean transformSurroundingLand) {
-        MOD_STRUCTURES.add(structure);
         StructureFeature.STRUCTURES_REGISTRY.put(structure.getRegistryName().toString(), structure);
 
         if (transformSurroundingLand) {

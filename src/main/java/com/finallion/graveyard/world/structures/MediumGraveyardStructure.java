@@ -1,6 +1,8 @@
 package com.finallion.graveyard.world.structures;
 
 import com.finallion.graveyard.TheGraveyard;
+import com.finallion.graveyard.config.StructureConfigEntry;
+import com.finallion.graveyard.init.TGConfiguredStructures;
 import com.finallion.graveyard.init.TGEntities;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
@@ -10,8 +12,10 @@ import net.minecraft.data.worldgen.Pools;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.JigsawFeature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
@@ -23,11 +27,18 @@ import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 import net.minecraftforge.common.util.Lazy;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class MediumGraveyardStructure extends StructureFeature<JigsawConfiguration> {
-    private static final int SIZE = 30;
+public class MediumGraveyardStructure extends AbstractGraveyardStructure {
+
+    public MediumGraveyardStructure(Codec<JigsawConfiguration> codec) {
+        super(codec, new StructureConfigEntry(18, 16,
+                Arrays.asList(Biome.BiomeCategory.FOREST.getName()),
+                Arrays.asList("dark_forest", "birch_forest", "old_growth_birch_forest")), // blacklist birch and dark forest
+                30, 1690192399, MediumGraveyardGenerator.STARTING_POOL, "medium_graveyard");
+    }
 
     public static final Lazy<List<MobSpawnSettings.SpawnerData>> MONSTER_SPAWNS = Lazy.of(() -> ImmutableList.of(
             new MobSpawnSettings.SpawnerData(TGEntities.SKELETON_CREEPER, 10, 1, 2),
@@ -35,70 +46,9 @@ public class MediumGraveyardStructure extends StructureFeature<JigsawConfigurati
     ));
 
 
-    public MediumGraveyardStructure(Codec<JigsawConfiguration> codec) {
-        super(codec, (context) -> {
-            if (!MediumGraveyardStructure.isFeatureChunk(context)) {
-                return Optional.empty();
-            } else {
-                return MediumGraveyardStructure.createPiecesGenerator(context);
-            }
-        });
-    }
-
     @Override
-    public GenerationStep.Decoration step() {
-        return GenerationStep.Decoration.SURFACE_STRUCTURES;
-    }
-
-    private static boolean isFeatureChunk(PieceGeneratorSupplier.Context<JigsawConfiguration> context) {
-        BlockPos centerOfChunk = new BlockPos(context.chunkPos().x * 16, 0, context.chunkPos().z * 16);
-
-        if (!StructureUtil.isTerrainFlat(context.chunkGenerator(), centerOfChunk.getX(), centerOfChunk.getZ(), context.heightAccessor(), SIZE)) {
-            return false;
-        }
-
-        if (!StructureUtil.isWater(context.chunkGenerator(), centerOfChunk.getX(), centerOfChunk.getZ(), context.heightAccessor(), SIZE)) {
-            return false;
-        }
-
-        /*
-        if (!StructureUtil.checkForOtherStructures(context.chunkGenerator(), context.seed(), centerOfChunk.getX(), centerOfChunk.getZ(), SIZE)) {
-            return false;
-        }
-
-         */
-
-        return true;
-    }
-
-    public static Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context) {
-        BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(0);
-
-        JigsawConfiguration newConfig = new JigsawConfiguration(() -> MediumGraveyardGenerator.STARTING_POOL, 10);
-
-        PieceGeneratorSupplier.Context<JigsawConfiguration> newContext = new PieceGeneratorSupplier.Context<>(
-                context.chunkGenerator(),
-                context.biomeSource(),
-                context.seed(),
-                context.chunkPos(),
-                newConfig,
-                context.heightAccessor(),
-                context.validBiome(),
-                context.structureManager(),
-                context.registryAccess()
-        );
-
-        Optional<PieceGenerator<JigsawConfiguration>> structurePiecesGenerator =
-                JigsawPlacement.addPieces(
-                        newContext,
-                        PoolElementStructurePiece::new,
-                        blockpos,
-                        false,
-                        true
-                );
-
-
-        return structurePiecesGenerator;
+    public ConfiguredStructureFeature<?, ?> getStructureFeature() {
+        return TGConfiguredStructures.MEDIUM_GRAVEYARD_STRUCTURE_CONFIG;
     }
 
     public static class MediumGraveyardGenerator {

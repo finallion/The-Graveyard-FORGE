@@ -2,6 +2,7 @@ package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
+import com.finallion.graveyard.blockentities.SarcophagusBlockEntity;
 import com.finallion.graveyard.blockentities.UrnBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -38,6 +39,10 @@ public class TGTileEntities {
             TGBlocks.GREEN_URN,
             TGBlocks.LIME_URN,
             TGBlocks.WHITE_URN).build(null));
+
+    public static final RegistryObject<BlockEntityType<SarcophagusBlockEntity>> SARCOPHAGUS_BLOCK_ENTITY = register("sarcophagus_block_entity", () -> BlockEntityType.Builder.of(SarcophagusBlockEntity::new,
+            TGBlocks.SARCOPHAGUS
+    ).build(null));
 
     private static <T extends BlockEntityType<?>> RegistryObject<T> register(String name, Supplier<T> tileEntity) {
         return TILE_ENTITIES.register(name, tileEntity);

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TGConfiguredStructures {
-    private static final List<ConfiguredStructureFeature<?, ?>> MOD_STRUCTURE_FEATURES = new ArrayList<>();
+    public static final List<ConfiguredStructureFeature<?, ?>> MOD_STRUCTURE_FEATURES = new ArrayList<>();
 
     public static final ConfiguredStructureFeature<?, ?> MEDIUM_GRAVEYARD_STRUCTURE_CONFIG = TGStructures.MEDIUM_GRAVEYARD_STRUCTURE.get().configured(
             new JigsawConfiguration(() -> MediumGraveyardStructure.MediumGraveyardGenerator.STARTING_POOL, 0));

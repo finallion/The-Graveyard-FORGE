@@ -132,12 +132,14 @@ public class TGBlocks {
     public static Block SMALL_GREEN_URN;
     public static Block SMALL_LIME_URN;
 
+    public static Block SARCOPHAGUS;
+
     @SubscribeEvent
     public static void initBlocks(RegistryEvent.Register<Block> event) {
-        TG_ROOTED_DIRT = registerBlockWithoutGroup(new Block(BlockBehaviour.Properties.copy(Blocks.DIRT)), "tg_rooted_dirt");
-        TG_TUFF = registerBlockWithoutGroup(new Block(BlockBehaviour.Properties.copy(Blocks.NETHERRACK)), "tg_tuff");
-        TG_MOSS_BLOCK = registerBlockWithoutGroup(new TGMossBlock(BlockBehaviour.Properties.copy(Blocks.GRASS_BLOCK)), "tg_moss_block");
-        TG_DEEPSLATE = registerBlockWithoutGroup(new TGDeepslateBlock(BlockBehaviour.Properties.copy(Blocks.STONE)), "tg_deepslate");
+        TG_ROOTED_DIRT = registerBlockWithoutGroup(new Block(BlockBehaviour.Properties.copy(Blocks.ROOTED_DIRT).lootFrom(() -> Blocks.ROOTED_DIRT)), "tg_rooted_dirt");
+        TG_TUFF = registerBlockWithoutGroup(new Block(BlockBehaviour.Properties.copy(Blocks.TUFF).lootFrom(() -> Blocks.TUFF)), "tg_tuff");
+        TG_MOSS_BLOCK = registerBlockWithoutGroup(new TGMossBlock(BlockBehaviour.Properties.copy(Blocks.MOSS_BLOCK).lootFrom(() -> Blocks.MOSS_BLOCK)), "tg_moss_block");
+        TG_DEEPSLATE = registerBlockWithoutGroup(new TGDeepslateBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE).lootFrom(() -> Blocks.DEEPSLATE)), "tg_deepslate");
 
         // helper blocks that get don't get replaced on world generation, generate ores or generate trees on
         TG_GRASS_BLOCK = registerBlockWithoutGroup(new TGGrassBlock(BlockBehaviour.Properties.copy(Blocks.GRASS_BLOCK).lootFrom(() -> Blocks.GRASS_BLOCK)), "tg_grass_block");
@@ -205,6 +207,8 @@ public class TGBlocks {
         SMALL_PURPLE_URN = registerBlock(new UrnBlock(), "small_purple_urn");
         SMALL_GREEN_URN = registerBlock(new UrnBlock(), "small_green_urn");
         SMALL_LIME_URN = registerBlock(new UrnBlock(), "small_lime_urn");
+
+        SARCOPHAGUS = registerBlockWithoutItem(new SarcophagusBlock(), "sarcophagus");
 
         event.getRegistry().registerAll(blocks_list.toArray(new Block[0]));
     }

@@ -2,6 +2,7 @@ package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.item.DaggerItem;
+import com.finallion.graveyard.item.SarcophagusItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -30,6 +31,7 @@ public class TGItems {
         createSpawnEgg(TGEntities.REAPER, 1381653, 5898240, "reaper");
 
         registerItem(new DaggerItem(Tiers.STONE, 4, -1.0F, new Item.Properties().tab(TheGraveyard.GROUP)), "bone_dagger");
+        registerItem(new SarcophagusItem(new Item.Properties().tab(TheGraveyard.GROUP)), "sarcophagus");
 
         items_list.forEach((e) -> event.getRegistry().register(e));
     }

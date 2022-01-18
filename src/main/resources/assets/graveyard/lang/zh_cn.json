@@ -40,6 +40,7 @@
   "block.graveyard.tg_cracked_deepslate_tiles": "墓园裂纹深石板瓦",
 
   "container.urn": "Urn",
+  "container.sarcophagus": "Sarcophagus",
 
   "block.graveyard.white_urn": "白色釉瓮",
   "block.graveyard.black_urn": "黑色釉瓮",
@@ -98,6 +99,8 @@
   "block.graveyard.deepslate_gravestone": "深板岩墓碑",
 
   "item.graveyard.bone_dagger": "骨头匕首",
+  "item.graveyard.sarcophagus": "Sarcophagus",
+  "block.graveyard.sarcophagus": "Sarcophagus",
 
   "entity.graveyard.skeleton_creeper": "骷髅苦力怕",
   "entity.graveyard.acolyte": "守灵人",
@@ -107,6 +110,12 @@
   "item.graveyard.acolyte_spawn_egg": "守灵人刷怪蛋",
   "item.graveyard.ghoul_spawn_egg": "食尸鬼刷怪蛋",
   "item.graveyard.reaper_spawn_egg": "死神刷怪蛋",
+
+  "entity.graveyard.revenant": "Revenant",
+  "item.graveyard.revenant_spawn_egg": "Revenant Spawn Egg",
+  "entity.graveyard.nightmare": "Nightmare",
+  "item.graveyard.nightmare_spawn_egg": "Nightmare Spawn Egg",
+
   "itemGroup.group": "The Graveyard",
   "gravestone.edit": "编辑墓碑"
 

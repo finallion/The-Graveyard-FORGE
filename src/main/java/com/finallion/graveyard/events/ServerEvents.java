@@ -3,6 +3,7 @@ package com.finallion.graveyard.events;
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.init.TGConfiguredStructures;
 import com.finallion.graveyard.init.TGStructures;
+import com.finallion.graveyard.world.structures.LargeGraveyardStructure;
 import com.finallion.graveyard.world.structures.MediumGraveyardStructure;
 import com.finallion.graveyard.world.structures.SmallDesertGraveyardStructure;
 import net.minecraft.world.entity.MobCategory;
@@ -16,6 +17,10 @@ public class ServerEvents {
 
         if (event.getStructure() == TGStructures.SMALL_DESERT_GRAVEYARD_STRUCTURE.get()) {
             event.addEntitySpawns(MobCategory.MONSTER, SmallDesertGraveyardStructure.MONSTER_SPAWNS.get());
+        }
+
+        if (event.getStructure() == TGStructures.LARGE_GRAVEYARD_STRUCTURE.get()) {
+            event.addEntitySpawns(MobCategory.MONSTER, LargeGraveyardStructure.MONSTER_SPAWNS.get());
         }
     }
 
