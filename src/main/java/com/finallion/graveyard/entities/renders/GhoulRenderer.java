@@ -1,12 +1,11 @@
-package com.finallion.graveyard.entites.renders;
+package com.finallion.graveyard.entities.renders;
 
 
-import com.finallion.graveyard.entites.BaseGhoulEntity;
-import com.finallion.graveyard.entites.models.BaseGhoulModel;
+import com.finallion.graveyard.entities.BaseGhoulEntity;
+import com.finallion.graveyard.entities.models.BaseGhoulModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 @OnlyIn(Dist.CLIENT)

@@ -42,10 +42,8 @@ public class LargeGraveyardStructure extends AbstractGraveyardStructure {
     }
 
     public static final Lazy<List<MobSpawnSettings.SpawnerData>> MONSTER_SPAWNS = Lazy.of(() -> ImmutableList.of(
-            new MobSpawnSettings.SpawnerData(TGEntities.SKELETON_CREEPER, 10, 1, 2),
-            new MobSpawnSettings.SpawnerData(TGEntities.GHOUL, 10, 1, 3),
-            new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 10, 1, 3),
-            new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 10, 1, 2)
+            new MobSpawnSettings.SpawnerData(TGEntities.SKELETON_CREEPER, 25, 1, 2),
+            new MobSpawnSettings.SpawnerData(TGEntities.GHOUL, 25, 1, 3)
     ));
 
 

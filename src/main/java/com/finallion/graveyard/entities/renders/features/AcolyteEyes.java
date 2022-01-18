@@ -1,7 +1,7 @@
-package com.finallion.graveyard.entites.renders.features;
+package com.finallion.graveyard.entities.renders.features;
 
 
-import com.finallion.graveyard.entites.AcolyteEntity;
+import com.finallion.graveyard.entities.AcolyteEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.IllagerModel;

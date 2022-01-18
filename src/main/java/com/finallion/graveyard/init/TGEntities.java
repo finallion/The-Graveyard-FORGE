@@ -1,10 +1,10 @@
 package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.entites.AcolyteEntity;
-import com.finallion.graveyard.entites.BaseGhoulEntity;
-import com.finallion.graveyard.entites.ReaperEntity;
-import com.finallion.graveyard.entites.SkeletonCreeper;
+import com.finallion.graveyard.entities.AcolyteEntity;
+import com.finallion.graveyard.entities.BaseGhoulEntity;
+import com.finallion.graveyard.entities.ReaperEntity;
+import com.finallion.graveyard.entities.SkeletonCreeper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -17,9 +17,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraft.world.level.levelgen.Heightmap;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)

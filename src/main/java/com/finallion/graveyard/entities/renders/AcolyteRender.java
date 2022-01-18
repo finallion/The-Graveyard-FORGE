@@ -1,8 +1,8 @@
-package com.finallion.graveyard.entites.renders;
+package com.finallion.graveyard.entities.renders;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.entites.AcolyteEntity;
-import com.finallion.graveyard.entites.renders.features.AcolyteEyes;
+import com.finallion.graveyard.entities.AcolyteEntity;
+import com.finallion.graveyard.entities.renders.features.AcolyteEyes;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.IllagerModel;
 import net.minecraft.client.model.geom.ModelLayers;

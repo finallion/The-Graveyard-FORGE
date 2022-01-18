@@ -1,7 +1,7 @@
-package com.finallion.graveyard.entites.renders;
+package com.finallion.graveyard.entities.renders;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.entites.renders.features.SkeletonCreeperEyes;
+import com.finallion.graveyard.entities.renders.features.SkeletonCreeperEyes;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.CreeperModel;
 import net.minecraft.client.model.geom.ModelLayers;

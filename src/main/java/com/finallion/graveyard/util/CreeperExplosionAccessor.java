@@ -1,7 +1,7 @@
 package com.finallion.graveyard.util;
 
 
-import com.finallion.graveyard.entites.SkeletonCreeper;
+import com.finallion.graveyard.entities.SkeletonCreeper;
 import net.minecraft.world.entity.monster.Creeper;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 

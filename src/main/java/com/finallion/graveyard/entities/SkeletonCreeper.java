@@ -1,7 +1,6 @@
-package com.finallion.graveyard.entites;
+package com.finallion.graveyard.entities;
 
 import com.finallion.graveyard.init.TGBlocks;
-import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -16,7 +15,6 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 
