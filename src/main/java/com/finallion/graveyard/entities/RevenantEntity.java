@@ -42,7 +42,7 @@ public class RevenantEntity extends AnimatedGraveyardEntity implements IAnimatab
         super(entityType, world);
     }
 
-    protected void initGoals() {
+    protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -50,9 +50,9 @@ public class RevenantEntity extends AnimatedGraveyardEntity implements IAnimatab
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this, new Class[0]));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, Player.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, AbstractVillager.class, false));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, IronGolem.class, true));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
     }
 
     @Override
@@ -77,10 +77,12 @@ public class RevenantEntity extends AnimatedGraveyardEntity implements IAnimatab
 
     @Override
     public void aiStep() {
+
         timeSinceLastAttack--;
+
         if (!this.level.isClientSide()) {
             if (this.getTarget() != null) {
-                canAttack = this.getTarget().distanceTo(this) <= ATTACK_RANGE;
+                canAttack = this.getTarget().distanceToSqr(this) <= ATTACK_RANGE;
             } else {
                 canAttack = false;
             }
@@ -91,7 +93,10 @@ public class RevenantEntity extends AnimatedGraveyardEntity implements IAnimatab
 
 
     private <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
+        System.out.println(canAttack);
+        System.out.println(isAggressive());
         if (isAggressive() && canAttack && !(this.dead || this.getHealth() < 0.01 || this.isDeadOrDying())) {
+            System.out.println("ATTACK!!!!");
             timeSinceLastAttack = 6;
             event.getController().setAnimation(ATTACK_ANIMATION);
             return PlayState.CONTINUE;
@@ -99,6 +104,7 @@ public class RevenantEntity extends AnimatedGraveyardEntity implements IAnimatab
 
         // hinders the animation to stop abruptly
         if (timeSinceLastAttack < 0 || !canAttack) {
+            System.out.println("STOP");
             return PlayState.STOP;
         }
 

@@ -47,8 +47,8 @@ public class TheGraveyardClient {
         event.registerEntityRenderer(TGEntities.ACOLYTE, AcolyteRender::new);
         event.registerEntityRenderer(TGEntities.GHOUL, GhoulRenderer::new);
         event.registerEntityRenderer(TGEntities.REAPER, ReaperRenderer::new);
-        //event.registerEntityRenderer(TGEntities.REVENANT, RevenantRenderer::new);
-        //event.registerEntityRenderer(TGEntities.NIGHTMARE, NightmareRenderer::new);
+        event.registerEntityRenderer(TGEntities.REVENANT, RevenantRenderer::new);
+        event.registerEntityRenderer(TGEntities.NIGHTMARE, NightmareRenderer::new);
 
         event.registerBlockEntityRenderer(TGTileEntities.GRAVESTONE_BLOCK_ENTITY.get(), GravestoneBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(TGTileEntities.SARCOPHAGUS_BLOCK_ENTITY.get(), SarcophagusBlockEntityRenderer::new);

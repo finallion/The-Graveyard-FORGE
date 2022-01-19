@@ -117,6 +117,8 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
         // stops attack animation when anger time is 0 and sets rage animation to play
         stopAttackAnimation();
 
+        timeSinceLastAttack--;
+
         if (!this.level.isClientSide()) {
             if (this.getTarget() != null) {
                 canAttack = this.getTarget().distanceToSqr(this) <= ATTACK_RANGE;
@@ -159,9 +161,7 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
             return PlayState.CONTINUE;
         }
 
-
-
-        if (event.isMoving() || isMoving) {
+        if (event.isMoving()) {
             if (isInWater()) {
                 event.getController().setAnimation(WALK_ANIMATION);
             } else if (isAggressive() && timeSinceLastAttack < 0) {
@@ -188,8 +188,8 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
-        data.addAnimationController(new AnimationController(this, "controller2", 0, this::predicate2));
+        data.addAnimationController(new AnimationController(this, "controller", 3, this::predicate));
+        data.addAnimationController(new AnimationController(this, "controller2", 3, this::predicate2));
     }
 
     @Override
@@ -197,7 +197,6 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
         return this.factory;
     }
 
-    // TODO: custom sounds
     @Override
     public void playAmbientSound() {
         this.playSound(SoundEvents.HUSK_AMBIENT, 1.0F, -5.0F);

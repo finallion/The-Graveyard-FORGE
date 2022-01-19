@@ -31,7 +31,7 @@ public class GraveyardHordeSpawner implements CustomSpawner {
     public int tick(ServerLevel p_64570_, boolean p_64571_, boolean p_64572_) {
         if (!p_64571_) {
             return 0;
-        } else if (GraveyardConfig.COMMON.enableHorde.get()) {
+        } else if (!GraveyardConfig.COMMON.enableHorde.get()) {
             return 0;
         } else {
             Random random = p_64570_.random;
@@ -39,7 +39,6 @@ public class GraveyardHordeSpawner implements CustomSpawner {
             if (this.nextTick > 0) {
                 return 0;
             } else {
-                // TODO: CONFIG
                 this.nextTick += GraveyardConfig.COMMON.ticksUntilSpawnHorde.get() + random.nextInt(1200);
                 if (p_64570_.isNight()) {
                     if (random.nextInt(5) != 0) {

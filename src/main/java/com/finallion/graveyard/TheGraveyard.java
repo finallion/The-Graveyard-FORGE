@@ -63,6 +63,7 @@ public class TheGraveyard {
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(EventPriority.NORMAL, this::addDimensionalSpacing);
         forgeBus.addListener(EventPriority.NORMAL, ServerEvents::setupStructureSpawns);
+        forgeBus.addListener(EventPriority.NORMAL, ServerEvents::onBiomesLoad);
         //MinecraftForge.EVENT_BUS.register(new ServerEvents());
 
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC);

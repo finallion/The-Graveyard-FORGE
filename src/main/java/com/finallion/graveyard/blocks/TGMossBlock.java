@@ -1,5 +1,6 @@
 package com.finallion.graveyard.blocks;
 
+import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.TGParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
@@ -39,8 +40,10 @@ public class TGMossBlock extends MossBlock {
     public void animateTick(BlockState p_180655_1_, Level world, BlockPos pos, Random random) {
         super.animateTick(p_180655_1_, world, pos, random);
 
-        if (random.nextInt(50) == 0) {
-            world.addParticle(TGParticles.GRAVEYARD_FOG_PARTICLE.get(), (double) pos.getX() + random.nextDouble(), (double) pos.getY() + random.nextDouble(), (double) pos.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
+        if (GraveyardConfig.COMMON.enableMossParticle.get()) {
+            if (random.nextInt(GraveyardConfig.COMMON.particleFrequency.get()) == 0) {
+                world.addParticle(TGParticles.GRAVEYARD_FOG_PARTICLE.get(), (double) pos.getX() + random.nextDouble(), (double) pos.getY() + random.nextDouble(), (double) pos.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
+            }
         }
 
 

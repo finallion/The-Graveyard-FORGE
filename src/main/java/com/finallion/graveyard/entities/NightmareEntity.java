@@ -58,8 +58,8 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
     private static boolean isInRange = false;
     private static final double ATTACK_RANGE = 5.5D;
 
-    private static final EntityDataAccessor<Boolean> DATA_CREEPY = SynchedEntityData.defineId(EnderMan.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> DATA_STARED_AT = SynchedEntityData.defineId(EnderMan.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_CREEPY = SynchedEntityData.defineId(NightmareEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_STARED_AT = SynchedEntityData.defineId(NightmareEntity.class, EntityDataSerializers.BOOLEAN);
     private int targetChangeTime;
     private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(20, 39);
     private int remainingPersistentAngerTime;
@@ -140,7 +140,7 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
     }
 
     private void stopAttackAnimation() {
-        if (!this.isAngry()) {
+        if (!this.isCreepy()) {
             setState(ANIMATION_IDLE);
         }
     }
