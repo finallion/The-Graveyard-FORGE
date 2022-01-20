@@ -19,21 +19,16 @@ import java.util.Map;
 @Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID)
 public class TGSpawner {
     private static Map<ResourceLocation, GraveyardHordeSpawner> spawners = new HashMap<>();
-    private static boolean loaded = false;
 
     @SubscribeEvent
     public static void onWorldLoad(ServerStartingEvent event) {
-        if (loaded) {
-            return;
-        }
-        spawners.put(DimensionType.OVERWORLD_LOCATION.location(), new GraveyardHordeSpawner());
-        loaded = true;
+        MinecraftServer server = event.getServer();
+        spawners.put(DimensionType.OVERWORLD_LOCATION.location(), new GraveyardHordeSpawner(server));
     }
 
     @SubscribeEvent
     public static void onServerStart(ServerStoppedEvent event) {
         spawners.clear();
-        loaded = false;
     }
 
     @SubscribeEvent
@@ -46,7 +41,7 @@ public class TGSpawner {
 
         GraveyardHordeSpawner spawner = spawners.get(event.world.dimension().location());
         if (spawner != null) {
-            spawner.tick((ServerLevel)event.world, true, true);
+            spawner.tick(event.world);
         }
     }
 }

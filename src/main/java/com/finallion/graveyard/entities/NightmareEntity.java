@@ -267,23 +267,12 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
         if (flag && !flag1) {
             net.minecraftforge.event.entity.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, p_32544_, p_32545_, p_32546_);
             if (event.isCanceled()) return false;
-            boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+            boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), false);
             if (flag2 && !this.isSilent()) {
-                this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 10.0F);
+                this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, -10.0F);
             }
 
             return flag2;
-        } else {
-            return false;
-        }
-    }
-
-    protected boolean teleport() {
-        if (!this.level.isClientSide() && this.isAlive()) {
-            double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 64.0D;
-            double d1 = this.getY() + (double)(this.random.nextInt(64) - 32);
-            double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 64.0D;
-            return this.teleport(d0, d1, d2);
         } else {
             return false;
         }
@@ -480,7 +469,7 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
                         if (this.target.distanceToSqr(this.nightmare) <= 384.0D && target != null) {
                             if (this.target.distanceToSqr(this.nightmare) > 24.0D) {
                                 target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100));
-                                this.nightmare.teleport();
+                                this.nightmare.teleportTowards(target);
                             }
                         }
 
