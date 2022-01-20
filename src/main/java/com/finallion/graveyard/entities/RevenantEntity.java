@@ -3,6 +3,8 @@ package com.finallion.graveyard.entities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -91,6 +93,9 @@ public class RevenantEntity extends AnimatedGraveyardEntity implements IAnimatab
         super.aiStep();
     }
 
+    public boolean canBeAffected(MobEffectInstance p_34192_) {
+        return p_34192_.getEffect() == MobEffects.WITHER ? false : super.canBeAffected(p_34192_);
+    }
 
     private <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
         System.out.println(canAttack);

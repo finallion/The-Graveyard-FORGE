@@ -7,6 +7,8 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
@@ -195,6 +197,10 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
     @Override
     public AnimationFactory getFactory() {
         return this.factory;
+    }
+
+    public boolean canBeAffected(MobEffectInstance p_34192_) {
+        return p_34192_.getEffect() == MobEffects.WITHER ? false : super.canBeAffected(p_34192_);
     }
 
     @Override

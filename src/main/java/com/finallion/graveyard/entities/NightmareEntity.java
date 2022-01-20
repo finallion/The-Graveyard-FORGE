@@ -278,6 +278,10 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
         }
     }
 
+    public boolean canBeAffected(MobEffectInstance p_34192_) {
+        return p_34192_.getEffect() == MobEffects.WITHER ? false : super.canBeAffected(p_34192_);
+    }
+
     public boolean isCreepy() {
         return this.entityData.get(DATA_CREEPY);
     }
