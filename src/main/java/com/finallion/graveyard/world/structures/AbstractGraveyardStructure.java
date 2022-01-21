@@ -5,7 +5,9 @@ import com.finallion.graveyard.config.StructureConfigEntry;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -48,7 +50,7 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
     }
 
     private static boolean isFeatureChunk(PieceGeneratorSupplier.Context<JigsawConfiguration> context, int size) {
-        BlockPos centerOfChunk = new BlockPos(context.chunkPos().x * 16, 0, context.chunkPos().z * 16);
+        BlockPos centerOfChunk = context.chunkPos().getMiddleBlockPosition(0);
 
         if (!isTerrainFlat(context.chunkGenerator(), centerOfChunk.getX(), centerOfChunk.getZ(), context.heightAccessor(), size)) {
             return false;
@@ -57,7 +59,6 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
         if (!isWater(context.chunkGenerator(), centerOfChunk.getX(), centerOfChunk.getZ(), context.heightAccessor(), size)) {
             return false;
         }
-
 
         return true;
     }
@@ -118,26 +119,21 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
 
         int offset = size;
 
-        int i1 = generator.getFirstFreeHeight(chunkX, chunkZ, Heightmap.Types.WORLD_SURFACE_WG, heightLimitView);
-        int j1 = generator.getFirstFreeHeight(chunkX, chunkZ + offset, Heightmap.Types.WORLD_SURFACE_WG, heightLimitView);
-        int k1 = generator.getFirstFreeHeight(chunkX + offset, chunkZ, Heightmap.Types.WORLD_SURFACE_WG, heightLimitView);
-        int o1 = generator.getFirstFreeHeight(chunkX, chunkZ - offset, Heightmap.Types.WORLD_SURFACE_WG, heightLimitView);
-        int p1 = generator.getFirstFreeHeight(chunkX - offset, chunkZ, Heightmap.Types.WORLD_SURFACE_WG, heightLimitView);
+        int i1 = generator.getFirstOccupiedHeight(chunkX, chunkZ, Heightmap.Types.WORLD_SURFACE_WG, heightLimitView);
+        int j1 = generator.getFirstOccupiedHeight(chunkX, chunkZ + offset, Heightmap.Types.WORLD_SURFACE_WG, heightLimitView);
+        int k1 = generator.getFirstOccupiedHeight(chunkX + offset, chunkZ, Heightmap.Types.WORLD_SURFACE_WG, heightLimitView);
+        int o1 = generator.getFirstOccupiedHeight(chunkX, chunkZ - offset, Heightmap.Types.WORLD_SURFACE_WG, heightLimitView);
+        int p1 = generator.getFirstOccupiedHeight(chunkX - offset, chunkZ, Heightmap.Types.WORLD_SURFACE_WG, heightLimitView);
 
+        NoiseColumn sample1 = generator.getBaseColumn(chunkX, chunkZ, heightLimitView);
+        NoiseColumn sample2 = generator.getBaseColumn(chunkX, chunkZ + size, heightLimitView);
+        NoiseColumn sample3 = generator.getBaseColumn(chunkX + size, chunkZ, heightLimitView);
+        NoiseColumn sample4 = generator.getBaseColumn(chunkX, chunkZ - size, heightLimitView);
+        NoiseColumn sample5 = generator.getBaseColumn(chunkX - size, chunkZ, heightLimitView);
 
-        /*
-        System.out.println("Terrain flatness results: ");
-        System.out.println("One: " + " Height: " + i1 + " at: " + chunkX + " " + chunkZ);
-        System.out.println("Two: " + " Height: " + j1 + " at: " + chunkX + " " + (chunkZ + offset));
-        System.out.println("Three: " + " Height: " + k1 + " at: " + (chunkX + offset) + " " + chunkZ);
-        //System.out.println("Four: " + " Height: " + l1 + " at: " + (chunkX + offset) + " " + (chunkZ + offset));
-        //System.out.println("Five: " + " Height: " + m1 + " at: " + (chunkX - offset) + " " + (chunkZ + offset));
-        //System.out.println("Six: " + " Height: " + n1 + " at: " + (chunkX + offset) + " " + (chunkZ - offset));
-        System.out.println("Seven: " + " Height: " + o1 + " at: " + chunkX + " " + (chunkZ - offset));
-        System.out.println("Eight: " + " Height: " + p1 + " at: " + (chunkX - offset) + " " + chunkZ);
-        //System.out.println("Nine: " + " Height: " + q1 + " at: " + (chunkX - offset) + " " + (chunkZ - offset));
-
-         */
+        if (sample1.getBlock(i1).getFluidState().is(FluidTags.WATER) || sample2.getBlock(j1).getFluidState().is(FluidTags.WATER) || sample3.getBlock(k1).getFluidState().is(FluidTags.WATER) || sample4.getBlock(o1).getFluidState().is(FluidTags.WATER) || sample5.getBlock(p1).getFluidState().is(FluidTags.WATER)) {
+            return false;
+        }
 
 
         int minSides = Math.min(Math.min(j1, p1), Math.min(o1, k1));
@@ -151,8 +147,6 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
     }
 
     protected static boolean isWater(ChunkGenerator generator, int chunkX, int chunkZ, LevelHeightAccessor heightLimitView, int size) {
-        int offset = size;
-
         Set<Biome> biomesInAreaOne = generator.getBiomeSource().getBiomesWithin(chunkX, 0, chunkZ, size, generator.climateSampler());
 
         for (Biome biome : biomesInAreaOne) {

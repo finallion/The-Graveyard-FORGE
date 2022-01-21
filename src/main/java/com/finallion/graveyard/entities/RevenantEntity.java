@@ -98,10 +98,7 @@ public class RevenantEntity extends AnimatedGraveyardEntity implements IAnimatab
     }
 
     private <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
-        System.out.println(canAttack);
-        System.out.println(isAggressive());
         if (isAggressive() && canAttack && !(this.dead || this.getHealth() < 0.01 || this.isDeadOrDying())) {
-            System.out.println("ATTACK!!!!");
             timeSinceLastAttack = 6;
             event.getController().setAnimation(ATTACK_ANIMATION);
             return PlayState.CONTINUE;
@@ -109,7 +106,6 @@ public class RevenantEntity extends AnimatedGraveyardEntity implements IAnimatab
 
         // hinders the animation to stop abruptly
         if (timeSinceLastAttack < 0 || !canAttack) {
-            System.out.println("STOP");
             return PlayState.STOP;
         }
 
