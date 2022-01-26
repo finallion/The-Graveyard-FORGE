@@ -1,27 +1,26 @@
 package com.finallion.graveyard.world.features.surfaceFeatures;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.biome.Biome;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class FeatureHelper {
 
-    public static boolean canBePlaced(StructureWorldAccess world, BlockPos pos, BlockState state) {
-        if (state.isOf(Blocks.GRASS_BLOCK)) {
-            world.setBlockState(pos, Blocks.DIRT.getDefaultState(), 2);
+    public static boolean canBePlaced(WorldGenLevel world, BlockPos pos, BlockState state) {
+        if (state.getBlock() == (Blocks.GRASS_BLOCK)) {
+            world.setBlock(pos, Blocks.DIRT.defaultBlockState(), 2);
         }
 
-        return state.isOf(Blocks.MOSS_BLOCK) || state.isOf(Blocks.GRASS_BLOCK) || state.isOf(Blocks.COARSE_DIRT) || state.isOf(Blocks.ROOTED_DIRT);
+        return state.getBlock() == (Blocks.MOSS_BLOCK) || state.getBlock() == (Blocks.GRASS_BLOCK) || state.getBlock() == (Blocks.COARSE_DIRT) || state.getBlock() == (Blocks.ROOTED_DIRT);
     }
 
     public static boolean canBePlaced(BlockState state) {
-        return state.isOf(Blocks.MOSS_BLOCK) || state.isOf(Blocks.GRASS_BLOCK) || state.isOf(Blocks.COARSE_DIRT) || state.isOf(Blocks.ROOTED_DIRT);
+        return state.getBlock() == (Blocks.MOSS_BLOCK) || state.getBlock() == (Blocks.GRASS_BLOCK) || state.getBlock() == (Blocks.COARSE_DIRT) || state.getBlock() == (Blocks.ROOTED_DIRT);
     }
 
-    public static boolean canGenerate(StructureWorldAccess world, BlockPos pos, int height) {
+    public static boolean canGenerate(WorldGenLevel world, BlockPos pos, int height) {
         for (int i = pos.getY(); i <= pos.getY() + height; i++) {
             if (!world.getBlockState(pos).isAir()) {
                 return false;
@@ -29,13 +28,6 @@ public class FeatureHelper {
         }
         return true;
 
-    }
-
-    public static boolean isCorrectBiome(RegistryKey<Biome> key) {
-        if (key.getValue().getPath().contains("haunted")) {
-            return true;
-        }
-        return false;
     }
 
 }

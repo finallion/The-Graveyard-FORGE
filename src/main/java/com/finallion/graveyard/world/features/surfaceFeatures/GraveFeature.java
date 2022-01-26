@@ -2,43 +2,36 @@ package com.finallion.graveyard.world.features.surfaceFeatures;
 
 import com.finallion.graveyard.init.TGBlocks;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.util.collection.DataPool;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
-import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.Random;
 
-public class GraveFeature extends Feature<DefaultFeatureConfig> {
+public class GraveFeature extends Feature<NoneFeatureConfiguration> {
 
-    private static WeightedBlockStateProvider graveStones = new WeightedBlockStateProvider(DataPool.<BlockState>builder()
-            .add(TGBlocks.GRAVESTONE.getDefaultState(), 25)
-            .add(TGBlocks.COBBLESTONE_GRAVESTONE.getDefaultState(), 25)
-            .add(TGBlocks.DEEPSLATE_GRAVESTONE.getDefaultState(), 25)
-            .add(TGBlocks.MOSSY_COBBLESTONE_GRAVESTONE.getDefaultState(), 25));
-
-    private static final Direction[] randomDirection = new Direction[]{Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH};
-
-
-    public GraveFeature(Codec<DefaultFeatureConfig> configCodec) {
+    public GraveFeature(Codec<NoneFeatureConfiguration> configCodec) {
         super(configCodec);
     }
 
     @Override
-    public boolean generate(FeatureContext<DefaultFeatureConfig> context) {
-        StructureWorldAccess world = context.getWorld();
-        BlockPos blockPos = context.getOrigin();
-        Random random = context.getRandom();
-        context.getConfig();
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        BlockPos pos = context.origin();
+        WorldGenLevel world = context.level();
+        Random random = context.random();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos().set(pos);
 
-        if (FeatureHelper.canBePlaced(world.getBlockState(blockPos.down())) && world.getBlockState(blockPos).isAir() && random.nextInt(10) == 0) {
-            world.setBlockState(blockPos, graveStones.getBlockState(random, blockPos).with(HorizontalFacingBlock.FACING, randomDirection[random.nextInt(4)]), 2);
+        if (FeatureHelper.canBePlaced(world.getBlockState(pos.below())) && world.getBlockState(pos).isAir() && random.nextInt(10) == 0) {
+            switch (random.nextInt(4)) {
+                case 1: world.setBlock(pos, TGBlocks.COBBLESTONE_GRAVESTONE.defaultBlockState(), 2); break;
+                case 2: world.setBlock(pos, TGBlocks.MOSSY_COBBLESTONE_GRAVESTONE.defaultBlockState(), 2); break;
+                case 3: world.setBlock(pos, TGBlocks.DEEPSLATE_GRAVESTONE.defaultBlockState(), 2); break;
+                default: world.setBlock(pos, TGBlocks.GRAVESTONE.defaultBlockState(), 2); break;
+            }
         }
 
 

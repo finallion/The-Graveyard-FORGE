@@ -3,10 +3,19 @@ package com.finallion.graveyard.world.features.trees;
 import com.finallion.graveyard.world.features.surfaceFeatures.FeatureHelper;
 import com.finallion.graveyard.world.features.trees.config.TGTreeFeatureConfig;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.LevelSimulatedReader;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.material.Material;
+
+import java.util.Random;
 
 public class LargeSpruceTree03 extends BaseSpruceTree {
     private final int trunkHeight = 25;
@@ -17,15 +26,17 @@ public class LargeSpruceTree03 extends BaseSpruceTree {
     }
 
     @Override
-    public boolean generate(FeatureContext<TGTreeFeatureConfig> context) {
-        StructureWorldAccess world = context.getWorld();
-        BlockPos blockPos = context.getOrigin();
-        BlockPos.Mutable mutable = new BlockPos.Mutable().set(blockPos);
-        BlockState wood = context.getConfig().woodState;
-        BlockState leaf = context.getConfig().leafState;
-        int offsetTrunk = context.getRandom().nextInt(3);
+    public boolean place(FeaturePlaceContext<TGTreeFeatureConfig> context) {
+        BlockPos blockPos = context.origin();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos().set(blockPos);
+        BlockState wood = context.config().woodState;
+        BlockState leaf = context.config().leafState;
+        WorldGenLevel world = context.level();
+        Random random = context.random();
+        TGTreeFeatureConfig config = context.config();
+        int offsetTrunk = random.nextInt(3);
 
-        if (!FeatureHelper.canBePlaced(world, blockPos.down(), world.getBlockState(blockPos.down()))) {
+        if (!FeatureHelper.canBePlaced(world, blockPos.below(), world.getBlockState(blockPos.below()))) {
             return false;
         }
 
@@ -34,51 +45,51 @@ public class LargeSpruceTree03 extends BaseSpruceTree {
         }
 
         for (int i = 0; i < trunkHeight + offsetTrunk; i++) {
-            world.setBlockState(blockPos.up(i), wood, 2);
+            world.setBlock(blockPos.above(i), wood, 2);
             mutable.move(0, 1, 0);
         }
 
         // single tree top
-        setLeaves(context, mutable.add(0, 4, 0), leaf);
-        setLeaves(context, mutable.add(0, 3, 0), leaf);
-        setLeaves(context, mutable.add(0, 2, 0), leaf);
-        setLeaves(context, mutable.add(0, 1, 0), leaf);
-        randomSpreadOne(context, mutable.add(0, 1, 0), false, 4);
-        setLeaves(context, mutable.add(0, 0, 0), leaf);
-        generateOneStar(context, mutable.add(0, 0, 0), false);
-        randomSpreadOne(context, mutable.add(0, -1, 0), false, 2);
-        randomSpreadTwo(context, mutable.add(0, -2, 0), true, 2);
-        randomSpreadOne(context, mutable.add(0, -3, 0), false, 2);
-        generateTwoStar(context, mutable.add(0, -4, 0), false);
-        randomSpreadThree(context, mutable.add(0, -5, 0), true, 2);
-        randomSpreadThree(context, mutable.add(0, -6, 0), false, 2);
-        generateTwoStar(context, mutable.add(0, -7, 0), false);
-        generateThreeStar(context, mutable.add(0, -8, 0), true);
-        randomSpreadThree(context, mutable.add(0, -9, 0), true, 2);
-        randomSpreadThree(context, mutable.add(0, -10, 0), false, 2);
-        randomSpreadTwo(context, mutable.add(0, -11, 0), false, 2);
+        setLeaves(world, mutable.offset(0, 4, 0), leaf);
+        setLeaves(world, mutable.offset(0, 3, 0), leaf);
+        setLeaves(world, mutable.offset(0, 2, 0), leaf);
+        setLeaves(world, mutable.offset(0, 1, 0), leaf);
+        randomSpreadOne(world, mutable.offset(0, 1, 0), false, 4, config);
+        setLeaves(world, mutable.offset(0, 0, 0), leaf);
+        generateOneStar(world, mutable.offset(0, 0, 0), false, config);
+        randomSpreadOne(world, mutable.offset(0, -1, 0), false, 2, config);
+        randomSpreadTwo(world, mutable.offset(0, -2, 0), true, 2, config);
+        randomSpreadOne(world, mutable.offset(0, -3, 0), false, 2, config);
+        generateTwoStar(world, mutable.offset(0, -4, 0), false, config);
+        randomSpreadThree(world, mutable.offset(0, -5, 0), true, 2, config);
+        randomSpreadThree(world, mutable.offset(0, -6, 0), false, 2, config);
+        generateTwoStar(world, mutable.offset(0, -7, 0), false, config);
+        generateThreeStar(world, mutable.offset(0, -8, 0), true, config);
+        randomSpreadThree(world, mutable.offset(0, -9, 0), true, 2, config);
+        randomSpreadThree(world, mutable.offset(0, -10, 0), false, 2, config);
+        randomSpreadTwo(world, mutable.offset(0, -11, 0), false, 2, config);
 
-        generateThreeStar(context, mutable.add(0, -12, 0), false);
-        randomSpreadFour(context, mutable.add(0, -13, 0), true, 2);
-        randomSpreadFour(context, mutable.add(0, -14, 0), false, 2);
-        generateTwoStar(context, mutable.add(0, -15, 0), false);
+        generateThreeStar(world, mutable.offset(0, -12, 0), false, config);
+        randomSpreadFour(world, mutable.offset(0, -13, 0), true, 2, config);
+        randomSpreadFour(world, mutable.offset(0, -14, 0), false, 2, config);
+        generateTwoStar(world, mutable.offset(0, -15, 0), false, config);
 
-        randomSpreadFour(context, mutable.add(0, -12, 0), true, 2);
-        randomSpreadFour(context, mutable.add(0, -13, 0), true, 4);
-        randomSpreadFour(context, mutable.add(0, -14, 0), false, 2);
-        generateTwoStar(context, mutable.add(0, -15, 0), false);
+        randomSpreadFour(world, mutable.offset(0, -12, 0), true, 2, config);
+        randomSpreadFour(world, mutable.offset(0, -13, 0), true, 4, config);
+        randomSpreadFour(world, mutable.offset(0, -14, 0), false, 2, config);
+        generateTwoStar(world, mutable.offset(0, -15, 0), false, config);
 
-        generateFiveStar(context, mutable.add(0, -16, 0), true);
-        randomSpreadFive(context, mutable.add(0, -17, 0), false, 2);
-        randomSpreadFour(context, mutable.add(0, -18, 0), false, 2);
+        generateFiveStar(world, mutable.offset(0, -16, 0), true, config);
+        randomSpreadFive(world, mutable.offset(0, -17, 0), false, 2, config);
+        randomSpreadFour(world, mutable.offset(0, -18, 0), false, 2, config);
 
-        generateFiveStar(context, mutable.add(0, -19, 0), false);
-        randomSpreadFive(context, mutable.add(0, -20, 0), false, 2);
-        randomSpreadFour(context, mutable.add(0, -21, 0), false, 2);
+        generateFiveStar(world, mutable.offset(0, -19, 0), false, config);
+        randomSpreadFive(world, mutable.offset(0, -20, 0), false, 2, config);
+        randomSpreadFour(world, mutable.offset(0, -21, 0), false, 2, config);
 
-        randomSpreadFive(context, mutable.add(0, -22, 0), false, 2);
-        generateFiveStar(context, mutable.add(0, -23, 0), false);
-        randomSpreadFour(context, mutable.add(0, -24, 0), false, 2);
+        randomSpreadFive(world, mutable.offset(0, -22, 0), false, 2, config);
+        generateFiveStar(world, mutable.offset(0, -23, 0), false, config);
+        randomSpreadFour(world, mutable.offset(0, -24, 0), false, 2, config);
         return false;
     }
 }
