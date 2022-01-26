@@ -25,7 +25,7 @@ public class GraveFeature extends Feature<NoneFeatureConfiguration> {
         Random random = context.random();
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos().set(pos);
 
-        if (FeatureHelper.canBePlaced(world.getBlockState(pos.below())) && world.getBlockState(pos).isAir() && random.nextInt(10) == 0) {
+        if (FeatureHelper.canBePlaced(world.getBlockState(pos.below())) && world.getBlockState(pos).isAir() && random.nextInt(10) == 0 && FeatureHelper.isCorrectBiome(world.getBiomeName(mutable).get())) {
             switch (random.nextInt(4)) {
                 case 1: world.setBlock(pos, TGBlocks.COBBLESTONE_GRAVESTONE.defaultBlockState(), 2); break;
                 case 2: world.setBlock(pos, TGBlocks.MOSSY_COBBLESTONE_GRAVESTONE.defaultBlockState(), 2); break;

@@ -2,7 +2,9 @@ package com.finallion.graveyard.world.features.surfaceFeatures;
 
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -28,6 +30,13 @@ public class FeatureHelper {
         }
         return true;
 
+    }
+
+    public static boolean isCorrectBiome(ResourceKey<Biome> key) {
+        if (key.getRegistryName().getPath().contains("haunted")) {
+            return true;
+        }
+        return false;
     }
 
 }
