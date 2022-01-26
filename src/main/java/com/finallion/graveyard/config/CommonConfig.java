@@ -24,37 +24,43 @@ public class CommonConfig {
     public final ForgeConfigSpec.IntValue weightGhoul;
     public final ForgeConfigSpec.IntValue minGroupSizeGhoul;
     public final ForgeConfigSpec.IntValue maxGroupSizeGhoul;
-    public final ForgeConfigSpec.ConfigValue<List<? extends String>> allowedBiomesAndCategoriesGhoul;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> allowedBiomesCategoriesGhoul;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBiomesGhoul;
 
     public final ForgeConfigSpec.BooleanValue enableRevenant;
     public final ForgeConfigSpec.IntValue weightRevenant;
     public final ForgeConfigSpec.IntValue minGroupSizeRevenant;
     public final ForgeConfigSpec.IntValue maxGroupSizeRevenant;
-    public final ForgeConfigSpec.ConfigValue<List<? extends String>> allowedBiomesAndCategoriesRevenant;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> allowedBiomesCategoriesRevenant;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBiomesRevenant;
 
     public final ForgeConfigSpec.BooleanValue enableReaper;
     public final ForgeConfigSpec.IntValue weightReaper;
     public final ForgeConfigSpec.IntValue minGroupSizeReaper;
     public final ForgeConfigSpec.IntValue maxGroupSizeReaper;
-    public final ForgeConfigSpec.ConfigValue<List<? extends String>> allowedBiomesAndCategoriesReaper;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> allowedBiomesCategoriesReaper;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBiomesReaper;
 
     public final ForgeConfigSpec.BooleanValue enableNightmare;
     public final ForgeConfigSpec.IntValue weightNightmare;
     public final ForgeConfigSpec.IntValue minGroupSizeNightmare;
     public final ForgeConfigSpec.IntValue maxGroupSizeNightmare;
-    public final ForgeConfigSpec.ConfigValue<List<? extends String>> allowedBiomesAndCategoriesNightmare;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> allowedBiomesCategoriesNightmare;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBiomesNightmare;
 
     public final ForgeConfigSpec.BooleanValue enableSkeletonCreeper;
     public final ForgeConfigSpec.IntValue weightSkeletonCreeper;
     public final ForgeConfigSpec.IntValue minGroupSizeSkeletonCreeper;
     public final ForgeConfigSpec.IntValue maxGroupSizeSkeletonCreeper;
-    public final ForgeConfigSpec.ConfigValue<List<? extends String>> allowedBiomesAndCategoriesSkeletonCreeper;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> allowedBiomesCategoriesSkeletonCreeper;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBiomesSkeletonCreeper;
 
     public final ForgeConfigSpec.BooleanValue enableAcolyte;
     public final ForgeConfigSpec.IntValue weightAcolyte;
     public final ForgeConfigSpec.IntValue minGroupSizeAcolyte;
     public final ForgeConfigSpec.IntValue maxGroupSizeAcolyte;
-    public final ForgeConfigSpec.ConfigValue<List<? extends String>> allowedBiomesAndCategoriesAcolyte;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> allowedBiomesCategoriesAcolyte;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBiomesAcolyte;
 
     public final ForgeConfigSpec.BooleanValue enableHorde;
     public final ForgeConfigSpec.IntValue sizeHorde;
@@ -89,37 +95,43 @@ public class CommonConfig {
         this.weightGhoul = builder.comment("Set the spawn weight: ").defineInRange("ghoul.weight", 45, 0, 100);
         this.minGroupSizeGhoul = builder.comment("Set the min group size on spawn: ").defineInRange("ghoul.minGroupSizeGhoul", 2, 1, 100);
         this.maxGroupSizeGhoul = builder.comment("Set the max group size on spawn: ").defineInRange("ghoul.maxGroupSizeGhoul", 5, 1, 100);
-        this.allowedBiomesAndCategoriesGhoul = builder.comment("Allowed biomes and biome categories to spawn: ").defineList("ghoul.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.allowedBiomesCategoriesGhoul = builder.comment("Allowed biome categories to spawn: ").defineList("ghoul.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.blacklistedBiomesGhoul = builder.comment("Blacklisted biomes to spawn: ").defineList("ghoul.blacklist_biomes", Arrays.asList("flower_forest", "lush_caves"), o -> o instanceof String);
 
         this.enableRevenant = builder.comment("Allow the Revenant to spawn: ").define("revenant.enabled", true);
         this.weightRevenant = builder.comment("Set the spawn weight: ").defineInRange("revenant.weight", 45, 0, 100);
         this.minGroupSizeRevenant = builder.comment("Set the min group size on spawn: ").defineInRange("revenant.minGroupSizeRevenant", 5, 1, 100);
         this.maxGroupSizeRevenant = builder.comment("Set the max group size on spawn: ").defineInRange("revenant.maxGroupSizeRevenant", 8, 1, 100);
-        this.allowedBiomesAndCategoriesRevenant = builder.comment("Allowed biomes and biome categories to spawn: ").defineList("revenant.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.allowedBiomesCategoriesRevenant = builder.comment("Allowed biome categories to spawn: ").defineList("revenant.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.blacklistedBiomesRevenant = builder.comment("Blacklisted biomes to spawn: ").defineList("revenant.blacklist_biomes", Arrays.asList("flower_forest", "lush_caves"), o -> o instanceof String);
 
         this.enableReaper = builder.comment("Allow the Reaper to spawn: ").define("reaper.enabled", false);
         this.weightReaper = builder.comment("Set the spawn weight: ").defineInRange("reaper.weight", 0, 0, 100);
         this.minGroupSizeReaper = builder.comment("Set the min group size on spawn: ").defineInRange("reaper.minGroupSizeReaper", 2, 1, 100);
         this.maxGroupSizeReaper = builder.comment("Set the max group size on spawn: ").defineInRange("reaper.maxGroupSizeGhoul", 3, 1, 100);
-        this.allowedBiomesAndCategoriesReaper = builder.comment("Allowed biomes and biome categories to spawn: ").defineList("reaper.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.allowedBiomesCategoriesReaper = builder.comment("Allowed biome categories to spawn: ").defineList("reaper.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.blacklistedBiomesReaper = builder.comment("Blacklisted biomes to spawn: ").defineList("reaper.blacklist_biomes", Arrays.asList("flower_forest", "lush_caves"), o -> o instanceof String);
 
         this.enableNightmare = builder.comment("Allow the Nightmare to spawn: ").define("nightmare.enabled", true);
         this.weightNightmare = builder.comment("Set the spawn weight: ").defineInRange("nightmare.weight", 15, 0, 100);
         this.minGroupSizeNightmare = builder.comment("Set the min group size on spawn: ").defineInRange("nightmare.minGroupSizeNightmare", 1, 1, 100);
         this.maxGroupSizeNightmare = builder.comment("Set the max group size on spawn: ").defineInRange("nightmare.maxGroupSizeNightmare", 1, 1, 100);
-        this.allowedBiomesAndCategoriesNightmare = builder.comment("Allowed biomes and biome categories to spawn: ").defineList("nightmare.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.allowedBiomesCategoriesNightmare = builder.comment("Allowed biome categories to spawn: ").defineList("nightmare.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.blacklistedBiomesNightmare = builder.comment("Blacklisted biomes to spawn: ").defineList("nightmare.blacklist_biomes", Arrays.asList("flower_forest", "lush_caves"), o -> o instanceof String);
 
         this.enableSkeletonCreeper = builder.comment("Allow the Skeleton Creeper to spawn: ").define("skeleton_creeper.enabled", true);
         this.weightSkeletonCreeper = builder.comment("Set the spawn weight: ").defineInRange("skeleton_creeper.weight", 35, 0, 100);
         this.minGroupSizeSkeletonCreeper = builder.comment("Set the min group size on spawn: ").defineInRange("skeleton_creeper.minGroupSizeSkeletonCreeper", 1, 1, 100);
         this.maxGroupSizeSkeletonCreeper = builder.comment("Set the max group size on spawn: ").defineInRange("skeleton_creeper.maxGroupSizeSkeletonCreeper", 4, 1, 100);
-        this.allowedBiomesAndCategoriesSkeletonCreeper = builder.comment("Allowed biomes and biome categories to spawn: ").defineList("skeleton_creeper.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.allowedBiomesCategoriesSkeletonCreeper = builder.comment("Allowed biome categories to spawn: ").defineList("skeleton_creeper.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.blacklistedBiomesSkeletonCreeper = builder.comment("Blacklisted biomes to spawn: ").defineList("skeleton_creeper.blacklist_biomes", Arrays.asList("flower_forest", "lush_caves"), o -> o instanceof String);
 
         this.enableAcolyte = builder.comment("Allow the Acolyte to spawn: ").define("acolyte.enabled", false);
         this.weightAcolyte = builder.comment("Set the spawn weight: ").defineInRange("acolyte.weight", 0, 0, 100);
         this.minGroupSizeAcolyte = builder.comment("Set the min group size on spawn: ").defineInRange("acolyte.minGroupSizeAcolyte", 2, 1, 100);
         this.maxGroupSizeAcolyte = builder.comment("Set the max group size on spawn: ").defineInRange("acolyte.maxGroupSizeAcolyte", 3, 1, 100);
-        this.allowedBiomesAndCategoriesAcolyte = builder.comment("Allowed biomes and biome categories to spawn: ").defineList("acolyte.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.allowedBiomesCategoriesAcolyte = builder.comment("Allowed biome categories to spawn: ").defineList("acolyte.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.blacklistedBiomesAcolyte = builder.comment("Blacklisted biomes to spawn: ").defineList("acolyte.blacklist_biomes", Arrays.asList("flower_forest", "lush_caves"), o -> o instanceof String);
 
         builder.pop();
 
@@ -127,7 +139,7 @@ public class CommonConfig {
         builder.push("The Graveyard - Horde Config");
         this.enableHorde = builder.comment("Enable large Graveyard mob groups to spawn: ").define("horde.generate", true);
         this.sizeHorde = builder.comment("Set the size of the horde: ").defineInRange("horde.size", 40, 0, 1000);
-        this.ticksUntilSpawnHorde = builder.comment("Set the ticks until the next horde spawn attempt: ").defineInRange("horde.ticksUntilSpawnHorde", 12000, 1, 1000000);
+        this.ticksUntilSpawnHorde = builder.comment("Set the ticks until the next horde spawn attempt: ").defineInRange("horde.ticksUntilSpawnHorde", 24000, 1, 1000000);
         builder.pop();
 
         builder.push("The Graveyard - Particle Config");
@@ -158,7 +170,7 @@ public class CommonConfig {
     private List<String> getAllOverworldBiomeCategories() {
         Set<String> biomeNames = new HashSet<>();
         for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
-            if (biome.getBiomeCategory() == Biome.BiomeCategory.OCEAN || biome.getBiomeCategory() == Biome.BiomeCategory.RIVER || biome.getBiomeCategory() == Biome.BiomeCategory.NONE || biome.getBiomeCategory() == Biome.BiomeCategory.THEEND || biome.getBiomeCategory() == Biome.BiomeCategory.NETHER) {
+            if (biome.getBiomeCategory() == Biome.BiomeCategory.OCEAN || biome.getBiomeCategory() == Biome.BiomeCategory.RIVER || biome.getBiomeCategory() == Biome.BiomeCategory.NONE || biome.getBiomeCategory() == Biome.BiomeCategory.THEEND || biome.getBiomeCategory() == Biome.BiomeCategory.NETHER || biome.getBiomeCategory() == Biome.BiomeCategory.MUSHROOM) {
                 continue;
             }
             biomeNames.add(biome.getBiomeCategory().getName().toLowerCase(Locale.ROOT));

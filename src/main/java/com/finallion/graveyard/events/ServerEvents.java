@@ -14,6 +14,7 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.StructureSpawnListGatherEvent;
 
 import java.util.List;
+import java.util.Locale;
 
 public class ServerEvents {
     public static void setupStructureSpawns(final StructureSpawnListGatherEvent event) {
@@ -33,42 +34,42 @@ public class ServerEvents {
     public static void onBiomesLoad(BiomeLoadingEvent event) {
         List<MobSpawnSettings.SpawnerData> base = event.getSpawns().getSpawner(MobCategory.MONSTER);
 
-        if (parseBiomes(GraveyardConfig.COMMON.allowedBiomesAndCategoriesGhoul.get(), event)) {
+        if (parseBiomes(GraveyardConfig.COMMON.allowedBiomesCategoriesGhoul.get(), GraveyardConfig.COMMON.allowedBiomesCategoriesGhoul.get(), event)) {
             base.add(new MobSpawnSettings.SpawnerData(TGEntities.GHOUL,
                     GraveyardConfig.COMMON.weightGhoul.get(),
                     GraveyardConfig.COMMON.minGroupSizeGhoul.get(),
                     GraveyardConfig.COMMON.maxGroupSizeGhoul.get()));
         }
 
-        if (parseBiomes(GraveyardConfig.COMMON.allowedBiomesAndCategoriesRevenant.get(), event)) {
+        if (parseBiomes(GraveyardConfig.COMMON.allowedBiomesCategoriesRevenant.get(), GraveyardConfig.COMMON.blacklistedBiomesRevenant.get(), event)) {
             base.add(new MobSpawnSettings.SpawnerData(TGEntities.REVENANT,
                     GraveyardConfig.COMMON.weightRevenant.get(),
                     GraveyardConfig.COMMON.minGroupSizeRevenant.get(),
                     GraveyardConfig.COMMON.maxGroupSizeRevenant.get()));
         }
 
-        if (parseBiomes(GraveyardConfig.COMMON.allowedBiomesAndCategoriesReaper.get(), event)) {
+        if (parseBiomes(GraveyardConfig.COMMON.allowedBiomesCategoriesReaper.get(), GraveyardConfig.COMMON.blacklistedBiomesReaper.get(), event)) {
             base.add(new MobSpawnSettings.SpawnerData(TGEntities.REAPER,
                     GraveyardConfig.COMMON.weightReaper.get(),
                     GraveyardConfig.COMMON.minGroupSizeReaper.get(),
                     GraveyardConfig.COMMON.maxGroupSizeReaper.get()));
         }
 
-        if (parseBiomes(GraveyardConfig.COMMON.allowedBiomesAndCategoriesNightmare.get(), event)) {
+        if (parseBiomes(GraveyardConfig.COMMON.allowedBiomesCategoriesNightmare.get(), GraveyardConfig.COMMON.blacklistedBiomesNightmare.get(), event)) {
             base.add(new MobSpawnSettings.SpawnerData(TGEntities.NIGHTMARE,
                     GraveyardConfig.COMMON.weightNightmare.get(),
                     GraveyardConfig.COMMON.minGroupSizeNightmare.get(),
                     GraveyardConfig.COMMON.maxGroupSizeNightmare.get()));
         }
 
-        if (parseBiomes(GraveyardConfig.COMMON.allowedBiomesAndCategoriesSkeletonCreeper.get(), event)) {
+        if (parseBiomes(GraveyardConfig.COMMON.allowedBiomesCategoriesSkeletonCreeper.get(), GraveyardConfig.COMMON.blacklistedBiomesSkeletonCreeper.get(), event)) {
             base.add(new MobSpawnSettings.SpawnerData(TGEntities.SKELETON_CREEPER,
                     GraveyardConfig.COMMON.weightSkeletonCreeper.get(),
                     GraveyardConfig.COMMON.minGroupSizeSkeletonCreeper.get(),
                     GraveyardConfig.COMMON.maxGroupSizeSkeletonCreeper.get()));
         }
 
-        if (parseBiomes(GraveyardConfig.COMMON.allowedBiomesAndCategoriesAcolyte.get(), event)) {
+        if (parseBiomes(GraveyardConfig.COMMON.allowedBiomesCategoriesAcolyte.get(), GraveyardConfig.COMMON.blacklistedBiomesAcolyte.get(), event)) {
             base.add(new MobSpawnSettings.SpawnerData(TGEntities.ACOLYTE,
                     GraveyardConfig.COMMON.weightAcolyte.get(),
                     GraveyardConfig.COMMON.minGroupSizeAcolyte.get(),
@@ -77,8 +78,30 @@ public class ServerEvents {
 
     }
 
-    private static boolean parseBiomes(List<? extends String> biomes, BiomeLoadingEvent biomeContext) {
-        return biomes.contains(biomeContext.getName().getPath()) || biomes.contains(biomeContext.getCategory().getName());
+    //private static boolean parseBiomes(List<? extends String> biomes, BiomeLoadingEvent biomeContext) {
+    //    return biomes.contains(biomeContext.getName().getPath()) || biomes.contains(biomeContext.getCategory().getName());
+    //}
+
+    private static boolean parseBiomes(List<? extends String> allowedBiomeCategory, List<? extends String> blacklistedBiomes, BiomeLoadingEvent biomeContext) {
+        if (allowedBiomeCategory == null) {
+            TheGraveyard.LOGGER.error("Error reading from the config file: Allowed biome category is null. Try to delete the file and restart the game.");
+            return false;
+        }
+
+        // no blacklist and biome is allowed
+        if (allowedBiomeCategory.contains(biomeContext.getCategory().toString().toLowerCase(Locale.ROOT)) && blacklistedBiomes.isEmpty()) {
+            return true;
+        }
+
+        // blacklist and check if biome is on the blacklist
+        if (allowedBiomeCategory.contains(biomeContext.getCategory().toString().toLowerCase(Locale.ROOT)) && !blacklistedBiomes.isEmpty()) {
+            if (blacklistedBiomes.contains(biomeContext.getName().getPath())) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 
 

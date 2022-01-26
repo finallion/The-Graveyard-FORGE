@@ -18,14 +18,18 @@ public class MobConfigEntry {
     private final int defaultMaxGroupSize;
     public ForgeConfigSpec.IntValue maxGroupSize;
 
-    private final List<String> defaultAllowedBiomesAndCategories;
+    private final List<String> defaultAllowedBiomeCategories;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> allowedBiomesAndCategories;
 
-    public MobConfigEntry(int weight, int minGroupSize, int maxGroupSize, List<String> allowedBiomesAndCategories) {
+    private final List<String> defaultBlacklistedBiomes;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBiomes;
+
+    public MobConfigEntry(int weight, int minGroupSize, int maxGroupSize, List<String> allowedBiomesAndCategories , List<String> blacklistedBiomes) {
         this.defaultWeight = weight;
         this.defaultMinGroupSize = minGroupSize;
         this.defaultMaxGroupSize = maxGroupSize;
-        this.defaultAllowedBiomesAndCategories = allowedBiomesAndCategories;
+        this.defaultAllowedBiomeCategories = allowedBiomesAndCategories;
+        this.defaultBlacklistedBiomes = blacklistedBiomes;
     }
 
 
@@ -42,7 +46,7 @@ public class MobConfigEntry {
     }
 
     public List<String> getBiomeCategories() {
-        return defaultAllowedBiomesAndCategories;
+        return defaultAllowedBiomeCategories;
     }
 
 }
