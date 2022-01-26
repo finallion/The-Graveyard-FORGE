@@ -137,6 +137,8 @@ public class TheGraveyard {
                 }
             }
 
+            associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("nether_fossil")), TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY);
+
             ImmutableMap.Builder<StructureFeature<?>, ImmutableMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>> tempStructureToMultiMap = ImmutableMap.builder();
             worldStructureConfig.configuredStructures.entrySet().stream().filter(entry -> !STStructureToMultiMap.containsKey(entry.getKey())).forEach(tempStructureToMultiMap::put);
 
