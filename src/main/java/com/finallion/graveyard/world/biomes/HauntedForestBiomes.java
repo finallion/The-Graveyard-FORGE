@@ -6,6 +6,8 @@ import com.finallion.graveyard.init.TGEntities;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.features.AquaticFeatures;
 import net.minecraft.data.worldgen.features.VegetationFeatures;
+import net.minecraft.data.worldgen.placement.AquaticPlacements;
+import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.Musics;
 import net.minecraft.sounds.SoundEvents;
@@ -215,10 +217,10 @@ public class HauntedForestBiomes {
         BiomeDefaultFeatures.addMossyStoneBlock(generationSettings);
         BiomeDefaultFeatures.addFerns(generationSettings);
         BiomeDefaultFeatures.addGiantTaigaVegetation(generationSettings);
-        generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationFeatures.PATCH_WATERLILY);
+        generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_WATERLILY);
         BiomeDefaultFeatures.addDefaultMushrooms(generationSettings);
         BiomeDefaultFeatures.addSwampExtraVegetation(generationSettings);
-        generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, AquaticFeatures.SEAGRASS_TALL);
+        generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, AquaticPlacements.SEAGRASS_SWAMP);
     }
 
 

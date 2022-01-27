@@ -69,6 +69,26 @@ public class CommonConfig {
     public final ForgeConfigSpec.BooleanValue enableMossParticle;
     public final ForgeConfigSpec.IntValue particleFrequency;
 
+    public final ForgeConfigSpec.BooleanValue enableHauntedForest;
+    public final ForgeConfigSpec.BooleanValue enableHauntedLakes;
+    public final ForgeConfigSpec.BooleanValue enableErodedHauntedForest;
+    public final ForgeConfigSpec.BooleanValue enableAncientDeadCoralReef;
+
+    public final ForgeConfigSpec.BooleanValue enableFogHauntedForest;
+    public final ForgeConfigSpec.DoubleValue FogHauntedForestDensity;
+    public final ForgeConfigSpec.IntValue FogHauntedForestMinY;
+    public final ForgeConfigSpec.IntValue FogHauntedForestMaxY;
+
+    public final ForgeConfigSpec.BooleanValue enableFogHauntedLakes;
+    public final ForgeConfigSpec.DoubleValue FogHauntedLakesDensity;
+    public final ForgeConfigSpec.IntValue FogHauntedLakesMinY;
+    public final ForgeConfigSpec.IntValue FogHauntedLakesMaxY;
+
+    public final ForgeConfigSpec.BooleanValue enableFogErodedHauntedForest;
+    public final ForgeConfigSpec.DoubleValue FogErodedHauntedForestDensity;
+    public final ForgeConfigSpec.IntValue FogErodedHauntedForestMinY;
+    public final ForgeConfigSpec.IntValue FogErodedHauntedForestMaxY;
+
 
     public CommonConfig(ForgeConfigSpec.Builder builder) {
         builder.push("The Graveyard - Structures Config");
@@ -133,6 +153,30 @@ public class CommonConfig {
         this.allowedBiomesCategoriesAcolyte = builder.comment("Allowed biome categories to spawn: ").defineList("acolyte.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
         this.blacklistedBiomesAcolyte = builder.comment("Blacklisted biomes to spawn: ").defineList("acolyte.blacklist_biomes", Arrays.asList("flower_forest", "lush_caves"), o -> o instanceof String);
 
+        builder.pop();
+
+        builder.push("The Graveyard - Biome Config");
+        this.enableAncientDeadCoralReef = builder.comment("Allow the biome to spawn: ").define("ancient_dead_coral_reef.generate", true);
+        this.enableHauntedForest = builder.comment("Allow the biome to spawn: ").define("haunted_forest.generate", true);
+        this.enableHauntedLakes = builder.comment("Allow the biome to spawn: ").define("haunted_lakes.generate", true);
+        this.enableErodedHauntedForest = builder.comment("Allow the biome to spawn: ").define("eroded_haunted_forest.generate", true);
+        builder.pop();
+
+        builder.push("The Graveyard - Biome Fog Config");
+        this.enableFogHauntedForest = builder.comment("Enable fog in the biome: ").define("fog_haunted_forest.generate", true);
+        this.FogHauntedForestDensity = builder.comment("Set density of the fog: ").defineInRange("fog_haunted_forest.density", 0.35F, 0, 32);
+        this.FogHauntedForestMinY = builder.comment("Set Y value, where the fog starts: ").defineInRange("fog_haunted_forest.minY", 85, -64, 256);
+        this.FogHauntedForestMaxY = builder.comment("Set Y value, where the fog ends: ").defineInRange("fog_haunted_forest.maxY", 148, -64, 256);
+
+        this.enableFogHauntedLakes = builder.comment("Enable fog in the biome: ").define("fog_haunted_lakes.generate", true);
+        this.FogHauntedLakesDensity = builder.comment("Set density of the fog: ").defineInRange("fog_haunted_lakes.density", 0.3F, 0, 32);
+        this.FogHauntedLakesMinY = builder.comment("Set Y value, where the fog starts: ").defineInRange("fog_haunted_lakes.minY", 63, -64, 256);
+        this.FogHauntedLakesMaxY = builder.comment("Set Y value, where the fog ends: ").defineInRange("fog_haunted_lakes.maxY", 128, -64, 256);
+
+        this.enableFogErodedHauntedForest = builder.comment("Enable fog in the biome: ").define("fog_eroded_haunted_forest.generate", true);
+        this.FogErodedHauntedForestDensity = builder.comment("Set density of the fog: ").defineInRange("fog_eroded_haunted_forest.density", 0.35F, 0, 32);
+        this.FogErodedHauntedForestMinY = builder.comment("Set Y value, where the fog starts: ").defineInRange("fog_eroded_haunted_forest.minY", 93, -64, 256);
+        this.FogErodedHauntedForestMaxY = builder.comment("Set Y value, where the fog ends: ").defineInRange("fog_eroded_haunted_forest.maxY", 160, -64, 256);
         builder.pop();
 
 
