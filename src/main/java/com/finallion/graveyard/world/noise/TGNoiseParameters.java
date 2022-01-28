@@ -1,6 +1,7 @@
 package com.finallion.graveyard.world.noise;
 
 
+import com.finallion.graveyard.TheGraveyard;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceKey;
@@ -27,15 +28,12 @@ public class TGNoiseParameters {
 
 
 
-    private static void register(ResourceKey<NormalNoise.NoiseParameters> noise, int firstOctave, double firstAmplitude, double... amplitudes) {
-        BuiltinRegistries.register(BuiltinRegistries.NOISE, noise, new NormalNoise.NoiseParameters(firstOctave, firstAmplitude, amplitudes));
-    }
-
+    // TODO: add MODID
     private static ResourceKey<NormalNoise.NoiseParameters> registerNoiseParameter(String p_189310_) {
         return ResourceKey.create(Registry.NOISE_REGISTRY, new ResourceLocation(p_189310_));
     }
 
-    public static NormalNoise instantiate(Registry<NormalNoise.NoiseParameters> p_189306_, PositionalRandomFactory p_189307_, ResourceKey<NormalNoise.NoiseParameters> p_189308_) {
-        return NormalNoise.create(p_189307_.fromHashOf(p_189308_.location()), p_189306_.getOrThrow(p_189308_));
+    private static void register(ResourceKey<NormalNoise.NoiseParameters> p_194751_, int p_194752_, double p_194753_, double... p_194754_) {
+        BuiltinRegistries.register(BuiltinRegistries.NOISE, p_194751_, new NormalNoise.NoiseParameters(p_194752_, p_194753_, p_194754_));
     }
 }

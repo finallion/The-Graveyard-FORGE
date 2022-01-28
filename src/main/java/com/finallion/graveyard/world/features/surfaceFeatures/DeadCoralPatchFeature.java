@@ -34,13 +34,13 @@ public class DeadCoralPatchFeature extends Feature<NoneFeatureConfiguration> {
             mutable.set(blockPos);
             mutable.move(random.nextInt(3) - random.nextInt(3), 0, random.nextInt(3) - random.nextInt(3));
             mutable.setY(i);
-            if (world.getBlockState(mutable).isSolidRender(world, mutable) && world.getBlockState(mutable.above()).isAir() && world.getBiomeName(mutable).get().getRegistryName().getPath().contains("ancient_dead_coral_reef")) {
+            if (world.getBlockState(mutable).isSolidRender(world, mutable) && world.getBlockState(mutable.above()).isAir() && world.getBiomeName(mutable).get().toString().contains("ancient_dead_coral_reef")) {
                 if (random.nextInt(7) == 0) {
                     BlockState coral = TGTags.DEAD_CORALS.getRandomElement(random).defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false);
                     world.setBlock(mutable.above(), coral, 2);
                     break;
                 }
-            } else if (world.getBlockState(mutable).isSolidRender(world, mutable) && world.getBlockState(mutable.above()).getBlock() == Blocks.WATER && world.getBiomeName(mutable).get().getRegistryName().getPath().contains("ancient_dead_coral_reef")) {
+            } else if (world.getBlockState(mutable).isSolidRender(world, mutable) && world.getBlockState(mutable.above()).getBlock() == Blocks.WATER && world.getBiomeName(mutable).get().toString().contains("ancient_dead_coral_reef")) {
                 if (random.nextBoolean()) {
                     BlockState coral = BlockTags.CORALS.getRandomElement(random).defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, true);
                     world.setBlock(mutable.above(), coral, 2);

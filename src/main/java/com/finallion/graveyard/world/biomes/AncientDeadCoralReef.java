@@ -36,20 +36,6 @@ public class AncientDeadCoralReef {
         generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TGConfiguredFeatures.ANCIENT_DEAD_CORAL_REEF_WATER_PLACED_FEATURE);
         generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TGConfiguredFeatures.DEAD_CORAL_PATCH_PLACED_FEATURE);
 
-        /*
-        BiomeModifications.create(new Identifier(TheGraveyard.MOD_ID + "ancient_dead_coral_reef_structures"))
-                .add(ModificationPhase.ADDITIONS, BiomeSelectors.includeByKey(TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY), ctx -> {
-                    ctx.getGenerationSettings().addStructure(RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, new Identifier("nether_fossil")));
-                }).add(ModificationPhase.ADDITIONS, BiomeSelectors.includeByKey(TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY), ctx -> {
-                    ctx.getGenerationSettings().addStructure(RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, new Identifier("ocean_ruin_cold")));
-                }).add(ModificationPhase.ADDITIONS, BiomeSelectors.includeByKey(TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY), ctx -> {
-                    ctx.getGenerationSettings().addStructure(RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, new Identifier("shipwreck")));
-                }).add(ModificationPhase.ADDITIONS, BiomeSelectors.includeByKey(TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY), ctx -> {
-                    ctx.getGenerationSettings().addStructure(RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, new Identifier("shipwreck_beached")));
-                });
-
-         */
-
         return (new Biome.BiomeBuilder())
                 .precipitation(Biome.Precipitation.RAIN)
                 .biomeCategory(Biome.BiomeCategory.BEACH)

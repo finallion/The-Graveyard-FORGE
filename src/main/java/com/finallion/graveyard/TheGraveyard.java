@@ -5,6 +5,8 @@ import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.events.ServerEvents;
 import com.finallion.graveyard.init.*;
+import com.finallion.graveyard.world.biomes.TGBiomeProvider;
+import com.finallion.graveyard.world.noise.TGNoiseParameters;
 import com.finallion.graveyard.world.structures.AbstractGraveyardStructure;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
@@ -40,6 +42,7 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
+import terrablender.api.BiomeProviders;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -77,8 +80,10 @@ public class TheGraveyard {
 
     public void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
+            BiomeProviders.register(new TGBiomeProvider(new ResourceLocation(MOD_ID, "biome_provider"), 1));
             TGStructures.setupStructures();
             TGConfiguredStructures.registerConfiguredStructures();
+            TGNoiseParameters.init();
         });
     }
 
@@ -140,7 +145,6 @@ public class TheGraveyard {
             // add vanilla structures to custom biomes
             associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("nether_fossil")), TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY);
             associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("ocean_ruin_cold")), TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY);
-            associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("shipwreck")), TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY);
             associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("shipwreck_beached")), TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY);
             associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("ruined_portal")), TGBiomes.HAUNTED_LAKES_KEY);
             associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("ruined_portal")), TGBiomes.ERODED_HAUNTED_FOREST_KEY);

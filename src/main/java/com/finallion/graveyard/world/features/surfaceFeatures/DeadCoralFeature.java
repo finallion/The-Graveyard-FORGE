@@ -38,7 +38,7 @@ public abstract class DeadCoralFeature extends Feature<NoneFeatureConfiguration>
     protected boolean placeCoralBlock(LevelAccessor world, Random p_65448_, BlockPos pos, BlockState p_65450_) {
         BlockPos blockPos = pos.above();
         BlockState blockState = world.getBlockState(pos);
-        if (world.getBlockState(pos.below()).is(Blocks.WATER) || world.getBlockState(pos.below()).is(Blocks.AIR) || !world.getBlockState(pos.below()).isSolidRender(world, pos.below())) {
+        if (world.getBlockState(pos.below()).is(Blocks.WATER) || world.getBlockState(pos.below()).is(Blocks.AIR) || !world.getBlockState(pos.below()).isCollisionShapeFullBlock(world, pos.below())) {
             return false;
         }
 

@@ -15,11 +15,11 @@ public class FeatureHelper {
             world.setBlock(pos, Blocks.DIRT.defaultBlockState(), 2);
         }
 
-        return state.getBlock() == (Blocks.MOSS_BLOCK) || state.getBlock() == (Blocks.GRASS_BLOCK) || state.getBlock() == (Blocks.COARSE_DIRT) || state.getBlock() == (Blocks.ROOTED_DIRT);
+        return state.is(Blocks.MOSS_BLOCK) || state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.COARSE_DIRT) || state.is(Blocks.ROOTED_DIRT);
     }
 
     public static boolean canBePlaced(BlockState state) {
-        return state.getBlock() == (Blocks.MOSS_BLOCK) || state.getBlock() == (Blocks.GRASS_BLOCK) || state.getBlock() == (Blocks.COARSE_DIRT) || state.getBlock() == (Blocks.ROOTED_DIRT);
+        return state.is(Blocks.MOSS_BLOCK) || state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.COARSE_DIRT) || state.is(Blocks.ROOTED_DIRT);
     }
 
     public static boolean canGenerate(WorldGenLevel world, BlockPos pos, int height) {
@@ -33,7 +33,7 @@ public class FeatureHelper {
     }
 
     public static boolean isCorrectBiome(ResourceKey<Biome> key) {
-        if (key.getRegistryName().getPath().contains("haunted")) {
+        if (key.toString().contains("haunted")) {
             return true;
         }
         return false;

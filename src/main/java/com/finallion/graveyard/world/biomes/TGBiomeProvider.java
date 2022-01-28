@@ -45,7 +45,6 @@ public class TGBiomeProvider extends BiomeProvider {
             if (GraveyardConfig.COMMON.enableAncientDeadCoralReef.get()) {
                 builder.replaceBiome(Biomes.BEACH, TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY);
             }
-
         });
     }
 

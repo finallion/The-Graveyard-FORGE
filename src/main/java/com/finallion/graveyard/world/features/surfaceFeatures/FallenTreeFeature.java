@@ -39,12 +39,12 @@ public class FallenTreeFeature extends Feature<NoneFeatureConfiguration> {
         for (int i = 93; i < world.getHeight(); i++) {
             for (int ii = 0; ii < length; ii++) {
                 if (ii == 0) {
-                    if (world.getBlockState(blockPos.relative(direction, ii + 1).below()).getBlock() != Blocks.SOUL_SAND || world.getBlockState(blockPos.relative(direction, ii + 2).below()).getBlock() != Blocks.SOUL_SAND) {
+                    if (!world.getBlockState(blockPos.relative(direction, ii + 1).below()).is(Blocks.SOUL_SAND) || world.getBlockState(blockPos.relative(direction, ii + 2).below()).getBlock() != Blocks.SOUL_SAND) {
                         break;
                     }
                 }
 
-                if (world.getBlockState(blockPos.relative(direction, ii).below()).getBlock() == Blocks.SOUL_SAND && canBeReplaced(world.getBlockState(blockPos.relative(direction, ii)))) {
+                if (world.getBlockState(blockPos.relative(direction, ii).below()).is(Blocks.SOUL_SAND) && canBeReplaced(world.getBlockState(blockPos.relative(direction, ii)))) {
                     world.setBlock(blockPos.relative(direction, ii), wood.setValue(BlockStateProperties.AXIS, axis), 2);
 
                     // moss carpet on top of the trunk

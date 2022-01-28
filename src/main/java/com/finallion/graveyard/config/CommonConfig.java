@@ -90,6 +90,7 @@ public class CommonConfig {
     public final ForgeConfigSpec.IntValue FogErodedHauntedForestMaxY;
 
 
+
     public CommonConfig(ForgeConfigSpec.Builder builder) {
         builder.push("The Graveyard - Structures Config");
         this.blacklistedBiomes = builder.comment("To whitelist biomes: add the biome category to the whitelist. If you want to allow a specific biome from a biome category, whitelist the category and blacklist all biomes except the one biome you like to be able to generate structures. \n" +
@@ -112,14 +113,14 @@ public class CommonConfig {
 
         builder.push("The Graveyard - Mob Spawning Config");
         this.enableGhoul = builder.comment("Allow the Ghoul to spawn: ").define("ghoul.enabled", true);
-        this.weightGhoul = builder.comment("Set the spawn weight: ").defineInRange("ghoul.weight", 45, 0, 100);
+        this.weightGhoul = builder.comment("Set the spawn weight: ").defineInRange("ghoul.weight", 25, 0, 100);
         this.minGroupSizeGhoul = builder.comment("Set the min group size on spawn: ").defineInRange("ghoul.minGroupSizeGhoul", 2, 1, 100);
         this.maxGroupSizeGhoul = builder.comment("Set the max group size on spawn: ").defineInRange("ghoul.maxGroupSizeGhoul", 5, 1, 100);
         this.allowedBiomesCategoriesGhoul = builder.comment("Allowed biome categories to spawn: ").defineList("ghoul.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
         this.blacklistedBiomesGhoul = builder.comment("Blacklisted biomes to spawn: ").defineList("ghoul.blacklist_biomes", Arrays.asList("flower_forest", "lush_caves"), o -> o instanceof String);
 
         this.enableRevenant = builder.comment("Allow the Revenant to spawn: ").define("revenant.enabled", true);
-        this.weightRevenant = builder.comment("Set the spawn weight: ").defineInRange("revenant.weight", 45, 0, 100);
+        this.weightRevenant = builder.comment("Set the spawn weight: ").defineInRange("revenant.weight", 25, 0, 100);
         this.minGroupSizeRevenant = builder.comment("Set the min group size on spawn: ").defineInRange("revenant.minGroupSizeRevenant", 5, 1, 100);
         this.maxGroupSizeRevenant = builder.comment("Set the max group size on spawn: ").defineInRange("revenant.maxGroupSizeRevenant", 8, 1, 100);
         this.allowedBiomesCategoriesRevenant = builder.comment("Allowed biome categories to spawn: ").defineList("revenant.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
@@ -133,14 +134,14 @@ public class CommonConfig {
         this.blacklistedBiomesReaper = builder.comment("Blacklisted biomes to spawn: ").defineList("reaper.blacklist_biomes", Arrays.asList("flower_forest", "lush_caves"), o -> o instanceof String);
 
         this.enableNightmare = builder.comment("Allow the Nightmare to spawn: ").define("nightmare.enabled", true);
-        this.weightNightmare = builder.comment("Set the spawn weight: ").defineInRange("nightmare.weight", 15, 0, 100);
+        this.weightNightmare = builder.comment("Set the spawn weight: ").defineInRange("nightmare.weight", 7, 0, 100);
         this.minGroupSizeNightmare = builder.comment("Set the min group size on spawn: ").defineInRange("nightmare.minGroupSizeNightmare", 1, 1, 100);
         this.maxGroupSizeNightmare = builder.comment("Set the max group size on spawn: ").defineInRange("nightmare.maxGroupSizeNightmare", 1, 1, 100);
         this.allowedBiomesCategoriesNightmare = builder.comment("Allowed biome categories to spawn: ").defineList("nightmare.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
         this.blacklistedBiomesNightmare = builder.comment("Blacklisted biomes to spawn: ").defineList("nightmare.blacklist_biomes", Arrays.asList("flower_forest", "lush_caves"), o -> o instanceof String);
 
         this.enableSkeletonCreeper = builder.comment("Allow the Skeleton Creeper to spawn: ").define("skeleton_creeper.enabled", true);
-        this.weightSkeletonCreeper = builder.comment("Set the spawn weight: ").defineInRange("skeleton_creeper.weight", 35, 0, 100);
+        this.weightSkeletonCreeper = builder.comment("Set the spawn weight: ").defineInRange("skeleton_creeper.weight", 20, 0, 100);
         this.minGroupSizeSkeletonCreeper = builder.comment("Set the min group size on spawn: ").defineInRange("skeleton_creeper.minGroupSizeSkeletonCreeper", 1, 1, 100);
         this.maxGroupSizeSkeletonCreeper = builder.comment("Set the max group size on spawn: ").defineInRange("skeleton_creeper.maxGroupSizeSkeletonCreeper", 4, 1, 100);
         this.allowedBiomesCategoriesSkeletonCreeper = builder.comment("Allowed biome categories to spawn: ").defineList("skeleton_creeper.biomes", getAllOverworldBiomeCategories(), o -> o instanceof String);
@@ -162,23 +163,23 @@ public class CommonConfig {
         this.enableErodedHauntedForest = builder.comment("Allow the biome to spawn: ").define("eroded_haunted_forest.generate", true);
         builder.pop();
 
+
         builder.push("The Graveyard - Biome Fog Config");
         this.enableFogHauntedForest = builder.comment("Enable fog in the biome: ").define("fog_haunted_forest.generate", true);
-        this.FogHauntedForestDensity = builder.comment("Set density of the fog: ").defineInRange("fog_haunted_forest.density", 0.35F, 0, 32);
-        this.FogHauntedForestMinY = builder.comment("Set Y value, where the fog starts: ").defineInRange("fog_haunted_forest.minY", 85, -64, 256);
+        this.FogHauntedForestDensity = builder.comment("Set density of the fog (smaller values = denser): ").defineInRange("fog_haunted_forest.density", 31.65D, 0.0D, 10000D);
+        this.FogHauntedForestMinY = builder.comment("Set Y value, where the fog starts: ").defineInRange("fog_haunted_forest.minY", 63, -64, 256);
         this.FogHauntedForestMaxY = builder.comment("Set Y value, where the fog ends: ").defineInRange("fog_haunted_forest.maxY", 148, -64, 256);
 
         this.enableFogHauntedLakes = builder.comment("Enable fog in the biome: ").define("fog_haunted_lakes.generate", true);
-        this.FogHauntedLakesDensity = builder.comment("Set density of the fog: ").defineInRange("fog_haunted_lakes.density", 0.3F, 0, 32);
+        this.FogHauntedLakesDensity = builder.comment("Set density of the fog (smaller values = denser): ").defineInRange("fog_haunted_lakes.density", 31.7D, 0.0D, 10000D);
         this.FogHauntedLakesMinY = builder.comment("Set Y value, where the fog starts: ").defineInRange("fog_haunted_lakes.minY", 63, -64, 256);
         this.FogHauntedLakesMaxY = builder.comment("Set Y value, where the fog ends: ").defineInRange("fog_haunted_lakes.maxY", 128, -64, 256);
 
         this.enableFogErodedHauntedForest = builder.comment("Enable fog in the biome: ").define("fog_eroded_haunted_forest.generate", true);
-        this.FogErodedHauntedForestDensity = builder.comment("Set density of the fog: ").defineInRange("fog_eroded_haunted_forest.density", 0.35F, 0, 32);
+        this.FogErodedHauntedForestDensity = builder.comment("Set density of the fog (smaller values = denser): ").defineInRange("fog_eroded_haunted_forest.density", 31.65D, 0.0D, 10000D);
         this.FogErodedHauntedForestMinY = builder.comment("Set Y value, where the fog starts: ").defineInRange("fog_eroded_haunted_forest.minY", 93, -64, 256);
         this.FogErodedHauntedForestMaxY = builder.comment("Set Y value, where the fog ends: ").defineInRange("fog_eroded_haunted_forest.maxY", 160, -64, 256);
         builder.pop();
-
 
         builder.push("The Graveyard - Horde Config");
         this.enableHorde = builder.comment("Enable large Graveyard mob groups to spawn: ").define("horde.generate", true);
@@ -194,6 +195,10 @@ public class CommonConfig {
 
 
     private boolean validateBiome(Object o) {
+        if (o.toString().contains("haunted_forest") || o.toString().contains("ancient_dead_coral_reef") || o.toString().contains("haunted_lakes")) {
+            return true;
+        }
+
         return o == null || ((String) o).contains("*") || ForgeRegistries.BIOMES.containsKey(new ResourceLocation((String) o));
     }
 

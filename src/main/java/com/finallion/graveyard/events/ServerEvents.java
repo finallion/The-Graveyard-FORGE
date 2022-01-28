@@ -76,11 +76,8 @@ public class ServerEvents {
                     GraveyardConfig.COMMON.maxGroupSizeAcolyte.get()));
         }
 
-    }
 
-    //private static boolean parseBiomes(List<? extends String> biomes, BiomeLoadingEvent biomeContext) {
-    //    return biomes.contains(biomeContext.getName().getPath()) || biomes.contains(biomeContext.getCategory().getName());
-    //}
+    }
 
     private static boolean parseBiomes(List<? extends String> allowedBiomeCategory, List<? extends String> blacklistedBiomes, BiomeLoadingEvent biomeContext) {
         if (allowedBiomeCategory == null) {

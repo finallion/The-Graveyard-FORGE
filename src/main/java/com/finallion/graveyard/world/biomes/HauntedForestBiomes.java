@@ -41,17 +41,6 @@ public class HauntedForestBiomes {
         generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TGConfiguredFeatures.GRAVESTONE_PLACED_FEATURE);
         generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TGConfiguredFeatures.BUSH_PLACED_FEATURE);
 
-        /*
-        BiomeModifications.create(new Identifier(TheGraveyard.MOD_ID + "haunted_forest_structures"))
-                .add(ModificationPhase.ADDITIONS, BiomeSelectors.includeByKey(TGBiomes.HAUNTED_FOREST_KEY), ctx -> {
-                    ctx.getGenerationSettings().addStructure(RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, new Identifier("ruined_portal")));
-                });
-
-
-
-         */
-
-
 
         return (new Biome.BiomeBuilder())
                 .precipitation(Biome.Precipitation.RAIN)
@@ -99,14 +88,6 @@ public class HauntedForestBiomes {
         generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TGConfiguredFeatures.BUSH_PLACED_FEATURE);
         generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TGConfiguredFeatures.SOUL_LIGHT_PLACED_FEATURE);
 
-        /*
-        BiomeModifications.create(new Identifier(TheGraveyard.MOD_ID + "haunted_lakes_structures"))
-                .add(ModificationPhase.ADDITIONS, BiomeSelectors.includeByKey(TGBiomes.HAUNTED_LAKES_KEY), ctx -> {
-                    ctx.getGenerationSettings().addStructure(RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, new Identifier("ruined_portal")));
-                });
-
-         */
-
         return (new Biome.BiomeBuilder())
                 .precipitation(Biome.Precipitation.RAIN)
                 .biomeCategory(Biome.BiomeCategory.FOREST)
@@ -148,18 +129,6 @@ public class HauntedForestBiomes {
         addBasicFeatures(generationSettings);
         addTaigaFeatures(generationSettings);
 
-        /*
-        BiomeModifications.create(new Identifier(TheGraveyard.MOD_ID + "eroded_haunted_forest_structures"))
-                .add(ModificationPhase.ADDITIONS, BiomeSelectors.includeByKey(TGBiomes.ERODED_HAUNTED_FOREST_KEY), ctx -> {
-                    ctx.getGenerationSettings().addStructure(RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, new Identifier("nether_fossil")));
-                })
-                .add(ModificationPhase.ADDITIONS, BiomeSelectors.includeByKey(TGBiomes.ERODED_HAUNTED_FOREST_KEY), ctx -> {
-                    ctx.getGenerationSettings().addStructure(RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, new Identifier("ruined_portal")));
-                });
-
-
-
-         */
         generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TGConfiguredFeatures.ERODED_HAUNTED_FOREST_TREES_PLACED_FEATURE);
         generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TGConfiguredFeatures.FALLEN_TREE_PLACED_FEATURE);
         generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TGConfiguredFeatures.COBWEB_PLACED_FEATURE);

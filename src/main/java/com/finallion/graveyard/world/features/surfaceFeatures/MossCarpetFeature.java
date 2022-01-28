@@ -35,7 +35,7 @@ public class MossCarpetFeature extends Feature<NoneFeatureConfiguration> {
                 world.setBlock(mutable.above(), Blocks.MOSS_CARPET.defaultBlockState(), 2);
                 break;
 
-            } else if (world.getBlockState(mutable).getBlock() == Blocks.MOSS_BLOCK && world.getBlockState(mutable.above()).isAir()) {
+            } else if (world.getBlockState(mutable).is(Blocks.MOSS_BLOCK) && world.getBlockState(mutable.above()).isAir()) {
                 if (random.nextInt(5) == 0) {
                     world.setBlock(mutable.above(), Blocks.MOSS_CARPET.defaultBlockState(), 2);
                     break;

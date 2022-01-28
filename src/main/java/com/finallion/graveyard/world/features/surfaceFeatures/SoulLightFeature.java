@@ -30,8 +30,8 @@ public class SoulLightFeature extends Feature<NoneFeatureConfiguration> {
         mutable.setY(63);
 
 
-        if (world.getBlockState(mutable).getBlock() == Blocks.LILY_PAD && world.getBlockState(mutable.above()).isAir() && world.getBlockState(mutable.above(2)).isAir() && FeatureHelper.isCorrectBiome(world.getBiomeName(mutable).get())) {
-            world.setBlock(mutable.move(0, random.nextInt(2) + 1, 0), Blocks.SOUL_LANTERN.defaultBlockState(), 2);
+        if (world.getBlockState(mutable).is(Blocks.LILY_PAD) && world.getBlockState(mutable.above()).isAir() && world.getBlockState(mutable.above(2)).isAir() && FeatureHelper.isCorrectBiome(world.getBiomeName(mutable).get())) {
+            world.setBlock(mutable.move(0, random.nextInt(2) + 1, 0), Blocks.BLACK_CANDLE.defaultBlockState().setValue(BlockStateProperties.LIT, true).setValue(BlockStateProperties.CANDLES, random.nextInt(3) + 2), 2);
             return true;
         }
 

@@ -3,7 +3,7 @@ loaderVersion="[38,)" #mandatory
 license="All rights reserved"
 [[mods]] #mandatory
 modId="graveyard" #mandatory
-version="1.4" #mandatory
+version="1.5" #mandatory
 displayName="The Graveyard" #mandatory
 logoFile="graveyard_logo.png" #optional
 credits="" #optional
@@ -15,7 +15,7 @@ The Graveyard adds new biomes, structures, mobs and blocks to your minecraft wor
 [[dependencies.graveyard]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[39,)" #mandatory
+    versionRange="[39.0.19,)" #mandatory
     ordering="NONE"
     side="BOTH"
 [[dependencies.graveyard]]
@@ -30,4 +30,10 @@ The Graveyard adds new biomes, structures, mobs and blocks to your minecraft wor
     versionRange="[3.0.0,)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.graveyard]]
+    modId = "terrablender"
+    mandatory = true
+    versionRange = "[1.1.0.73,)"
+    ordering = "NONE"
+    side = "BOTH"
 
