@@ -1,0 +1,33 @@
+name: 1.18.1 Bug/Crash Report
+description: File a bug/crash report
+assignees: Finallion
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For bugs/crashes experienced with Minecraft 1.18.1. Older versions are not supported.
+        If any section does not apply, replace its content with "N/A".
+  - type: textarea
+    attributes:
+      label: What's the issue you encountered?
+      description: |
+        Describe the issue in detail and what you were doing beforehand.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: How can the issue be reproduced?
+      description: Include a detailed step by step process for recreating your issue.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Logs
+      description: |
+        Logs can be found in your Minecraft directory under `/logs/latest.log`.
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: |
+        Any other information relevant to your issue.
