@@ -42,9 +42,9 @@ public class ClientEvents {
                     || pos.getY() < GraveyardConfig.COMMON.FogHauntedLakesMinY.get()) {
                 // fade fog out
                 if (fogStart < 32.0F) {
-                    fogStart *= 1.25F;
+                    fogStart *= 1.05F;
                 } else {
-                    fogStart = 32.0F;
+                    fogStart = event.getFarPlaneDistance() / 2;
                     return;
                 }
             }
@@ -54,9 +54,9 @@ public class ClientEvents {
                     || pos.getY() < GraveyardConfig.COMMON.FogErodedHauntedForestMinY.get()) {
                 // fade fog out
                 if (fogStart < 32.0F) {
-                    fogStart *= 1.25F;
+                    fogStart *= 1.05F;
                 } else {
-                    fogStart = 32.0F;
+                    fogStart = event.getFarPlaneDistance() / 2;
                     return;
                 }
             }
@@ -66,9 +66,9 @@ public class ClientEvents {
                     || pos.getY() < GraveyardConfig.COMMON.FogHauntedForestMinY.get()) {
                 // fade fog out
                 if (fogStart < 32.0F) {
-                    fogStart *= 1.25F;
+                    fogStart *= 1.05F;
                 } else {
-                    fogStart = 32.0F;
+                    fogStart = event.getFarPlaneDistance() / 2;
                     return;
                 }
             }
@@ -77,9 +77,9 @@ public class ClientEvents {
 
             // fade fog out
             if (fogStart < 32.0F) {
-                fogStart *= 1.25F;
+                fogStart *= 1.05F;
             } else {
-                fogStart = 32.0F;
+                fogStart = event.getFarPlaneDistance() / 2;
                 return;
             }
 
@@ -94,11 +94,19 @@ public class ClientEvents {
 
                 // fog fade in
                 if (fogStart > fogDensity) {
-                    fogStart *= 0.95F;
+                    fogStart *= 0.975F;
                 }
 
                 float start = viewDistance * 0.05F * fogStart;
                 float end = Math.min(viewDistance, 192.0F) * 0.5F * fogStart;
+
+                if (start > 64.0F) {
+                    start = 64.0F;
+                }
+
+                if (end > event.getFarPlaneDistance()) {
+                    end = event.getFarPlaneDistance();
+                }
 
                 RenderSystem.setShaderFogStart(start);
                 RenderSystem.setShaderFogEnd(end);

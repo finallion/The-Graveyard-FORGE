@@ -34,7 +34,7 @@ public class ServerEvents {
     public static void onBiomesLoad(BiomeLoadingEvent event) {
         List<MobSpawnSettings.SpawnerData> base = event.getSpawns().getSpawner(MobCategory.MONSTER);
 
-        if (parseBiomes(GraveyardConfig.COMMON.allowedBiomesCategoriesGhoul.get(), GraveyardConfig.COMMON.allowedBiomesCategoriesGhoul.get(), event)) {
+        if (parseBiomes(GraveyardConfig.COMMON.allowedBiomesCategoriesGhoul.get(), GraveyardConfig.COMMON.blacklistedBiomesGhoul.get(), event)) {
             base.add(new MobSpawnSettings.SpawnerData(TGEntities.GHOUL,
                     GraveyardConfig.COMMON.weightGhoul.get(),
                     GraveyardConfig.COMMON.minGroupSizeGhoul.get(),
