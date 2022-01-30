@@ -5,8 +5,6 @@ import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.events.ServerEvents;
 import com.finallion.graveyard.init.*;
-import com.finallion.graveyard.world.biomes.TGBiomeProvider;
-import com.finallion.graveyard.world.noise.TGNoiseParameters;
 import com.finallion.graveyard.world.structures.AbstractGraveyardStructure;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
@@ -42,7 +40,6 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
-import terrablender.api.BiomeProviders;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -80,10 +77,10 @@ public class TheGraveyard {
 
     public void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            BiomeProviders.register(new TGBiomeProvider(new ResourceLocation(MOD_ID, "biome_provider"), 1));
+            //BiomeProviders.register(new TGBiomeProvider(new ResourceLocation(MOD_ID, "biome_provider"), 1));
             TGStructures.setupStructures();
             TGConfiguredStructures.registerConfiguredStructures();
-            TGNoiseParameters.init();
+            //TGNoiseParameters.init();
         });
     }
 

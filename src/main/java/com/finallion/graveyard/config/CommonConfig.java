@@ -69,6 +69,7 @@ public class CommonConfig {
     public final ForgeConfigSpec.BooleanValue enableMossParticle;
     public final ForgeConfigSpec.IntValue particleFrequency;
 
+    /*
     public final ForgeConfigSpec.BooleanValue enableHauntedForest;
     public final ForgeConfigSpec.BooleanValue enableHauntedLakes;
     public final ForgeConfigSpec.BooleanValue enableErodedHauntedForest;
@@ -88,7 +89,7 @@ public class CommonConfig {
     public final ForgeConfigSpec.DoubleValue FogErodedHauntedForestDensity;
     public final ForgeConfigSpec.IntValue FogErodedHauntedForestMinY;
     public final ForgeConfigSpec.IntValue FogErodedHauntedForestMaxY;
-
+     */
 
 
     public CommonConfig(ForgeConfigSpec.Builder builder) {
@@ -155,6 +156,7 @@ public class CommonConfig {
         this.blacklistedBiomesAcolyte = builder.comment("Blacklisted biomes to spawn: ").defineList("acolyte.blacklist_biomes", Arrays.asList("flower_forest", "lush_caves"), o -> o instanceof String);
 
         builder.pop();
+        /*
 
         builder.push("The Graveyard - Biome Config");
         this.enableAncientDeadCoralReef = builder.comment("Allow the biome to spawn: ").define("ancient_dead_coral_reef.generate", true);
@@ -181,6 +183,8 @@ public class CommonConfig {
         this.FogErodedHauntedForestMaxY = builder.comment("Set Y value, where the fog ends: ").defineInRange("fog_eroded_haunted_forest.maxY", 160, -64, 256);
         builder.pop();
 
+
+         */
         builder.push("The Graveyard - Horde Config");
         this.enableHorde = builder.comment("Enable large Graveyard mob groups to spawn: ").define("horde.generate", true);
         this.sizeHorde = builder.comment("Set the size of the horde: ").defineInRange("horde.size", 40, 0, 1000);

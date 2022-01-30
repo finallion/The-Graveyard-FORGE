@@ -12,13 +12,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.SurfaceRules;
-import terrablender.api.BiomeProvider;
-import terrablender.worldgen.TBClimate;
+
 
 import java.util.Optional;
 import java.util.function.Consumer;
 
-
+/*
 public class TGBiomeProvider extends BiomeProvider {
 
     public TGBiomeProvider(ResourceLocation name, int overworldWeight){
@@ -54,4 +53,6 @@ public class TGBiomeProvider extends BiomeProvider {
     }
 
 }
+
+ */
 

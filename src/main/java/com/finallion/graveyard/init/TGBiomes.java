@@ -12,7 +12,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+//@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TGBiomes {
     public static final ResourceKey<Biome> ERODED_HAUNTED_FOREST_KEY = registerBiomeKeys("eroded_haunted_forest");
     public static final ResourceKey<Biome> HAUNTED_LAKES_KEY = registerBiomeKeys("haunted_lakes");
@@ -23,7 +23,7 @@ public class TGBiomes {
         return ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(TheGraveyard.MOD_ID, name));
     }
 
-    @SubscribeEvent
+    //@SubscribeEvent
     public static void registerBiomes(RegistryEvent.Register<Biome> event) {
         IForgeRegistry<Biome> registry = event.getRegistry();
         registry.register(HauntedForestBiomes.createHauntedForest().setRegistryName(HAUNTED_FOREST_KEY.location()));

@@ -32,7 +32,7 @@ public class HauntedHouseStructure extends AbstractGraveyardStructure {
     public HauntedHouseStructure(Codec<JigsawConfiguration> codec) {
         super(codec, new StructureConfigEntry(25, 20,
                         Arrays.asList(Biome.BiomeCategory.FOREST.getName(), Biome.BiomeCategory.SWAMP.getName()),
-                        Arrays.asList("forest", "flower_forest", "birch_forest", "old_growth_birch_forest", "windswept_forest", "haunted_forest")), // only allow in swamp and dark forest
+                        Arrays.asList("forest", "flower_forest", "birch_forest", "old_growth_birch_forest", "windswept_forest")), // only allow in swamp and dark forest
                 30, 451235912, HauntedHouseGenerator.STARTING_POOL, "haunted_house");
     }
 
