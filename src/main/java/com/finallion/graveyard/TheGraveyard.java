@@ -140,6 +140,7 @@ public class TheGraveyard {
             }
 
             // add vanilla structures to custom biomes
+            /*
             associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("nether_fossil")), TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY);
             associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("ocean_ruin_cold")), TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY);
             associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("shipwreck_beached")), TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY);
@@ -148,6 +149,8 @@ public class TheGraveyard {
             associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("ruined_portal")), TGBiomes.HAUNTED_FOREST_KEY);
             associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("nether_fossil")), TGBiomes.ERODED_HAUNTED_FOREST_KEY);
 
+
+             */
             ImmutableMap.Builder<StructureFeature<?>, ImmutableMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>> tempStructureToMultiMap = ImmutableMap.builder();
             worldStructureConfig.configuredStructures.entrySet().stream().filter(entry -> !STStructureToMultiMap.containsKey(entry.getKey())).forEach(tempStructureToMultiMap::put);
 
