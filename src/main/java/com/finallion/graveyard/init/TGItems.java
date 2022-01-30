@@ -28,7 +28,7 @@ public class TGItems {
         createSpawnEgg(TGEntities.SKELETON_CREEPER, 7960171, 15263976, "skeleton_creeper");
         createSpawnEgg(TGEntities.ACOLYTE, 2688830, 5898240, "acolyte");
         createSpawnEgg(TGEntities.GHOUL, 6239802, 16487198, "ghoul");
-        createSpawnEgg(TGEntities.REAPER, 1381653, 5898240, "reaper");
+        createSpawnEgg(TGEntities.REAPER, 1381653, 7456477, "reaper");
         createSpawnEgg(TGEntities.REVENANT, 12965589, 9765908, "revenant");
         createSpawnEgg(TGEntities.NIGHTMARE, 592137, 4718849, "nightmare");
 
