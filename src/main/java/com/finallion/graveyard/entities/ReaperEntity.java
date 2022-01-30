@@ -26,6 +26,7 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -193,6 +194,41 @@ public class ReaperEntity extends Monster implements IAnimatable {
 
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
+    }
+
+    @Override
+    public void aiStep() {
+        if (this.isAlive()) {
+            boolean flag = this.isSunSensitive() && this.isSunBurnTick();
+            if (flag) {
+                ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
+                if (!itemstack.isEmpty()) {
+                    if (itemstack.isDamageableItem()) {
+                        itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
+                        if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
+                            this.broadcastBreakEvent(EquipmentSlot.HEAD);
+                            this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+                        }
+                    }
+
+                    flag = false;
+                }
+
+                if (flag) {
+                    this.setSecondsOnFire(8);
+                }
+            }
+        }
+        super.aiStep();
+    }
+
+    protected boolean isSunSensitive() {
+        return true;
+    }
+
+    @Override
+    protected boolean isSunBurnTick() {
+        return super.isSunBurnTick();
     }
 
 

@@ -10,6 +10,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -114,6 +116,15 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
         }
     }
 
+    protected boolean isSunSensitive() {
+        return true;
+    }
+
+    @Override
+    protected boolean isSunBurnTick() {
+        return super.isSunBurnTick();
+    }
+
     @Override
     public void aiStep() {
         // stops attack animation when anger time is 0 and sets rage animation to play
@@ -125,6 +136,28 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
             if (this.getTarget() != null) {
                 canAttack = this.getTarget().distanceToSqr(this) <= ATTACK_RANGE;
                 canRage = this.getTarget().distanceToSqr(this) > ATTACK_RANGE * 6;
+            }
+        }
+
+        if (this.isAlive()) {
+            boolean flag = this.isSunSensitive() && this.isSunBurnTick();
+            if (flag) {
+                ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
+                if (!itemstack.isEmpty()) {
+                    if (itemstack.isDamageableItem()) {
+                        itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
+                        if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
+                            this.broadcastBreakEvent(EquipmentSlot.HEAD);
+                            this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+                        }
+                    }
+
+                    flag = false;
+                }
+
+                if (flag) {
+                    this.setSecondsOnFire(8);
+                }
             }
         }
 

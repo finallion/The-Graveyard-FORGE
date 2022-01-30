@@ -145,6 +145,18 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
         }
     }
 
+    protected void customServerAiStep() {
+        if (this.level.isDay() && this.tickCount >= this.targetChangeTime + 600) {
+            float f = this.getBrightness();
+            if (f > 0.5F && this.level.canSeeSky(this.blockPosition()) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
+                this.setTarget((LivingEntity)null);
+                this.teleport();
+            }
+        }
+
+        super.customServerAiStep();
+    }
+
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         float limbSwingAmount = event.getLimbSwingAmount();
         boolean isMoving = !(limbSwingAmount > -0.05F && limbSwingAmount < 0.05F);
@@ -277,6 +289,18 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
             return false;
         }
     }
+
+    protected boolean teleport() {
+        if (!this.level.isClientSide() && this.isAlive()) {
+            double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 64.0D;
+            double d1 = this.getY() + (double)(this.random.nextInt(64) - 32);
+            double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 64.0D;
+            return this.teleport(d0, d1, d2);
+        } else {
+            return false;
+        }
+    }
+
 
     public boolean canBeAffected(MobEffectInstance p_34192_) {
         return p_34192_.getEffect() == MobEffects.WITHER ? false : super.canBeAffected(p_34192_);
