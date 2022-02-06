@@ -8,7 +8,9 @@
     "LakeFeatureMixin",
     "ServerPlayNetworkHandlerMixin",
     "SpringFeatureMixin",
-    "TreeFeatureMixin"
+    "TreeFeatureMixin",
+    "VillagerMixin",
+    "WanderingTraderMixin"
   ],
   "client": [
     "ClientPlayNetworkHandlerMixin"
