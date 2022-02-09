@@ -29,7 +29,6 @@ public class ClientEvents {
         FogType cameraSubmersionType = event.getCamera().getFluidInCamera();
         String biomeName = entity.level.getBiomeName(pos).get().toString();
 
-
         if (!GraveyardConfig.COMMON.enableFogHauntedForest.get() &&
                 !GraveyardConfig.COMMON.enableFogHauntedLakes.get() &&
                 !GraveyardConfig.COMMON.enableFogErodedHauntedForest.get()) {
@@ -41,7 +40,7 @@ public class ClientEvents {
             if (pos.getY() > GraveyardConfig.COMMON.FogHauntedLakesMaxY.get()
                     || pos.getY() < GraveyardConfig.COMMON.FogHauntedLakesMinY.get()) {
                 // fade fog out
-                if (fogStart < 32.0F) {
+                if (fogStart < event.getFarPlaneDistance() / 2) {
                     fogStart *= 1.05F;
                 } else {
                     fogStart = event.getFarPlaneDistance() / 2;
@@ -53,7 +52,7 @@ public class ClientEvents {
             if (pos.getY() > GraveyardConfig.COMMON.FogErodedHauntedForestMaxY.get()
                     || pos.getY() < GraveyardConfig.COMMON.FogErodedHauntedForestMinY.get()) {
                 // fade fog out
-                if (fogStart < 32.0F) {
+                if (fogStart < event.getFarPlaneDistance() / 2) {
                     fogStart *= 1.05F;
                 } else {
                     fogStart = event.getFarPlaneDistance() / 2;
@@ -65,7 +64,7 @@ public class ClientEvents {
             if (pos.getY() > GraveyardConfig.COMMON.FogHauntedForestMaxY.get()
                     || pos.getY() < GraveyardConfig.COMMON.FogHauntedForestMinY.get()) {
                 // fade fog out
-                if (fogStart < 32.0F) {
+                if (fogStart < event.getFarPlaneDistance() / 2) {
                     fogStart *= 1.05F;
                 } else {
                     fogStart = event.getFarPlaneDistance() / 2;
@@ -76,7 +75,7 @@ public class ClientEvents {
         } else {
 
             // fade fog out
-            if (fogStart < 32.0F) {
+            if (fogStart < event.getFarPlaneDistance() / 2) {
                 fogStart *= 1.05F;
             } else {
                 fogStart = event.getFarPlaneDistance() / 2;
