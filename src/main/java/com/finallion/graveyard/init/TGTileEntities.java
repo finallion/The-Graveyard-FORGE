@@ -1,6 +1,7 @@
 package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
+import com.finallion.graveyard.blockentities.BrazierBlockEntity;
 import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
 import com.finallion.graveyard.blockentities.SarcophagusBlockEntity;
 import com.finallion.graveyard.blockentities.UrnBlockEntity;
@@ -41,8 +42,20 @@ public class TGTileEntities {
             TGBlocks.WHITE_URN).build(null));
 
     public static final RegistryObject<BlockEntityType<SarcophagusBlockEntity>> SARCOPHAGUS_BLOCK_ENTITY = register("sarcophagus_block_entity", () -> BlockEntityType.Builder.of(SarcophagusBlockEntity::new,
-            TGBlocks.SARCOPHAGUS
+            TGBlocks.SARCOPHAGUS,
+            TGBlocks.OAK_COFFIN,
+            TGBlocks.DARK_OAK_COFFIN,
+            TGBlocks.ACACIA_COFFIN,
+            TGBlocks.JUNGLE_COFFIN,
+            TGBlocks.BIRCH_COFFIN,
+            TGBlocks.CRIMSON_COFFIN,
+            TGBlocks.WARPED_COFFIN,
+            TGBlocks.SPRUCE_COFFIN
     ).build(null));
+
+    public static final RegistryObject<BlockEntityType<BrazierBlockEntity>> BRAZIER_BLOCK_ENTITY = register("brazier_block_entity", () -> BlockEntityType.Builder.of(BrazierBlockEntity::new,
+            TGBlocks.SOUL_FIRE_BRAZIER,
+            TGBlocks.FIRE_BRAZIER).build(null));
 
     private static <T extends BlockEntityType<?>> RegistryObject<T> register(String name, Supplier<T> tileEntity) {
         return TILE_ENTITIES.register(name, tileEntity);

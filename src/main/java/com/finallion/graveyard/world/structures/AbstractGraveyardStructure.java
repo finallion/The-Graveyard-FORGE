@@ -2,6 +2,8 @@ package com.finallion.graveyard.world.structures;
 
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.StructureConfigEntry;
+import com.finallion.graveyard.init.TGEntities;
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -9,6 +11,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -21,8 +24,10 @@ import net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePo
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraftforge.common.util.Lazy;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -43,6 +48,13 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
         this.structureConfigEntry = structureConfigEntry;
         this.structureName = name;
     }
+
+    public static final Lazy<List<MobSpawnSettings.SpawnerData>> MONSTER_SPAWNS = Lazy.of(() -> ImmutableList.of(
+            new MobSpawnSettings.SpawnerData(TGEntities.SKELETON_CREEPER, 35, 1, 2),
+            new MobSpawnSettings.SpawnerData(TGEntities.GHOUL, 50, 1, 3),
+            new MobSpawnSettings.SpawnerData(TGEntities.REVENANT, 45, 1, 3)
+    ));
+
 
     @Override
     public GenerationStep.Decoration step() {

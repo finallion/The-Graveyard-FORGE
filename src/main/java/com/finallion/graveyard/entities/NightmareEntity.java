@@ -1,5 +1,6 @@
 package com.finallion.graveyard.entities;
 
+import com.finallion.graveyard.config.GraveyardConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -116,6 +117,28 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
             this.updatePersistentAnger((ServerLevel)this.level, true);
         }
 
+        if (this.isAlive()) {
+            boolean flag = this.isSunSensitive() && this.isSunBurnTick() && GraveyardConfig.COMMON.nightmareCanBurnInSunlight.get();
+            if (flag) {
+                ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
+                if (!itemstack.isEmpty()) {
+                    if (itemstack.isDamageableItem()) {
+                        itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
+                        if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
+                            this.broadcastBreakEvent(EquipmentSlot.HEAD);
+                            this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+                        }
+                    }
+
+                    flag = false;
+                }
+
+                if (flag) {
+                    this.setSecondsOnFire(8);
+                }
+            }
+        }
+
         super.aiStep();
     }
 
@@ -208,6 +231,14 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
         data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
     }
 
+    protected boolean isSunSensitive() {
+        return true;
+    }
+
+    @Override
+    protected boolean isSunBurnTick() {
+        return super.isSunBurnTick();
+    }
 
     @Override
     public AnimationFactory getFactory() {
@@ -302,10 +333,17 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
     }
 
 
-    public boolean canBeAffected(MobEffectInstance p_34192_) {
-        return p_34192_.getEffect() == MobEffects.WITHER ? false : super.canBeAffected(p_34192_);
-    }
+    public boolean canBeAffected(MobEffectInstance effect) {
+        if (effect.getEffect() == MobEffects.WITHER) {
+            if (GraveyardConfig.COMMON.nightmareCanBeWithered.get()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
 
+        return super.canBeAffected(effect);
+    }
     public boolean isCreepy() {
         return this.entityData.get(DATA_CREEPY);
     }

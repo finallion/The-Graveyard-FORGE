@@ -1,6 +1,7 @@
 package com.finallion.graveyard.blockentities;
 
 import com.finallion.graveyard.blocks.UrnBlock;
+import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.TGBlocks;
 import com.finallion.graveyard.init.TGTileEntities;
 import net.minecraft.core.BlockPos;
@@ -109,7 +110,10 @@ public class UrnBlockEntity extends RandomizableContainerBlockEntity {
     }
 
     protected AbstractContainerMenu createMenu(int p_59082_, Inventory p_59083_) {
-        return ChestMenu.sixRows(p_59082_, p_59083_, this);
+        if (GraveyardConfig.COMMON.urnHasDoubleInventory.get()) {
+            return ChestMenu.sixRows(p_59082_, p_59083_, this);
+        }
+        return ChestMenu.threeRows(p_59082_, p_59083_, this);
     }
 
     public void startOpen(Player p_58616_) {

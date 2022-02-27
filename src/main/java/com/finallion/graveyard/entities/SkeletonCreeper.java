@@ -1,5 +1,7 @@
 package com.finallion.graveyard.entities;
 
+import com.finallion.graveyard.TheGraveyard;
+import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.TGBlocks;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -54,9 +56,19 @@ public class SkeletonCreeper extends Creeper {
 
     }
 
-    public boolean canBeAffected(MobEffectInstance p_34192_) {
-        return p_34192_.getEffect() == MobEffects.WITHER ? false : super.canBeAffected(p_34192_);
+
+    public boolean canBeAffected(MobEffectInstance effect) {
+        if (effect.getEffect() == MobEffects.WITHER) {
+            if (GraveyardConfig.COMMON.skeletonCreeperCanBeWithered.get()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return super.canBeAffected(effect);
     }
+
 
     public void explode() {
         if (!this.level.isClientSide) {
@@ -107,7 +119,7 @@ public class SkeletonCreeper extends Creeper {
         }
 
         if (this.isAlive()) {
-            boolean flag = this.isSunSensitive() && this.isSunBurnTick();
+            boolean flag = this.isSunSensitive() && this.isSunBurnTick() && GraveyardConfig.COMMON.skeletonCreeperCanBurnInSunlight.get();
             if (flag) {
                 ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
                 if (!itemstack.isEmpty()) {

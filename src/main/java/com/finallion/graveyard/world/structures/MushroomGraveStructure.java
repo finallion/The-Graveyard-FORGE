@@ -22,16 +22,17 @@ import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 public class MushroomGraveStructure extends AbstractGraveyardStructure {
 
     public MushroomGraveStructure(Codec<JigsawConfiguration> codec) {
         super(codec, new StructureConfigEntry(24, 18,
-                Biome.BiomeCategory.MUSHROOM.getName(),
-                Biome.BiomeCategory.JUNGLE.getName(),
-                Biome.BiomeCategory.SWAMP.getName()
-                ), 7, 379123039, MushroomGraveGenerator.STARTING_POOL, "mushroom_grave");
+                        Arrays.asList("#" + Biome.BiomeCategory.MUSHROOM.getName(), "#" + Biome.BiomeCategory.JUNGLE.getName(), "#" + Biome.BiomeCategory.SWAMP.getName()),
+                        Collections.emptyList(), Arrays.asList("#minecraft"), false),
+                7, 379123039, MushroomGraveGenerator.STARTING_POOL, "mushroom_grave");
     }
 
 

@@ -36,15 +36,10 @@ public class LargeGraveyardStructure extends AbstractGraveyardStructure {
 
     public LargeGraveyardStructure(Codec<JigsawConfiguration> codec) {
         super(codec, new StructureConfigEntry(12, 10,
-                Arrays.asList(Biome.BiomeCategory.FOREST.getName(), Biome.BiomeCategory.TAIGA.getName()),
-                Arrays.asList("forest", "flower_forest", "birch_forest", "old_growth_birch_forest", "windswept_forest", "eroded_haunted_forest", "haunted_lakes")), // only allow in dark forest and taigas
+                        Arrays.asList("#" + Biome.BiomeCategory.FOREST.getName(), "#" + Biome.BiomeCategory.TAIGA.getName()),
+                        Arrays.asList("minecraft:forest", "minecraft:flower_forest", "minecraft:birch_forest", "minecraft:old_growth_birch_forest", "minecraft:windswept_forest", "graveyard_biomes:eroded_haunted_forest", "graveyard_biomes:haunted_lakes"), Arrays.asList("#minecraft", "#graveyard_biomes"), true), // only allow in dark forest and taigas
                 50, 304812394, LargeGraveyardGenerator.STARTING_POOL, "large_graveyard");
     }
-
-    public static final Lazy<List<MobSpawnSettings.SpawnerData>> MONSTER_SPAWNS = Lazy.of(() -> ImmutableList.of(
-            new MobSpawnSettings.SpawnerData(TGEntities.SKELETON_CREEPER, 25, 1, 2),
-            new MobSpawnSettings.SpawnerData(TGEntities.GHOUL, 25, 1, 3)
-    ));
 
 
     @Override

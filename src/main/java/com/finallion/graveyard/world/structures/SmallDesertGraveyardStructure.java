@@ -27,17 +27,21 @@ import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 import net.minecraftforge.common.util.Lazy;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 public class SmallDesertGraveyardStructure extends AbstractGraveyardStructure {
 
     public SmallDesertGraveyardStructure(Codec<JigsawConfiguration> codec) {
-        super(codec, new StructureConfigEntry(32, 28, Biome.BiomeCategory.DESERT.getName()),
+        super(codec, new StructureConfigEntry(32, 28,
+                Arrays.asList("#" + Biome.BiomeCategory.DESERT.getName()),
+                Collections.emptyList(), Arrays.asList("#minecraft"), false),
                 20, 598017285, SmallDesertGraveyardGenerator.STARTING_POOL, "small_desert_graveyard");
     }
 
-    public static final Lazy<List<MobSpawnSettings.SpawnerData>> MONSTER_SPAWNS = Lazy.of(() -> ImmutableList.of(
+    public static final Lazy<List<MobSpawnSettings.SpawnerData>> ILLAGER_SPAWNS = Lazy.of(() -> ImmutableList.of(
             new MobSpawnSettings.SpawnerData(EntityType.PILLAGER, 10, 1, 1),
             new MobSpawnSettings.SpawnerData(EntityType.VINDICATOR, 10, 1, 1)
     ));

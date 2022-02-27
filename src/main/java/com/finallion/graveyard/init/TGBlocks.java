@@ -3,13 +3,17 @@ package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.blocks.*;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,6 +25,7 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TGBlocks {
     public static List<Block> blocks_list = new ArrayList<Block>();
+    public static List<Block> coffins = new ArrayList<Block>();
 
     public static final ResourceLocation GRAVESTONE_TEXTURE = new ResourceLocation("minecraft", "block/polished_basalt_side");
     public static final ResourceLocation COBBLESTONE_GRAVESTONE_TEXTURE = new ResourceLocation("minecraft", "block/cobblestone");
@@ -78,6 +83,13 @@ public class TGBlocks {
 
 
     public static Block DARK_IRON_BARS;
+    public static Block SOUL_FIRE_BRAZIER;
+    public static Block FIRE_BRAZIER;
+    public static Block PEDESTAL;
+    public static Block CANDLE_HOLDER;
+    public static Block DARK_IRON_TRAPDOOR;
+    public static Block DARK_IRON_DOOR;
+    public static Block DARK_IRON_BLOCK;
     public static Block SKULL_WITH_RIB_CAGE;
     public static Block LEANING_SKELETON;
     public static Block SKULL_PILE;
@@ -133,6 +145,15 @@ public class TGBlocks {
     public static Block SMALL_LIME_URN;
 
     public static Block SARCOPHAGUS;
+    public static Block OAK_COFFIN;
+    public static Block SPRUCE_COFFIN;
+    public static Block BIRCH_COFFIN;
+    public static Block DARK_OAK_COFFIN;
+    public static Block JUNGLE_COFFIN;
+    public static Block ACACIA_COFFIN;
+    public static Block WARPED_COFFIN;
+    public static Block CRIMSON_COFFIN;
+
 
     @SubscribeEvent
     public static void initBlocks(RegistryEvent.Register<Block> event) {
@@ -153,7 +174,13 @@ public class TGBlocks {
 
 
         DARK_IRON_BARS = registerBlock(new DarkIronBars(BlockBehaviour.Properties.of(Material.METAL).strength(1.0F).noOcclusion()), "dark_iron_bars");
-
+        SOUL_FIRE_BRAZIER = registerBlock(new BrazierBlock(BlockBehaviour.Properties.of(Material.METAL).strength(1.0F).noOcclusion().lightLevel(BrazierBlock.STATE_TO_LUMINANCE).sound(SoundType.METAL), ParticleTypes.SOUL_FIRE_FLAME), "soul_fire_brazier");
+        FIRE_BRAZIER = registerBlock(new BrazierBlock(BlockBehaviour.Properties.of(Material.METAL).strength(1.0F).noOcclusion().lightLevel(BrazierBlock.STATE_TO_LUMINANCE).sound(SoundType.METAL), ParticleTypes.FLAME), "fire_brazier");
+        PEDESTAL = registerBlock(new PedestalBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.0F).sound(SoundType.DEEPSLATE)), "pedestal");
+        CANDLE_HOLDER = registerBlock(new CandleHolderBlock(BlockBehaviour.Properties.of(Material.METAL).strength(1.0F).noOcclusion().sound(SoundType.METAL)), "candle_holder");
+        DARK_IRON_TRAPDOOR = registerBlock(new TGTrapDoorBlock(BlockBehaviour.Properties.of(Material.WOOD).requiresCorrectToolForDrops().strength(5.0F).sound(SoundType.METAL).noOcclusion()), "dark_iron_trapdoor");
+        DARK_IRON_DOOR = registerBlock(new TGDoorBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.RAW_IRON).requiresCorrectToolForDrops().strength(5.0F).sound(SoundType.METAL).noOcclusion()), "dark_iron_door");
+        DARK_IRON_BLOCK = registerBlock(new Block(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.RAW_IRON).requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.METAL)), "dark_iron_block");
         SKULL_WITH_RIB_CAGE = registerBlock(new BoneDisplayBlock(), "skull_with_rib_cage");
         LEANING_SKELETON = registerBlock(new BoneDisplayBlock(), "leaning_skeleton");
         SKULL_PILE = registerBlock(new BoneDisplayBlock(), "skull_pile");
@@ -208,9 +235,27 @@ public class TGBlocks {
         SMALL_GREEN_URN = registerBlock(new UrnBlock(), "small_green_urn");
         SMALL_LIME_URN = registerBlock(new UrnBlock(), "small_lime_urn");
 
-        SARCOPHAGUS = registerBlockWithoutItem(new SarcophagusBlock(), "sarcophagus");
+        SARCOPHAGUS = registerBlock(new SarcophagusBlock(BlockBehaviour.Properties.of(Material.STONE).noOcclusion().strength(1.5F), false), "sarcophagus");
+        OAK_COFFIN = registerBlock(new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true), "oak_coffin");
+        SPRUCE_COFFIN = registerBlock(new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true), "spruce_coffin");
+        BIRCH_COFFIN = registerBlock(new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true), "birch_coffin");
+        DARK_OAK_COFFIN = registerBlock(new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true), "dark_oak_coffin");
+        JUNGLE_COFFIN = registerBlock(new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true), "jungle_coffin");
+        ACACIA_COFFIN = registerBlock(new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true), "acacia_coffin");
+        WARPED_COFFIN = registerBlock(new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true), "warped_coffin");
+        CRIMSON_COFFIN = registerBlock(new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true), "crimson_coffin");
+
 
         event.getRegistry().registerAll(blocks_list.toArray(new Block[0]));
+
+        coffins.add(OAK_COFFIN);
+        coffins.add(SPRUCE_COFFIN);
+        coffins.add(DARK_OAK_COFFIN);
+        coffins.add(BIRCH_COFFIN);
+        coffins.add(JUNGLE_COFFIN);
+        coffins.add(ACACIA_COFFIN);
+        coffins.add(CRIMSON_COFFIN);
+        coffins.add(WARPED_COFFIN);
     }
 
 

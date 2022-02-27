@@ -5,8 +5,6 @@ import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.events.ServerEvents;
 import com.finallion.graveyard.init.*;
-import com.finallion.graveyard.world.biomes.TGBiomeProvider;
-import com.finallion.graveyard.world.noise.TGNoiseParameters;
 import com.finallion.graveyard.world.structures.AbstractGraveyardStructure;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
@@ -22,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.FlatLevelSource;
 import net.minecraft.world.level.levelgen.StructureSettings;
@@ -30,6 +29,7 @@ import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.StructureFeatureConfiguration;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -42,7 +42,6 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
-import terrablender.api.BiomeProviders;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -67,6 +66,7 @@ public class TheGraveyard {
         forgeBus.addListener(EventPriority.NORMAL, this::addDimensionalSpacing);
         forgeBus.addListener(EventPriority.NORMAL, ServerEvents::setupStructureSpawns);
         forgeBus.addListener(EventPriority.NORMAL, ServerEvents::onBiomesLoad);
+        forgeBus.addListener(EventPriority.NORMAL, ServerEvents::addBiomeFeatures);
         //MinecraftForge.EVENT_BUS.register(new ServerEvents());
 
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC);
@@ -80,10 +80,8 @@ public class TheGraveyard {
 
     public void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            BiomeProviders.register(new TGBiomeProvider(new ResourceLocation(MOD_ID, "biome_provider"), 1));
             TGStructures.setupStructures();
             TGConfiguredStructures.registerConfiguredStructures();
-            TGNoiseParameters.init();
         });
     }
 
@@ -112,6 +110,7 @@ public class TheGraveyard {
 
             biomeLoop: for (Map.Entry<ResourceKey<Biome>, Biome> biomeEntry : serverLevel.registryAccess().ownedRegistryOrThrow(Registry.BIOME_REGISTRY).entrySet()) {
                 Biome.BiomeCategory biomeCategory = biomeEntry.getValue().getBiomeCategory();
+                ResourceKey<Biome> biomeKey = biomeEntry.getKey();
 
                 ResourceLocation name = biomeEntry.getValue().getRegistryName();
 
@@ -119,37 +118,16 @@ public class TheGraveyard {
                     continue;
                 }
 
-                // check blacklist (mostly river and ocean biomes)
-                for (String biome : GraveyardConfig.COMMON.blacklistedBiomes.get()) {
-                    if (biome.equals(name.toString())) {
-                        continue biomeLoop;
-                    }
-                }
-
-
                 for (StructureFeature<?> structure : TGStructures.MOD_STRUCTURES) {
                     AbstractGraveyardStructure abstractStructure = (AbstractGraveyardStructure) structure;
                     StructureConfigEntry structureConfig = abstractStructure.getStructureConfigEntry();
 
-                    // check in config if structure is allowed to generate
-                    if (structureConfig.canGenerate.get()) {
-                        // check the biome blacklist
-                        if (checkBiome(structureConfig.biomeCategories.get(), structureConfig.blacklistedBiomes.get(), name, biomeCategory)) {
-                            associateBiomeToConfiguredStructure(STStructureToMultiMap, abstractStructure.getStructureFeature(), biomeEntry.getKey());
-                        }
+                    if (parseBiomes(structureConfig.whitelist.get(), structureConfig.blacklist.get(), biomeKey, biomeCategory) &&
+                            parseWhitelistedMods(structureConfig.modWhitelist.get(), biomeKey) && structureConfig.canGenerate.get()) {
+                        associateBiomeToConfiguredStructure(STStructureToMultiMap, abstractStructure.getStructureFeature(), biomeEntry.getKey());
                     }
-
                 }
             }
-
-            // add vanilla structures to custom biomes
-            associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("nether_fossil")), TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY);
-            associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("ocean_ruin_cold")), TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY);
-            associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("shipwreck_beached")), TGBiomes.ANCIENT_DEAD_CORAL_REEF_KEY);
-            associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("ruined_portal")), TGBiomes.HAUNTED_LAKES_KEY);
-            associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("ruined_portal")), TGBiomes.ERODED_HAUNTED_FOREST_KEY);
-            associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("ruined_portal")), TGBiomes.HAUNTED_FOREST_KEY);
-            associateBiomeToConfiguredStructure(STStructureToMultiMap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("nether_fossil")), TGBiomes.ERODED_HAUNTED_FOREST_KEY);
 
             ImmutableMap.Builder<StructureFeature<?>, ImmutableMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>> tempStructureToMultiMap = ImmutableMap.builder();
             worldStructureConfig.configuredStructures.entrySet().stream().filter(entry -> !STStructureToMultiMap.containsKey(entry.getKey())).forEach(tempStructureToMultiMap::put);
@@ -209,24 +187,63 @@ public class TheGraveyard {
         }
     }
 
+    private static boolean parseBiomes(List<? extends String> whitelist, List<? extends String> blacklist, ResourceKey<Biome> key, Biome.BiomeCategory category) {
+        String biomeIdentifier = key.location().toString();
+        String biomeCategory = category.getName();
 
-    private static boolean checkBiome(List<? extends String> allowedBiomeCategories, List<? extends String> blacklistedBiomes, ResourceLocation name, Biome.BiomeCategory category) {
+        if (whitelist == null) {
+            TheGraveyard.LOGGER.error("Error reading from the Graveyard config file: Allowed biome category/biome is null. Try to delete the file and restart the game.");
+            return false;
+        }
 
-        // if the category of the now checked biome is in the allowed list of the structure and the blacklist is not empty
-        if (allowedBiomeCategories.contains(category.getName()) && !blacklistedBiomes.isEmpty()) {
-            // if the blacklist contains the biome (not category)
-            if (blacklistedBiomes.contains(name.getPath())) {
+        // no blacklist and biome is allowed
+        if (whitelist.contains(biomeIdentifier) && blacklist.isEmpty()) {
+            return true;
+        }
+
+        // no blacklist and biomeCategory is allowed
+        if (whitelist.contains("#" + biomeCategory) && blacklist.isEmpty()) {
+            return true;
+        }
+
+        // blacklist exists and check if biome is on the blacklist
+        if (whitelist.contains(biomeIdentifier) && !blacklist.isEmpty()) {
+            if (blacklist.contains("#" + biomeCategory)) { // whitelist weighs higher than blacklist
+                //TheGraveyard.LOGGER.error("Blacklisted biome category #" + biomeCategory + " contains whitelisted biome " + biomeIdentifier + ".");
+                return true;
+            } else if (blacklist.contains(biomeIdentifier)) {  // blacklist weighs higher than whitelist
+                TheGraveyard.LOGGER.error("Biome " +  biomeIdentifier + " is on whitelist and blacklist.");
                 return false;
             } else {
                 return true;
             }
         }
 
-        if (allowedBiomeCategories.contains(category.getName()) && blacklistedBiomes.isEmpty()) {
-            return true;
+
+        // blacklist exists and check if biomeCategory is on the blacklist
+        if (whitelist.contains("#" + biomeCategory) && !blacklist.isEmpty()) {
+            if (blacklist.contains("#" + biomeCategory)) { // blacklist weighs higher than whitelist
+                TheGraveyard.LOGGER.error("Biome category #" + biomeCategory + " is on whitelist and blacklist.");
+                return false;
+            } else if (blacklist.contains(biomeIdentifier)) { // blacklist weighs higher than whitelist
+                return false;
+            } else {
+                return true;
+            }
         }
 
         return false;
+    }
+
+    private static boolean parseWhitelistedMods(List<? extends String> whitelist, ResourceKey<Biome> key) {
+        if (whitelist == null) {
+            TheGraveyard.LOGGER.error("Error reading from the Graveyard config file: Allowed biome category/biome is null. Try to delete the file and restart the game.");
+            return false;
+        }
+
+        String modid = key.location().getNamespace();
+        return whitelist.contains("#" + modid);
+
     }
 
 

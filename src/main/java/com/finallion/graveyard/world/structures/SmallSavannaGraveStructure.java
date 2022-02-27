@@ -22,6 +22,8 @@ import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 
@@ -29,9 +31,9 @@ public class SmallSavannaGraveStructure extends AbstractGraveyardStructure {
 
     public SmallSavannaGraveStructure(Codec<JigsawConfiguration> codec) {
         super(codec, new StructureConfigEntry(12, 8,
-                Biome.BiomeCategory.SAVANNA.getName(),
-                Biome.BiomeCategory.MESA.getName()
-        ), 4, 709787761, SmallSavannaGraveGenerator.STARTING_POOL, "small_savanna_grave");
+                        Arrays.asList("#" + Biome.BiomeCategory.MESA.getName(), "#" + Biome.BiomeCategory.SAVANNA.getName()),
+                        Collections.emptyList(), Arrays.asList("#minecraft"), false),
+                4, 709787761, SmallSavannaGraveGenerator.STARTING_POOL, "small_savanna_grave");
     }
 
     @Override

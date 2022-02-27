@@ -22,14 +22,17 @@ import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 public class SmallMountainGraveStructure extends AbstractGraveyardStructure {
 
     public SmallMountainGraveStructure(Codec<JigsawConfiguration> codec) {
         super(codec, new StructureConfigEntry(12, 8,
-                Biome.BiomeCategory.EXTREME_HILLS.getName(),
-                Biome.BiomeCategory.MOUNTAIN.getName()), 4, 725689810, SmallMountainGraveGenerator.STARTING_POOL, "small_mountain_grave");
+                Arrays.asList("#" + Biome.BiomeCategory.MOUNTAIN.getName(), "#" + Biome.BiomeCategory.EXTREME_HILLS.getName()),
+                Collections.emptyList(), Arrays.asList("#minecraft"), false),
+                4, 725689810, SmallMountainGraveGenerator.STARTING_POOL, "small_mountain_grave");
     }
 
     @Override

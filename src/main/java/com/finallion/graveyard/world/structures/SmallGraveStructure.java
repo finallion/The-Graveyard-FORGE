@@ -22,16 +22,17 @@ import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 public class SmallGraveStructure extends AbstractGraveyardStructure {
 
     public SmallGraveStructure(Codec<JigsawConfiguration> codec) {
         super(codec, new StructureConfigEntry(12, 8,
-                Biome.BiomeCategory.TAIGA.getName(),
-                Biome.BiomeCategory.FOREST.getName(),
-                Biome.BiomeCategory.PLAINS.getName()
-        ), 4, 661903018, SmallGraveGenerator.STARTING_POOL, "small_grave");
+                        Arrays.asList("#" + Biome.BiomeCategory.TAIGA.getName(), "#" + Biome.BiomeCategory.FOREST.getName(), "#" + Biome.BiomeCategory.PLAINS.getName()),
+                        Collections.emptyList(), Arrays.asList("#minecraft", "#graveyard_biomes"), false),
+                4, 661903018, SmallGraveGenerator.STARTING_POOL, "small_grave");
     }
 
     @Override

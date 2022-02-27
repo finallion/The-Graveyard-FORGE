@@ -9,7 +9,7 @@ logoFile="graveyard_logo.png" #optional
 credits="" #optional
 authors="Finallion" #optional
 description='''
-The Graveyard adds new biomes, structures, mobs and blocks to your minecraft world, themed around the graveyard!
+The Graveyard adds new structures, mobs and blocks to your minecraft world, themed around the graveyard!
 '''
 
 [[dependencies.graveyard]] #optional
@@ -30,10 +30,4 @@ The Graveyard adds new biomes, structures, mobs and blocks to your minecraft wor
     versionRange="[3.0.0,)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.graveyard]]
-    modId = "terrablender"
-    mandatory = true
-    versionRange = "[1.1.0.73,)"
-    ordering = "NONE"
-    side = "BOTH"
 

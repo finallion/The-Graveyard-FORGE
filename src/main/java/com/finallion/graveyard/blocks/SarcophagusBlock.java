@@ -55,12 +55,13 @@ public class SarcophagusBlock extends AbstractCoffinBlock<SarcophagusBlockEntity
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final EnumProperty<SarcophagusPart> PART = EnumProperty.create("part", SarcophagusPart.class);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-
+    private boolean isCoffin;
 
     // open state missing
-    public SarcophagusBlock() {
-        super(BlockBehaviour.Properties.of(Material.STONE).noOcclusion().strength(1.5F), TGTileEntities.SARCOPHAGUS_BLOCK_ENTITY::get);
+    public SarcophagusBlock(Properties properties, boolean isCoffin) {
+        super(properties, TGTileEntities.SARCOPHAGUS_BLOCK_ENTITY::get);
         this.registerDefaultState(this.stateDefinition.any().setValue(PART, SarcophagusPart.FOOT).setValue(WATERLOGGED, Boolean.valueOf(false)));
+        this.isCoffin = isCoffin;
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_51562_) {
@@ -193,7 +194,7 @@ public class SarcophagusBlock extends AbstractCoffinBlock<SarcophagusBlockEntity
 
 
     public BlockEntity newBlockEntity(BlockPos p_153064_, BlockState p_153065_) {
-        return new SarcophagusBlockEntity(p_153064_, p_153065_);
+        return new SarcophagusBlockEntity(p_153064_, p_153065_, isCoffin);
     }
 
     public RenderShape getRenderShape(BlockState p_51567_) {

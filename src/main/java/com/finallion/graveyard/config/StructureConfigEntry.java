@@ -16,23 +16,22 @@ public class StructureConfigEntry {
     private final int defaultSeparation;
     public ForgeConfigSpec.IntValue separation;
 
-    private final List<String> defaultBiomeCategories;
-    public ForgeConfigSpec.ConfigValue<List<? extends String>> biomeCategories;
-    private final List<String> defaultBlacklistedBiomes;
-    public ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBiomes;
+    private final List<String> defaultWhitelist;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> whitelist;
+    private final List<String> defaultBlacklist;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> blacklist;
+    private final List<String> defaultModWhitelist;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> modWhitelist;
+    private final boolean defaultCanSpawnGraveyardMobs;
+    public ForgeConfigSpec.BooleanValue canSpawnGraveyardMobs;
 
-    public StructureConfigEntry(int spacing, int separation, String... biomeCategories) {
+    public StructureConfigEntry(int spacing, int separation, List<String> whitelist, List<String> blacklist, List<String> modWhitelist, boolean canSpawnGraveyardMobs) {
         this.defaultSpacing = spacing;
         this.defaultSeparation = separation;
-        this.defaultBiomeCategories = Arrays.asList(biomeCategories);
-        this.defaultBlacklistedBiomes = Collections.emptyList();
-    }
-
-    public StructureConfigEntry(int spacing, int separation, List<String> biomeCategories, List<String> blacklistedBiomes) {
-        this.defaultSpacing = spacing;
-        this.defaultSeparation = separation;
-        this.defaultBiomeCategories = biomeCategories;
-        this.defaultBlacklistedBiomes = blacklistedBiomes;
+        this.defaultWhitelist = whitelist;
+        this.defaultBlacklist = blacklist;
+        this.defaultModWhitelist = modWhitelist;
+        this.defaultCanSpawnGraveyardMobs = canSpawnGraveyardMobs;
     }
 
 
@@ -44,11 +43,19 @@ public class StructureConfigEntry {
         return defaultSeparation;
     }
 
-    public List<String> getBiomeCategories() {
-        return defaultBiomeCategories;
+    public boolean getCanSpawnGraveyardMobs() {
+        return defaultCanSpawnGraveyardMobs;
     }
 
-    public List<String> getBlacklistedBiomes() {
-        return defaultBlacklistedBiomes;
+    public List<String> getWhitelist() {
+        return defaultWhitelist;
+    }
+
+    public List<String> getBlacklist() {
+        return defaultBlacklist;
+    }
+
+    public List<String> getModWhitelist() {
+        return defaultModWhitelist;
     }
 }

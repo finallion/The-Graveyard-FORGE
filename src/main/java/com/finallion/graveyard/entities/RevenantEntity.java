@@ -1,5 +1,6 @@
 package com.finallion.graveyard.entities;
 
+import com.finallion.graveyard.config.GraveyardConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -89,7 +90,7 @@ public class RevenantEntity extends AnimatedGraveyardEntity implements IAnimatab
         }
 
         if (this.isAlive()) {
-            boolean flag = this.isSunSensitive() && this.isSunBurnTick();
+            boolean flag = this.isSunSensitive() && this.isSunBurnTick() && GraveyardConfig.COMMON.revenantCanBurnInSunlight.get();
             if (flag) {
                 ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
                 if (!itemstack.isEmpty()) {
@@ -109,7 +110,6 @@ public class RevenantEntity extends AnimatedGraveyardEntity implements IAnimatab
                 }
             }
         }
-
         super.aiStep();
     }
 
@@ -123,8 +123,16 @@ public class RevenantEntity extends AnimatedGraveyardEntity implements IAnimatab
     }
 
 
-    public boolean canBeAffected(MobEffectInstance p_34192_) {
-        return p_34192_.getEffect() == MobEffects.WITHER ? false : super.canBeAffected(p_34192_);
+    public boolean canBeAffected(MobEffectInstance effect) {
+        if (effect.getEffect() == MobEffects.WITHER) {
+            if (GraveyardConfig.COMMON.revenantCanBeWithered.get()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return super.canBeAffected(effect);
     }
 
     private <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {

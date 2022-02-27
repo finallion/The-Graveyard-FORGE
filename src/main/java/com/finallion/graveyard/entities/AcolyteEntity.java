@@ -1,6 +1,7 @@
 package com.finallion.graveyard.entities;
 
 import com.finallion.graveyard.TheGraveyard;
+import com.finallion.graveyard.config.GraveyardConfig;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -9,6 +10,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -71,9 +74,36 @@ public class AcolyteEntity extends AbstractIllager {
             ((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(flag);
         }
 
+
         super.customServerAiStep();
     }
 
+    @Override
+    public void aiStep() {
+        if (this.isAlive()) {
+            boolean flag = this.isSunSensitive() && this.isSunBurnTick() && GraveyardConfig.COMMON.acolyteCanBurnInSunlight.get();
+            if (flag) {
+                ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
+                if (!itemstack.isEmpty()) {
+                    if (itemstack.isDamageableItem()) {
+                        itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
+                        if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
+                            this.broadcastBreakEvent(EquipmentSlot.HEAD);
+                            this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+                        }
+                    }
+
+                    flag = false;
+                }
+
+                if (flag) {
+                    this.setSecondsOnFire(8);
+                }
+            }
+        }
+
+        super.aiStep();
+    }
 
     @Override
     public boolean canBeLeader() {
@@ -112,6 +142,15 @@ public class AcolyteEntity extends AbstractIllager {
 
     }
 
+    protected boolean isSunSensitive() {
+        return true;
+    }
+
+    @Override
+    protected boolean isSunBurnTick() {
+        return super.isSunBurnTick();
+    }
+
     public boolean isAlliedTo(Entity p_184191_1_) {
         if (super.isAlliedTo(p_184191_1_)) {
             return true;
@@ -120,6 +159,18 @@ public class AcolyteEntity extends AbstractIllager {
         } else {
             return false;
         }
+    }
+
+    public boolean canBeAffected(MobEffectInstance effect) {
+        if (effect.getEffect() == MobEffects.WITHER) {
+            if (GraveyardConfig.COMMON.acolyteCanBeWithered.get()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return super.canBeAffected(effect);
     }
 
     @Override

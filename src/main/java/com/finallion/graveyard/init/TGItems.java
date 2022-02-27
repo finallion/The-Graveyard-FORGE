@@ -33,7 +33,21 @@ public class TGItems {
         createSpawnEgg(TGEntities.NIGHTMARE, 592137, 4718849, "nightmare");
 
         registerItem(new DaggerItem(Tiers.STONE, 4, -1.0F, new Item.Properties().tab(TheGraveyard.GROUP)), "bone_dagger");
+        /*
         registerItem(new SarcophagusItem(new Item.Properties().tab(TheGraveyard.GROUP)), "sarcophagus");
+        registerItem(new SarcophagusItem(new Item.Properties().tab(TheGraveyard.GROUP)), "oak_coffin");
+        registerItem(new SarcophagusItem(new Item.Properties().tab(TheGraveyard.GROUP)), "spruce_coffin");
+        registerItem(new SarcophagusItem(new Item.Properties().tab(TheGraveyard.GROUP)), "birch_coffin");
+        registerItem(new SarcophagusItem(new Item.Properties().tab(TheGraveyard.GROUP)), "dark_oak_coffin");
+        registerItem(new SarcophagusItem(new Item.Properties().tab(TheGraveyard.GROUP)), "jungle_coffin");
+        registerItem(new SarcophagusItem(new Item.Properties().tab(TheGraveyard.GROUP)), "acacia_coffin");
+        registerItem(new SarcophagusItem(new Item.Properties().tab(TheGraveyard.GROUP)), "warped_coffin");
+        registerItem(new SarcophagusItem(new Item.Properties().tab(TheGraveyard.GROUP)), "crimson_coffin");
+
+         */
+        registerItem(new Item(new Item.Properties().tab(TheGraveyard.GROUP)), "dark_iron_ingot");
+        registerItem(new Item(new Item.Properties().tab(TheGraveyard.GROUP)), "corruption");
+
 
         items_list.forEach((e) -> event.getRegistry().register(e));
     }

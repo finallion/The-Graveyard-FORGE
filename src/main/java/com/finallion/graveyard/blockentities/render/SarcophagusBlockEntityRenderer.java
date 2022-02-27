@@ -63,6 +63,12 @@ public class SarcophagusBlockEntityRenderer<T extends BlockEntity & LidBlockEnti
         Level world = entity.getLevel();
 
         BlockState blockState = entity.getBlockState();
+        String name = entity.getBlockState().getBlock().getDescriptionId();
+        boolean isCoffin = entity.isCoffin();
+
+        System.out.println(name);
+        System.out.println(isCoffin);
+
         DoubleBlockCombiner.NeighborCombineResult<? extends SarcophagusBlockEntity> propertySource = DoubleBlockCombiner.combineWithNeigbour(TGTileEntities.SARCOPHAGUS_BLOCK_ENTITY.get(), SarcophagusBlock::getBlockType, SarcophagusBlock::getConnectedDirection, ChestBlock.FACING, blockState, world, entity.getBlockPos(), (worldx, pos) -> {
             return false;
         });
@@ -71,14 +77,31 @@ public class SarcophagusBlockEntityRenderer<T extends BlockEntity & LidBlockEnti
         g = 1.0F - g * g * g;
         int k = propertySource.<Int2IntFunction>apply(new BrightnessCombiner<>()).applyAsInt(light);
 
+        BakedModel footLid = getModel(name, isCoffin, 0);
+        BakedModel headLid = getModel(name, isCoffin, 1);
+        BakedModel head = getModel(name, isCoffin, 2);
+        BakedModel foot = getModel(name, isCoffin, 3);
+
         if (world != null) {
-            this.renderPart(entity, matrixStack, vertexConsumers, blockState.getValue(SarcophagusBlock.PART) == SarcophagusPart.HEAD ? this.sarcophagusModelHead : this.sarcophagusModelFoot, (Direction)blockState.getValue(SarcophagusBlock.FACING), (VertexConsumer)vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, false);
-            this.renderLid(entity, matrixStack, vertexConsumers, blockState.getValue(SarcophagusBlock.PART) == SarcophagusPart.HEAD ? this.sarcophagusModelHeadLid : this.sarcophagusModelFootLid, Direction.SOUTH, (VertexConsumer)vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, false, g);
+            if (isCoffin) {
+                this.renderPart(entity, matrixStack, vertexConsumers, blockState.getValue(SarcophagusBlock.PART) == SarcophagusPart.HEAD ? head : foot, (Direction) blockState.getValue(SarcophagusBlock.FACING), vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, false);
+                this.renderLid(entity, matrixStack, vertexConsumers, blockState.getValue(SarcophagusBlock.PART) == SarcophagusPart.HEAD ? headLid : footLid, Direction.SOUTH, vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, false, g);
+            } else {
+                this.renderPart(entity, matrixStack, vertexConsumers, blockState.getValue(SarcophagusBlock.PART) == SarcophagusPart.HEAD ? this.sarcophagusModelHead : this.sarcophagusModelFoot, (Direction) blockState.getValue(SarcophagusBlock.FACING), (VertexConsumer) vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, false);
+                this.renderLid(entity, matrixStack, vertexConsumers, blockState.getValue(SarcophagusBlock.PART) == SarcophagusPart.HEAD ? this.sarcophagusModelHeadLid : this.sarcophagusModelFootLid, Direction.SOUTH, (VertexConsumer) vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, false, g);
+            }
         } else {
-            this.renderLid(entity, matrixStack, vertexConsumers, sarcophagusModelFootLid, Direction.SOUTH, (VertexConsumer)vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, true, g);
-            this.renderPart(entity, matrixStack, vertexConsumers, sarcophagusModelFoot, Direction.SOUTH, (VertexConsumer)vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, true);
-            this.renderLid(entity, matrixStack, vertexConsumers, sarcophagusModelHeadLid, Direction.SOUTH, (VertexConsumer)vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, false, g);
-            this.renderPart(entity, matrixStack, vertexConsumers, sarcophagusModelHead, Direction.SOUTH, (VertexConsumer)vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, false);
+            if (isCoffin) {
+                this.renderLid(entity, matrixStack, vertexConsumers, footLid, Direction.SOUTH, vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, true, g);
+                this.renderPart(entity, matrixStack, vertexConsumers, foot, Direction.SOUTH, vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, true);
+                this.renderLid(entity, matrixStack, vertexConsumers, headLid, Direction.SOUTH, vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, false, g);
+                this.renderPart(entity, matrixStack, vertexConsumers, head, Direction.SOUTH, vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, false);
+            } else {
+                this.renderLid(entity, matrixStack, vertexConsumers, sarcophagusModelFootLid, Direction.SOUTH, (VertexConsumer) vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, true, g);
+                this.renderPart(entity, matrixStack, vertexConsumers, sarcophagusModelFoot, Direction.SOUTH, (VertexConsumer) vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, true);
+                this.renderLid(entity, matrixStack, vertexConsumers, sarcophagusModelHeadLid, Direction.SOUTH, (VertexConsumer) vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, false, g);
+                this.renderPart(entity, matrixStack, vertexConsumers, sarcophagusModelHead, Direction.SOUTH, (VertexConsumer) vertexConsumers.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), k, overlay, false);
+            }
         }
     }
 
@@ -90,7 +113,7 @@ public class SarcophagusBlockEntityRenderer<T extends BlockEntity & LidBlockEnti
         matrices.pushPose();
         matrices.translate(0.0D, 0.0D, isFoot ? -1.0D : 0.0D);
 
-        float f = ((Direction)entity.getBlockState().getValue(SarcophagusBlock.FACING)).getOpposite().toYRot();
+        float f = ((Direction) entity.getBlockState().getValue(SarcophagusBlock.FACING)).getOpposite().toYRot();
         matrices.translate(0.5D, 0.5D, 0.5D);
         matrices.mulPose(Vector3f.YP.rotationDegrees(-f));
 
@@ -107,7 +130,7 @@ public class SarcophagusBlockEntityRenderer<T extends BlockEntity & LidBlockEnti
         matrices.pushPose();
         matrices.translate(0.0D, 0.0D, isFoot ? -1.0D : 0.0D);
 
-        float f = ((Direction)entity.getBlockState().getValue(SarcophagusBlock.FACING)).getOpposite().toYRot();
+        float f = ((Direction) entity.getBlockState().getValue(SarcophagusBlock.FACING)).getOpposite().toYRot();
         matrices.translate(0.5D, 0.5D, 0.5D);
         matrices.mulPose(Vector3f.YP.rotationDegrees(-f));
 
@@ -120,6 +143,31 @@ public class SarcophagusBlockEntityRenderer<T extends BlockEntity & LidBlockEnti
 
         renderer.renderModel(matrices.last(), vertexConsumer, entity.getBlockState(), model, 1.0F, 1.0F, 1.0F, light, overlay, EmptyModelData.INSTANCE);
         matrices.popPose();
+    }
+
+    private BakedModel getModel(String name, boolean isCoffin, int part) {
+        Minecraft client = Minecraft.getInstance();
+
+        if (isCoffin) {
+            String woodType = name.split("\\.")[2];
+            switch (part) {
+                default -> {
+                    return client.getModelManager().getModel(new ResourceLocation(TheGraveyard.MOD_ID, "block/" + woodType + "_head_lid"));
+                }
+                case 1 -> {
+                    return client.getModelManager().getModel(new ResourceLocation(TheGraveyard.MOD_ID, "block/" + woodType + "_foot_lid"));
+                }
+                case 2 -> {
+                    return client.getModelManager().getModel(new ResourceLocation(TheGraveyard.MOD_ID, "block/" + woodType + "_foot"));
+                }
+                case 3 -> {
+                    return client.getModelManager().getModel(new ResourceLocation(TheGraveyard.MOD_ID, "block/" + woodType + "_head"));
+                }
+            }
+        } else {
+            return client.getModelManager().getModel(new ResourceLocation(TheGraveyard.MOD_ID, "block/oak_coffin_head"));
+        }
+
     }
 }
 

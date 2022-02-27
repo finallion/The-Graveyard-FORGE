@@ -22,13 +22,17 @@ import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 public class SmallDesertGraveStructure extends AbstractGraveyardStructure {
 
     public SmallDesertGraveStructure(Codec<JigsawConfiguration> codec) {
         super(codec, new StructureConfigEntry(20, 16,
-                Biome.BiomeCategory.DESERT.getName()), 4, 681236914, SmallDesertGraveGenerator.STARTING_POOL, "small_desert_grave");
+                        Arrays.asList("#" + Biome.BiomeCategory.DESERT.getName()),
+                        Collections.emptyList(), Arrays.asList("#minecraft"), false),
+                4, 681236914, SmallDesertGraveGenerator.STARTING_POOL, "small_desert_grave");
     }
 
 

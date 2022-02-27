@@ -1,6 +1,7 @@
 package com.finallion.graveyard.entities;
 
 
+import com.finallion.graveyard.config.GraveyardConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -101,8 +102,16 @@ public class ReaperEntity extends Monster implements IAnimatable {
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
-    public boolean canBeAffected(MobEffectInstance p_34192_) {
-        return p_34192_.getEffect() == MobEffects.WITHER ? false : super.canBeAffected(p_34192_);
+    public boolean canBeAffected(MobEffectInstance effect) {
+        if (effect.getEffect() == MobEffects.WITHER) {
+            if (GraveyardConfig.COMMON.reaperCanBeWithered.get()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return super.canBeAffected(effect);
     }
 
     public void move(MoverType p_33997_, Vec3 p_33998_) {
@@ -199,7 +208,7 @@ public class ReaperEntity extends Monster implements IAnimatable {
     @Override
     public void aiStep() {
         if (this.isAlive()) {
-            boolean flag = this.isSunSensitive() && this.isSunBurnTick();
+            boolean flag = this.isSunSensitive() && this.isSunBurnTick() && GraveyardConfig.COMMON.reaperCanBurnInSunlight.get();
             if (flag) {
                 ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
                 if (!itemstack.isEmpty()) {

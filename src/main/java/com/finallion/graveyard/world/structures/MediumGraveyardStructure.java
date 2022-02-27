@@ -35,15 +35,10 @@ public class MediumGraveyardStructure extends AbstractGraveyardStructure {
 
     public MediumGraveyardStructure(Codec<JigsawConfiguration> codec) {
         super(codec, new StructureConfigEntry(18, 16,
-                Arrays.asList(Biome.BiomeCategory.FOREST.getName()),
-                Arrays.asList("dark_forest", "birch_forest", "old_growth_birch_forest", "haunted_lakes", "haunted_forest")), // blacklist birch and dark forest
+                        Arrays.asList("#" + Biome.BiomeCategory.FOREST.getName()),
+                        Arrays.asList("minecraft:dark_forest", "minecraft:birch_forest", "minecraft:old_growth_birch_forest", "graveyard_biomes:haunted_lakes", "graveyard_biomes:haunted_forest"), Arrays.asList("#minecraft", "#graveyard_biomes"), true), // blacklist birch and dark forest
                 30, 1690192399, MediumGraveyardGenerator.STARTING_POOL, "medium_graveyard");
     }
-
-    public static final Lazy<List<MobSpawnSettings.SpawnerData>> MONSTER_SPAWNS = Lazy.of(() -> ImmutableList.of(
-            new MobSpawnSettings.SpawnerData(TGEntities.SKELETON_CREEPER, 25, 1, 2),
-            new MobSpawnSettings.SpawnerData(TGEntities.GHOUL, 25, 1, 3)
-    ));
 
 
     @Override

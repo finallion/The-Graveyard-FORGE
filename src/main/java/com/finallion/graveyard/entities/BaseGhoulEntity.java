@@ -1,5 +1,8 @@
 package com.finallion.graveyard.entities;
 
+import com.finallion.graveyard.config.GraveyardConfig;
+import com.mojang.authlib.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -24,6 +27,11 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.client.RenderProperties;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.extensions.IForgeBlock;
+import net.minecraftforge.common.extensions.IForgeBlockState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -41,18 +49,22 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
     private final AnimationBuilder RAGE_ANIMATION = new AnimationBuilder().addAnimation("rage", false);
     private final AnimationBuilder RUNNING_ANIMATION = new AnimationBuilder().addAnimation("running", true);
     private final AnimationBuilder ATTACK_ANIMATION = new AnimationBuilder().addAnimation("attack", true);
+    private final AnimationBuilder SPAWN_ANIMATION = new AnimationBuilder().addAnimation("spawn", false);
     protected static final byte ANIMATION_IDLE = 0;
     protected static final byte ANIMATION_WALK = 1;
     protected static final byte ANIMATION_RAGE = 2;
     protected static final byte ANIMATION_DEATH = 3;
     protected static final byte ANIMATION_RUNNING = 4;
     protected static final byte ANIMATION_ATTACK = 5;
+    protected static final byte ANIMATION_SPAWN = 6;
     protected static final EntityDataAccessor<Byte> VARIANT = SynchedEntityData.defineId(BaseGhoulEntity.class, EntityDataSerializers.BYTE);
     private AnimationFactory factory = new AnimationFactory(this);
     private static boolean canAttack = false;
     private static boolean canRage = false;
     private static int timeSinceLastAttack = 0;
     private static final double ATTACK_RANGE = 4.5D;
+    private boolean spawned = false;
+    private int spawnTimer;
 
 
     public BaseGhoulEntity(EntityType<? extends BaseGhoulEntity> entityType, Level world) {
@@ -62,6 +74,9 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
 
     protected void defineSynchedData() {
         super.defineSynchedData();
+        spawnTimer = 30;
+        setState((byte) ANIMATION_SPAWN);
+
         byte variant = (byte) random.nextInt(8);
         this.entityData.define(VARIANT, variant);
 
@@ -131,6 +146,10 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
         stopAttackAnimation();
 
         timeSinceLastAttack--;
+        spawnTimer--;
+        if (level.isClientSide() && spawnTimer >= 0 && spawned) {
+            Minecraft.getInstance().particleEngine.destroy(this.getOnPos(), level.getBlockState(this.getOnPos()));
+        }
 
         if (!this.level.isClientSide()) {
             if (this.getTarget() != null) {
@@ -140,7 +159,7 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
         }
 
         if (this.isAlive()) {
-            boolean flag = this.isSunSensitive() && this.isSunBurnTick();
+            boolean flag = this.isSunSensitive() && this.isSunBurnTick() && GraveyardConfig.COMMON.ghoulCanBurnInSunlight.get();
             if (flag) {
                 ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
                 if (!itemstack.isEmpty()) {
@@ -163,6 +182,16 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
 
 
         super.aiStep();
+    }
+
+    private <E extends IAnimatable> PlayState predicate3(AnimationEvent<E> event) {
+        if (getAnimationState() == 6) {
+            event.getController().setAnimation(SPAWN_ANIMATION);
+            spawned = true;
+
+            return PlayState.CONTINUE;
+        }
+        return PlayState.CONTINUE;
     }
 
     private <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
@@ -225,6 +254,7 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController(this, "controller", 3, this::predicate));
         data.addAnimationController(new AnimationController(this, "controller2", 3, this::predicate2));
+        data.addAnimationController(new AnimationController(this, "controller3", 0, this::predicate3));
     }
 
     @Override
@@ -232,8 +262,16 @@ public class BaseGhoulEntity extends AnimatedGraveyardEntity implements IAnimata
         return this.factory;
     }
 
-    public boolean canBeAffected(MobEffectInstance p_34192_) {
-        return p_34192_.getEffect() == MobEffects.WITHER ? false : super.canBeAffected(p_34192_);
+    public boolean canBeAffected(MobEffectInstance effect) {
+        if (effect.getEffect() == MobEffects.WITHER) {
+            if (GraveyardConfig.COMMON.ghoulCanBeWithered.get()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return super.canBeAffected(effect);
     }
 
     @Override
