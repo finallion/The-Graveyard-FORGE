@@ -29,7 +29,7 @@ public class DaggerItem extends SwordItem {
          return 30.0F;
       } else {
          Material material = state.getMaterial();
-         return material != Material.PLANT && material != Material.REPLACEABLE_PLANT && !state.is(BlockTags.LEAVES) && material != Material.VEGETABLE ? 1.0F : 1.5F;
+         return material != Material.PLANT && material != Material.REPLACEABLE_PLANT && !state.m_204336_(BlockTags.LEAVES) && material != Material.VEGETABLE ? 1.0F : 1.5F;
       }
    }
 

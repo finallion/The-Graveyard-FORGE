@@ -23,7 +23,7 @@ public class TreeFeatureMixin {
     @Inject(method = "place(Lnet/minecraft/world/level/levelgen/feature/FeaturePlaceContext;)Z", at = @At(value = "HEAD"), cancellable = true)
     private void noTreesInStructures(FeaturePlaceContext<TreeConfiguration> context, CallbackInfoReturnable<Boolean> info) {
         BlockState state = context.level().getBlockState(context.origin().below());
-        if (state.is(TGBlocks.TG_DIRT) || state.is(TGBlocks.TG_COARSE_DIRT) || state.is(TGBlocks.TG_GRASS_BLOCK) || state.is(TGBlocks.TG_MOSS_BLOCK) || state.is(TGBlocks.TG_ROOTED_DIRT) || state.is(TGBlocks.TG_PODZOL)) {
+        if (state.is(TGBlocks.TG_DIRT.get()) || state.is(TGBlocks.TG_COARSE_DIRT.get()) || state.is(TGBlocks.TG_GRASS_BLOCK.get()) || state.is(TGBlocks.TG_MOSS_BLOCK.get()) || state.is(TGBlocks.TG_ROOTED_DIRT.get()) || state.is(TGBlocks.TG_PODZOL.get())) {
             info.setReturnValue(false);
         }
     }

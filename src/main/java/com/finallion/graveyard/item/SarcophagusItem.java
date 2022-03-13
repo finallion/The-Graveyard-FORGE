@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class SarcophagusItem extends BlockItem {
     public SarcophagusItem(Item.Properties p_40559_) {
-        super(TGBlocks.SARCOPHAGUS, p_40559_);
+        super(TGBlocks.SARCOPHAGUS.get(), p_40559_);
     }
 
     protected boolean placeBlock(BlockPlaceContext p_40561_, BlockState p_40562_) {

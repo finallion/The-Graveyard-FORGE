@@ -2,12 +2,10 @@ package com.finallion.graveyard.world.structures;
 
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.StructureConfigEntry;
-import com.finallion.graveyard.init.TGEntities;
-import com.google.common.collect.ImmutableList;
-import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.FluidTags;
+import net.minecraft.core.Holder;
+import net.minecraft.core.QuartPos;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.biome.Biome;
@@ -18,12 +16,14 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.StructureFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.structures.JigsawPlacement;
-import net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
+import net.minecraft.world.level.levelgen.structure.PostPlacementProcessor;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.util.Lazy;
 
 import javax.annotation.Nonnull;
@@ -32,28 +32,14 @@ import java.util.Optional;
 import java.util.Set;
 
 public abstract class AbstractGraveyardStructure extends StructureFeature<JigsawConfiguration> {
-    private int seed;
     private final StructureConfigEntry structureConfigEntry;
     private String structureName;
 
-    public AbstractGraveyardStructure(Codec<JigsawConfiguration> codec, StructureConfigEntry structureConfigEntry, int size, int seed, StructureTemplatePool pool, String name) {
-        super(codec, (context) -> {
-            if (!AbstractGraveyardStructure.isFeatureChunk(context, size)) {
-                return Optional.empty();
-            } else {
-                return AbstractGraveyardStructure.createPiecesGenerator(context, pool);
-            }
-        });
-        this.seed = seed;
-        this.structureConfigEntry = structureConfigEntry;
+    public AbstractGraveyardStructure(StructureConfigEntry config, int size, String name) {
+        super(JigsawConfiguration.CODEC, (context -> AbstractGraveyardStructure.createPiecesGenerator(context, config, size, name)), PostPlacementProcessor.NONE);
+        this.structureConfigEntry = config;
         this.structureName = name;
     }
-
-    public static final Lazy<List<MobSpawnSettings.SpawnerData>> MONSTER_SPAWNS = Lazy.of(() -> ImmutableList.of(
-            new MobSpawnSettings.SpawnerData(TGEntities.SKELETON_CREEPER, 35, 1, 2),
-            new MobSpawnSettings.SpawnerData(TGEntities.GHOUL, 50, 1, 3),
-            new MobSpawnSettings.SpawnerData(TGEntities.REVENANT, 45, 1, 3)
-    ));
 
 
     @Override
@@ -61,40 +47,35 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
         return GenerationStep.Decoration.SURFACE_STRUCTURES;
     }
 
-    private static boolean isFeatureChunk(PieceGeneratorSupplier.Context<JigsawConfiguration> context, int size) {
+    private static boolean isFeatureChunk(PieceGeneratorSupplier.Context<JigsawConfiguration> context, StructureConfigEntry config, int size, String name) {
         BlockPos centerOfChunk = context.chunkPos().getMiddleBlockPosition(0);
+
+        if (!isCorrectBiome(context, config, name)) {
+            return false;
+        }
+
 
         if (!isTerrainFlat(context.chunkGenerator(), centerOfChunk.getX(), centerOfChunk.getZ(), context.heightAccessor(), size)) {
             return false;
         }
 
-        if (!isWater(context.chunkGenerator(), centerOfChunk.getX(), centerOfChunk.getZ(), context.heightAccessor(), size)) {
-            return false;
-        }
+        //if (!isWater(context.chunkGenerator(), centerOfChunk.getX(), centerOfChunk.getZ(), context.heightAccessor(), size)) {
+        //    return false;
+        //}
 
         return true;
     }
 
-    public static Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context, StructureTemplatePool pool) {
+    public static Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context, StructureConfigEntry config, int size, String name) {
         BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(0);
 
-        JigsawConfiguration newConfig = new JigsawConfiguration(() -> pool, 3);
-
-        PieceGeneratorSupplier.Context<JigsawConfiguration> newContext = new PieceGeneratorSupplier.Context<>(
-                context.chunkGenerator(),
-                context.biomeSource(),
-                context.seed(),
-                context.chunkPos(),
-                newConfig,
-                context.heightAccessor(),
-                context.validBiome(),
-                context.structureManager(),
-                context.registryAccess()
-        );
+        if (!AbstractGraveyardStructure.isFeatureChunk(context, config, size, name)) {
+            return Optional.empty();
+        }
 
         Optional<PieceGenerator<JigsawConfiguration>> structurePiecesGenerator =
-                JigsawPlacement.addPieces(
-                        newContext,
+                JigsawPlacement.m_210284_(
+                        context,
                         PoolElementStructurePiece::new,
                         blockpos,
                         false,
@@ -109,17 +90,11 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
         return structureConfigEntry;
     }
 
-    public StructureFeatureConfiguration getStructureFeatureConfiguration() {
-        return new StructureFeatureConfiguration(structureConfigEntry.getSpacing(), structureConfigEntry.getSeparation(), seed);
-    }
-
-
-    public abstract ConfiguredStructureFeature<?, ?> getStructureFeature();
-
     public String getStructureName() {
         return structureName;
     }
 
+    public abstract ConfiguredStructureFeature<?, ?> getStructureFeature();
 
     protected static boolean isTerrainFlat(ChunkGenerator generator, int chunkX, int chunkZ, LevelHeightAccessor heightLimitView, int size) {
         // center of generation is chunkX 0 chunkZ (i)
@@ -143,7 +118,7 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
         NoiseColumn sample4 = generator.getBaseColumn(chunkX, chunkZ - size, heightLimitView);
         NoiseColumn sample5 = generator.getBaseColumn(chunkX - size, chunkZ, heightLimitView);
 
-        if (sample1.getBlock(i1).getFluidState().is(FluidTags.WATER) || sample2.getBlock(j1).getFluidState().is(FluidTags.WATER) || sample3.getBlock(k1).getFluidState().is(FluidTags.WATER) || sample4.getBlock(o1).getFluidState().is(FluidTags.WATER) || sample5.getBlock(p1).getFluidState().is(FluidTags.WATER)) {
+        if (sample1.getBlock(i1).getFluidState().is(Fluids.WATER) || sample2.getBlock(j1).getFluidState().is(Fluids.WATER) || sample3.getBlock(k1).getFluidState().is(Fluids.WATER) || sample4.getBlock(o1).getFluidState().is(Fluids.WATER) || sample5.getBlock(p1).getFluidState().is(Fluids.WATER)) {
             return false;
         }
 
@@ -154,10 +129,10 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
         int maxSides = Math.max(Math.max(j1, p1), Math.max(o1, k1));
         int maxHeight = Math.max(maxSides, i1);
 
-        return Math.abs(maxHeight - minHeight) <= 3;
-
+        return Math.abs(maxHeight - minHeight) <= 4;
     }
 
+    /*
     protected static boolean isWater(ChunkGenerator generator, int chunkX, int chunkZ, LevelHeightAccessor heightLimitView, int size) {
         Set<Biome> biomesInAreaOne = generator.getBiomeSource().getBiomesWithin(chunkX, 0, chunkZ, size, generator.climateSampler());
 
@@ -168,6 +143,77 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
         }
 
         return true;
-
     }
+     */
+
+    protected static boolean isCorrectBiome(PieceGeneratorSupplier.Context<JigsawConfiguration> context, StructureConfigEntry config, String name) {
+        BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(0);
+
+        Holder<Biome> biome = context.chunkGenerator().m_203495_(QuartPos.fromBlock(blockpos.getX()), QuartPos.fromBlock(blockpos.getY()), QuartPos.fromBlock(blockpos.getZ()));
+
+        if (config.canGenerate.get() &&
+                parseBiomes(config.whitelist.get(), config.blacklist.get(), biome) &&
+                parseWhitelistedMods(config.modWhitelist.get(), biome)) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean parseBiomes(List<? extends String> whitelist, List<? extends String> blacklist, Holder<Biome> biome) {
+        String biomeName = biome.m_203543_().get().location().toString();
+        String biomeCategory = BuiltinRegistries.BIOME.get(biome.m_203543_().get()).m_204183_(biome).getName();
+
+        if (whitelist == null) {
+            TheGraveyard.LOGGER.error("Error reading from the Graveyard config file: Allowed biome category/biome is null. Try to delete the file and restart the game.");
+            return false;
+        }
+
+        // no blacklist and biome is allowed
+        if (whitelist.contains(biomeName) && blacklist.isEmpty()) {
+            return true;
+        }
+
+        // no blacklist and biomeCategory is allowed
+        if (whitelist.contains("#" + biomeCategory) && blacklist.isEmpty()) {
+            return true;
+        }
+
+        // blacklist exists and check if biome is on the blacklist
+        if (whitelist.contains(biomeName) && !blacklist.isEmpty()) {
+            if (blacklist.contains("#" + biomeCategory)) { // whitelist weighs higher than blacklist
+                //TheGraveyard.LOGGER.error("Blacklisted biome category #" + biomeCategory + " contains whitelisted biome " + biomeName + ".");
+                return true;
+            } else if (blacklist.contains(biomeName)) {  // blacklist weighs higher than whitelist
+                TheGraveyard.LOGGER.debug("Biome " +  biomeName + " is on whitelist and blacklist.");
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        // blacklist exists and check if biomeCategory is on the blacklist
+        if (whitelist.contains("#" + biomeCategory) && !blacklist.isEmpty()) {
+            if (blacklist.contains("#" + biomeCategory)) { // blacklist weighs higher than whitelist
+                TheGraveyard.LOGGER.debug("Biome category #" + biomeCategory + " is on whitelist and blacklist.");
+                return false;
+            } else if (blacklist.contains(biomeName)) { // blacklist weighs higher than whitelist
+                //TheGraveyard.LOGGER.error("Biome category #" + biomeCategory + " is on whitelist and subsidiary biome " + biomeName + " is on blacklist.");
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean parseWhitelistedMods(List<? extends String> modWhitelist, Holder<Biome> biome) {
+        if (modWhitelist == null) {
+            TheGraveyard.LOGGER.error("Error reading from the Graveyard config file: Allowed biome category/biome is null. Try to delete the file and restart the game.");
+            return false;
+        }
+
+        String modid = biome.m_203543_().get().getRegistryName().getNamespace();
+        return modWhitelist.contains("#" + modid);
+    }
+
 }

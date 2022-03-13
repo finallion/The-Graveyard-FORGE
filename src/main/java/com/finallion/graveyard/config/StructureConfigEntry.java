@@ -16,46 +16,54 @@ public class StructureConfigEntry {
     private final int defaultSeparation;
     public ForgeConfigSpec.IntValue separation;
 
-    private final List<String> defaultWhitelist;
+    private final long defaultSalt;
+    public ForgeConfigSpec.LongValue salt;
+
+    private final List<? extends String> defaultWhitelist;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> whitelist;
-    private final List<String> defaultBlacklist;
+    private final List<? extends String> defaultBlacklist;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> blacklist;
-    private final List<String> defaultModWhitelist;
+    private final List<? extends String> defaultModWhitelist;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> modWhitelist;
     private final boolean defaultCanSpawnGraveyardMobs;
     public ForgeConfigSpec.BooleanValue canSpawnGraveyardMobs;
 
-    public StructureConfigEntry(int spacing, int separation, List<String> whitelist, List<String> blacklist, List<String> modWhitelist, boolean canSpawnGraveyardMobs) {
+    public StructureConfigEntry(int spacing, int separation, int salt, List<? extends String> whitelist, List<? extends String> blacklist, List<? extends String> modWhitelist, boolean canSpawnGraveyardMobs) {
         this.defaultSpacing = spacing;
         this.defaultSeparation = separation;
+        this.defaultSalt = salt;
         this.defaultWhitelist = whitelist;
         this.defaultBlacklist = blacklist;
         this.defaultModWhitelist = modWhitelist;
         this.defaultCanSpawnGraveyardMobs = canSpawnGraveyardMobs;
     }
 
-
-    public int getSpacing() {
-        return defaultSpacing;
-    }
-
-    public int getSeparation() {
-        return defaultSeparation;
-    }
-
-    public boolean getCanSpawnGraveyardMobs() {
-        return defaultCanSpawnGraveyardMobs;
-    }
-
-    public List<String> getWhitelist() {
+    public List<? extends String> getDefaultWhitelist() {
         return defaultWhitelist;
     }
 
-    public List<String> getBlacklist() {
+    public List<? extends String> getDefaultBlacklist() {
         return defaultBlacklist;
     }
 
-    public List<String> getModWhitelist() {
+    public List<? extends String> getDefaultModWhitelist() {
         return defaultModWhitelist;
+    }
+
+
+    public int getDefaultSpacing() {
+        return defaultSpacing;
+    }
+
+    public int getDefaultSeparation() {
+        return defaultSeparation;
+    }
+
+    public long getDefaultSalt() {
+        return defaultSalt;
+    }
+
+    public boolean getDefaultCanSpawnGraveyardMobs() {
+        return defaultCanSpawnGraveyardMobs;
     }
 }

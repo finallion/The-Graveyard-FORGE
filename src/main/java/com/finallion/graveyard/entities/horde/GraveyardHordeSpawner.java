@@ -5,6 +5,7 @@ import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.entities.AnimatedGraveyardEntity;
 import com.finallion.graveyard.init.TGEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.material.Fluids;
 
 import java.util.Random;
 
@@ -59,8 +61,8 @@ public class GraveyardHordeSpawner {
                                 if (!level.hasChunksAt(blockpos$mutableblockpos.getX() - 10, blockpos$mutableblockpos.getZ() - 10, blockpos$mutableblockpos.getX() + 10, blockpos$mutableblockpos.getZ() + 10)) {
                                     return 0;
                                 } else {
-                                    Biome biome = level.getBiome(blockpos$mutableblockpos);
-                                    Biome.BiomeCategory biome$biomecategory = biome.getBiomeCategory();
+                                    Holder<Biome> holder = level.m_204166_(blockpos$mutableblockpos);
+                                    Biome.BiomeCategory biome$biomecategory = Biome.m_204183_(holder);
                                     if (biome$biomecategory == Biome.BiomeCategory.MUSHROOM) {
                                         return 0;
                                     } else {
@@ -97,19 +99,19 @@ public class GraveyardHordeSpawner {
 
     private boolean spawnHordeEntity(Level p_64565_, BlockPos p_64566_, Random p_64567_, boolean p_64568_) {
         BlockState blockstate = p_64565_.getBlockState(p_64566_);
-        if (!NaturalSpawner.isValidEmptySpawnBlock(p_64565_, p_64566_, blockstate, blockstate.getFluidState(), TGEntities.GHOUL)) {
+        if (!NaturalSpawner.isValidEmptySpawnBlock(p_64565_, p_64566_, blockstate, blockstate.getFluidState(), TGEntities.GHOUL.get())) {
             return false;
-        } else if (blockstate.getFluidState().is(FluidTags.WATER)) {
+        } else if (blockstate.getFluidState().is(Fluids.WATER)) {
             return false;
-        } else if (!AnimatedGraveyardEntity.checkAnyLightMonsterSpawnRules(TGEntities.GHOUL, p_64565_, MobSpawnType.PATROL, p_64566_, p_64567_)) {
+        } else if (!AnimatedGraveyardEntity.checkAnyLightMonsterSpawnRules(TGEntities.GHOUL.get(), p_64565_, MobSpawnType.PATROL, p_64566_, p_64567_)) {
             return false;
         } else {
             GraveyardHordeEntity hordeEntity;
 
             if (p_64567_.nextBoolean()) {
-                hordeEntity = TGEntities.GHOUL.create(p_64565_);
+                hordeEntity = TGEntities.GHOUL.get().create(p_64565_);
             } else {
-                hordeEntity = TGEntities.REVENANT.create(p_64565_);
+                hordeEntity = TGEntities.REVENANT.get().create(p_64565_);
             }
 
             if (hordeEntity != null) {

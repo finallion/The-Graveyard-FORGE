@@ -10,7 +10,7 @@ public class FeatureHelper {
 
 
     public static boolean canBePlaced(BlockState state) {
-        return state.is(Blocks.MOSS_BLOCK) || state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.COARSE_DIRT) || state.is(Blocks.ROOTED_DIRT);
+        return state.is(Blocks.SAND) || state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.COARSE_DIRT) || state.is(Blocks.ROOTED_DIRT);
     }
 
     public static boolean isCorrectBiome(ResourceKey<Biome> key) {

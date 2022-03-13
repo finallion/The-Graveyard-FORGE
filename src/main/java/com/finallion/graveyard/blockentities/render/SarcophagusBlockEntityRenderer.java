@@ -66,9 +66,6 @@ public class SarcophagusBlockEntityRenderer<T extends BlockEntity & LidBlockEnti
         String name = entity.getBlockState().getBlock().getDescriptionId();
         boolean isCoffin = entity.isCoffin();
 
-        System.out.println(name);
-        System.out.println(isCoffin);
-
         DoubleBlockCombiner.NeighborCombineResult<? extends SarcophagusBlockEntity> propertySource = DoubleBlockCombiner.combineWithNeigbour(TGTileEntities.SARCOPHAGUS_BLOCK_ENTITY.get(), SarcophagusBlock::getBlockType, SarcophagusBlock::getConnectedDirection, ChestBlock.FACING, blockState, world, entity.getBlockPos(), (worldx, pos) -> {
             return false;
         });

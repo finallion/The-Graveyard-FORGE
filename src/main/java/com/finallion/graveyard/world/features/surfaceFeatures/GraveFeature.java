@@ -25,13 +25,12 @@ public class GraveFeature extends Feature<NoneFeatureConfiguration> {
         Random random = context.random();
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos().set(pos);
 
-        if (FeatureHelper.canBePlaced(world.getBlockState(pos.below())) && world.getBlockState(pos).isAir() && random.nextInt(10) == 0 && FeatureHelper.isCorrectBiome(world.getBiomeName(mutable).get())) {
-            // TODO put gravestones into tag
+        if (FeatureHelper.canBePlaced(world.getBlockState(pos.below())) && world.getBlockState(pos).isAir() && random.nextInt(10) == 0 && FeatureHelper.isCorrectBiome(world.m_204166_(mutable).m_203543_().get())) {
             switch (random.nextInt(4)) {
-                case 1: world.setBlock(pos, TGBlocks.COBBLESTONE_GRAVESTONE.defaultBlockState(), 2); break;
-                case 2: world.setBlock(pos, TGBlocks.MOSSY_COBBLESTONE_GRAVESTONE.defaultBlockState(), 2); break;
-                case 3: world.setBlock(pos, TGBlocks.DEEPSLATE_GRAVESTONE.defaultBlockState(), 2); break;
-                default: world.setBlock(pos, TGBlocks.GRAVESTONE.defaultBlockState(), 2); break;
+                case 1: world.setBlock(pos, TGBlocks.COBBLESTONE_GRAVESTONE.get().defaultBlockState(), 2); break;
+                case 2: world.setBlock(pos, TGBlocks.MOSSY_COBBLESTONE_GRAVESTONE.get().defaultBlockState(), 2); break;
+                case 3: world.setBlock(pos, TGBlocks.DEEPSLATE_GRAVESTONE.get().defaultBlockState(), 2); break;
+                default: world.setBlock(pos, TGBlocks.GRAVESTONE.get().defaultBlockState(), 2); break;
             }
         }
 

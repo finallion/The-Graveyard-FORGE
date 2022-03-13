@@ -7,10 +7,11 @@
     "CreeperEntityMixin",
     "LakeFeatureMixin",
     "ServerPlayNetworkHandlerMixin",
-    "SpringFeatureMixin",
     "TreeFeatureMixin",
     "VillagerMixin",
-    "WanderingTraderMixin"
+    "WanderingTraderMixin",
+    "StructureFeatureAccessor",
+    "WorldGenRegionAccessor"
   ],
   "client": [
     "ClientPlayNetworkHandlerMixin"

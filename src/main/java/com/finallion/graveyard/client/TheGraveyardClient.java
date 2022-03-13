@@ -47,12 +47,12 @@ public class TheGraveyardClient {
 
     @SubscribeEvent
     public void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(TGEntities.SKELETON_CREEPER, SkeletonCreeperRender::new);
-        event.registerEntityRenderer(TGEntities.ACOLYTE, AcolyteRender::new);
-        event.registerEntityRenderer(TGEntities.GHOUL, GhoulRenderer::new);
-        event.registerEntityRenderer(TGEntities.REAPER, ReaperRenderer::new);
-        event.registerEntityRenderer(TGEntities.REVENANT, RevenantRenderer::new);
-        event.registerEntityRenderer(TGEntities.NIGHTMARE, NightmareRenderer::new);
+        event.registerEntityRenderer(TGEntities.SKELETON_CREEPER.get(), SkeletonCreeperRender::new);
+        event.registerEntityRenderer(TGEntities.ACOLYTE.get(), AcolyteRender::new);
+        event.registerEntityRenderer(TGEntities.GHOUL.get(), GhoulRenderer::new);
+        event.registerEntityRenderer(TGEntities.REAPER.get(), ReaperRenderer::new);
+        event.registerEntityRenderer(TGEntities.REVENANT.get(), RevenantRenderer::new);
+        event.registerEntityRenderer(TGEntities.NIGHTMARE.get(), NightmareRenderer::new);
 
         event.registerBlockEntityRenderer(TGTileEntities.GRAVESTONE_BLOCK_ENTITY.get(), GravestoneBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(TGTileEntities.SARCOPHAGUS_BLOCK_ENTITY.get(), SarcophagusBlockEntityRenderer::new);
@@ -62,7 +62,7 @@ public class TheGraveyardClient {
     @SubscribeEvent
     public void onBlockColorsInit(ColorHandlerEvent.Item event) {
         final BlockColors blockColors = event.getBlockColors();
-        blockColors.register((state, reader, pos, color) -> reader != null && pos != null ? BiomeColors.getAverageGrassColor(reader, pos) : GrassColor.get(0.5D, 1.0D), TGBlocks.TG_GRASS_BLOCK);
+        blockColors.register((state, reader, pos, color) -> reader != null && pos != null ? BiomeColors.getAverageGrassColor(reader, pos) : GrassColor.get(0.5D, 1.0D), TGBlocks.TG_GRASS_BLOCK.get());
 
     }
 
@@ -75,25 +75,25 @@ public class TheGraveyardClient {
         itemColors.register((stack, color) -> {
             BlockState blockstate = ((BlockItem) stack.getItem()).getBlock().defaultBlockState();
             return blockColors.getColor(blockstate, null, null, color);
-        }, TGBlocks.TG_GRASS_BLOCK);
+        }, TGBlocks.TG_GRASS_BLOCK.get());
 
     }
 
     @SubscribeEvent
     public void clientInit(FMLClientSetupEvent event) {
-        ItemBlockRenderTypes.setRenderLayer(TGBlocks.DARK_IRON_BARS, CUTOUT_MIPPED);
-        ItemBlockRenderTypes.setRenderLayer(TGBlocks.TG_GRASS_BLOCK, CUTOUT_MIPPED);
-        ItemBlockRenderTypes.setRenderLayer(TGBlocks.SKULL_WITH_RIB_CAGE, CUTOUT_MIPPED);
-        ItemBlockRenderTypes.setRenderLayer(TGBlocks.WITHER_SKULL_WITH_RIB_CAGE, CUTOUT_MIPPED);
-        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LEANING_SKELETON, CUTOUT_MIPPED);
-        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LEANING_WITHER_SKELETON, CUTOUT_MIPPED);
-        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LYING_SKELETON, CUTOUT_MIPPED);
-        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LYING_WITHER_SKELETON, CUTOUT_MIPPED);
-        ItemBlockRenderTypes.setRenderLayer(TGBlocks.SOUL_FIRE_BRAZIER, CUTOUT_MIPPED);
-        ItemBlockRenderTypes.setRenderLayer(TGBlocks.FIRE_BRAZIER, CUTOUT_MIPPED);
-        ItemBlockRenderTypes.setRenderLayer(TGBlocks.CANDLE_HOLDER, CUTOUT_MIPPED);
-        ItemBlockRenderTypes.setRenderLayer(TGBlocks.DARK_IRON_DOOR, CUTOUT_MIPPED);
-        ItemBlockRenderTypes.setRenderLayer(TGBlocks.DARK_IRON_TRAPDOOR, CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.DARK_IRON_BARS.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.TG_GRASS_BLOCK.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.SKULL_WITH_RIB_CAGE.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.WITHER_SKULL_WITH_RIB_CAGE.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LEANING_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LEANING_WITHER_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LYING_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LYING_WITHER_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.SOUL_FIRE_BRAZIER.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.FIRE_BRAZIER.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.CANDLE_HOLDER.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.DARK_IRON_DOOR.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.DARK_IRON_TRAPDOOR.get(), CUTOUT_MIPPED);
 
     }
 
@@ -104,7 +104,7 @@ public class TheGraveyardClient {
         ForgeModelBakery.addSpecialModel(SarcophagusBlockEntityRenderer.SARCOPHAGUS_FOOT_LID);
         ForgeModelBakery.addSpecialModel(SarcophagusBlockEntityRenderer.SARCOPHAGUS_HEAD_LID);
 
-        for (Block block : TGBlocks.coffins) {
+        for (Block block : TGBlocks.getCoffins()) {
             String woodType = block.getDescriptionId().split("\\.")[2];
             ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "block/" + woodType + "_foot"));
             ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "block/" + woodType + "_foot_lid"));

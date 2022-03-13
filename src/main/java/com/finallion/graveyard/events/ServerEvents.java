@@ -4,102 +4,40 @@ import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.init.TGConfiguredFeatures;
-import com.finallion.graveyard.init.TGConfiguredStructures;
 import com.finallion.graveyard.init.TGEntities;
-import com.finallion.graveyard.init.TGStructures;
+import com.finallion.graveyard.init.TGStructureFeatures;
 import com.finallion.graveyard.world.structures.AbstractGraveyardStructure;
-import com.finallion.graveyard.world.structures.LargeGraveyardStructure;
-import com.finallion.graveyard.world.structures.MediumGraveyardStructure;
 import com.finallion.graveyard.world.structures.SmallDesertGraveyardStructure;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.StructureSpawnListGatherEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.function.Supplier;
 
 public class ServerEvents {
     public static void addBiomeFeatures(BiomeLoadingEvent event) {
         ResourceKey<Biome> biome = ResourceKey.create(ForgeRegistries.Keys.BIOMES, event.getName());
-        List<Supplier<PlacedFeature>> vegetalFeatures = event.getGeneration().getFeatures(GenerationStep.Decoration.VEGETAL_DECORATION);
+        BiomeGenerationSettingsBuilder generation = event.getGeneration();
 
-
-        if (biome.location().getNamespace().equals("graveyard") && biome.location().getPath().contains("haunted")) {
-            vegetalFeatures.add(() -> TGConfiguredFeatures.GRAVESTONE_PLACED_FEATURE);
+        if (biome.location().getNamespace().equals("graveyard_biomes") && biome.location().getPath().contains("haunted")) {
+            generation.m_204201_(GenerationStep.Decoration.VEGETAL_DECORATION, Holder.m_205709_(TGConfiguredFeatures.GRAVESTONE_PLACED_FEATURE));
         }
     }
 
-    public static void setupStructureSpawns(final StructureSpawnListGatherEvent event) {
-        if (!(event.getStructure() instanceof AbstractGraveyardStructure)) {
-            return;
-        }
-
-        AbstractGraveyardStructure graveyardStructure = (AbstractGraveyardStructure) event.getStructure();
-        StructureConfigEntry structureConfig = graveyardStructure.getStructureConfigEntry();
-
-        if (event.getStructure() == TGStructures.SMALL_DESERT_GRAVEYARD_STRUCTURE.get()) {
-            if (structureConfig.canSpawnGraveyardMobs.get()) {
-                event.addEntitySpawns(MobCategory.MONSTER, AbstractGraveyardStructure.MONSTER_SPAWNS.get());
-            }
-            event.addEntitySpawns(MobCategory.MONSTER, SmallDesertGraveyardStructure.ILLAGER_SPAWNS.get());
-        }
-
-
-        if (event.getStructure() == TGStructures.LARGE_GRAVEYARD_STRUCTURE.get() && structureConfig.canSpawnGraveyardMobs.get()) {
-            event.addEntitySpawns(MobCategory.MONSTER, AbstractGraveyardStructure.MONSTER_SPAWNS.get());
-        }
-
-        if (event.getStructure() == TGStructures.MEDIUM_GRAVEYARD_STRUCTURE.get() && structureConfig.canSpawnGraveyardMobs.get()) {
-            event.addEntitySpawns(MobCategory.MONSTER, AbstractGraveyardStructure.MONSTER_SPAWNS.get());
-        }
-
-        if (event.getStructure() == TGStructures.SMALL_GRAVEYARD_STRUCTURE.get() && structureConfig.canSpawnGraveyardMobs.get()) {
-            event.addEntitySpawns(MobCategory.MONSTER, AbstractGraveyardStructure.MONSTER_SPAWNS.get());
-        }
-
-        if (event.getStructure() == TGStructures.SMALL_DESERT_GRAVE_STRUCTURE.get() && structureConfig.canSpawnGraveyardMobs.get()) {
-            event.addEntitySpawns(MobCategory.MONSTER, AbstractGraveyardStructure.MONSTER_SPAWNS.get());
-        }
-
-        if (event.getStructure() == TGStructures.MEMORIAL_TREE_STRUCTURE.get() && structureConfig.canSpawnGraveyardMobs.get()) {
-            event.addEntitySpawns(MobCategory.MONSTER, AbstractGraveyardStructure.MONSTER_SPAWNS.get());
-        }
-
-        if (event.getStructure() == TGStructures.HAUNTED_HOUSE_STRUCTURE.get() && structureConfig.canSpawnGraveyardMobs.get()) {
-            event.addEntitySpawns(MobCategory.MONSTER, AbstractGraveyardStructure.MONSTER_SPAWNS.get());
-        }
-
-        if (event.getStructure() == TGStructures.SMALL_GRAVE_STRUCTURE.get() && structureConfig.canSpawnGraveyardMobs.get()) {
-            event.addEntitySpawns(MobCategory.MONSTER, AbstractGraveyardStructure.MONSTER_SPAWNS.get());
-        }
-
-        if (event.getStructure() == TGStructures.SMALL_SAVANNA_GRAVE_STRUCTURE.get() && structureConfig.canSpawnGraveyardMobs.get()) {
-            event.addEntitySpawns(MobCategory.MONSTER, AbstractGraveyardStructure.MONSTER_SPAWNS.get());
-        }
-
-        if (event.getStructure() == TGStructures.SMALL_MOUNTAIN_GRAVE_STRUCTURE.get() && structureConfig.canSpawnGraveyardMobs.get()) {
-            event.addEntitySpawns(MobCategory.MONSTER, AbstractGraveyardStructure.MONSTER_SPAWNS.get());
-        }
-
-        if (event.getStructure() == TGStructures.MUSHROOM_GRAVE_STRUCTURE.get() && structureConfig.canSpawnGraveyardMobs.get()) {
-            event.addEntitySpawns(MobCategory.MONSTER, AbstractGraveyardStructure.MONSTER_SPAWNS.get());
-        }
-    }
 
     public static void onBiomesLoad(BiomeLoadingEvent event) {
         List<MobSpawnSettings.SpawnerData> base = event.getSpawns().getSpawner(MobCategory.MONSTER);
 
         if (parseBiomes(GraveyardConfig.COMMON.whitelistGhoul.get(), GraveyardConfig.COMMON.blacklistGhoul.get(), event) &&
                 parseWhitelistedMods(GraveyardConfig.COMMON.modWhitelistGhoul.get(), event) && GraveyardConfig.COMMON.enableGhoul.get()) {
-            base.add(new MobSpawnSettings.SpawnerData(TGEntities.GHOUL,
+            base.add(new MobSpawnSettings.SpawnerData(TGEntities.GHOUL.get(),
                     GraveyardConfig.COMMON.weightGhoul.get(),
                     GraveyardConfig.COMMON.minGroupSizeGhoul.get(),
                     GraveyardConfig.COMMON.maxGroupSizeGhoul.get()));
@@ -107,7 +45,7 @@ public class ServerEvents {
 
         if (parseBiomes(GraveyardConfig.COMMON.whitelistRevenant.get(), GraveyardConfig.COMMON.blacklistRevenant.get(), event) &&
                 parseWhitelistedMods(GraveyardConfig.COMMON.modWhitelistRevenant.get(), event) && GraveyardConfig.COMMON.enableRevenant.get()) {
-            base.add(new MobSpawnSettings.SpawnerData(TGEntities.REVENANT,
+            base.add(new MobSpawnSettings.SpawnerData(TGEntities.REVENANT.get(),
                     GraveyardConfig.COMMON.weightRevenant.get(),
                     GraveyardConfig.COMMON.minGroupSizeRevenant.get(),
                     GraveyardConfig.COMMON.maxGroupSizeRevenant.get()));
@@ -115,7 +53,7 @@ public class ServerEvents {
 
         if (parseBiomes(GraveyardConfig.COMMON.whitelistReaper.get(), GraveyardConfig.COMMON.blacklistReaper.get(), event) &&
                 parseWhitelistedMods(GraveyardConfig.COMMON.modWhitelistReaper.get(), event) && GraveyardConfig.COMMON.enableReaper.get()) {
-            base.add(new MobSpawnSettings.SpawnerData(TGEntities.REAPER,
+            base.add(new MobSpawnSettings.SpawnerData(TGEntities.REAPER.get(),
                     GraveyardConfig.COMMON.weightReaper.get(),
                     GraveyardConfig.COMMON.minGroupSizeReaper.get(),
                     GraveyardConfig.COMMON.maxGroupSizeReaper.get()));
@@ -123,7 +61,7 @@ public class ServerEvents {
 
         if (parseBiomes(GraveyardConfig.COMMON.whitelistNightmare.get(), GraveyardConfig.COMMON.blacklistNightmare.get(), event) &&
                 parseWhitelistedMods(GraveyardConfig.COMMON.modWhitelistNightmare.get(), event) && GraveyardConfig.COMMON.enableNightmare.get()) {
-            base.add(new MobSpawnSettings.SpawnerData(TGEntities.NIGHTMARE,
+            base.add(new MobSpawnSettings.SpawnerData(TGEntities.NIGHTMARE.get(),
                     GraveyardConfig.COMMON.weightNightmare.get(),
                     GraveyardConfig.COMMON.minGroupSizeNightmare.get(),
                     GraveyardConfig.COMMON.maxGroupSizeNightmare.get()));
@@ -131,7 +69,7 @@ public class ServerEvents {
 
         if (parseBiomes(GraveyardConfig.COMMON.whitelistSkeletonCreeper.get(), GraveyardConfig.COMMON.blacklistSkeletonCreeper.get(), event) &&
                 parseWhitelistedMods(GraveyardConfig.COMMON.modWhitelistSkeletonCreeper.get(), event) && GraveyardConfig.COMMON.enableSkeletonCreeper.get()) {
-            base.add(new MobSpawnSettings.SpawnerData(TGEntities.SKELETON_CREEPER,
+            base.add(new MobSpawnSettings.SpawnerData(TGEntities.SKELETON_CREEPER.get(),
                     GraveyardConfig.COMMON.weightSkeletonCreeper.get(),
                     GraveyardConfig.COMMON.minGroupSizeSkeletonCreeper.get(),
                     GraveyardConfig.COMMON.maxGroupSizeSkeletonCreeper.get()));
@@ -139,7 +77,7 @@ public class ServerEvents {
 
         if (parseBiomes(GraveyardConfig.COMMON.whitelistAcolyte.get(), GraveyardConfig.COMMON.blacklistAcolyte.get(), event) &&
                 parseWhitelistedMods(GraveyardConfig.COMMON.modWhitelistAcolyte.get(), event) && GraveyardConfig.COMMON.enableAcolyte.get()) {
-            base.add(new MobSpawnSettings.SpawnerData(TGEntities.ACOLYTE,
+            base.add(new MobSpawnSettings.SpawnerData(TGEntities.ACOLYTE.get(),
                     GraveyardConfig.COMMON.weightAcolyte.get(),
                     GraveyardConfig.COMMON.minGroupSizeAcolyte.get(),
                     GraveyardConfig.COMMON.maxGroupSizeAcolyte.get()));

@@ -48,7 +48,7 @@ public class SkeletonCreeper extends Creeper {
         if (entity != this && entity instanceof Creeper) {
             Creeper creeper = (Creeper)entity;
             if (creeper.isIgnited() && random.nextBoolean()) {
-                this.spawnAtLocation(TGBlocks.CREEPER_SKELETON.asItem());
+                this.spawnAtLocation(TGBlocks.CREEPER_SKELETON.get().asItem());
             }
         } else {
             super.dropCustomDeathLoot(p_32292_, p_32293_, p_32294_);
