@@ -2,6 +2,7 @@ package com.finallion.graveyard.entities.renders.features;
 
 
 import com.finallion.graveyard.entities.AcolyteEntity;
+import com.finallion.graveyard.entities.models.CorruptedIllagerModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.IllagerModel;
@@ -15,13 +16,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class AcolyteEyes extends RenderLayer<AcolyteEntity, IllagerModel<AcolyteEntity>> {
+public class AcolyteEyes extends RenderLayer<AcolyteEntity, CorruptedIllagerModel<AcolyteEntity>> {
 
-    public AcolyteEyes(RenderLayerParent<AcolyteEntity, IllagerModel<AcolyteEntity>> p_117346_) {
+    public AcolyteEyes(RenderLayerParent<AcolyteEntity, CorruptedIllagerModel<AcolyteEntity>> p_117346_) {
         super(p_117346_);
     }
-
-
 
     @Override
     public void render(PoseStack matrices, MultiBufferSource vertexConsumer, int p_117351_, AcolyteEntity p_117352_, float p_117353_, float p_117354_, float p_117355_, float p_117356_, float p_117357_, float p_117358_) {

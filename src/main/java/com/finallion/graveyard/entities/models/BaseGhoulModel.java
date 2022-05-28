@@ -1,31 +1,31 @@
 package com.finallion.graveyard.entities.models;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.entities.BaseGhoulEntity;
+import com.finallion.graveyard.entities.GhoulEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-public class BaseGhoulModel extends AnimatedGeoModel<BaseGhoulEntity> {
+public class BaseGhoulModel extends AnimatedGeoModel<GhoulEntity> {
     private ResourceLocation texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin1.png");
 
     @Override
-    public ResourceLocation getModelLocation(BaseGhoulEntity object) {
+    public ResourceLocation getModelLocation(GhoulEntity object) {
         return new ResourceLocation(TheGraveyard.MOD_ID, "geo/ghoul.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(BaseGhoulEntity object) {
+    public ResourceLocation getTextureLocation(GhoulEntity object) {
         return texture;
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(BaseGhoulEntity animatable) {
+    public ResourceLocation getAnimationFileLocation(GhoulEntity animatable) {
         return new ResourceLocation(TheGraveyard.MOD_ID, "animations/ghoul/ghoul.animation.json");
     }
 
     @Override
-    public void setLivingAnimations(BaseGhoulEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
+    public void setLivingAnimations(GhoulEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
 
         switch (entity.getVariant()) {

@@ -1,6 +1,7 @@
 package com.finallion.graveyard.entities;
 
-import com.finallion.graveyard.config.GraveyardConfig;
+import com.finallion.graveyard.init.TGAdvancements;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -8,8 +9,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.damagesource.DamageSource;
@@ -24,7 +25,6 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -46,7 +46,7 @@ import java.util.EnumSet;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-public class NightmareEntity extends Monster implements IAnimatable, NeutralMob {
+public class NightmareEntity extends HostileGraveyardEntity implements IAnimatable, NeutralMob {
     private AnimationFactory factory = new AnimationFactory(this);
     private final AnimationBuilder DEATH_ANIMATION = new AnimationBuilder().addAnimation("death", false);
     private final AnimationBuilder IDLE_ANIMATION = new AnimationBuilder().addAnimation("idle", true);
@@ -62,17 +62,17 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
 
     private static final EntityDataAccessor<Boolean> DATA_CREEPY = SynchedEntityData.defineId(NightmareEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_STARED_AT = SynchedEntityData.defineId(NightmareEntity.class, EntityDataSerializers.BOOLEAN);
-    private int targetChangeTime;
-    private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(20, 39);
-    private int remainingPersistentAngerTime;
-    @Nullable
-    private UUID persistentAngerTarget;
+    private static final UniformInt ANGER_TIME = TimeUtil.rangeOfSeconds(20, 39);
+    private UUID target;
+    private int angerTime;
+    private int ageWhenTargetSet;
 
     public NightmareEntity(EntityType<? extends Monster> entityType, Level world) {
-        super(entityType, world);
+        super(entityType, world, "nightmare");
         this.maxUpStep = 1.0F;
     }
 
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_CREEPY, false);
@@ -88,6 +88,7 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
         this.entityData.set(ANIMATION, time);
     }
 
+
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new ChasePlayerGoal(this));
@@ -96,8 +97,20 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new TeleportTowardsPlayerGoal(this, this::isAngryAt));
-        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this, new Class[0]));
         this.targetSelector.addGoal(4, new ResetUniversalAngerTargetGoal<>(this, false));
+    }
+
+    protected void customServerAiStep() {
+        if (this.level.isDay() && this.tickCount >= this.ageWhenTargetSet + 600) {
+            float f = this.getBrightness();
+            if (f > 0.5F && this.level.canSeeSky(this.blockPosition()) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
+                this.setTarget((LivingEntity)null);
+                this.teleport();
+            }
+        }
+
+        super.customServerAiStep();
     }
 
 
@@ -116,28 +129,6 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
                 }
             }
             this.updatePersistentAnger((ServerLevel)this.level, true);
-        }
-
-        if (this.isAlive()) {
-            boolean flag = this.isSunSensitive() && this.isSunBurnTick() && GraveyardConfig.COMMON.nightmareCanBurnInSunlight.get();
-            if (flag) {
-                ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
-                if (!itemstack.isEmpty()) {
-                    if (itemstack.isDamageableItem()) {
-                        itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
-                        if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
-                            this.broadcastBreakEvent(EquipmentSlot.HEAD);
-                            this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
-                        }
-                    }
-
-                    flag = false;
-                }
-
-                if (flag) {
-                    this.setSecondsOnFire(8);
-                }
-            }
         }
 
         super.aiStep();
@@ -169,17 +160,6 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
         }
     }
 
-    protected void customServerAiStep() {
-        if (this.level.isDay() && this.tickCount >= this.targetChangeTime + 600) {
-            float f = this.getBrightness();
-            if (f > 0.5F && this.level.canSeeSky(this.blockPosition()) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
-                this.setTarget((LivingEntity)null);
-                this.teleport();
-            }
-        }
-
-        super.customServerAiStep();
-    }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         float limbSwingAmount = event.getLimbSwingAmount();
@@ -209,13 +189,15 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 50.0D).add(Attributes.ATTACK_DAMAGE, 10.0D).add(Attributes.MOVEMENT_SPEED, 0.19D).add(Attributes.FOLLOW_RANGE, 64.0D);
     }
 
+    @Override
     protected void tickDeath() {
         ++this.deathTime;
         if (this.deathTime == 28 && !this.level.isClientSide()) {
             this.level.broadcastEntityEvent(this, (byte)60);
-            this.remove(Entity.RemovalReason.KILLED);
+            this.remove(RemovalReason.KILLED);
         }
     }
+
 
     public boolean hurt(DamageSource p_32494_, float p_32495_) {
         if (this.isInvulnerableTo(p_32494_)) {
@@ -228,18 +210,20 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
     }
 
 
+
+    public byte getAnimation() {
+        return entityData.get(ANIMATION);
+    }
+
+    public void setAnimation(byte animation) {
+        entityData.set(ANIMATION, animation);
+    }
+
+
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
     }
 
-    protected boolean isSunSensitive() {
-        return true;
-    }
-
-    @Override
-    protected boolean isSunBurnTick() {
-        return super.isSunBurnTick();
-    }
 
     @Override
     public AnimationFactory getFactory() {
@@ -256,6 +240,7 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
     protected void playHurtSound(DamageSource source) {
         this.playSound(SoundEvents.ENDERMAN_HURT, 1.0F, -10.0F);
     }
+
 
     @Override
     public void die(DamageSource p_21014_) {
@@ -282,8 +267,6 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
 
         }
     }
-
-
     protected float getStandingEyeHeight(Pose p_32517_, EntityDimensions p_32518_) {
         return 2.55F;
     }
@@ -333,62 +316,63 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
         }
     }
 
-
-    public boolean canBeAffected(MobEffectInstance effect) {
-        if (effect.getEffect() == MobEffects.WITHER) {
-            if (GraveyardConfig.COMMON.nightmareCanBeWithered.get()) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        return super.canBeAffected(effect);
-    }
     public boolean isCreepy() {
         return this.entityData.get(DATA_CREEPY);
-    }
-
-    public boolean hasBeenStaredAt() {
-        return this.entityData.get(DATA_STARED_AT);
     }
 
     public void setBeingStaredAt() {
         this.entityData.set(DATA_STARED_AT, true);
     }
 
-    public void startPersistentAngerTimer() {
-        this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
-    }
 
-    public void setRemainingPersistentAngerTime(int p_32515_) {
-        this.remainingPersistentAngerTime = p_32515_;
-    }
-
+    @Override
     public int getRemainingPersistentAngerTime() {
-        return this.remainingPersistentAngerTime;
+        return this.angerTime;
+    }
+
+    @Override
+    public void setRemainingPersistentAngerTime(int p_21673_) {
+        this.angerTime = p_21673_;
+    }
+
+    @Nullable
+    public UUID getPersistentAngerTarget() {
+        return this.target;
     }
 
     public void setPersistentAngerTarget(@javax.annotation.Nullable UUID p_32509_) {
-        this.persistentAngerTarget = p_32509_;
+        this.target = p_32509_;
     }
 
-    @javax.annotation.Nullable
-    public UUID getPersistentAngerTarget() {
-        return this.persistentAngerTarget;
+    public void startPersistentAngerTimer() {
+        this.setRemainingPersistentAngerTime(ANGER_TIME.sample(this.random));
     }
 
-    public void setTarget(@javax.annotation.Nullable LivingEntity p_32537_) {
-        if (p_32537_ == null) {
-            this.targetChangeTime = 0;
+    public void setTarget(@Nullable LivingEntity target) {
+        super.setTarget(target);
+        if (target == null) {
+            this.ageWhenTargetSet = 0;
             this.entityData.set(DATA_CREEPY, false);
+            this.setRemainingPersistentAngerTime(0);
             this.entityData.set(DATA_STARED_AT, false);
         } else {
-            this.targetChangeTime = this.tickCount;
+            this.ageWhenTargetSet = this.tickCount;
             this.entityData.set(DATA_CREEPY, true);
         }
 
-        super.setTarget(p_32537_);
+    }
+
+    // getKillCredit
+
+
+    @Override
+    public void createWitherRose(@Nullable LivingEntity adversary) {
+        if (adversary instanceof ServerPlayer player) {
+            if (player.hasEffect(MobEffects.BLINDNESS)) {
+                TGAdvancements.KILL_WHILE_BLINDED.trigger(player);
+            }
+        }
+        super.setLastHurtByMob(adversary);
     }
 
 
@@ -551,6 +535,5 @@ public class NightmareEntity extends Monster implements IAnimatable, NeutralMob 
 
         }
     }
-
 
 }

@@ -11,27 +11,27 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "weight": 1,
           "name": "minecraft:iron_leggings"
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "weight": 1,
           "name": "minecraft:iron_boots"
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "weight": 1,
           "name": "minecraft:iron_helmet"
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "weight": 1,
           "name": "minecraft:iron_chestplate"
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "weight": 2,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
@@ -41,7 +41,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "weight": 2,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
@@ -51,7 +51,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "weight": 2,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
@@ -61,7 +61,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "weight": 2,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
@@ -84,7 +84,7 @@
     {
       "rolls": {
         "type": "minecraft:uniform",
-        "min": 2.0,
+        "min": 3.0,
         "max": 4.0
       },
       "bonus_rolls": 0.0,
@@ -123,7 +123,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 20,
+          "weight": 10,
           "name": "minecraft:moss_block"
         },
         {
@@ -226,6 +226,102 @@
             }
           ],
           "name": "minecraft:pumpkin_seeds"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2.0,
+                "max": 4.0
+              },
+              "add": false
+            }
+          ],
+          "name": "minecraft:raw_gold"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 4.0,
+                "max": 6.0
+              },
+              "add": false
+            }
+          ],
+          "name": "minecraft:raw_copper"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2.0,
+                "max": 6.0
+              },
+              "add": false
+            }
+          ],
+          "name": "minecraft:redstone"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2.0,
+                "max": 4.0
+              },
+              "add": false
+            }
+          ],
+          "name": "minecraft:raw_iron"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1.0,
+                "max": 3.0
+              },
+              "add": false
+            }
+          ],
+          "name": "minecraft:white_candle"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 3.0,
+                "max": 5.0
+              },
+              "add": false
+            }
+          ],
+          "name": "minecraft:candle"
         }
       ]
     },
@@ -296,6 +392,27 @@
             }
           ],
           "name": "minecraft:string"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 3.0,
+                "max": 6.0
+              },
+              "add": false
+            }
+          ],
+          "name": "minecraft:cobweb"
         }
       ]
     }

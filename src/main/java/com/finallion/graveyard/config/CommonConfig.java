@@ -2,6 +2,7 @@ package com.finallion.graveyard.config;
 
 import com.finallion.graveyard.init.TGStructureFeatures;
 import com.finallion.graveyard.world.structures.AbstractGraveyardStructure;
+import com.finallion.graveyard.world.structures.AbstractUndergroundStructure;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
@@ -176,14 +177,46 @@ public class CommonConfig {
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistAcolyte;
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> modWhitelistAcolyte;
 
+    public final ForgeConfigSpec.BooleanValue enableWraith;
+    public final ForgeConfigSpec.IntValue weightWraith;
+    public final ForgeConfigSpec.IntValue minGroupSizeWraith;
+    public final ForgeConfigSpec.IntValue maxGroupSizeWraith;
+    public final ForgeConfigSpec.BooleanValue wraithCanBurnInSunlight;
+    public final ForgeConfigSpec.BooleanValue wraithCanBeWithered;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistWraith;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistWraith;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> modWhitelistWraith;
+
+    public final ForgeConfigSpec.BooleanValue enableCorruptedPillager;
+    public final ForgeConfigSpec.IntValue weightCorruptedPillager;
+    public final ForgeConfigSpec.IntValue minGroupSizeCorruptedPillager;
+    public final ForgeConfigSpec.IntValue maxGroupSizeCorruptedPillager;
+    public final ForgeConfigSpec.BooleanValue corruptedPillagerCanBurnInSunlight;
+    public final ForgeConfigSpec.BooleanValue corruptedPillagerCanBeWithered;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistCorruptedPillager;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistCorruptedPillager;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> modWhitelistCorruptedPillager;
+
+    public final ForgeConfigSpec.BooleanValue enableCorruptedVindicator;
+    public final ForgeConfigSpec.IntValue weightCorruptedVindicator;
+    public final ForgeConfigSpec.IntValue minGroupSizeCorruptedVindicator;
+    public final ForgeConfigSpec.IntValue maxGroupSizeCorruptedVindicator;
+    public final ForgeConfigSpec.BooleanValue corruptedVindicatorCanBurnInSunlight;
+    public final ForgeConfigSpec.BooleanValue corruptedVindicatorCanBeWithered;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistCorruptedVindicator;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistCorruptedVindicator;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> modWhitelistCorruptedVindicator;
+
     public final ForgeConfigSpec.BooleanValue enableHorde;
-    public final ForgeConfigSpec.IntValue sizeHorde;
+    public final ForgeConfigSpec.IntValue mobSpawnAttempts;
     public final ForgeConfigSpec.IntValue ticksUntilSpawnHorde;
+    public final ForgeConfigSpec.IntValue additionalRandomizedTicks;
 
     public final ForgeConfigSpec.BooleanValue enableMossParticle;
     public final ForgeConfigSpec.IntValue particleFrequency;
 
     public final ForgeConfigSpec.BooleanValue urnHasDoubleInventory;
+    public final ForgeConfigSpec.IntValue maxTerrainHeightDifference;
 
     public CommonConfig(ForgeConfigSpec.Builder builder) {
         builder.comment(" Welcome to The Graveyard Config!\n" +
@@ -213,6 +246,23 @@ public class CommonConfig {
 
         for (StructureFeature<?> structure : getStructures()) {
             AbstractGraveyardStructure abstractStructure = (AbstractGraveyardStructure) structure;
+            StructureConfigEntry entry = abstractStructure.getStructureConfigEntry();
+            String name = abstractStructure.getStructureName();
+
+            entry.canGenerate = builder.define(name + ".canGenerate", true);
+            entry.spacing = builder.defineInRange(name + ".spacing", entry.getDefaultSpacing(),0, 200);
+            entry.separation = builder.defineInRange(name + ".separation", entry.getDefaultSeparation(),0, 200);
+            entry.salt = builder.defineInRange(name + ".salt", entry.getDefaultSalt(), 0, 10000000000L);
+            entry.whitelist = builder.defineList(name + ".whitelist", entry.getDefaultWhitelist(), o -> o instanceof String);
+            entry.blacklist = builder.defineList(name + ".blacklist", entry.getDefaultBlacklist(), o -> o instanceof String);
+            entry.modWhitelist = builder.defineList(name + ".modWhitelist", entry.getDefaultModWhitelist(), o -> o instanceof String);
+            entry.canSpawnGraveyardMobs = builder.define(name + ".canSpawnMobs", entry.getDefaultCanSpawnGraveyardMobs());
+
+            structureConfigEntries.putIfAbsent(abstractStructure.getStructureName(), entry);
+        }
+
+        for (StructureFeature<?> structure : getUndergroundStructures()) {
+            AbstractUndergroundStructure abstractStructure = (AbstractUndergroundStructure) structure;
             StructureConfigEntry entry = abstractStructure.getStructureConfigEntry();
             String name = abstractStructure.getStructureName();
 
@@ -393,12 +443,44 @@ public class CommonConfig {
         this.whitelistAcolyte = builder.defineList("acolyte.whitelist", getAllOverworldBiomeCategories(), o -> o instanceof String);
         this.blacklistAcolyte = builder.defineList("acolyte.blacklist", Arrays.asList("minecraft:flower_forest", "minecraft:lush_caves"), o -> o instanceof String);
         this.modWhitelistAcolyte = builder.defineList("acolyte.modWhitelist", Arrays.asList("#minecraft", "#graveyard_biomes"), o -> o instanceof String);
+
+        this.enableWraith = builder.define("wraith.enabled", false);
+        this.weightWraith = builder.defineInRange("wraith.weight", 0, 0, 100);
+        this.minGroupSizeWraith = builder.defineInRange("wraith.minGroupSizeWraith", 2, 1, 100);
+        this.maxGroupSizeWraith = builder.defineInRange("wraith.maxGroupSizeWraith", 3, 1, 100);
+        this.wraithCanBurnInSunlight = builder.define("wraith.canBurnInSunlight", true);
+        this.wraithCanBeWithered = builder.define("wraith.canBeWithered", false);
+        this.whitelistWraith = builder.defineList("wraith.whitelist", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.blacklistWraith = builder.defineList("wraith.blacklist", Arrays.asList("minecraft:flower_forest", "minecraft:lush_caves"), o -> o instanceof String);
+        this.modWhitelistWraith = builder.defineList("wraith.modWhitelist", Arrays.asList("#minecraft", "#graveyard_biomes"), o -> o instanceof String);
+
+        this.enableCorruptedPillager = builder.define("corruptedPillager.enabled", false);
+        this.weightCorruptedPillager = builder.defineInRange("corruptedPillager.weight", 0, 0, 100);
+        this.minGroupSizeCorruptedPillager = builder.defineInRange("corruptedPillager.minGroupSizeCorruptedPillager", 2, 1, 100);
+        this.maxGroupSizeCorruptedPillager = builder.defineInRange("corruptedPillager.maxGroupSizeCorruptedPillager", 3, 1, 100);
+        this.corruptedPillagerCanBurnInSunlight = builder.define("corruptedPillager.canBurnInSunlight", true);
+        this.corruptedPillagerCanBeWithered = builder.define("corruptedPillager.canBeWithered", false);
+        this.whitelistCorruptedPillager = builder.defineList("corruptedPillager.whitelist", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.blacklistCorruptedPillager = builder.defineList("corruptedPillager.blacklist", Arrays.asList("minecraft:flower_forest", "minecraft:lush_caves"), o -> o instanceof String);
+        this.modWhitelistCorruptedPillager = builder.defineList("corruptedPillager.modWhitelist", Arrays.asList("#minecraft", "#graveyard_biomes"), o -> o instanceof String);
+
+        this.enableCorruptedVindicator = builder.define("corruptedVindicator.enabled", false);
+        this.weightCorruptedVindicator = builder.defineInRange("corruptedVindicator.weight", 0, 0, 100);
+        this.minGroupSizeCorruptedVindicator = builder.defineInRange("corruptedVindicator.minGroupSizeCorruptedVindicator", 2, 1, 100);
+        this.maxGroupSizeCorruptedVindicator = builder.defineInRange("corruptedVindicator.maxGroupSizeCorruptedVindicator", 3, 1, 100);
+        this.corruptedVindicatorCanBurnInSunlight = builder.define("corruptedVindicator.canBurnInSunlight", true);
+        this.corruptedVindicatorCanBeWithered = builder.define("corruptedVindicator.canBeWithered", false);
+        this.whitelistCorruptedVindicator = builder.defineList("corruptedVindicator.whitelist", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.blacklistCorruptedVindicator = builder.defineList("corruptedVindicator.blacklist", Arrays.asList("minecraft:flower_forest", "minecraft:lush_caves"), o -> o instanceof String);
+        this.modWhitelistCorruptedVindicator = builder.defineList("corruptedVindicator.modWhitelist", Arrays.asList("#minecraft", "#graveyard_biomes"), o -> o instanceof String);
+
         builder.pop();
 
         builder.push("The Graveyard - Horde Config");
         this.enableHorde = builder.define("horde.generate", true);
-        this.sizeHorde = builder.defineInRange("horde.size", 40, 0, 1000);
+        this.mobSpawnAttempts = builder.defineInRange("horde.mobSpawnAttempts", 40, 0, 1000);
         this.ticksUntilSpawnHorde = builder.defineInRange("horde.ticksUntilSpawnHorde", 24000, 1, 1000000);
+        this.additionalRandomizedTicks = builder.defineInRange("horde.additionalRandomizedTicks", 1200, 1, 1000000);
         builder.pop();
 
         builder.push("The Graveyard - Particle Config");
@@ -408,6 +490,7 @@ public class CommonConfig {
 
         builder.push("The Graveyard - Additional Config");
         this.urnHasDoubleInventory = builder.define("urn.urnHasDoubleInventory", true);
+        this.maxTerrainHeightDifference = builder.defineInRange("terrain.maxTerrainHeightDifference", 6, 1, 100);
         builder.pop();
     }
 
@@ -425,6 +508,7 @@ public class CommonConfig {
 
     }
 
+
     private List<StructureFeature<?>> getStructures() {
         List<StructureFeature<?>> structures = new ArrayList<>();
         structures.add(TGStructureFeatures.MEDIUM_GRAVEYARD_STRUCTURE);
@@ -438,6 +522,14 @@ public class CommonConfig {
         structures.add(TGStructureFeatures.SMALL_DESERT_GRAVE_STRUCTURE);
         structures.add(TGStructureFeatures.SMALL_SAVANNA_GRAVE_STRUCTURE);
         structures.add(TGStructureFeatures.SMALL_MOUNTAIN_GRAVE_STRUCTURE);
+        structures.add(TGStructureFeatures.GIANT_MUSHROOM_STRUCTURE);
+        structures.add(TGStructureFeatures.ALTAR_STRUCTURE);
+        return structures;
+    }
+
+    private List<StructureFeature<?>> getUndergroundStructures() {
+        List<StructureFeature<?>> structures = new ArrayList<>();
+        structures.add(TGStructureFeatures.CRYPT_STRUCTURE);
         return structures;
     }
 }

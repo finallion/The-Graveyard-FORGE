@@ -10,24 +10,29 @@ public class HordeConfigEntry {
 
     public ForgeConfigSpec.BooleanValue enabled;
 
-    private final int defaultSize;
-    public ForgeConfigSpec.IntValue size;
+    private final int defaultMobSpawnAttempts;
+    public ForgeConfigSpec.IntValue mobSpawnAttempts;
 
     private final int defaultTicksUntilSpawn;
     public ForgeConfigSpec.IntValue ticksUntilSpawn;
 
-    public HordeConfigEntry(int size, int ticksUntilSpawn) {
-        this.defaultSize = size;
+    private final int defaultAdditionalRandomizedTicks;
+    public ForgeConfigSpec.IntValue additionalRandomizedTicks;
+
+    public HordeConfigEntry(int mobSpawnAttempts, int ticksUntilSpawn, int additionalRandomizedTicks) {
+        this.defaultMobSpawnAttempts = mobSpawnAttempts;
         this.defaultTicksUntilSpawn = ticksUntilSpawn;
+        this.defaultAdditionalRandomizedTicks = additionalRandomizedTicks;
     }
 
     public int getSize() {
-        return defaultSize;
+        return defaultMobSpawnAttempts;
     }
 
     public int getTicksUntilSpawn() {
         return defaultTicksUntilSpawn;
     }
+
 
 
 

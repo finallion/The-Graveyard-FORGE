@@ -18,6 +18,6 @@ public class TGFeatures {
 
     public static final DeferredRegister<Feature<?>> FEATURES  = DeferredRegister.create(ForgeRegistries.FEATURES, TheGraveyard.MOD_ID);
     // features
-    public static final RegistryObject<Feature<NoneFeatureConfiguration>> GRAVESTONE_FEATURE = FEATURES .register("gravestone_feature", () -> new GraveFeature(NoneFeatureConfiguration.CODEC));
+    public static final RegistryObject<Feature<NoneFeatureConfiguration>> GRAVESTONE_FEATURE = FEATURES.register("gravestone_feature", () -> new GraveFeature(NoneFeatureConfiguration.CODEC));
 
 }

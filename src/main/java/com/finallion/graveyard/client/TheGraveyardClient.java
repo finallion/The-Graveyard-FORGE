@@ -5,12 +5,14 @@ import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.blockentities.render.BrazierBlockEntityRenderer;
 import com.finallion.graveyard.blockentities.render.GravestoneBlockEntityRenderer;
 import com.finallion.graveyard.blockentities.render.SarcophagusBlockEntityRenderer;
+import com.finallion.graveyard.entities.models.CorruptedIllagerModel;
 import com.finallion.graveyard.entities.renders.*;
 import com.finallion.graveyard.init.TGBlocks;
 import com.finallion.graveyard.init.TGEntities;
 import com.finallion.graveyard.init.TGTileEntities;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -29,9 +31,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 
-
 public class TheGraveyardClient {
     private static final RenderType CUTOUT_MIPPED = RenderType.cutoutMipped();
+    public static final ModelLayerLocation CORRUPTED_ILLAGER_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(TheGraveyard.MOD_ID, "corrupted_illager"), "main");
 
 
     public TheGraveyardClient() {
@@ -41,8 +43,14 @@ public class TheGraveyardClient {
         modEventBus.addListener(this::onBlockColorsInit);
         modEventBus.addListener(this::onItemColorsInit);
         modEventBus.addListener(this::registerEntityRenderers);
+        modEventBus.addListener(this::registerLayerDefinition);
         modEventBus.addListener(this::onRegisterModels);
 
+    }
+
+    @SubscribeEvent
+    public void registerLayerDefinition(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(CORRUPTED_ILLAGER_MODEL_LAYER, CorruptedIllagerModel::createBodyModel);
     }
 
     @SubscribeEvent
@@ -53,6 +61,9 @@ public class TheGraveyardClient {
         event.registerEntityRenderer(TGEntities.REAPER.get(), ReaperRenderer::new);
         event.registerEntityRenderer(TGEntities.REVENANT.get(), RevenantRenderer::new);
         event.registerEntityRenderer(TGEntities.NIGHTMARE.get(), NightmareRenderer::new);
+        event.registerEntityRenderer(TGEntities.CORRUPTED_PILLAGER.get(), CorruptedPillagerRenderer::new);
+        event.registerEntityRenderer(TGEntities.CORRUPTED_VINDICATOR.get(), CorruptedVindicatorRenderer::new);
+        event.registerEntityRenderer(TGEntities.WRAITH.get(), WraithRenderer::new);
 
         event.registerBlockEntityRenderer(TGTileEntities.GRAVESTONE_BLOCK_ENTITY.get(), GravestoneBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(TGTileEntities.SARCOPHAGUS_BLOCK_ENTITY.get(), SarcophagusBlockEntityRenderer::new);

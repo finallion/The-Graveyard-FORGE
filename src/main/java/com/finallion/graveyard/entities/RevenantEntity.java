@@ -28,7 +28,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 
-public class RevenantEntity extends AnimatedGraveyardEntity implements IAnimatable {
+public class RevenantEntity extends AngerableGraveyardEntity implements IAnimatable {
     private AnimationFactory factory = new AnimationFactory(this);
     private final AnimationBuilder DEATH_ANIMATION = new AnimationBuilder().addAnimation("death", false);
     private final AnimationBuilder IDLE_ANIMATION = new AnimationBuilder().addAnimation("idle", true);
@@ -40,7 +40,7 @@ public class RevenantEntity extends AnimatedGraveyardEntity implements IAnimatab
     private static int timeSinceLastAttack = 0;
 
     public RevenantEntity(EntityType<? extends Monster> entityType, Level world) {
-        super(entityType, world);
+        super(entityType, world, "revenant");
     }
 
     protected void registerGoals() {
@@ -89,51 +89,9 @@ public class RevenantEntity extends AnimatedGraveyardEntity implements IAnimatab
             }
         }
 
-        if (this.isAlive()) {
-            boolean flag = this.isSunSensitive() && this.isSunBurnTick() && GraveyardConfig.COMMON.revenantCanBurnInSunlight.get();
-            if (flag) {
-                ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
-                if (!itemstack.isEmpty()) {
-                    if (itemstack.isDamageableItem()) {
-                        itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
-                        if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
-                            this.broadcastBreakEvent(EquipmentSlot.HEAD);
-                            this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
-                        }
-                    }
-
-                    flag = false;
-                }
-
-                if (flag) {
-                    this.setSecondsOnFire(8);
-                }
-            }
-        }
         super.aiStep();
     }
 
-    protected boolean isSunSensitive() {
-        return true;
-    }
-
-    @Override
-    protected boolean isSunBurnTick() {
-        return super.isSunBurnTick();
-    }
-
-
-    public boolean canBeAffected(MobEffectInstance effect) {
-        if (effect.getEffect() == MobEffects.WITHER) {
-            if (GraveyardConfig.COMMON.revenantCanBeWithered.get()) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        return super.canBeAffected(effect);
-    }
 
     private <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
         if (isAggressive() && canAttack && !(this.dead || this.getHealth() < 0.01 || this.isDeadOrDying())) {

@@ -139,7 +139,10 @@ public class BrazierBlock extends Block implements EntityBlock, SimpleWaterlogge
     public static void extinguish(@javax.annotation.Nullable Player p_151900_, BlockState p_151901_, LevelAccessor p_151902_, BlockPos p_151903_) {
         setLit(p_151902_, p_151901_, p_151903_, false);
         if (p_151901_.getBlock() instanceof BrazierBlock) {
-            spawnSmokeParticle((Level)p_151902_, p_151903_, true);
+            Random random = p_151902_.getRandom();
+            p_151902_.addParticle(ParticleTypes.SMOKE, (double)p_151903_.getX() + 0.5D + random.nextDouble() / 4.0D * (double)(random.nextBoolean() ? 1 : -1), (double)p_151903_.getY() + 0.4D, (double)p_151903_.getZ() + 0.5D + random.nextDouble() / 4.0D * (double)(random.nextBoolean() ? 1 : -1), 0.0D, 0.005D, 0.0D);
+            p_151902_.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, (double)p_151903_.getX() + 0.5D + random.nextDouble() / 3.0D * (double)(random.nextBoolean() ? 1 : -1), (double)p_151903_.getY() + random.nextDouble() + random.nextDouble(), (double)p_151903_.getZ() + 0.5D + random.nextDouble() / 3.0D * (double)(random.nextBoolean() ? 1 : -1), 0.0D, 0.07D, 0.0D);
+
         }
 
         p_151902_.playSound((Player)null, p_151903_, SoundEvents.CANDLE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);

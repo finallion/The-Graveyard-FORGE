@@ -38,10 +38,11 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class ReaperEntity extends Monster implements IAnimatable {
+public class ReaperEntity extends HostileGraveyardEntity implements IAnimatable {
     private AnimationFactory factory = new AnimationFactory(this);
     private final AnimationBuilder DEATH_ANIMATION = new AnimationBuilder().addAnimation("death", false);
     private final AnimationBuilder IDLE_ANIMATION = new AnimationBuilder().addAnimation("idle", true);
@@ -61,7 +62,7 @@ public class ReaperEntity extends Monster implements IAnimatable {
     private BlockPos bounds;
 
     public ReaperEntity(EntityType<? extends Monster> entityType, Level world) {
-        super(entityType, world);
+        super(entityType, world, "reaper");
         this.moveControl = new MoveHelperController(this);
     }
 
@@ -89,7 +90,6 @@ public class ReaperEntity extends Monster implements IAnimatable {
         }
     }
 
-
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -100,18 +100,6 @@ public class ReaperEntity extends Monster implements IAnimatable {
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, Raider.class)).setAlertOthers());
         this.targetSelector.addGoal(2, new CopyOwnerTargetGoal(this));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true));
-    }
-
-    public boolean canBeAffected(MobEffectInstance effect) {
-        if (effect.getEffect() == MobEffects.WITHER) {
-            if (GraveyardConfig.COMMON.reaperCanBeWithered.get()) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        return super.canBeAffected(effect);
     }
 
     public void move(MoverType p_33997_, Vec3 p_33998_) {
@@ -125,8 +113,6 @@ public class ReaperEntity extends Monster implements IAnimatable {
         this.noPhysics = false;
         this.setNoGravity(true);
     }
-
-
 
     @SuppressWarnings("rawtypes")
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
@@ -203,41 +189,6 @@ public class ReaperEntity extends Monster implements IAnimatable {
 
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
-    }
-
-    @Override
-    public void aiStep() {
-        if (this.isAlive()) {
-            boolean flag = this.isSunSensitive() && this.isSunBurnTick() && GraveyardConfig.COMMON.reaperCanBurnInSunlight.get();
-            if (flag) {
-                ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
-                if (!itemstack.isEmpty()) {
-                    if (itemstack.isDamageableItem()) {
-                        itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
-                        if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
-                            this.broadcastBreakEvent(EquipmentSlot.HEAD);
-                            this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
-                        }
-                    }
-
-                    flag = false;
-                }
-
-                if (flag) {
-                    this.setSecondsOnFire(8);
-                }
-            }
-        }
-        super.aiStep();
-    }
-
-    protected boolean isSunSensitive() {
-        return true;
-    }
-
-    @Override
-    protected boolean isSunBurnTick() {
-        return super.isSunBurnTick();
     }
 
 

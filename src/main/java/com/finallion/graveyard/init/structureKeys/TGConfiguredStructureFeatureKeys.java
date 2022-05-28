@@ -18,6 +18,9 @@ public class TGConfiguredStructureFeatureKeys {
     public static ResourceKey<ConfiguredStructureFeature<?, ?>> SMALL_MOUNTAIN_GRAVE = of("small_mountain_grave");
     public static ResourceKey<ConfiguredStructureFeature<?, ?>> MUSHROOM_GRAVE = of("mushroom_grave");
     public static ResourceKey<ConfiguredStructureFeature<?, ?>> MEMORIAL_TREE = of("memorial_tree");
+    public static ResourceKey<ConfiguredStructureFeature<?, ?>> ALTAR = of("altar");
+    public static ResourceKey<ConfiguredStructureFeature<?, ?>> GIANT_MUSHROOM = of("giant_mushroom");
+    public static ResourceKey<ConfiguredStructureFeature<?, ?>> CRYPT = of("crypt");
 
     private static ResourceKey<ConfiguredStructureFeature<?, ?>> of(String id) {
         return ResourceKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, new ResourceLocation(TheGraveyard.MOD_ID, id));

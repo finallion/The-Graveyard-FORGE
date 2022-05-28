@@ -19,6 +19,7 @@ import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class HauntedHouseStructure extends AbstractGraveyardStructure {
 
@@ -27,9 +28,9 @@ public class HauntedHouseStructure extends AbstractGraveyardStructure {
                         25,
                         20,
                         451235912,
-                        Arrays.asList("#" + Biome.BiomeCategory.FOREST.getName(), "#" + Biome.BiomeCategory.SWAMP.getName()),
-                        Arrays.asList("minecraft:forest", "minecraft:flower_forest", "minecraft:birch_forest", "minecraft:old_growth_birch_forest", "minecraft:windswept_forest", "graveyard_biomes:haunted_forest"),
-                        Arrays.asList("#minecraft", "#graveyard_biomes"),
+                        Arrays.asList("minecraft:dark_forest", "#" + Biome.BiomeCategory.SWAMP.getName(), "terralith:moonlight_valley", "terralith:cloud_forest", "graveyard_biomes:haunted_lakes"),
+                        Collections.emptyList(),
+                        Arrays.asList("#minecraft", "#graveyard_biomes", "#terralith"),
                         false), // only allow in swamp and dark forest
                 30,  "haunted_house");
     }

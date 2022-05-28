@@ -1,7 +1,9 @@
 package com.finallion.graveyard.world.structures;
 
 import com.finallion.graveyard.TheGraveyard;
+import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.config.StructureConfigEntry;
+import com.finallion.graveyard.util.BiomeCheckUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
@@ -62,6 +64,7 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
         //if (!isWater(context.chunkGenerator(), centerOfChunk.getX(), centerOfChunk.getZ(), context.heightAccessor(), size)) {
         //    return false;
         //}
+
 
         return true;
     }
@@ -129,7 +132,7 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
         int maxSides = Math.max(Math.max(j1, p1), Math.max(o1, k1));
         int maxHeight = Math.max(maxSides, i1);
 
-        return Math.abs(maxHeight - minHeight) <= 4;
+        return Math.abs(maxHeight - minHeight) <= GraveyardConfig.COMMON.maxTerrainHeightDifference.get();
     }
 
     /*
@@ -152,68 +155,13 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
         Holder<Biome> biome = context.chunkGenerator().m_203495_(QuartPos.fromBlock(blockpos.getX()), QuartPos.fromBlock(blockpos.getY()), QuartPos.fromBlock(blockpos.getZ()));
 
         if (config.canGenerate.get() &&
-                parseBiomes(config.whitelist.get(), config.blacklist.get(), biome) &&
-                parseWhitelistedMods(config.modWhitelist.get(), biome)) {
+                BiomeCheckUtil.parseBiomes(config.whitelist.get(), config.blacklist.get(), biome) &&
+                BiomeCheckUtil.parseWhitelistedMods(config.modWhitelist.get(), biome)) {
             return true;
         }
         return false;
     }
 
-    private static boolean parseBiomes(List<? extends String> whitelist, List<? extends String> blacklist, Holder<Biome> biome) {
-        String biomeName = biome.m_203543_().get().location().toString();
-        String biomeCategory = BuiltinRegistries.BIOME.get(biome.m_203543_().get()).m_204183_(biome).getName();
 
-        if (whitelist == null) {
-            TheGraveyard.LOGGER.error("Error reading from the Graveyard config file: Allowed biome category/biome is null. Try to delete the file and restart the game.");
-            return false;
-        }
-
-        // no blacklist and biome is allowed
-        if (whitelist.contains(biomeName) && blacklist.isEmpty()) {
-            return true;
-        }
-
-        // no blacklist and biomeCategory is allowed
-        if (whitelist.contains("#" + biomeCategory) && blacklist.isEmpty()) {
-            return true;
-        }
-
-        // blacklist exists and check if biome is on the blacklist
-        if (whitelist.contains(biomeName) && !blacklist.isEmpty()) {
-            if (blacklist.contains("#" + biomeCategory)) { // whitelist weighs higher than blacklist
-                //TheGraveyard.LOGGER.error("Blacklisted biome category #" + biomeCategory + " contains whitelisted biome " + biomeName + ".");
-                return true;
-            } else if (blacklist.contains(biomeName)) {  // blacklist weighs higher than whitelist
-                TheGraveyard.LOGGER.debug("Biome " +  biomeName + " is on whitelist and blacklist.");
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        // blacklist exists and check if biomeCategory is on the blacklist
-        if (whitelist.contains("#" + biomeCategory) && !blacklist.isEmpty()) {
-            if (blacklist.contains("#" + biomeCategory)) { // blacklist weighs higher than whitelist
-                TheGraveyard.LOGGER.debug("Biome category #" + biomeCategory + " is on whitelist and blacklist.");
-                return false;
-            } else if (blacklist.contains(biomeName)) { // blacklist weighs higher than whitelist
-                //TheGraveyard.LOGGER.error("Biome category #" + biomeCategory + " is on whitelist and subsidiary biome " + biomeName + " is on blacklist.");
-                return false;
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean parseWhitelistedMods(List<? extends String> modWhitelist, Holder<Biome> biome) {
-        if (modWhitelist == null) {
-            TheGraveyard.LOGGER.error("Error reading from the Graveyard config file: Allowed biome category/biome is null. Try to delete the file and restart the game.");
-            return false;
-        }
-
-        String modid = biome.m_203543_().get().getRegistryName().getNamespace();
-        return modWhitelist.contains("#" + modid);
-    }
 
 }

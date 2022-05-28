@@ -14,7 +14,6 @@ public class TGStructureSets {
 
     public static void init() {
 
-
         StructureSets.m_211131_(TGStructureSetKeys.HAUNTED_HOUSES, TGConfiguredStructureFeatures.HAUNTED_HOUSE_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
                         GraveyardConfig.COMMON.structureConfigEntries.get("haunted_house").spacing.get(),
@@ -91,6 +90,27 @@ public class TGStructureSets {
                         GraveyardConfig.COMMON.structureConfigEntries.get("memorial_tree").separation.get(),
                         RandomSpreadType.LINEAR,
                         Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("memorial_tree").salt.get())));
+
+        StructureSets.m_211131_(TGStructureSetKeys.ALTARS, TGConfiguredStructureFeatures.ALTAR_STRUCTURE_CONFIG,
+                new RandomSpreadStructurePlacement(
+                        GraveyardConfig.COMMON.structureConfigEntries.get("altar").spacing.get(),
+                        GraveyardConfig.COMMON.structureConfigEntries.get("altar").separation.get(),
+                        RandomSpreadType.LINEAR,
+                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("altar").salt.get())));
+
+        StructureSets.m_211131_(TGStructureSetKeys.GIANT_MUSHROOMS, TGConfiguredStructureFeatures.GIANT_MUSHROOM_STRUCTURE_CONFIG,
+                new RandomSpreadStructurePlacement(
+                        GraveyardConfig.COMMON.structureConfigEntries.get("giant_mushroom").spacing.get(),
+                        GraveyardConfig.COMMON.structureConfigEntries.get("giant_mushroom").separation.get(),
+                        RandomSpreadType.LINEAR,
+                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("giant_mushroom").salt.get())));
+
+        StructureSets.m_211131_(TGStructureSetKeys.CRYPTS, TGConfiguredStructureFeatures.CRYPT_STRUCTURE_CONFIG,
+                new RandomSpreadStructurePlacement(
+                        GraveyardConfig.COMMON.structureConfigEntries.get("crypt").spacing.get(),
+                        GraveyardConfig.COMMON.structureConfigEntries.get("crypt").separation.get(),
+                        RandomSpreadType.LINEAR,
+                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("crypt").salt.get())));
 
     }
 

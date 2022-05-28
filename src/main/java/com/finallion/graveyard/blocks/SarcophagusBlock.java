@@ -2,12 +2,16 @@ package com.finallion.graveyard.blocks;
 
 import com.finallion.graveyard.blockentities.SarcophagusBlockEntity;
 import com.finallion.graveyard.blockentities.enums.SarcophagusPart;
+import com.finallion.graveyard.entities.WraithEntity;
+import com.finallion.graveyard.init.TGAdvancements;
 import com.finallion.graveyard.init.TGBlocks;
+import com.finallion.graveyard.init.TGEntities;
 import com.finallion.graveyard.init.TGTileEntities;
 import it.unimi.dsi.fastutil.floats.Float2FloatFunction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.LivingEntity;
@@ -55,17 +59,19 @@ public class SarcophagusBlock extends AbstractCoffinBlock<SarcophagusBlockEntity
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final EnumProperty<SarcophagusPart> PART = EnumProperty.create("part", SarcophagusPart.class);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    private boolean isCoffin;
+    public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
+    public static final BooleanProperty PLAYER_PLACED = BlockStateProperties.LOCKED;
+    public static final BooleanProperty IS_COFFIN = BlockStateProperties.LIT;
+
 
     // open state missing
     public SarcophagusBlock(Properties properties, boolean isCoffin) {
         super(properties, TGTileEntities.SARCOPHAGUS_BLOCK_ENTITY::get);
-        this.registerDefaultState(this.stateDefinition.any().setValue(PART, SarcophagusPart.FOOT).setValue(WATERLOGGED, Boolean.valueOf(false)));
-        this.isCoffin = isCoffin;
+        this.registerDefaultState(this.stateDefinition.any().setValue(PART, SarcophagusPart.FOOT).setValue(WATERLOGGED, false).setValue(PLAYER_PLACED, false).setValue(IS_COFFIN, isCoffin));
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_51562_) {
-        p_51562_.add(FACING, PART, WATERLOGGED);
+        p_51562_.add(WATERLOGGED, OPEN, FACING, PART, PLAYER_PLACED, IS_COFFIN);
     }
 
     public FluidState getFluidState(BlockState p_51581_) {
@@ -105,9 +111,12 @@ public class SarcophagusBlock extends AbstractCoffinBlock<SarcophagusBlockEntity
 
 
     public InteractionResult use(BlockState p_49515_, Level p_49516_, BlockPos p_49517_, Player p_49518_, InteractionHand p_49519_, BlockHitResult p_49520_) {
+        Random random = new Random();
+
         if (p_49516_.isClientSide) {
             return InteractionResult.CONSUME;
         } else {
+            BlockPos original = p_49517_;
             if (p_49515_.getValue(PART) == SarcophagusPart.HEAD) {
                 p_49517_ = p_49517_.relative(p_49515_.getValue(FACING).getOpposite());
             }
@@ -117,15 +126,45 @@ public class SarcophagusBlock extends AbstractCoffinBlock<SarcophagusBlockEntity
                 p_49518_.openMenu(menuprovider);
             }
 
+            spawnGhost(p_49515_, p_49516_, original, p_49518_, random);
+
             return InteractionResult.CONSUME;
         }
     }
+
+    private static Direction getDirectionTowardsOtherPart(SarcophagusPart part, Direction direction) {
+        return part == SarcophagusPart.FOOT ? direction : direction.getOpposite();
+    }
+
+    public static void spawnGhost(BlockState state, Level world, BlockPos pos, Player player, Random random) {
+        if (!state.getValue(PLAYER_PLACED) && random.nextInt(4) == 0 && pos.getY() < 62) {
+            BlockPos entityPos = pos;
+            for (int i = 0; i < 10; i++) { // 10 spawn attempts to find air, else just spawn
+                entityPos = player.getOnPos().offset(-2 + random.nextInt(5), 1, -2 + random.nextInt(5));
+                if (world.getBlockState(entityPos).isAir() && world.getBlockState(entityPos.above()).isAir()) {
+                    break;
+                }
+            }
+            WraithEntity ghost = TGEntities.WRAITH.get().create(world);
+            ghost.moveTo(entityPos, 0.0F, 0.0F);
+            world.addFreshEntity(ghost);
+            world.setBlock(pos, state.setValue(PLAYER_PLACED, true), 3);
+            BlockPos otherPartPos = pos.relative(getDirectionTowardsOtherPart(state.getValue(PART), state.getValue(FACING)));
+            BlockState otherPart = world.getBlockState(otherPartPos);
+            if (player instanceof ServerPlayer) {
+                TGAdvancements.SPAWN_WRAITH.trigger((ServerPlayer) player);
+            }
+            world.setBlock(otherPartPos, otherPart.setValue(PLAYER_PLACED, true), 3);
+        }
+    }
+
 
     public void setPlacedBy(Level p_49499_, BlockPos p_49500_, BlockState p_49501_, @javax.annotation.Nullable LivingEntity p_49502_, ItemStack p_49503_) {
         super.setPlacedBy(p_49499_, p_49500_, p_49501_, p_49502_, p_49503_);
         if (!p_49499_.isClientSide) {
             BlockPos blockpos = p_49500_.relative(p_49501_.getValue(FACING));
-            p_49499_.setBlock(blockpos, p_49501_.setValue(PART, SarcophagusPart.HEAD), 3);
+            p_49499_.setBlock(p_49500_, p_49501_.setValue(PLAYER_PLACED, true), 3);
+            p_49499_.setBlock(blockpos, p_49501_.setValue(PART, SarcophagusPart.HEAD).setValue(PLAYER_PLACED, true), 3);
             p_49499_.blockUpdated(p_49500_, Blocks.AIR);
             p_49501_.updateNeighbourShapes(p_49499_, p_49500_, 3);
         }
@@ -194,7 +233,7 @@ public class SarcophagusBlock extends AbstractCoffinBlock<SarcophagusBlockEntity
 
 
     public BlockEntity newBlockEntity(BlockPos p_153064_, BlockState p_153065_) {
-        return new SarcophagusBlockEntity(p_153064_, p_153065_, isCoffin);
+        return new SarcophagusBlockEntity(p_153064_, p_153065_);
     }
 
     public RenderShape getRenderShape(BlockState p_51567_) {

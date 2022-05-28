@@ -25,27 +25,27 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.ChestType;
 
 public class SarcophagusBlockEntity extends RandomizableContainerBlockEntity implements LidBlockEntity {
     private static final int EVENT_SET_OPEN_COUNT = 1;
     private NonNullList<ItemStack> items = NonNullList.withSize(54, ItemStack.EMPTY);
-    private boolean isCoffin;
 
     private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
-        protected void onOpen(Level p_155357_, BlockPos p_155358_, BlockState p_155359_) {
-            if (isCoffin) {
-                SarcophagusBlockEntity.playSound(p_155357_, p_155358_, p_155359_, SoundEvents.CHEST_OPEN);
+        protected void onOpen(Level p_155357_, BlockPos p_155358_, BlockState state) {
+            if (state.getValue(BlockStateProperties.LIT)) {
+                SarcophagusBlockEntity.playSound(p_155357_, p_155358_, state, SoundEvents.CHEST_OPEN);
             } else {
-                SarcophagusBlockEntity.playSound(p_155357_, p_155358_, p_155359_, SoundEvents.GRINDSTONE_USE);
+                SarcophagusBlockEntity.playSound(p_155357_, p_155358_, state, SoundEvents.GRINDSTONE_USE);
             }
         }
 
-        protected void onClose(Level p_155367_, BlockPos p_155368_, BlockState p_155369_) {
-            if (isCoffin) {
-                SarcophagusBlockEntity.playSound(p_155367_, p_155368_, p_155369_, SoundEvents.CHEST_CLOSE);
+        protected void onClose(Level p_155367_, BlockPos p_155368_, BlockState state) {
+            if (state.getValue(BlockStateProperties.LIT)) {
+                SarcophagusBlockEntity.playSound(p_155367_, p_155368_, state, SoundEvents.CHEST_CLOSE);
             } else {
-                SarcophagusBlockEntity.playSound(p_155367_, p_155368_, p_155369_, SoundEvents.GRINDSTONE_USE);
+                SarcophagusBlockEntity.playSound(p_155367_, p_155368_, state, SoundEvents.GRINDSTONE_USE);
             }
         }
 
@@ -64,10 +64,6 @@ public class SarcophagusBlockEntity extends RandomizableContainerBlockEntity imp
     };
     private final SarcophagusLidAnimator chestLidController = new SarcophagusLidAnimator();
 
-    public SarcophagusBlockEntity(BlockPos p_155331_, BlockState p_155332_, boolean isCoffin) {
-        this(p_155331_, p_155332_);
-        this.isCoffin = isCoffin;
-    }
 
     public SarcophagusBlockEntity(BlockPos p_155331_, BlockState p_155332_) {
         super(TGTileEntities.SARCOPHAGUS_BLOCK_ENTITY.get(), p_155331_, p_155332_);
@@ -78,7 +74,7 @@ public class SarcophagusBlockEntity extends RandomizableContainerBlockEntity imp
     }
 
     protected Component getDefaultName() {
-        if (isCoffin) {
+        if (this.getBlockState().getValue(BlockStateProperties.LIT)) {
             return new TranslatableComponent("container.coffin");
         }
         return new TranslatableComponent("container.sarcophagus");
@@ -174,8 +170,9 @@ public class SarcophagusBlockEntity extends RandomizableContainerBlockEntity imp
     }
 
     public boolean isCoffin() {
-        return isCoffin;
+        return this.getBlockState().getValue(BlockStateProperties.LIT);
     }
+
 
 
 

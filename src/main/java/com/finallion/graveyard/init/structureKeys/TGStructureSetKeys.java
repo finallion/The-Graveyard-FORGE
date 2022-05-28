@@ -18,6 +18,9 @@ public class TGStructureSetKeys {
     public static ResourceKey<StructureSet> SMALL_MOUNTAIN_GRAVES = of("small_mountain_graves");
     public static ResourceKey<StructureSet> MUSHROOM_GRAVES = of("mushroom_graves");
     public static ResourceKey<StructureSet> MEMORIAL_TREES = of("memorial_trees");
+    public static ResourceKey<StructureSet> ALTARS = of("altars");
+    public static ResourceKey<StructureSet> GIANT_MUSHROOMS = of("giant_mushrooms");
+    public static ResourceKey<StructureSet> CRYPTS = of("crypts");
 
 
     private static ResourceKey<StructureSet> of(String p_209839_) {

@@ -5,12 +5,9 @@ import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.events.ServerEvents;
 import com.finallion.graveyard.init.*;
 import com.finallion.graveyard.util.TGTags;
-import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -18,6 +15,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -50,7 +48,7 @@ public class TheGraveyard {
         TGTileEntities.TILE_ENTITIES.register(modEventBus);
         TGParticles.PARTICLES.register(modEventBus);
 
-        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC);
 
 
     }
@@ -63,11 +61,12 @@ public class TheGraveyard {
             TGProcessors.registerProcessors();
             TGConfiguredStructureFeatures.init();
             TGStructureSets.init();
+            TGAdvancements.init();
         });
     }
 
 
-    public static final CreativeModeTab GROUP = new CreativeModeTab ("group") {
+    public static final CreativeModeTab GROUP = new CreativeModeTab ("graveyard_group") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(Items.SKELETON_SKULL);

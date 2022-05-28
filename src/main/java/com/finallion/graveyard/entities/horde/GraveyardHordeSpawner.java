@@ -2,7 +2,8 @@ package com.finallion.graveyard.entities.horde;
 
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.GraveyardConfig;
-import com.finallion.graveyard.entities.AnimatedGraveyardEntity;
+import com.finallion.graveyard.entities.HordeGraveyardEntity;
+import com.finallion.graveyard.entities.HostileGraveyardEntity;
 import com.finallion.graveyard.init.TGEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -41,7 +42,7 @@ public class GraveyardHordeSpawner {
             if (this.nextTick > 0) {
                 return 0;
             } else {
-                this.nextTick += GraveyardConfig.COMMON.ticksUntilSpawnHorde.get() + random.nextInt(10);
+                this.nextTick += GraveyardConfig.COMMON.ticksUntilSpawnHorde.get() +  GraveyardConfig.COMMON.additionalRandomizedTicks.get();
                 if (level.isNight()) {
                     if (random.nextInt(5) != 0) {
                         return 0;
@@ -67,17 +68,18 @@ public class GraveyardHordeSpawner {
                                         return 0;
                                     } else {
                                         int j1 = 0;
-                                        int k1 = GraveyardConfig.COMMON.sizeHorde.get();
+                                        int k1 = GraveyardConfig.COMMON.mobSpawnAttempts.get();
+                                        boolean illagerSpawn = random.nextBoolean();
 
                                         for (int l1 = 0; l1 < k1; ++l1) {
                                             ++j1;
                                             blockpos$mutableblockpos.setY(level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, blockpos$mutableblockpos).getY());
                                             if (l1 == 0) {
-                                                if (!this.spawnHordeEntity(level, blockpos$mutableblockpos, random, true)) {
+                                                if (!this.spawnHordeEntity(level, blockpos$mutableblockpos, random, true, illagerSpawn)) {
                                                     break;
                                                 }
                                             } else {
-                                                this.spawnHordeEntity(level, blockpos$mutableblockpos, random, false);
+                                                this.spawnHordeEntity(level, blockpos$mutableblockpos, random, false, illagerSpawn);
                                             }
 
                                             blockpos$mutableblockpos.setX(blockpos$mutableblockpos.getX() + random.nextInt(5) - random.nextInt(5));
@@ -97,21 +99,31 @@ public class GraveyardHordeSpawner {
         }
     }
 
-    private boolean spawnHordeEntity(Level p_64565_, BlockPos p_64566_, Random p_64567_, boolean p_64568_) {
+    private boolean spawnHordeEntity(Level p_64565_, BlockPos p_64566_, Random p_64567_, boolean p_64568_, boolean illagerSpawn) {
         BlockState blockstate = p_64565_.getBlockState(p_64566_);
+        BlockState downState = p_64565_.getBlockState(p_64566_.below());
         if (!NaturalSpawner.isValidEmptySpawnBlock(p_64565_, p_64566_, blockstate, blockstate.getFluidState(), TGEntities.GHOUL.get())) {
             return false;
-        } else if (blockstate.getFluidState().is(Fluids.WATER)) {
+        } else if (blockstate.getFluidState().is(Fluids.WATER) || downState.getFluidState().is(Fluids.WATER) ) {
             return false;
-        } else if (!AnimatedGraveyardEntity.checkAnyLightMonsterSpawnRules(TGEntities.GHOUL.get(), p_64565_, MobSpawnType.PATROL, p_64566_, p_64567_)) {
+        } else if (!HostileGraveyardEntity.checkAnyLightMonsterSpawnRules(TGEntities.GHOUL.get(), p_64565_, MobSpawnType.PATROL, p_64566_, p_64567_)) {
             return false;
         } else {
-            GraveyardHordeEntity hordeEntity;
+            HordeGraveyardEntity hordeEntity;
 
-            if (p_64567_.nextBoolean()) {
-                hordeEntity = TGEntities.GHOUL.get().create(p_64565_);
+            if (!illagerSpawn) {
+                if (p_64567_.nextBoolean()) {
+                    hordeEntity = TGEntities.GHOUL.get().create(p_64565_);
+                } else {
+                    hordeEntity = TGEntities.REVENANT.get().create(p_64565_);
+                }
             } else {
-                hordeEntity = TGEntities.REVENANT.get().create(p_64565_);
+                int rand = p_64567_.nextInt(5);
+                switch (rand) {
+                    case 0, 1 -> hordeEntity = TGEntities.CORRUPTED_PILLAGER.get().create(p_64565_);
+                    case 2, 3 -> hordeEntity = TGEntities.CORRUPTED_VINDICATOR.get().create(p_64565_);
+                    default -> hordeEntity = TGEntities.ACOLYTE.get().create(p_64565_);
+                }
             }
 
             if (hordeEntity != null) {

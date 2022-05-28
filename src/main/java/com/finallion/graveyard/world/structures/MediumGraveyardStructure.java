@@ -17,14 +17,15 @@ import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class MediumGraveyardStructure extends AbstractGraveyardStructure {
 
     public MediumGraveyardStructure(Codec<JigsawConfiguration> codec) {
         super(new StructureConfigEntry(18, 16,1690192399,
-                        Arrays.asList("#" + Biome.BiomeCategory.FOREST.getName()),
-                        Arrays.asList("minecraft:dark_forest", "minecraft:birch_forest", "minecraft:old_growth_birch_forest", "graveyard_biomes:haunted_lakes", "graveyard_biomes:haunted_forest"),
-                        Arrays.asList("#minecraft", "#graveyard_biomes"), true), // blacklist birch and dark forest
+                        Arrays.asList("minecraft:forest", "minecraft:flower_forest", "terralith:brushland", "terralith:blooming_valley", "terralith:temperate_highlands", "graveyard_biomes:eroded_haunted_forest"),
+                        Collections.emptyList(),
+                        Arrays.asList("#minecraft", "#graveyard_biomes", "#terralith"), true), // blacklist birch and dark forest
                 30, "medium_graveyard");
     }
 

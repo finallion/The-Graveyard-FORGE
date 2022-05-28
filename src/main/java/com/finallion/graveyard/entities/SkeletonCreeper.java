@@ -57,19 +57,6 @@ public class SkeletonCreeper extends Creeper {
     }
 
 
-    public boolean canBeAffected(MobEffectInstance effect) {
-        if (effect.getEffect() == MobEffects.WITHER) {
-            if (GraveyardConfig.COMMON.skeletonCreeperCanBeWithered.get()) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        return super.canBeAffected(effect);
-    }
-
-
     public void explode() {
         if (!this.level.isClientSide) {
             Explosion.BlockInteraction explosion$mode = Explosion.BlockInteraction.NONE;
@@ -118,38 +105,8 @@ public class SkeletonCreeper extends Creeper {
             }
         }
 
-        if (this.isAlive()) {
-            boolean flag = this.isSunSensitive() && this.isSunBurnTick() && GraveyardConfig.COMMON.skeletonCreeperCanBurnInSunlight.get();
-            if (flag) {
-                ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
-                if (!itemstack.isEmpty()) {
-                    if (itemstack.isDamageableItem()) {
-                        itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
-                        if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
-                            this.broadcastBreakEvent(EquipmentSlot.HEAD);
-                            this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
-                        }
-                    }
-
-                    flag = false;
-                }
-
-                if (flag) {
-                    this.setSecondsOnFire(8);
-                }
-            }
-        }
         super.aiStep();
 
-    }
-
-    protected boolean isSunSensitive() {
-        return true;
-    }
-
-    @Override
-    protected boolean isSunBurnTick() {
-        return super.isSunBurnTick();
     }
 
     @Override

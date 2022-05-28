@@ -1,12 +1,9 @@
 package com.finallion.graveyard.mixin;
 
-import com.finallion.graveyard.entities.AcolyteEntity;
-import com.finallion.graveyard.entities.horde.GraveyardHordeEntity;
+import com.finallion.graveyard.entities.HostileGraveyardEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.npc.AbstractVillager;
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,7 +20,6 @@ public abstract class WanderingTraderMixin extends AbstractVillager {
 
     @Inject(method = "registerGoals", at = @At(value = "TAIL"))
     private void inject(CallbackInfo ci) {
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, GraveyardHordeEntity.class, 10.0F, 0.5D, 0.5D));
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, AcolyteEntity.class, 10.0F, 0.5D, 0.5D));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, HostileGraveyardEntity.class, 10.0F, 0.5D, 0.5D));
     }
 }
