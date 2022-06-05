@@ -80,7 +80,7 @@ public class TGConfiguredStructureFeatures {
 
     public static final Holder<ConfiguredStructureFeature<?, ?>> CRYPT_STRUCTURE_CONFIG = register(TGConfiguredStructureFeatureKeys.CRYPT,
             TGStructureFeatures.CRYPT_STRUCTURE.m_209773_(
-                    new JigsawConfiguration(CryptStructure.CryptGenerator.STARTING_POOL, 7), TGTags.IS_OVERWORLD, true, addMobSpawnsToStructure(GraveyardConfig.COMMON.structureConfigEntries.get("crypt").canSpawnGraveyardMobs.get(), "")));
+                    new JigsawConfiguration(CryptStructure.CryptGenerator.STARTING_POOL, 7), TGTags.IS_OVERWORLD, false, addMobSpawnsToStructure(GraveyardConfig.COMMON.structureConfigEntries.get("crypt").canSpawnGraveyardMobs.get(), "")));
 
 
     public static void init() {

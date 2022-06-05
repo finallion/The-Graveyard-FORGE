@@ -216,6 +216,7 @@ public class CommonConfig {
     public final ForgeConfigSpec.IntValue particleFrequency;
 
     public final ForgeConfigSpec.BooleanValue urnHasDoubleInventory;
+    public final ForgeConfigSpec.BooleanValue disableWitherSkeletonSpawner;
     public final ForgeConfigSpec.IntValue maxTerrainHeightDifference;
 
     public CommonConfig(ForgeConfigSpec.Builder builder) {
@@ -490,6 +491,7 @@ public class CommonConfig {
 
         builder.push("The Graveyard - Additional Config");
         this.urnHasDoubleInventory = builder.define("urn.urnHasDoubleInventory", true);
+        this.disableWitherSkeletonSpawner = builder.define("spawner.disableWitherSkeletonSpawner", false);
         this.maxTerrainHeightDifference = builder.defineInRange("terrain.maxTerrainHeightDifference", 6, 1, 100);
         builder.pop();
     }
