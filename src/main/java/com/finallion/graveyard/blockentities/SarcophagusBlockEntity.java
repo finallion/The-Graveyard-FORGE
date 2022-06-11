@@ -8,7 +8,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -75,9 +74,9 @@ public class SarcophagusBlockEntity extends RandomizableContainerBlockEntity imp
 
     protected Component getDefaultName() {
         if (this.getBlockState().getValue(BlockStateProperties.LIT)) {
-            return new TranslatableComponent("container.coffin");
+            return Component.translatable("container.coffin");
         }
-        return new TranslatableComponent("container.sarcophagus");
+        return Component.translatable("container.sarcophagus");
     }
 
     public void load(CompoundTag p_155349_) {

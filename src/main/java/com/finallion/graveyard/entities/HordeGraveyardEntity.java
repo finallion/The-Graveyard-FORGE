@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -173,7 +174,7 @@ public abstract class HordeGraveyardEntity extends HostileGraveyardEntity {
                 List<HordeGraveyardEntity> list = this.findPatrolCompanions();
                 if (this.mob.isPatrolling() && list.isEmpty()) {
                     this.mob.setPatrolling(false);
-                } else if (flag && this.mob.getPatrolTarget().m_203195_(this.mob.position(), 10.0D)) {
+                } else if (flag && this.mob.getPatrolTarget().closerToCenterThan(this.mob.position(), 10.0D)) {
                     this.mob.findPatrolTarget();
                 } else {
                     Vec3 vec3 = Vec3.atBottomCenterOf(this.mob.getPatrolTarget());
@@ -204,7 +205,7 @@ public abstract class HordeGraveyardEntity extends HostileGraveyardEntity {
         }
 
         private boolean moveRandomly() {
-            Random random = this.mob.getRandom();
+            RandomSource random = this.mob.getRandom();
             BlockPos blockpos = this.mob.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, this.mob.blockPosition().offset(-8 + random.nextInt(16), 0, -8 + random.nextInt(16)));
             return this.mob.getNavigation().moveTo((double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ(), this.speedModifier);
         }

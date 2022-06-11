@@ -1,0 +1,10 @@
+{
+  "type": "graveyard:mobspawns",
+  "biomes": "#graveyard:is_overworld",
+  "spawn": {
+    "type": "graveyard:ghoul",
+    "maxCount": 5,
+    "minCount": 2,
+    "weight": 25
+  }
+}

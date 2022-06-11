@@ -24,6 +24,6 @@ public class TGStructureSetKeys {
 
 
     private static ResourceKey<StructureSet> of(String p_209839_) {
-        return ResourceKey.create(Registry.f_211073_, new ResourceLocation(p_209839_));
+        return ResourceKey.create(Registry.STRUCTURE_SET_REGISTRY, new ResourceLocation(p_209839_));
     }
 }

@@ -7,6 +7,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
@@ -27,7 +28,7 @@ public class AcolyteEntity extends CorruptedIllager {
         super(entityType, world, "acolyte");
     }
 
-    protected void populateDefaultEquipmentSlots(DifficultyInstance p_34084_) {
+    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_34084_) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Registry.ITEM.get(new ResourceLocation(TheGraveyard.MOD_ID, "bone_dagger"))));
     }
 

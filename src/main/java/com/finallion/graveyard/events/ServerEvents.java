@@ -2,12 +2,8 @@ package com.finallion.graveyard.events;
 
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.GraveyardConfig;
-import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.init.TGConfiguredFeatures;
 import com.finallion.graveyard.init.TGEntities;
-import com.finallion.graveyard.init.TGStructureFeatures;
-import com.finallion.graveyard.world.structures.AbstractGraveyardStructure;
-import com.finallion.graveyard.world.structures.SmallDesertGraveyardStructure;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.MobCategory;
@@ -15,14 +11,16 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.event.world.StructureSpawnListGatherEvent;
+import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class ServerEvents {
-    public static void addBiomeFeatures(BiomeLoadingEvent event) {
+
+    /*
+    public static void addBiomeFeatures(BiomeModifier event) {
         ResourceKey<Biome> biome = ResourceKey.create(ForgeRegistries.Keys.BIOMES, event.getName());
         BiomeGenerationSettingsBuilder generation = event.getGeneration();
 
@@ -170,6 +168,8 @@ public class ServerEvents {
         return whitelist.contains("#" + modid);
 
     }
+
+     */
 
 
 

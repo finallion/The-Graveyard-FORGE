@@ -4,9 +4,7 @@ import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.init.structureKeys.TGStructureSetKeys;
-import com.finallion.graveyard.world.structures.AbstractGraveyardStructure;
 import net.minecraft.data.worldgen.StructureSets;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 
@@ -14,104 +12,166 @@ public class TGStructureSets {
 
     public static void init() {
 
-        StructureSets.m_211131_(TGStructureSetKeys.HAUNTED_HOUSES, TGConfiguredStructureFeatures.HAUNTED_HOUSE_STRUCTURE_CONFIG,
+        StructureSets.register(TGStructureSetKeys.HAUNTED_HOUSES, TGConfiguredStructureFeatures.HAUNTED_HOUSE_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
-                        GraveyardConfig.COMMON.structureConfigEntries.get("haunted_house").spacing.get(),
-                        GraveyardConfig.COMMON.structureConfigEntries.get("haunted_house").separation.get(),
+                        getSpacing("haunted_house"),
+                        getSeparation("haunted_house"),
                         RandomSpreadType.LINEAR,
-                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("haunted_house").salt.get())));
+                        Math.toIntExact(getSalt("haunted_house"))));
 
-        StructureSets.m_211131_(TGStructureSetKeys.LARGE_GRAVEYARDS, TGConfiguredStructureFeatures.LARGE_GRAVEYARD_STRUCTURE_CONFIG,
+        StructureSets.register(TGStructureSetKeys.LARGE_GRAVEYARDS, TGConfiguredStructureFeatures.LARGE_GRAVEYARD_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
-                        GraveyardConfig.COMMON.structureConfigEntries.get("large_graveyard").spacing.get(),
-                        GraveyardConfig.COMMON.structureConfigEntries.get("large_graveyard").separation.get(),
+                        getSpacing("large_graveyard"),
+                        getSeparation("large_graveyard"),
                         RandomSpreadType.LINEAR,
-                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("large_graveyard").salt.get())));
+                        Math.toIntExact(getSalt("large_graveyard"))));
 
-        StructureSets.m_211131_(TGStructureSetKeys.MEDIUM_GRAVEYARDS, TGConfiguredStructureFeatures.MEDIUM_GRAVEYARD_STRUCTURE_CONFIG,
+        StructureSets.register(TGStructureSetKeys.MEDIUM_GRAVEYARDS, TGConfiguredStructureFeatures.MEDIUM_GRAVEYARD_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
-                        GraveyardConfig.COMMON.structureConfigEntries.get("medium_graveyard").spacing.get(),
-                        GraveyardConfig.COMMON.structureConfigEntries.get("medium_graveyard").separation.get(),
+                        getSpacing("medium_graveyard"),
+                        getSeparation("medium_graveyard"),
                         RandomSpreadType.LINEAR,
-                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("medium_graveyard").salt.get())));
+                        Math.toIntExact(getSalt("medium_graveyard"))));
 
-        StructureSets.m_211131_(TGStructureSetKeys.SMALL_GRAVES, TGConfiguredStructureFeatures.SMALL_GRAVE_STRUCTURE_CONFIG,
+        StructureSets.register(TGStructureSetKeys.SMALL_GRAVES, TGConfiguredStructureFeatures.SMALL_GRAVE_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
-                        GraveyardConfig.COMMON.structureConfigEntries.get("small_grave").spacing.get(),
-                        GraveyardConfig.COMMON.structureConfigEntries.get("small_grave").separation.get(),
+                        getSpacing("small_grave"),
+                        getSeparation("small_grave"),
                         RandomSpreadType.LINEAR,
-                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("small_grave").salt.get())));
+                        Math.toIntExact(getSalt("small_grave"))));
 
-        StructureSets.m_211131_(TGStructureSetKeys.SMALL_DESERT_GRAVES, TGConfiguredStructureFeatures.SMALL_DESERT_GRAVE_STRUCTURE_CONFIG,
+        StructureSets.register(TGStructureSetKeys.SMALL_DESERT_GRAVES, TGConfiguredStructureFeatures.SMALL_DESERT_GRAVE_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
-                        GraveyardConfig.COMMON.structureConfigEntries.get("small_desert_grave").spacing.get(),
-                        GraveyardConfig.COMMON.structureConfigEntries.get("small_desert_grave").separation.get(),
+                        getSpacing("small_desert_grave"),
+                        getSeparation("small_desert_grave"),
                         RandomSpreadType.LINEAR,
-                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("small_desert_grave").salt.get())));
+                        Math.toIntExact(getSalt("small_desert_grave"))));
 
-        StructureSets.m_211131_(TGStructureSetKeys.SMALL_SAVANNA_GRAVES, TGConfiguredStructureFeatures.SMALL_SAVANNA_GRAVE_STRUCTURE_CONFIG,
+        StructureSets.register(TGStructureSetKeys.SMALL_SAVANNA_GRAVES, TGConfiguredStructureFeatures.SMALL_SAVANNA_GRAVE_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
-                        GraveyardConfig.COMMON.structureConfigEntries.get("small_savanna_grave").spacing.get(),
-                        GraveyardConfig.COMMON.structureConfigEntries.get("small_savanna_grave").separation.get(),
+                        getSpacing("small_savanna_grave"),
+                        getSeparation("small_savanna_grave"),
                         RandomSpreadType.LINEAR,
-                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("small_savanna_grave").salt.get())));
+                        Math.toIntExact(getSalt("small_savanna_grave"))));
 
-        StructureSets.m_211131_(TGStructureSetKeys.SMALL_MOUNTAIN_GRAVES, TGConfiguredStructureFeatures.SMALL_MOUNTAIN_GRAVE_STRUCTURE_CONFIG,
+        StructureSets.register(TGStructureSetKeys.SMALL_MOUNTAIN_GRAVES, TGConfiguredStructureFeatures.SMALL_MOUNTAIN_GRAVE_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
-                        GraveyardConfig.COMMON.structureConfigEntries.get("small_mountain_grave").spacing.get(),
-                        GraveyardConfig.COMMON.structureConfigEntries.get("small_mountain_grave").separation.get(),
+                        getSpacing("small_mountain_grave"),
+                        getSeparation("small_mountain_grave"),
                         RandomSpreadType.LINEAR,
-                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("small_mountain_grave").salt.get())));
+                        Math.toIntExact(getSalt("small_mountain_grave"))));
 
-        StructureSets.m_211131_(TGStructureSetKeys.SMALL_GRAVEYARDS, TGConfiguredStructureFeatures.SMALL_GRAVEYARD_STRUCTURE_CONFIG,
+        StructureSets.register(TGStructureSetKeys.SMALL_GRAVEYARDS, TGConfiguredStructureFeatures.SMALL_GRAVEYARD_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
-                        GraveyardConfig.COMMON.structureConfigEntries.get("small_graveyard").spacing.get(),
-                        GraveyardConfig.COMMON.structureConfigEntries.get("small_graveyard").separation.get(),
+                        getSpacing("small_graveyard"),
+                        getSeparation("small_graveyard"),
                         RandomSpreadType.LINEAR,
-                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("small_graveyard").salt.get())));
+                        Math.toIntExact(getSalt("small_graveyard"))));
 
-        StructureSets.m_211131_(TGStructureSetKeys.SMALL_DESERT_GRAVEYARDS, TGConfiguredStructureFeatures.SMALL_DESERT_GRAVEYARD_STRUCTURE_CONFIG,
+        StructureSets.register(TGStructureSetKeys.SMALL_DESERT_GRAVEYARDS, TGConfiguredStructureFeatures.SMALL_DESERT_GRAVEYARD_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
-                        GraveyardConfig.COMMON.structureConfigEntries.get("small_desert_graveyard").spacing.get(),
-                        GraveyardConfig.COMMON.structureConfigEntries.get("small_desert_graveyard").separation.get(),
+                        getSpacing("small_desert_graveyard"),
+                        getSeparation("small_desert_graveyard"),
                         RandomSpreadType.LINEAR,
-                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("small_desert_graveyard").salt.get())));
+                        Math.toIntExact(getSalt("small_desert_graveyard"))));
 
-        StructureSets.m_211131_(TGStructureSetKeys.MUSHROOM_GRAVES, TGConfiguredStructureFeatures.MUSHROOM_GRAVE_STRUCTURE_CONFIG,
+        StructureSets.register(TGStructureSetKeys.MUSHROOM_GRAVES, TGConfiguredStructureFeatures.MUSHROOM_GRAVE_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
-                        GraveyardConfig.COMMON.structureConfigEntries.get("mushroom_grave").spacing.get(),
-                        GraveyardConfig.COMMON.structureConfigEntries.get("mushroom_grave").separation.get(),
+                        getSpacing("mushroom_grave"),
+                        getSeparation("mushroom_grave"),
                         RandomSpreadType.LINEAR,
-                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("mushroom_grave").salt.get())));
+                        Math.toIntExact(getSalt("mushroom_grave"))));
 
-        StructureSets.m_211131_(TGStructureSetKeys.MEMORIAL_TREES, TGConfiguredStructureFeatures.MEMORIAL_TREE_STRUCTURE_CONFIG,
+        StructureSets.register(TGStructureSetKeys.MEMORIAL_TREES, TGConfiguredStructureFeatures.MEMORIAL_TREE_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
-                        GraveyardConfig.COMMON.structureConfigEntries.get("memorial_tree").spacing.get(),
-                        GraveyardConfig.COMMON.structureConfigEntries.get("memorial_tree").separation.get(),
+                        getSpacing("memorial_tree"),
+                        getSeparation("memorial_tree"),
                         RandomSpreadType.LINEAR,
-                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("memorial_tree").salt.get())));
+                        Math.toIntExact(getSalt("memorial_tree"))));
 
-        StructureSets.m_211131_(TGStructureSetKeys.ALTARS, TGConfiguredStructureFeatures.ALTAR_STRUCTURE_CONFIG,
+        StructureSets.register(TGStructureSetKeys.ALTARS, TGConfiguredStructureFeatures.ALTAR_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
-                        GraveyardConfig.COMMON.structureConfigEntries.get("altar").spacing.get(),
-                        GraveyardConfig.COMMON.structureConfigEntries.get("altar").separation.get(),
+                        getSpacing("altar"),
+                        getSeparation("altar"),
                         RandomSpreadType.LINEAR,
-                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("altar").salt.get())));
+                        Math.toIntExact(getSalt("altar"))));
 
-        StructureSets.m_211131_(TGStructureSetKeys.GIANT_MUSHROOMS, TGConfiguredStructureFeatures.GIANT_MUSHROOM_STRUCTURE_CONFIG,
+        StructureSets.register(TGStructureSetKeys.GIANT_MUSHROOMS, TGConfiguredStructureFeatures.GIANT_MUSHROOM_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
-                        GraveyardConfig.COMMON.structureConfigEntries.get("giant_mushroom").spacing.get(),
-                        GraveyardConfig.COMMON.structureConfigEntries.get("giant_mushroom").separation.get(),
+                        getSpacing("giant_mushroom"),
+                        getSeparation("giant_mushroom"),
                         RandomSpreadType.LINEAR,
-                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("giant_mushroom").salt.get())));
+                        Math.toIntExact(getSalt("giant_mushroom"))));
 
-        StructureSets.m_211131_(TGStructureSetKeys.CRYPTS, TGConfiguredStructureFeatures.CRYPT_STRUCTURE_CONFIG,
+        StructureSets.register(TGStructureSetKeys.CRYPTS, TGConfiguredStructureFeatures.CRYPT_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
-                        GraveyardConfig.COMMON.structureConfigEntries.get("crypt").spacing.get(),
-                        GraveyardConfig.COMMON.structureConfigEntries.get("crypt").separation.get(),
+                        getSpacing("crypt"),
+                        getSeparation("crypt"),
                         RandomSpreadType.LINEAR,
-                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("crypt").salt.get())));
+                        Math.toIntExact(getSalt("crypt"))));
 
+    }
+
+
+    // TODO move to StructureConfigEntry, this is just a very dirty, very quick way to make 1.19 work
+    private static long getSalt(String name) {
+        return switch (name) {
+            case "haunted_house" -> GraveyardConfig.COMMON.saltHauntedHouse.get();
+            case "large_graveyard" -> GraveyardConfig.COMMON.saltLargeGraveyard.get();
+            case "medium_graveyard" -> GraveyardConfig.COMMON.saltMediumGraveyard.get();
+            case "small_graveyard" -> GraveyardConfig.COMMON.saltSmallGraveyard.get();
+            case "small_desert_graveyard" -> GraveyardConfig.COMMON.saltSmallDesertGraveyard.get();
+            case "small_grave" -> GraveyardConfig.COMMON.saltSmallGrave.get();
+            case "small_mountain_grave" -> GraveyardConfig.COMMON.saltSmallMountainGrave.get();
+            case "small_savanna_grave" -> GraveyardConfig.COMMON.saltSmallSavannaGrave.get();
+            case "small_desert_grave" -> GraveyardConfig.COMMON.saltSmallDesertGrave.get();
+            case "mushroom_grave" -> GraveyardConfig.COMMON.saltMushroomGrave.get();
+            case "memorial_tree" -> GraveyardConfig.COMMON.saltMemorialTree.get();
+            case "crypt" -> GraveyardConfig.COMMON.saltCrypt.get();
+            case "altar" -> GraveyardConfig.COMMON.saltAltar.get();
+            case "giant_mushroom" -> GraveyardConfig.COMMON.saltGiantMushroom.get();
+            default -> 0;
+        };
+    }
+
+    private static int getSpacing(String name) {
+        return switch (name) {
+            case "haunted_house" -> GraveyardConfig.COMMON.spacingHauntedHouse.get();
+            case "large_graveyard" -> GraveyardConfig.COMMON.spacingLargeGraveyard.get();
+            case "medium_graveyard" -> GraveyardConfig.COMMON.spacingMediumGraveyard.get();
+            case "small_graveyard" -> GraveyardConfig.COMMON.spacingSmallGraveyard.get();
+            case "small_desert_graveyard" -> GraveyardConfig.COMMON.spacingSmallDesertGraveyard.get();
+            case "small_grave" -> GraveyardConfig.COMMON.spacingSmallGrave.get();
+            case "small_mountain_grave" -> GraveyardConfig.COMMON.spacingSmallMountainGrave.get();
+            case "small_savanna_grave" -> GraveyardConfig.COMMON.spacingSmallSavannaGrave.get();
+            case "small_desert_grave" -> GraveyardConfig.COMMON.spacingSmallDesertGrave.get();
+            case "mushroom_grave" -> GraveyardConfig.COMMON.spacingMushroomGrave.get();
+            case "memorial_tree" -> GraveyardConfig.COMMON.spacingMemorialTree.get();
+            case "crypt" -> GraveyardConfig.COMMON.spacingCrypt.get();
+            case "altar" -> GraveyardConfig.COMMON.spacingAltar.get();
+            case "giant_mushroom" -> GraveyardConfig.COMMON.spacingGiantMushroom.get();
+            default -> 0;
+        };
+    }
+
+    private static int getSeparation(String name) {
+        return switch (name) {
+            case "haunted_house" -> GraveyardConfig.COMMON.separationHauntedHouse.get();
+            case "large_graveyard" -> GraveyardConfig.COMMON.separationLargeGraveyard.get();
+            case "medium_graveyard" -> GraveyardConfig.COMMON.separationMediumGraveyard.get();
+            case "small_graveyard" -> GraveyardConfig.COMMON.separationSmallGraveyard.get();
+            case "small_desert_graveyard" -> GraveyardConfig.COMMON.separationSmallDesertGraveyard.get();
+            case "small_grave" -> GraveyardConfig.COMMON.separationSmallGrave.get();
+            case "small_mountain_grave" -> GraveyardConfig.COMMON.separationSmallMountainGrave.get();
+            case "small_savanna_grave" -> GraveyardConfig.COMMON.separationSmallSavannaGrave.get();
+            case "small_desert_grave" -> GraveyardConfig.COMMON.separationSmallDesertGrave.get();
+            case "mushroom_grave" -> GraveyardConfig.COMMON.separationMushroomGrave.get();
+            case "memorial_tree" -> GraveyardConfig.COMMON.separationMemorialTree.get();
+            case "crypt" -> GraveyardConfig.COMMON.separationCrypt.get();
+            case "altar" -> GraveyardConfig.COMMON.separationAltar.get();
+            case "giant_mushroom" -> GraveyardConfig.COMMON.separationGiantMushroom.get();
+            default -> 0;
+        };
     }
 
 }

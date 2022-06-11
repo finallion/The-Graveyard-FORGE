@@ -28,8 +28,8 @@ public class GravestoneBlockEntity extends BlockEntity {
     public static final int LINES = 4;
     private static final String[] RAW_TEXT_FIELD_NAMES = new String[]{"Text1", "Text2", "Text3", "Text4"};
     private static final String[] FILTERED_TEXT_FIELD_NAMES = new String[]{"FilteredText1", "FilteredText2", "FilteredText3", "FilteredText4"};
-    private final Component[] messages = new Component[]{TextComponent.EMPTY, TextComponent.EMPTY, TextComponent.EMPTY, TextComponent.EMPTY};
-    private final Component[] filteredMessages = new Component[]{TextComponent.EMPTY, TextComponent.EMPTY, TextComponent.EMPTY, TextComponent.EMPTY};
+    private final Component[] messages = new Component[]{Component.empty(), Component.empty(), Component.empty(), Component.empty()};
+    private final Component[] filteredMessages = new Component[]{Component.empty(), Component.empty(), Component.empty(), Component.empty()};
     private boolean isEditable = true;
     @javax.annotation.Nullable
     private UUID playerWhoMayEdit;
@@ -103,7 +103,7 @@ public class GravestoneBlockEntity extends BlockEntity {
         } catch (Exception exception) {
         }
 
-        return TextComponent.EMPTY;
+        return Component.empty();
     }
 
     public Component getMessage(int p_155707_, boolean p_155708_) {
@@ -184,7 +184,7 @@ public class GravestoneBlockEntity extends BlockEntity {
 
     public CommandSourceStack createCommandSourceStack(@Nullable ServerPlayer p_59736_) {
         String s = p_59736_ == null ? "Sign" : p_59736_.getName().getString();
-        Component component = (Component)(p_59736_ == null ? new TextComponent("Sign") : p_59736_.getDisplayName());
+        Component component = (Component)(p_59736_ == null ? Component.literal("Sign") : p_59736_.getDisplayName());
         return new CommandSourceStack(CommandSource.NULL, Vec3.atCenterOf(this.worldPosition), Vec2.ZERO, (ServerLevel)this.level, 2, s, component, this.level.getServer(), p_59736_);
     }
 

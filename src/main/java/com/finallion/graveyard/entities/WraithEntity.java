@@ -440,7 +440,7 @@ public class WraithEntity extends HostileGraveyardEntity implements IAnimatable 
                     Block block = blockState.getBlock();
                     boolean bl = false;
                     boolean torchAndLantern = false;
-                    if (blockState.m_204336_(BlockTags.CANDLES)) {
+                    if (blockState.is(BlockTags.CANDLES)) {
                         if (block instanceof CandleBlock) {
                             if (blockState.getValue(BlockStateProperties.LIT)) {
                                 bl = true;

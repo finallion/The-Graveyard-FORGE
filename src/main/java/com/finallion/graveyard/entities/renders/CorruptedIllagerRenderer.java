@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public abstract class CorruptedIllagerRenderer<T extends CorruptedIllager> extends MobRenderer<T, CorruptedIllagerModel<T>> {
     protected CorruptedIllagerRenderer(EntityRendererProvider.Context ctx, CorruptedIllagerModel<T> model, float shadowRadius) {
         super(ctx, model, shadowRadius);
-        this.addLayer(new CustomHeadLayer<>(this, ctx.getModelSet()));
+        this.addLayer(new CustomHeadLayer(this, ctx.getModelSet(), ctx.getItemInHandRenderer()));
     }
 
     protected void scale(T illagerEntity, PoseStack matrixStack, float f) {

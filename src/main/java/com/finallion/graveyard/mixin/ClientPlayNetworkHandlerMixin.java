@@ -43,7 +43,6 @@ public class ClientPlayNetworkHandlerMixin {
         BlockPos blockpos = packet.getPos();
         BlockEntity blockentity = this.level.getBlockEntity(blockpos);
         if (blockentity instanceof GravestoneBlockEntity) {
-            System.out.println("HERERERERERER");
             BlockState blockstate = this.level.getBlockState(blockpos);
             blockentity = new GravestoneBlockEntity(blockpos, blockstate);
             blockentity.setLevel(this.level);

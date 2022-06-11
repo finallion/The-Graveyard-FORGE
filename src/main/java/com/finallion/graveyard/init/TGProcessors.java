@@ -22,11 +22,11 @@ public class TGProcessors {
     public static StructureProcessorType<RemoveWaterloggedProcessor> REMOVE_WATERLOGGED = () -> RemoveWaterloggedProcessor.CODEC;
     public static StructureProcessorType<SwitchSpawnerProcessor> SWITCH_SPAWNER = () -> SwitchSpawnerProcessor.CODEC;
 
-    public static final Holder<StructureProcessorList> WATERLOGGED_LIST = BuiltinRegistries.m_206388_(BuiltinRegistries.PROCESSOR_LIST,
+    public static final Holder<StructureProcessorList> WATERLOGGED_LIST = BuiltinRegistries.register(BuiltinRegistries.PROCESSOR_LIST,
             new ResourceLocation(TheGraveyard.MOD_ID, "waterlogged_processor_list"),
             new StructureProcessorList(ImmutableList.of(new RemoveWaterloggedProcessor())));
 
-    public static final Holder<StructureProcessorList> SWITCH_SPAWNER_LIST = BuiltinRegistries.m_206388_(BuiltinRegistries.PROCESSOR_LIST,
+    public static final Holder<StructureProcessorList> SWITCH_SPAWNER_LIST = BuiltinRegistries.register(BuiltinRegistries.PROCESSOR_LIST,
             new ResourceLocation(TheGraveyard.MOD_ID, "switch_spawner_processor_list"),
             new StructureProcessorList(ImmutableList.of(new SwitchSpawnerProcessor())));
 

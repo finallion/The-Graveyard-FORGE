@@ -1,0 +1,10 @@
+{
+  "type": "graveyard:mobspawns",
+  "biomes": "#graveyard:is_overworld",
+  "spawn": {
+    "type": "graveyard:revenant",
+    "maxCount": 5,
+    "minCount": 3,
+    "weight": 25
+  }
+}

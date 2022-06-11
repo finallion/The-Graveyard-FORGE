@@ -26,7 +26,7 @@ import java.util.List;
 public class TGConfiguredFeatures {
 
     public static ConfiguredFeature<?, ?> GRAVESTONE_CONFIG_FEATURE = new ConfiguredFeature<>(TGFeatures.GRAVESTONE_FEATURE.get(), FeatureConfiguration.NONE);
-    public static PlacedFeature GRAVESTONE_PLACED_FEATURE = new PlacedFeature(Holder.m_205709_(GRAVESTONE_CONFIG_FEATURE), List.of(RarityFilter.onAverageOnceEvery(1), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, CountPlacement.of(1)));
+    public static PlacedFeature GRAVESTONE_PLACED_FEATURE = new PlacedFeature(Holder.direct(GRAVESTONE_CONFIG_FEATURE), List.of(RarityFilter.onAverageOnceEvery(1), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, CountPlacement.of(1)));
 
     public static void registerConfiguredFeatures() {
         Registry<ConfiguredFeature<?, ?>> registry = BuiltinRegistries.CONFIGURED_FEATURE;

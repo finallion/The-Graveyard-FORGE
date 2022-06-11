@@ -10,6 +10,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -100,7 +101,7 @@ public class BrazierBlock extends Block implements EntityBlock, SimpleWaterlogge
     }
 
 
-    public void animateTick(BlockState p_51287_, Level p_51288_, BlockPos pos, Random p_51290_) {
+    public void animateTick(BlockState p_51287_, Level p_51288_, BlockPos pos, RandomSource p_51290_) {
         if (p_51287_.getValue(LIT)) {
             if (p_51290_.nextInt(20) == 0) {
                 p_51288_.playLocalSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, SoundEvents.CAMPFIRE_CRACKLE, SoundSource.BLOCKS, 0.5F + p_51290_.nextFloat(), p_51290_.nextFloat() * 0.7F + 0.6F, false);
@@ -139,7 +140,7 @@ public class BrazierBlock extends Block implements EntityBlock, SimpleWaterlogge
     public static void extinguish(@javax.annotation.Nullable Player p_151900_, BlockState p_151901_, LevelAccessor p_151902_, BlockPos p_151903_) {
         setLit(p_151902_, p_151901_, p_151903_, false);
         if (p_151901_.getBlock() instanceof BrazierBlock) {
-            Random random = p_151902_.getRandom();
+            RandomSource random = p_151902_.getRandom();
             p_151902_.addParticle(ParticleTypes.SMOKE, (double)p_151903_.getX() + 0.5D + random.nextDouble() / 4.0D * (double)(random.nextBoolean() ? 1 : -1), (double)p_151903_.getY() + 0.4D, (double)p_151903_.getZ() + 0.5D + random.nextDouble() / 4.0D * (double)(random.nextBoolean() ? 1 : -1), 0.0D, 0.005D, 0.0D);
             p_151902_.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, (double)p_151903_.getX() + 0.5D + random.nextDouble() / 3.0D * (double)(random.nextBoolean() ? 1 : -1), (double)p_151903_.getY() + random.nextDouble() + random.nextDouble(), (double)p_151903_.getZ() + 0.5D + random.nextDouble() / 3.0D * (double)(random.nextBoolean() ? 1 : -1), 0.0D, 0.07D, 0.0D);
 
@@ -151,7 +152,7 @@ public class BrazierBlock extends Block implements EntityBlock, SimpleWaterlogge
 
 
     public static void spawnSmokeParticle(Level p_51252_, BlockPos p_51253_, boolean p_51255_) {
-        Random random = p_51252_.getRandom();
+        RandomSource random = p_51252_.getRandom();
         SimpleParticleType simpleparticletype = ParticleTypes.CAMPFIRE_COSY_SMOKE;
         p_51252_.addAlwaysVisibleParticle(simpleparticletype, true, (double)p_51253_.getX() + 0.5D + random.nextDouble() / 3.0D * (double)(random.nextBoolean() ? 1 : -1), (double)p_51253_.getY() + random.nextDouble() + random.nextDouble(), (double)p_51253_.getZ() + 0.5D + random.nextDouble() / 3.0D * (double)(random.nextBoolean() ? 1 : -1), 0.0D, 0.07D, 0.0D);
         if (p_51255_) {

@@ -5,6 +5,7 @@ import com.finallion.graveyard.entities.horde.GraveyardHordeSpawner;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -23,7 +24,7 @@ public class TGSpawner {
     @SubscribeEvent
     public static void onWorldLoad(ServerStartingEvent event) {
         MinecraftServer server = event.getServer();
-        spawners.put(DimensionType.OVERWORLD_LOCATION.location(), new GraveyardHordeSpawner(server));
+        spawners.put(Level.OVERWORLD.location(), new GraveyardHordeSpawner(server));
     }
 
     @SubscribeEvent

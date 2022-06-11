@@ -10,7 +10,9 @@ import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
@@ -37,7 +39,7 @@ public class GraveyardHordeSpawner {
         if (!GraveyardConfig.COMMON.enableHorde.get()) {
             return 0;
         } else {
-            Random random = level.random;
+            RandomSource random = level.random;
             --this.nextTick;
             if (this.nextTick > 0) {
                 return 0;
@@ -62,9 +64,8 @@ public class GraveyardHordeSpawner {
                                 if (!level.hasChunksAt(blockpos$mutableblockpos.getX() - 10, blockpos$mutableblockpos.getZ() - 10, blockpos$mutableblockpos.getX() + 10, blockpos$mutableblockpos.getZ() + 10)) {
                                     return 0;
                                 } else {
-                                    Holder<Biome> holder = level.m_204166_(blockpos$mutableblockpos);
-                                    Biome.BiomeCategory biome$biomecategory = Biome.m_204183_(holder);
-                                    if (biome$biomecategory == Biome.BiomeCategory.MUSHROOM) {
+                                    Holder<Biome> holder = level.getBiome(blockpos$mutableblockpos);
+                                    if (holder.is(BiomeTags.WITHOUT_PATROL_SPAWNS)) {
                                         return 0;
                                     } else {
                                         int j1 = 0;
@@ -99,7 +100,7 @@ public class GraveyardHordeSpawner {
         }
     }
 
-    private boolean spawnHordeEntity(Level p_64565_, BlockPos p_64566_, Random p_64567_, boolean p_64568_, boolean illagerSpawn) {
+    private boolean spawnHordeEntity(Level p_64565_, BlockPos p_64566_, RandomSource p_64567_, boolean p_64568_, boolean illagerSpawn) {
         BlockState blockstate = p_64565_.getBlockState(p_64566_);
         BlockState downState = p_64565_.getBlockState(p_64566_.below());
         if (!NaturalSpawner.isValidEmptySpawnBlock(p_64565_, p_64566_, blockstate, blockstate.getFluidState(), TGEntities.GHOUL.get())) {

@@ -10,7 +10,6 @@
     "TreeFeatureMixin",
     "VillagerMixin",
     "WanderingTraderMixin",
-    "StructureFeatureAccessor",
     "WorldGenRegionAccessor"
   ],
   "client": [

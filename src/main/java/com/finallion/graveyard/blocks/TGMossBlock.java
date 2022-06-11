@@ -5,6 +5,7 @@ import com.finallion.graveyard.init.TGParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
@@ -37,7 +38,7 @@ public class TGMossBlock extends MossBlock {
 
     // graveyard fog
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState p_180655_1_, Level world, BlockPos pos, Random random) {
+    public void animateTick(BlockState p_180655_1_, Level world, BlockPos pos, RandomSource random) {
         super.animateTick(p_180655_1_, world, pos, random);
 
         if (GraveyardConfig.COMMON.enableMossParticle.get()) {
