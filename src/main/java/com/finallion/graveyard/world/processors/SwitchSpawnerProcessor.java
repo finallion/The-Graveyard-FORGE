@@ -1,21 +1,22 @@
 package com.finallion.graveyard.world.processors;
 
-import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.TGProcessors;
 import com.mojang.serialization.Codec;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.SpawnerBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.block.SpawnerBlock;
+import net.minecraft.entity.EntityType;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.MobSpawnerTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.gen.feature.template.IStructureProcessorType;
+import net.minecraft.world.gen.feature.template.PlacementSettings;
+import net.minecraft.world.gen.feature.template.StructureProcessor;
+import net.minecraft.world.gen.feature.template.Template;
+
+import javax.annotation.Nullable;
+
 
 public class SwitchSpawnerProcessor extends StructureProcessor {
     public static final Codec<SwitchSpawnerProcessor> CODEC = Codec.unit(SwitchSpawnerProcessor::new);
@@ -23,14 +24,14 @@ public class SwitchSpawnerProcessor extends StructureProcessor {
 
     @Nullable
     @Override
-    public StructureTemplate.StructureBlockInfo processBlock(LevelReader worldReader, BlockPos pos, BlockPos pos2, StructureTemplate.StructureBlockInfo infoIn1, StructureTemplate.StructureBlockInfo structureBlockInfo2, StructurePlaceSettings settings) {
+    public Template.BlockInfo processBlock(IWorldReader worldReader, BlockPos pos, BlockPos pos2, Template.BlockInfo infoIn1, Template.BlockInfo structureBlockInfo2, PlacementSettings settings) {
         if (structureBlockInfo2.state.getBlock() instanceof SpawnerBlock && GraveyardConfig.COMMON.disableWitherSkeletonSpawner.get()) {
             BlockPos worldPos = structureBlockInfo2.pos;
-            BlockEntity blockEntity = worldReader.getBlockEntity(worldPos);
-            if (blockEntity instanceof SpawnerBlockEntity) {
-                CompoundTag nbtCompound = structureBlockInfo2.nbt.getCompound("SpawnData");
+            TileEntity blockEntity = worldReader.getBlockEntity(worldPos);
+            if (blockEntity instanceof MobSpawnerTileEntity) {
+                CompoundNBT nbtCompound = structureBlockInfo2.nbt.getCompound("SpawnData");
                 if (nbtCompound.toString().contains("wither_skeleton")) {
-                    ((SpawnerBlockEntity)blockEntity).getSpawner().setEntityId(EntityType.SKELETON);
+                    ((MobSpawnerTileEntity)blockEntity).getSpawner().setEntityId(EntityType.SKELETON);
                     //TheGraveyard.LOGGER.error("The Graveyard Config: Wither Skeleton Spawner switched to Skeleton Spawner at " + worldPos);
                 }
             }
@@ -39,7 +40,7 @@ public class SwitchSpawnerProcessor extends StructureProcessor {
     }
 
     @Override
-    protected StructureProcessorType<?> getType() {
+    protected IStructureProcessorType<?> getType() {
         return TGProcessors.SWITCH_SPAWNER;
     }
 }
