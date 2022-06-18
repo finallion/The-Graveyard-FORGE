@@ -2,12 +2,8 @@ package com.finallion.graveyard.events;
 
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.GraveyardConfig;
-import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.init.TGConfiguredFeatures;
 import com.finallion.graveyard.init.TGEntities;
-import com.finallion.graveyard.init.TGStructureFeatures;
-import com.finallion.graveyard.world.structures.AbstractGraveyardStructure;
-import com.finallion.graveyard.world.structures.SmallDesertGraveyardStructure;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.MobCategory;
@@ -16,7 +12,6 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.event.world.StructureSpawnListGatherEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
@@ -85,7 +80,7 @@ public class ServerEvents {
 
         if (parseBiomes(GraveyardConfig.COMMON.whitelistWraith.get(), GraveyardConfig.COMMON.blacklistWraith.get(), event) &&
                 parseWhitelistedMods(GraveyardConfig.COMMON.modWhitelistWraith.get(), event) && GraveyardConfig.COMMON.enableWraith.get()) {
-            base.add(new MobSpawnSettings.SpawnerData(TGEntities.ACOLYTE.get(),
+            base.add(new MobSpawnSettings.SpawnerData(TGEntities.WRAITH.get(),
                     GraveyardConfig.COMMON.weightWraith.get(),
                     GraveyardConfig.COMMON.minGroupSizeWraith.get(),
                     GraveyardConfig.COMMON.maxGroupSizeWraith.get()));
@@ -93,7 +88,7 @@ public class ServerEvents {
 
         if (parseBiomes(GraveyardConfig.COMMON.whitelistCorruptedPillager.get(), GraveyardConfig.COMMON.blacklistCorruptedPillager.get(), event) &&
                 parseWhitelistedMods(GraveyardConfig.COMMON.modWhitelistCorruptedPillager.get(), event) && GraveyardConfig.COMMON.enableCorruptedPillager.get()) {
-            base.add(new MobSpawnSettings.SpawnerData(TGEntities.ACOLYTE.get(),
+            base.add(new MobSpawnSettings.SpawnerData(TGEntities.CORRUPTED_PILLAGER.get(),
                     GraveyardConfig.COMMON.weightCorruptedPillager.get(),
                     GraveyardConfig.COMMON.minGroupSizeCorruptedPillager.get(),
                     GraveyardConfig.COMMON.maxGroupSizeCorruptedPillager.get()));
@@ -101,7 +96,7 @@ public class ServerEvents {
 
         if (parseBiomes(GraveyardConfig.COMMON.whitelistCorruptedVindicator.get(), GraveyardConfig.COMMON.blacklistCorruptedVindicator.get(), event) &&
                 parseWhitelistedMods(GraveyardConfig.COMMON.modWhitelistCorruptedVindicator.get(), event) && GraveyardConfig.COMMON.enableCorruptedVindicator.get()) {
-            base.add(new MobSpawnSettings.SpawnerData(TGEntities.ACOLYTE.get(),
+            base.add(new MobSpawnSettings.SpawnerData(TGEntities.CORRUPTED_VINDICATOR.get(),
                     GraveyardConfig.COMMON.weightCorruptedVindicator.get(),
                     GraveyardConfig.COMMON.minGroupSizeCorruptedVindicator.get(),
                     GraveyardConfig.COMMON.maxGroupSizeCorruptedVindicator.get()));
