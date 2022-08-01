@@ -173,6 +173,6 @@
   "advancements.graveyard.kill_horde.description": "밤에 스폰 되는 묘지의 몬스터 무리를 제거하세요.",
 
 
-  "itemGroup.graveyard.group": "The Graveyard",
+  "itemGroup.graveyard_group": "The Graveyard",
   "gravestone.edit": "묘비 수정"
 }

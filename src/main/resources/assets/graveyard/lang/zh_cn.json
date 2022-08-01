@@ -161,7 +161,7 @@
   "biome.graveyard.eroded_haunted_forest": "侵蚀中的闹鬼森林",
   "biome.graveyard.ancient_dead_coral_reef": "远古死珊瑚礁",
 
-  "itemGroup.graveyard.group": "The Graveyard",
+  "itemGroup.graveyard_group": "The Graveyard",
   "gravestone.edit": "编辑墓碑",
 
   "advancements.graveyard.crypt.title": "进入黑暗",

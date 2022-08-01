@@ -170,7 +170,7 @@
   "advancements.graveyard.kill_horde.description": "Decimate a graveyard horde, spawning at night.",
 
 
-  "itemGroup.graveyard.group": "The Graveyard",
+  "itemGroup.graveyard_group": "The Graveyard",
   "gravestone.edit": "Редактировать надгробие"
 
 }
