@@ -15,13 +15,18 @@ import java.util.function.Supplier;
 
 public class TGTileEntities {
 
-    public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, TheGraveyard.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, TheGraveyard.MOD_ID);
 
     public static final RegistryObject<BlockEntityType<GravestoneBlockEntity>> GRAVESTONE_BLOCK_ENTITY = register("gravestone_block_entity", () -> BlockEntityType.Builder.of(GravestoneBlockEntity::new,
             TGBlocks.GRAVESTONE.get(),
             TGBlocks.DEEPSLATE_GRAVESTONE.get(),
             TGBlocks.MOSSY_COBBLESTONE_GRAVESTONE.get(),
-            TGBlocks.COBBLESTONE_GRAVESTONE.get()
+            TGBlocks.COBBLESTONE_GRAVESTONE.get(),
+            TGBlocks.BLACKSTONE_GRAVESTONE.get(),
+            TGBlocks.CRACKED_BLACKSTONE_GRAVESTONE.get(),
+            TGBlocks.STONE_BRICKS_GRAVESTONE.get(),
+            TGBlocks.MOSSY_STONE_BRICKS_GRAVESTONE.get(),
+            TGBlocks.BRICKS_GRAVESTONE.get()
     ).build(null));
 
     public static final RegistryObject<BlockEntityType<UrnBlockEntity>> URN_BLOCK_ENTITY = register("urn_block_entity", () -> BlockEntityType.Builder.of(UrnBlockEntity::new,  TGBlocks.BLACK_URN.get(),
@@ -50,7 +55,8 @@ public class TGTileEntities {
             TGBlocks.BIRCH_COFFIN.get(),
             TGBlocks.CRIMSON_COFFIN.get(),
             TGBlocks.WARPED_COFFIN.get(),
-            TGBlocks.SPRUCE_COFFIN.get()
+            TGBlocks.SPRUCE_COFFIN.get(),
+            TGBlocks.MANGROVE_COFFIN.get()
     ).build(null));
 
     public static final RegistryObject<BlockEntityType<BrazierBlockEntity>> BRAZIER_BLOCK_ENTITY = register("brazier_block_entity", () -> BlockEntityType.Builder.of(BrazierBlockEntity::new,

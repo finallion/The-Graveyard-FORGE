@@ -16,13 +16,10 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
-
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
@@ -36,7 +33,6 @@ import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.apache.logging.log4j.core.pattern.TextRenderer;
 
 import java.util.HashMap;
 import java.util.List;
@@ -74,7 +70,8 @@ public class GravestoneBlockEntityRenderer implements BlockEntityRenderer<Graves
         matrixStack.scale(0.010416667F, -0.010416667F, 0.010416667F);
 
 
-        int i = signBlockEntity.getColor().getTextColor();
+        //int i = signBlockEntity.getColor().getTextColor();
+        int i = getDarkColor(signBlockEntity);
 
         FormattedCharSequence[] aformattedcharsequence = signBlockEntity.getRenderMessages(Minecraft.getInstance().isTextFilteringEnabled(), (p_173653_) -> {
             List<FormattedCharSequence> list = this.font.split(p_173653_, 90);
@@ -175,10 +172,20 @@ public class GravestoneBlockEntityRenderer implements BlockEntityRenderer<Graves
         RenderType layer2 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/cobblestone.png"));
         RenderType layer3 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/mossy_cobblestone.png"));
         RenderType layer4 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/deepslate.png"));
+        RenderType layer5 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/blackstone.png"));
+        RenderType layer6 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/cracked_blackstone.png"));
+        RenderType layer7 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/stone_bricks.png"));
+        RenderType layer8 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/mossy_stone_bricks.png"));
+        RenderType layer9 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/bricks.png"));
         LAYERS.put(TGBlocks.GRAVESTONE.get(), layer1);
         LAYERS.put(TGBlocks.COBBLESTONE_GRAVESTONE.get(), layer2);
         LAYERS.put(TGBlocks.MOSSY_COBBLESTONE_GRAVESTONE.get(), layer3);
         LAYERS.put(TGBlocks.DEEPSLATE_GRAVESTONE.get(), layer4);
+        LAYERS.put(TGBlocks.BLACKSTONE_GRAVESTONE.get(), layer5);
+        LAYERS.put(TGBlocks.CRACKED_BLACKSTONE_GRAVESTONE.get(), layer6);
+        LAYERS.put(TGBlocks.STONE_BRICKS_GRAVESTONE.get(), layer7);
+        LAYERS.put(TGBlocks.MOSSY_STONE_BRICKS_GRAVESTONE.get(), layer8);
+        LAYERS.put(TGBlocks.BRICKS_GRAVESTONE.get(), layer9);
 
     }
 

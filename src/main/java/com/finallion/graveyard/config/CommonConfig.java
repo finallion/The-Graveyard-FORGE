@@ -284,8 +284,8 @@ public class CommonConfig {
 
 
         this.canGenerateHauntedHouse = builder.define("hauntedHouse.generate", true);
-        this.spacingHauntedHouse = builder.defineInRange("hauntedHouse.spacing", 25, 0, 200);
-        this.separationHauntedHouse = builder.defineInRange("hauntedHouse.separation", 20, 0, 200);
+        this.spacingHauntedHouse = builder.defineInRange("hauntedHouse.spacing", 20, 0, 200);
+        this.separationHauntedHouse = builder.defineInRange("hauntedHouse.separation", 15, 0, 200);
         this.saltHauntedHouse = builder.defineInRange("hauntedHouse.salt", 451235912, 0, 10000000000L);
         this.whitelistHauntedHouse = builder.defineList("hauntedHouse.whitelist", Arrays.asList(
                 "minecraft:dark_forest",
@@ -299,7 +299,7 @@ public class CommonConfig {
                 "graveyard_biomes:haunted_lakes"), o -> o instanceof String);
         this.modWhitelistHauntedHouse = builder.defineList("hauntedHouse.modWhitelist", Collections.emptyList(), o -> o instanceof String);
         this.terrainCheckRadiusHauntedHouse = builder.defineInRange("hauntedHouse.terrainCheckRadius", 30, 0, 250);
-        this.terrainHeightDifferenceHauntedHouse = builder.defineInRange("hauntedHouse.terrainHeightDifference", 3, 1, 100);
+        this.terrainHeightDifferenceHauntedHouse = builder.defineInRange("hauntedHouse.terrainHeightDifference", 5, 1, 100);
         this.canSpawnGraveyardMobsHauntedHouse = builder.define("hauntedHouse.canSpawnMobs", false);
 
         this.canGenerateLargeGraveyard = builder.define("largeGraveyard.generate", true);

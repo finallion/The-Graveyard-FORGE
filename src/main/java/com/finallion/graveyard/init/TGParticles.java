@@ -3,12 +3,9 @@ package com.finallion.graveyard.init;
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.particles.GraveyardFogParticle;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
@@ -22,7 +19,7 @@ public class TGParticles {
 
 
     @SubscribeEvent
-    public static void initParticles(ParticleFactoryRegisterEvent event){
+    public static void initParticles(RegisterParticleProvidersEvent event){
         Minecraft.getInstance().particleEngine.register(GRAVEYARD_FOG_PARTICLE.get(), GraveyardFogParticle.FogFactory::new);
     }
 

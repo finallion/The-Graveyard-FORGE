@@ -5,7 +5,6 @@ import com.finallion.graveyard.blockentities.SarcophagusBlockEntity;
 import com.finallion.graveyard.blockentities.enums.SarcophagusPart;
 import com.finallion.graveyard.blocks.SarcophagusBlock;
 import com.finallion.graveyard.init.TGTileEntities;
-import com.mojang.authlib.minecraft.client.MinecraftClient;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
@@ -14,16 +13,13 @@ import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BrightnessCombiner;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.DoubleBlockCombiner;
@@ -32,10 +28,6 @@ import net.minecraft.world.level.block.entity.LidBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
-
-import java.util.Random;
 
 
 @OnlyIn(Dist.CLIENT)
@@ -116,7 +108,7 @@ public class SarcophagusBlockEntityRenderer<T extends BlockEntity & LidBlockEnti
 
         matrices.translate(-0.5D, -0.5D, -0.5D);
 
-        renderer.renderModel(matrices.last(), vertexConsumer, entity.getBlockState(), model, 1.0F, 1.0F, 1.0F, light, overlay, EmptyModelData.INSTANCE);
+        renderer.renderModel(matrices.last(), vertexConsumer, entity.getBlockState(), model, 1.0F, 1.0F, 1.0F, light, overlay);
         matrices.popPose();
     }
 
@@ -138,7 +130,7 @@ public class SarcophagusBlockEntityRenderer<T extends BlockEntity & LidBlockEnti
 
         matrices.translate(-0.5D, -0.5D, -0.5D);
 
-        renderer.renderModel(matrices.last(), vertexConsumer, entity.getBlockState(), model, 1.0F, 1.0F, 1.0F, light, overlay, EmptyModelData.INSTANCE);
+        renderer.renderModel(matrices.last(), vertexConsumer, entity.getBlockState(), model, 1.0F, 1.0F, 1.0F, light, overlay);
         matrices.popPose();
     }
 

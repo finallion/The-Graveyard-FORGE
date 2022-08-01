@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "cutout",
   "textures": {
     "1": "graveyard:block/brazier",
     "particle": "graveyard:block/dark_iron_bars"

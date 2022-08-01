@@ -1,40 +1,6 @@
 package com.finallion.graveyard.data;
 
-import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.init.TGEntities;
-import com.finallion.graveyard.util.SpawnRules;
-import com.finallion.graveyard.util.TGTags;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DataProvider;
-import net.minecraft.data.tags.BiomeTagsProvider;
-import net.minecraft.data.tags.BlockTagsProvider;
-import net.minecraft.resources.RegistryOps;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.tags.BiomeTags;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraftforge.common.world.BiomeModifier;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.io.IOException;
-import java.nio.file.Path;
-
+/*
 public class DataGenerators {
 
     @SubscribeEvent
@@ -44,7 +10,7 @@ public class DataGenerators {
         //BiomeTagsProvider spawnTags = new SpawnTagProvider(generator, TheGraveyard.MOD_ID, event.getExistingFileHelper());
         //generator.addProvider(true, spawnTags);
 
-        /*
+
         final RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.BUILTIN.get());
         final String directory = PackType.SERVER_DATA.getDirectory();
         final ResourceLocation biomeModifiersRegistryID = ForgeRegistries.Keys.BIOME_MODIFIERS.location();
@@ -78,10 +44,9 @@ public class DataGenerators {
             }
         });
 
-         */
     }
 
 
 
 
-}
+}         */

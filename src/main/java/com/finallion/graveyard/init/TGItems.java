@@ -1,33 +1,15 @@
 package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.blocks.*;
 import com.finallion.graveyard.item.DaggerItem;
-import com.finallion.graveyard.item.SarcophagusItem;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.Tiers;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.common.ForgeSpawnEggItem;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.lwjgl.system.CallbackI;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -94,6 +76,13 @@ public class TGItems {
     public static final RegistryObject<Item> COBBLESTONE_GRAVESTONE = ITEMS.register( "cobblestone_gravestone", () -> new BlockItem(TGBlocks.COBBLESTONE_GRAVESTONE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> MOSSY_COBBLESTONE_GRAVESTONE = ITEMS.register("mossy_cobblestone_gravestone", () -> new BlockItem(TGBlocks.MOSSY_COBBLESTONE_GRAVESTONE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> DEEPSLATE_GRAVESTONE = ITEMS.register("deepslate_gravestone", () -> new BlockItem(TGBlocks.DEEPSLATE_GRAVESTONE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> BLACKSTONE_GRAVESTONE = ITEMS.register("blackstone_gravestone", () -> new BlockItem(TGBlocks.BLACKSTONE_GRAVESTONE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> CRACKED_BLACKSTONE_GRAVESTONE = ITEMS.register("cracked_blackstone_gravestone", () -> new BlockItem(TGBlocks.CRACKED_BLACKSTONE_GRAVESTONE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> STONE_BRICKS_GRAVESTONE = ITEMS.register("stone_bricks_gravestone", () -> new BlockItem(TGBlocks.STONE_BRICKS_GRAVESTONE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> MOSSY_STONE_BRICKS_GRAVESTONE = ITEMS.register("mossy_stone_bricks_gravestone", () -> new BlockItem(TGBlocks.MOSSY_STONE_BRICKS_GRAVESTONE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> BRICKS_GRAVESTONE = ITEMS.register("bricks_gravestone", () -> new BlockItem(TGBlocks.BRICKS_GRAVESTONE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+
+
 
     public static final RegistryObject<Item> BLACK_URN = ITEMS.register("black_urn", () -> new BlockItem(TGBlocks.BLACK_URN.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> BROWN_URN = ITEMS.register("brown_urn", () -> new BlockItem(TGBlocks.BROWN_URN.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
@@ -138,5 +127,6 @@ public class TGItems {
     public static final RegistryObject<Item> ACACIA_COFFIN = ITEMS.register("acacia_coffin", () -> new BlockItem(TGBlocks.ACACIA_COFFIN.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> WARPED_COFFIN = ITEMS.register("warped_coffin", () -> new BlockItem(TGBlocks.WARPED_COFFIN.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> CRIMSON_COFFIN = ITEMS.register("crimson_coffin", () -> new BlockItem(TGBlocks.CRIMSON_COFFIN.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> MANGROVE_COFFIN = ITEMS.register("mangrove_coffin", () -> new BlockItem(TGBlocks.MANGROVE_COFFIN.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
 
 }
