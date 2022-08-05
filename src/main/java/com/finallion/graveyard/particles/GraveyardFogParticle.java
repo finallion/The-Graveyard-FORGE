@@ -4,10 +4,7 @@ package com.finallion.graveyard.particles;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class GraveyardFogParticle extends TextureSheetParticle {
     private double startY;
 
@@ -41,7 +38,6 @@ public class GraveyardFogParticle extends TextureSheetParticle {
 
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static class FogFactory implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet spriteProvider;
 

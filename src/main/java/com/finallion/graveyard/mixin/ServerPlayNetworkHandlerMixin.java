@@ -4,7 +4,6 @@ import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.Connection;
-import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundSignUpdatePacket;
 import net.minecraft.server.MinecraftServer;
@@ -12,11 +11,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.FilteredText;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
-import net.minecraft.server.network.TextFilter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -41,7 +37,7 @@ public class ServerPlayNetworkHandlerMixin {
     @Shadow @Final private MinecraftServer server;
 
     @Inject(method = "updateSignText", at = @At(value = "HEAD"), cancellable = true)
-    private void signUpdate(ServerboundSignUpdatePacket packet, List<FilteredText<String>> signText, CallbackInfo info) {
+    private void signUpdate(ServerboundSignUpdatePacket packet, List<FilteredText> signText, CallbackInfo info) {
         this.player.resetLastActionTime();
         ServerLevel serverlevel = this.player.getLevel();
         BlockPos blockpos = packet.getPos();
@@ -60,11 +56,11 @@ public class ServerPlayNetworkHandlerMixin {
             }
 
             for(int i = 0; i < signText.size(); ++i) {
-                FilteredText<Component> textfilter$filteredtext = signText.get(i).map(Component::literal);
+                FilteredText filteredtext = signText.get(i);
                 if (this.player.isTextFilteringEnabled()) {
-                    signblockentity.setMessage(i, textfilter$filteredtext.filteredOrElse(CommonComponents.EMPTY));
+                    signblockentity.setMessage(i, Component.literal(filteredtext.m_243113_()));
                 } else {
-                    signblockentity.setMessage(i, textfilter$filteredtext.raw(), textfilter$filteredtext.filteredOrElse(CommonComponents.EMPTY));
+                    signblockentity.setMessage(i, Component.literal(filteredtext.raw()), Component.literal(filteredtext.m_243113_()));
                 }
             }
             signblockentity.setChanged();

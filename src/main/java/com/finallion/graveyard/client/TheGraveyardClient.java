@@ -9,7 +9,9 @@ import com.finallion.graveyard.entities.models.CorruptedIllagerModel;
 import com.finallion.graveyard.entities.renders.*;
 import com.finallion.graveyard.init.TGBlocks;
 import com.finallion.graveyard.init.TGEntities;
+import com.finallion.graveyard.init.TGParticles;
 import com.finallion.graveyard.init.TGTileEntities;
+import com.finallion.graveyard.particles.GraveyardFogParticle;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -22,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -36,6 +39,7 @@ public class TheGraveyardClient {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         //modEventBus.addListener(this::clientInit);
+        modEventBus.addListener(this::initParticles);
         modEventBus.addListener(this::onBlockColorsInit);
         modEventBus.addListener(this::onItemColorsInit);
         modEventBus.addListener(this::registerEntityRenderers);
@@ -48,6 +52,12 @@ public class TheGraveyardClient {
     @SubscribeEvent
     public void registerLayerDefinition(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(CORRUPTED_ILLAGER_MODEL_LAYER, CorruptedIllagerModel::createBodyModel);
+    }
+
+
+    @SubscribeEvent
+    public void initParticles(RegisterParticleProvidersEvent event){
+        event.register(TGParticles.GRAVEYARD_FOG_PARTICLE.get(), GraveyardFogParticle.FogFactory::new);
     }
 
     @SubscribeEvent

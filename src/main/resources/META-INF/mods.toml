@@ -3,7 +3,7 @@ loaderVersion="[38,)" #mandatory
 license="All rights reserved"
 [[mods]] #mandatory
 modId="graveyard" #mandatory
-version="1.11" #mandatory
+version="1.12" #mandatory
 displayName="The Graveyard" #mandatory
 logoFile="graveyard_logo.png" #optional
 credits="" #optional
@@ -15,7 +15,7 @@ The Graveyard adds new structures, mobs and blocks to your minecraft world, them
 [[dependencies.graveyard]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[41.1.0,)" #mandatory
+    versionRange="[42.0.1,)" #mandatory
     ordering="NONE"
     side="BOTH"
 [[dependencies.graveyard]]

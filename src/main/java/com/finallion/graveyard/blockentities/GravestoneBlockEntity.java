@@ -1,13 +1,15 @@
 package com.finallion.graveyard.blockentities;
 
-import com.finallion.graveyard.init.TGBlocks;
 import com.finallion.graveyard.init.TGTileEntities;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentUtils;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,7 +17,6 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -175,7 +176,7 @@ public class GravestoneBlockEntity extends BlockEntity {
             Style style = component.getStyle();
             ClickEvent clickevent = style.getClickEvent();
             if (clickevent != null && clickevent.getAction() == ClickEvent.Action.RUN_COMMAND) {
-                p_155710_.getServer().getCommands().performCommand(this.createCommandSourceStack(p_155710_), clickevent.getValue());
+                p_155710_.getServer().getCommands().performPrefixedCommand(this.createCommandSourceStack(p_155710_), clickevent.getValue());
             }
         }
 
