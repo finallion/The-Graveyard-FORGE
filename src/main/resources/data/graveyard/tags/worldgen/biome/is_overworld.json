@@ -19,6 +19,8 @@
     "minecraft:sunflower_plains",
     "minecraft:swamp",
     "minecraft:savanna_plateau",
+    "minecraft:dripstone_caves",
+    "minecraft:lush_caves",
 
     {"id": "graveyard_biomes:ancient_dead_coral_reef", "required": false},
     {"id": "graveyard_biomes:eroded_haunted_forest", "required": false},

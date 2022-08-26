@@ -27,6 +27,11 @@ public class TGBlocks {
     public static final ResourceLocation COBBLESTONE_GRAVESTONE_TEXTURE = new ResourceLocation("minecraft", "block/cobblestone");
     public static final ResourceLocation MOSSY_COBBLESTONE_GRAVESTONE_TEXTURE = new ResourceLocation("minecraft", "block/mossy_cobblestone");
     public static final ResourceLocation DEEPSLATE_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "block/deepslate");
+    public static final ResourceLocation BLACKSTONE_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "block/blackstone");
+    public static final ResourceLocation CRACKED_BLACKSTONE_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "block/cracked_blackstone");
+    public static final ResourceLocation STONE_BRICKS_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "block/stone_bricks");
+    public static final ResourceLocation MOSSY_STONE_BRICKS_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "block/mossy_stone_bricks");
+    public static final ResourceLocation BRICKS_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "block/bricks");
 
     public static final RegistryObject<Block> TG_ROOTED_DIRT = BLOCKS.register("tg_rooted_dirt", () -> new Block(BlockBehaviour.Properties.copy(Blocks.ROOTED_DIRT).lootFrom(() -> Blocks.ROOTED_DIRT)));
     public static final RegistryObject<Block> TG_TUFF = BLOCKS.register("tg_tuff", () -> new Block(BlockBehaviour.Properties.copy(Blocks.TUFF).lootFrom(() -> Blocks.TUFF)));
@@ -71,6 +76,11 @@ public class TGBlocks {
     public static final RegistryObject<Block> COBBLESTONE_GRAVESTONE = BLOCKS.register("cobblestone_gravestone", () -> new GravestoneBlock(COBBLESTONE_GRAVESTONE_TEXTURE));
     public static final RegistryObject<Block> MOSSY_COBBLESTONE_GRAVESTONE = BLOCKS.register("mossy_cobblestone_gravestone", () -> new GravestoneBlock(MOSSY_COBBLESTONE_GRAVESTONE_TEXTURE));
     public static final RegistryObject<Block> DEEPSLATE_GRAVESTONE = BLOCKS.register("deepslate_gravestone", () -> new GravestoneBlock(DEEPSLATE_GRAVESTONE_TEXTURE));
+    public static final RegistryObject<Block> BLACKSTONE_GRAVESTONE = BLOCKS.register("blackstone_gravestone", () -> new GravestoneBlock(BLACKSTONE_GRAVESTONE_TEXTURE));
+    public static final RegistryObject<Block> CRACKED_BLACKSTONE_GRAVESTONE = BLOCKS.register("cracked_blackstone_gravestone", () -> new GravestoneBlock(CRACKED_BLACKSTONE_GRAVESTONE_TEXTURE));
+    public static final RegistryObject<Block> STONE_BRICKS_GRAVESTONE = BLOCKS.register("stone_bricks_gravestone", () -> new GravestoneBlock(STONE_BRICKS_GRAVESTONE_TEXTURE));
+    public static final RegistryObject<Block> MOSSY_STONE_BRICKS_GRAVESTONE = BLOCKS.register("mossy_stone_bricks_gravestone", () -> new GravestoneBlock(MOSSY_STONE_BRICKS_GRAVESTONE_TEXTURE));
+    public static final RegistryObject<Block> BRICKS_GRAVESTONE = BLOCKS.register("bricks_gravestone", () -> new GravestoneBlock(BRICKS_GRAVESTONE_TEXTURE));
 
     public static final RegistryObject<Block> BLACK_URN = BLOCKS.register("black_urn", () -> new UrnBlock());
     public static final RegistryObject<Block> BROWN_URN = BLOCKS.register("brown_urn", () -> new UrnBlock());

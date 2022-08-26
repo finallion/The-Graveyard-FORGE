@@ -78,6 +78,11 @@
   "block.graveyard.cobblestone_gravestone": "Булыжниковое надгробие",
   "block.graveyard.mossy_cobblestone_gravestone": "Замшелое булыжниковое надгробие",
   "block.graveyard.deepslate_gravestone": "Глубинносланцевое надгробие",
+  "block.graveyard.blackstone_gravestone": "Blackstone Gravestone",
+  "block.graveyard.cracked_blackstone_gravestone": "Cracked Polished Blackstone Gravestone",
+  "block.graveyard.stone_bricks_gravestone": "Stone Bricks Gravestone",
+  "block.graveyard.mossy_stone_bricks_gravestone": "Mossy Stone Bricks Gravestone",
+  "block.graveyard.bricks_gravestone": "Bricks Gravestone",
 
   "item.graveyard.bone_dagger": "Костянной кинжал",
   "item.graveyard.dark_iron_ingot": "Dark Iron Ingot",

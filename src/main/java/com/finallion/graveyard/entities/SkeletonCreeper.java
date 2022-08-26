@@ -1,21 +1,20 @@
 package com.finallion.graveyard.entities;
 
-import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.TGBlocks;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AreaEffectCloud;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 
@@ -23,7 +22,6 @@ import java.util.Collection;
 import java.util.Random;
 
 public class SkeletonCreeper extends Creeper {
-    private static final TargetingConditions CLOSE_PLAYER_PREDICATE;
     private Player closestPlayer;
     private final double explosionRadius = 3.5D;
 
@@ -37,7 +35,7 @@ public class SkeletonCreeper extends Creeper {
     }
 
     public boolean canStart() {
-        this.closestPlayer = this.level.getNearestPlayer(SkeletonCreeper.CLOSE_PLAYER_PREDICATE, this);
+        this.closestPlayer = this.level.getNearestPlayer(this, 8.0D);
         return this.closestPlayer != null;
     }
 
@@ -106,16 +104,10 @@ public class SkeletonCreeper extends Creeper {
         }
 
         super.aiStep();
-
     }
 
     @Override
     public MobType getMobType() {
         return MobType.UNDEAD;
     }
-
-    static {
-        CLOSE_PLAYER_PREDICATE = TargetingConditions.DEFAULT.range(8);
-    }
-
 }

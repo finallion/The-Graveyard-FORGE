@@ -80,6 +80,11 @@
   "block.graveyard.cobblestone_gravestone": "Nagrobek z bruku",
   "block.graveyard.mossy_cobblestone_gravestone": "Nagrobek z zamszonego bruku",
   "block.graveyard.deepslate_gravestone": "Nagrobek z łupku",
+  "block.graveyard.blackstone_gravestone": "Blackstone Gravestone",
+  "block.graveyard.cracked_blackstone_gravestone": "Cracked Polished Blackstone Gravestone",
+  "block.graveyard.stone_bricks_gravestone": "Stone Bricks Gravestone",
+  "block.graveyard.mossy_stone_bricks_gravestone": "Mossy Stone Bricks Gravestone",
+  "block.graveyard.bricks_gravestone": "Bricks Gravestone",
 
   "item.graveyard.bone_dagger": "Kościany sztylet",
   "item.graveyard.dark_iron_ingot": "Sztabka mrocznego żelaza",
@@ -166,7 +171,7 @@
   "advancements.graveyard.kill_horde.description": "Decimate a graveyard horde, spawning at night.",
 
 
-  "itemGroup.group": "Cmentarz",
+  "itemGroup.graveyard_group": "The Graveyard",
   "gravestone.edit": "Edytuj nagrobek"
 
 }

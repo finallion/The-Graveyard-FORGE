@@ -79,6 +79,11 @@
   "block.graveyard.cobblestone_gravestone": "Cobblestone Gravestone",
   "block.graveyard.mossy_cobblestone_gravestone": "Mossy Cobblestone Gravestone",
   "block.graveyard.deepslate_gravestone": "Deepslate Gravestone",
+  "block.graveyard.blackstone_gravestone": "Blackstone Gravestone",
+  "block.graveyard.cracked_blackstone_gravestone": "Cracked Polished Blackstone Gravestone",
+  "block.graveyard.stone_bricks_gravestone": "Stone Bricks Gravestone",
+  "block.graveyard.mossy_stone_bricks_gravestone": "Mossy Stone Bricks Gravestone",
+  "block.graveyard.bricks_gravestone": "Bricks Gravestone",
 
   "item.graveyard.bone_dagger": "Bone Dagger",
   "item.graveyard.dark_iron_ingot": "Dark Iron Ingot",
@@ -127,6 +132,7 @@
   "biome.graveyard.eroded_haunted_forest": "Eroded Haunted Forest",
   "biome.graveyard.ancient_dead_coral_reef": "Ancient Dead Coral Reef",
 
+
   "advancements.graveyard.crypt.title": "Into Darkness",
   "advancements.graveyard.crypt.description": "Find an underground crypt.",
   "advancements.graveyard.haunted_house.title": "Invitation to the Tea Party",
@@ -167,5 +173,4 @@
 
   "itemGroup.graveyard_group": "The Graveyard",
   "gravestone.edit": "Edit Gravestone"
-
 }

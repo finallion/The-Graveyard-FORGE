@@ -1,12 +1,10 @@
 package com.finallion.graveyard.world.structures;
 
-import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.util.BiomeCheckUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
-import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -19,7 +17,6 @@ import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -92,6 +89,11 @@ public abstract class AbstractUndergroundStructure extends StructureFeature<Jigs
 
         Holder<Biome> biome = context.chunkGenerator().m_203495_(QuartPos.fromBlock(blockpos.getX()), QuartPos.fromBlock(blockpos.getY()), QuartPos.fromBlock(blockpos.getZ()));
 
+        System.out.println(config.canGenerate.get() );
+        System.out.println(biome);
+        System.out.println(config.whitelist.get());
+        System.out.println(config.blacklist.get());
+        System.out.println(config.modWhitelist.get());
         if (config.canGenerate.get() &&
                 BiomeCheckUtil.parseBiomes(config.whitelist.get(), config.blacklist.get(), biome) &&
                 BiomeCheckUtil.parseWhitelistedMods(config.modWhitelist.get(), biome)) {
