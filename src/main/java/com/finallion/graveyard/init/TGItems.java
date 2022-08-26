@@ -27,7 +27,6 @@ public class TGItems {
     public static final RegistryObject<Item> CORRUPTED_PILLAGER_SPAWN_EGG = ITEMS.register("corrupted_pillager_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.CORRUPTED_PILLAGER, 7567737, 4924973, (new Item.Properties()).tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> CORRUPTED_VINDICATOR_SPAWN_EGG = ITEMS.register("corrupted_vindicator_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.CORRUPTED_VINDICATOR, 7567737, 2380632, (new Item.Properties()).tab(TheGraveyard.GROUP)));
 
-
     public static final RegistryObject<Item> BONE_DAGGER = ITEMS.register("bone_dagger", () -> new DaggerItem(Tiers.STONE, 4, -1.0F, new Item.Properties().tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> DARK_IRON_INGOT = ITEMS.register("dark_iron_ingot", () -> new Item(new Item.Properties().tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> CORRUPTION = ITEMS.register("corruption", () -> new Item(new Item.Properties().tab(TheGraveyard.GROUP)));
@@ -81,7 +80,6 @@ public class TGItems {
     public static final RegistryObject<Item> STONE_BRICKS_GRAVESTONE = ITEMS.register("stone_bricks_gravestone", () -> new BlockItem(TGBlocks.STONE_BRICKS_GRAVESTONE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> MOSSY_STONE_BRICKS_GRAVESTONE = ITEMS.register("mossy_stone_bricks_gravestone", () -> new BlockItem(TGBlocks.MOSSY_STONE_BRICKS_GRAVESTONE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> BRICKS_GRAVESTONE = ITEMS.register("bricks_gravestone", () -> new BlockItem(TGBlocks.BRICKS_GRAVESTONE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
-
 
 
     public static final RegistryObject<Item> BLACK_URN = ITEMS.register("black_urn", () -> new BlockItem(TGBlocks.BLACK_URN.get(), new Item.Properties().tab(TheGraveyard.GROUP)));

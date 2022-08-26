@@ -39,10 +39,8 @@ public class TheGraveyard {
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        //forgeBus.addListener(EventPriority.NORMAL, ServerEvents::onBiomesLoad);
-        //forgeBus.addListener(EventPriority.NORMAL, ServerEvents::addBiomeFeatures);
-
         modEventBus.addListener(this::setup);
+
         TGBlocks.BLOCKS.register(modEventBus);
         TGItems.ITEMS.register(modEventBus);
         TGEntities.ENTITIES.register(modEventBus);
@@ -56,7 +54,6 @@ public class TheGraveyard {
 
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC);
-
 
         //modEventBus.addListener(DataGenerators::gatherData);
 
