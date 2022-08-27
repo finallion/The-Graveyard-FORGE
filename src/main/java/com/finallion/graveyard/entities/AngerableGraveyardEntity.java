@@ -90,7 +90,6 @@ public abstract class AngerableGraveyardEntity extends HordeGraveyardEntity impl
 
 
     public void setTarget(@Nullable LivingEntity target) {
-        super.setTarget(target);
         AttributeInstance attributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
         if (target == null) {
             this.ageWhenTargetSet = 0;
