@@ -127,4 +127,23 @@ public class TGItems {
     public static final RegistryObject<Item> WARPED_COFFIN = ITEMS.register("warped_coffin", () -> new BlockItem(TGBlocks.WARPED_COFFIN.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> CRIMSON_COFFIN = ITEMS.register("crimson_coffin", () -> new BlockItem(TGBlocks.CRIMSON_COFFIN.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
 
+    public static final RegistryObject<Item> SARCOPHAGUS_LID = ITEMS.register("sarcophagus_lid", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> SARCOPHAGUS_BASE = ITEMS.register("sarcophagus_base", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> DARK_OAK_COFFIN_LID = ITEMS.register("dark_oak_coffin_lid", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> DARK_OAK_COFFIN_BASE = ITEMS.register("dark_oak_coffin_base", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> OAK_COFFIN_LID = ITEMS.register("oak_coffin_lid", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> OAK_COFFIN_BASE = ITEMS.register("oak_coffin_base", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> BIRCH_COFFIN_LID = ITEMS.register("birch_coffin_lid", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> BIRCH_COFFIN_BASE = ITEMS.register("birch_coffin_base", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> JUNGLE_COFFIN_LID = ITEMS.register("jungle_coffin_lid", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> JUNGLE_COFFIN_BASE = ITEMS.register("jungle_coffin_base", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> ACACIA_COFFIN_LID = ITEMS.register("acacia_coffin_lid", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> ACACIA_COFFIN_BASE = ITEMS.register("acacia_coffin_base", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> SPRUCE_COFFIN_LID = ITEMS.register("spruce_coffin_lid", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> SPRUCE_COFFIN_BASE = ITEMS.register("spruce_coffin_base", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> WARPED_COFFIN_LID = ITEMS.register("warped_coffin_lid", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> WARPED_COFFIN_BASE = ITEMS.register("warped_coffin_base", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> CRIMSON_COFFIN_LID = ITEMS.register("crimson_coffin_lid", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> CRIMSON_COFFIN_BASE = ITEMS.register("crimson_coffin_base", () -> new Item(new Item.Properties()));
+
 }

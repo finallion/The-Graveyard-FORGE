@@ -119,22 +119,21 @@ public class TheGraveyardClient {
 
     }
 
+
     @SubscribeEvent
     public void onRegisterModels(final ModelRegistryEvent event) {
-        ForgeModelBakery.addSpecialModel(SarcophagusBlockEntityRenderer.SARCOPHAGUS_FOOT);
-        ForgeModelBakery.addSpecialModel(SarcophagusBlockEntityRenderer.SARCOPHAGUS_HEAD);
-        ForgeModelBakery.addSpecialModel(SarcophagusBlockEntityRenderer.SARCOPHAGUS_FOOT_LID);
-        ForgeModelBakery.addSpecialModel(SarcophagusBlockEntityRenderer.SARCOPHAGUS_HEAD_LID);
+        ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "item/sarcophagus_base"));
+        ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "item/sarcophagus_lid"));
 
         for (Block block : TGBlocks.getCoffins()) {
             String woodType = block.getDescriptionId().split("\\.")[2];
-            ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "block/" + woodType + "_foot"));
-            ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "block/" + woodType + "_foot_lid"));
-            ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "block/" + woodType + "_head"));
-            ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "block/" + woodType + "_head_lid"));
+            ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "item/" + woodType + "_base"));
+            ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "item/" + woodType + "_lid"));
         }
 
     }
+
+
 
 
 

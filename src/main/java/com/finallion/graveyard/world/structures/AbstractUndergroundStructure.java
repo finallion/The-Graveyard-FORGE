@@ -88,12 +88,6 @@ public abstract class AbstractUndergroundStructure extends StructureFeature<Jigs
         BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(0);
 
         Holder<Biome> biome = context.chunkGenerator().m_203495_(QuartPos.fromBlock(blockpos.getX()), QuartPos.fromBlock(blockpos.getY()), QuartPos.fromBlock(blockpos.getZ()));
-
-        System.out.println(config.canGenerate.get() );
-        System.out.println(biome);
-        System.out.println(config.whitelist.get());
-        System.out.println(config.blacklist.get());
-        System.out.println(config.modWhitelist.get());
         if (config.canGenerate.get() &&
                 BiomeCheckUtil.parseBiomes(config.whitelist.get(), config.blacklist.get(), biome) &&
                 BiomeCheckUtil.parseWhitelistedMods(config.modWhitelist.get(), biome)) {
