@@ -54,7 +54,6 @@ public class GravestoneBlockEntityRenderer implements BlockEntityRenderer<Graves
         BlockState blockState = signBlockEntity.getBlockState();
         matrixStack.pushPose();
 
-
         // text render location in world
         // offset on block
         matrixStack.translate(0.5D, 0.25D, 0.5D);
@@ -186,7 +185,6 @@ public class GravestoneBlockEntityRenderer implements BlockEntityRenderer<Graves
         LAYERS.put(TGBlocks.STONE_BRICKS_GRAVESTONE.get(), layer7);
         LAYERS.put(TGBlocks.MOSSY_STONE_BRICKS_GRAVESTONE.get(), layer8);
         LAYERS.put(TGBlocks.BRICKS_GRAVESTONE.get(), layer9);
-
     }
 
 

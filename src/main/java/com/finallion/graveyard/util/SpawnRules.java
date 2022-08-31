@@ -8,7 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
@@ -103,13 +103,15 @@ public class SpawnRules {
             return false;
         }
 
+
         for (String biomeInList : biomeWhitelist) {
-            if (biomeInList.startsWith("#minecraft:has_structure/")) { // check if biome is in tag
+            if (biomeInList.startsWith("#")) { // check if biome is in tag
                 String[] parts = biomeInList.substring(1).split(":");
                 TagKey<Biome> tag = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(parts[0], parts[1]));
-                Registry<Biome> registry = RegistryAccess.builtinCopy().registryOrThrow(Registry.BIOME_REGISTRY);
+                // RegistryAccess causes massive delay on game startup. Since this loads only once and not on runtime, use BuiltinRegistries.
+                //Registry<Biome> registry = RegistryAccess.builtinCopy().registryOrThrow(Registry.BIOME_REGISTRY);
 
-                if (registry.getTag(tag).orElseThrow().contains(biome)) {
+                if (BuiltinRegistries.BIOME.getTag(tag).orElseThrow().contains(biome)) {
                     return true;
                 }
 
@@ -117,6 +119,7 @@ public class SpawnRules {
                 return true;
             }
         }
+
 
         return false;
     }

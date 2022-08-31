@@ -1,6 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
+	"ambientocclusion": false,
 	"textures": {
 		"0": "graveyard:block/pedestal",
 		"particle": "block/cobbled_deepslate"
