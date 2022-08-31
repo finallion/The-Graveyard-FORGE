@@ -1,6 +1,5 @@
 package com.finallion.graveyard.init;
 
-import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.structureKeys.TGStructureTypeKeys;
 import com.finallion.graveyard.util.TGTags;
@@ -20,6 +19,7 @@ import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +32,8 @@ public class TGConfiguredStructureFeatures {
                     ConstantHeight.of(VerticalAnchor.absolute(0)), true, Heightmap.Types.WORLD_SURFACE_WG,
                     getTerrainCheck("haunted_house"),
                     getTerrainDifference("haunted_house"),
-                    TGJigsawStructure.getBiomeWhiteList("haunted_house"),
-                    TGJigsawStructure.getModIdWhiteList("haunted_house"),
+                    getBiomeWhiteList("haunted_house"),
+                    getBiomeBlackList("haunted_house"),
                     "haunted_house"
             )
     );
@@ -44,8 +44,8 @@ public class TGConfiguredStructureFeatures {
                     ConstantHeight.of(VerticalAnchor.absolute(0)), true, Heightmap.Types.WORLD_SURFACE_WG,
                     getTerrainCheck("large_graveyard"),
                     getTerrainDifference("large_graveyard"),
-                    TGJigsawStructure.getBiomeWhiteList("large_graveyard"),
-                    TGJigsawStructure.getModIdWhiteList("large_graveyard"),
+                    getBiomeWhiteList("large_graveyard"),
+                    getBiomeBlackList("large_graveyard"),
                     "large_graveyard"
             )
     );
@@ -56,8 +56,8 @@ public class TGConfiguredStructureFeatures {
                     ConstantHeight.of(VerticalAnchor.absolute(0)), true, Heightmap.Types.WORLD_SURFACE_WG,
                     getTerrainCheck("altar"),
                     getTerrainDifference("altar"),
-                    TGJigsawStructure.getBiomeWhiteList("altar"),
-                    TGJigsawStructure.getModIdWhiteList("altar"),
+                    getBiomeWhiteList("altar"),
+                    getBiomeBlackList("altar"),
                     "altar"
             )
     );
@@ -68,8 +68,8 @@ public class TGConfiguredStructureFeatures {
                     ConstantHeight.of(VerticalAnchor.absolute(-10)), false,
                     getTerrainCheck("crypt"),
                     getTerrainDifference("crypt"),
-                    TGJigsawStructure.getBiomeWhiteList("crypt"),
-                    TGJigsawStructure.getModIdWhiteList("crypt"),
+                    getBiomeWhiteList("crypt"),
+                    getBiomeBlackList("crypt"),
                     "crypt"
             )
     );
@@ -80,8 +80,8 @@ public class TGConfiguredStructureFeatures {
                     ConstantHeight.of(VerticalAnchor.absolute(0)), false, Heightmap.Types.WORLD_SURFACE_WG,
                     getTerrainCheck("giant_mushroom"),
                     getTerrainDifference("giant_mushroom"),
-                    TGJigsawStructure.getBiomeWhiteList("giant_mushroom"),
-                    TGJigsawStructure.getModIdWhiteList("giant_mushroom"),
+                    getBiomeWhiteList("giant_mushroom"),
+                    getBiomeBlackList("giant_mushroom"),
                     "giant_mushroom"
             )
     );
@@ -92,8 +92,8 @@ public class TGConfiguredStructureFeatures {
                     ConstantHeight.of(VerticalAnchor.absolute(0)), true, Heightmap.Types.WORLD_SURFACE_WG,
                     getTerrainCheck("medium_graveyard"),
                     getTerrainDifference("medium_graveyard"),
-                    TGJigsawStructure.getBiomeWhiteList("medium_graveyard"),
-                    TGJigsawStructure.getModIdWhiteList("medium_graveyard"),
+                    getBiomeWhiteList("medium_graveyard"),
+                    getBiomeBlackList("medium_graveyard"),
                     "medium_graveyard"
             )
     );
@@ -104,8 +104,8 @@ public class TGConfiguredStructureFeatures {
                     ConstantHeight.of(VerticalAnchor.absolute(0)), true, Heightmap.Types.WORLD_SURFACE_WG,
                     getTerrainCheck("small_graveyard"),
                     getTerrainDifference("small_graveyard"),
-                    TGJigsawStructure.getBiomeWhiteList("small_graveyard"),
-                    TGJigsawStructure.getModIdWhiteList("small_graveyard"),
+                    getBiomeWhiteList("small_graveyard"),
+                    getBiomeBlackList("small_graveyard"),
                     "small_graveyard"
             )
     );
@@ -116,8 +116,8 @@ public class TGConfiguredStructureFeatures {
                     ConstantHeight.of(VerticalAnchor.absolute(0)), true, Heightmap.Types.WORLD_SURFACE_WG,
                     getTerrainCheck("small_desert_graveyard"),
                     getTerrainDifference("small_desert_graveyard"),
-                    TGJigsawStructure.getBiomeWhiteList("small_desert_graveyard"),
-                    TGJigsawStructure.getModIdWhiteList("small_desert_graveyard"),
+                    getBiomeWhiteList("small_desert_graveyard"),
+                    getBiomeBlackList("small_desert_graveyard"),
                     "small_desert_graveyard"
             )
     );
@@ -128,8 +128,8 @@ public class TGConfiguredStructureFeatures {
                     ConstantHeight.of(VerticalAnchor.absolute(0)), true, Heightmap.Types.WORLD_SURFACE_WG,
                     getTerrainCheck("small_grave"),
                     getTerrainDifference("small_grave"),
-                    TGJigsawStructure.getBiomeWhiteList("small_grave"),
-                    TGJigsawStructure.getModIdWhiteList("small_grave"),
+                    getBiomeWhiteList("small_grave"),
+                    getBiomeBlackList("small_grave"),
                     "small_grave"
             )
     );
@@ -140,8 +140,8 @@ public class TGConfiguredStructureFeatures {
                     ConstantHeight.of(VerticalAnchor.absolute(0)), true, Heightmap.Types.WORLD_SURFACE_WG,
                     getTerrainCheck("small_savanna_grave"),
                     getTerrainDifference("small_savanna_grave"),
-                    TGJigsawStructure.getBiomeWhiteList("small_savanna_grave"),
-                    TGJigsawStructure.getModIdWhiteList("small_savanna_grave"),
+                    getBiomeWhiteList("small_savanna_grave"),
+                    getBiomeBlackList("small_savanna_grave"),
                     "small_savanna_grave"
             )
     );
@@ -152,8 +152,8 @@ public class TGConfiguredStructureFeatures {
                     ConstantHeight.of(VerticalAnchor.absolute(0)), true, Heightmap.Types.WORLD_SURFACE_WG,
                     getTerrainCheck("small_mountain_grave"),
                     getTerrainDifference("small_mountain_grave"),
-                    TGJigsawStructure.getBiomeWhiteList("small_mountain_grave"),
-                    TGJigsawStructure.getModIdWhiteList("small_mountain_grave"),
+                    getBiomeWhiteList("small_mountain_grave"),
+                    getBiomeBlackList("small_mountain_grave"),
                     "small_mountain_grave"
             )
     );
@@ -165,8 +165,8 @@ public class TGConfiguredStructureFeatures {
                     ConstantHeight.of(VerticalAnchor.absolute(0)), true, Heightmap.Types.WORLD_SURFACE_WG,
                     getTerrainCheck("small_desert_grave"),
                     getTerrainDifference("small_desert_grave"),
-                    TGJigsawStructure.getBiomeWhiteList("small_desert_grave"),
-                    TGJigsawStructure.getModIdWhiteList("small_desert_grave"),
+                    getBiomeWhiteList("small_desert_grave"),
+                    getBiomeBlackList("small_desert_grave"),
                     "small_desert_grave"
             )
     );
@@ -177,8 +177,8 @@ public class TGConfiguredStructureFeatures {
                     ConstantHeight.of(VerticalAnchor.absolute(0)), true, Heightmap.Types.WORLD_SURFACE_WG,
                     getTerrainCheck("memorial_tree"),
                     getTerrainDifference("memorial_tree"),
-                    TGJigsawStructure.getBiomeWhiteList("memorial_tree"),
-                    TGJigsawStructure.getModIdWhiteList("memorial_tree"),
+                    getBiomeWhiteList("memorial_tree"),
+                    getBiomeBlackList("memorial_tree"),
                     "memorial_tree"
             )
     );
@@ -189,8 +189,8 @@ public class TGConfiguredStructureFeatures {
                     ConstantHeight.of(VerticalAnchor.absolute(0)), true, Heightmap.Types.WORLD_SURFACE_WG,
                     getTerrainCheck("mushroom_grave"),
                     getTerrainDifference("mushroom_grave"),
-                    TGJigsawStructure.getBiomeWhiteList("mushroom_grave"),
-                    TGJigsawStructure.getModIdWhiteList("mushroom_grave"),
+                    getBiomeWhiteList("mushroom_grave"),
+                    getBiomeBlackList("mushroom_grave"),
                     "mushroom_grave"
             )
     );
@@ -221,7 +221,6 @@ public class TGConfiguredStructureFeatures {
         return Map.of(MobCategory.MONSTER, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.PIECE, TGJigsawStructure.EMPTY));
     }
 
-    // TODO move to StructureConfigEntry, this is just a very dirty, very quick way to make 1.19 work
     private static boolean canGenerate(String name) {
         return switch (name) {
             case "haunted_house" -> GraveyardConfig.COMMON.canSpawnGraveyardMobsHauntedHouse.get();
@@ -282,7 +281,46 @@ public class TGConfiguredStructureFeatures {
         };
     }
 
+    public static List<String> getBiomeWhiteList(String name) {
+        return switch (name) {
+            case "haunted_house" -> (List<String>) GraveyardConfig.COMMON.whitelistHauntedHouse.get();
+            case "large_graveyard" -> (List<String>) GraveyardConfig.COMMON.whitelistLargeGraveyard.get();
+            case "medium_graveyard" -> (List<String>) GraveyardConfig.COMMON.whitelistMediumGraveyard.get();
+            case "small_graveyard" -> (List<String>) GraveyardConfig.COMMON.whitelistSmallGraveyard.get();
+            case "small_desert_graveyard" -> (List<String>) GraveyardConfig.COMMON.whitelistSmallDesertGraveyard.get();
+            case "small_grave" -> (List<String>) GraveyardConfig.COMMON.whitelistSmallGrave.get();
+            case "small_mountain_grave" -> (List<String>) GraveyardConfig.COMMON.whitelistSmallMountainGrave.get();
+            case "small_savanna_grave" -> (List<String>) GraveyardConfig.COMMON.whitelistSmallSavannaGrave.get();
+            case "small_desert_grave" -> (List<String>) GraveyardConfig.COMMON.whitelistSmallDesertGrave.get();
+            case "mushroom_grave" -> (List<String>) GraveyardConfig.COMMON.whitelistMushroomGrave.get();
+            case "memorial_tree" -> (List<String>) GraveyardConfig.COMMON.whitelistMemorialTree.get();
+            case "crypt" -> (List<String>) GraveyardConfig.COMMON.whitelistCrypt.get();
+            case "altar" -> (List<String>) GraveyardConfig.COMMON.whitelistAltar.get();
+            case "giant_mushroom" -> (List<String>) GraveyardConfig.COMMON.whitelistGiantMushroom.get();
+            default -> Collections.EMPTY_LIST;
+        };
 
+    }
 
+    public static List<String> getBiomeBlackList(String name) {
+        return switch (name) {
+            case "haunted_house" -> (List<String>) GraveyardConfig.COMMON.blacklistHauntedHouse.get();
+            case "large_graveyard" -> (List<String>) GraveyardConfig.COMMON.blacklistLargeGraveyard.get();
+            case "medium_graveyard" -> (List<String>) GraveyardConfig.COMMON.blacklistMediumGraveyard.get();
+            case "small_graveyard" -> (List<String>) GraveyardConfig.COMMON.blacklistSmallGraveyard.get();
+            case "small_desert_graveyard" -> (List<String>) GraveyardConfig.COMMON.blacklistSmallDesertGraveyard.get();
+            case "small_grave" -> (List<String>) GraveyardConfig.COMMON.blacklistSmallGrave.get();
+            case "small_mountain_grave" -> (List<String>) GraveyardConfig.COMMON.blacklistSmallMountainGrave.get();
+            case "small_savanna_grave" -> (List<String>) GraveyardConfig.COMMON.blacklistSmallSavannaGrave.get();
+            case "small_desert_grave" -> (List<String>) GraveyardConfig.COMMON.blacklistSmallDesertGrave.get();
+            case "mushroom_grave" -> (List<String>) GraveyardConfig.COMMON.blacklistMushroomGrave.get();
+            case "memorial_tree" -> (List<String>) GraveyardConfig.COMMON.blacklistMemorialTree.get();
+            case "crypt" -> (List<String>) GraveyardConfig.COMMON.blacklistCrypt.get();
+            case "altar" -> (List<String>) GraveyardConfig.COMMON.blacklistAltar.get();
+            case "giant_mushroom" -> (List<String>) GraveyardConfig.COMMON.blacklistGiantMushroom.get();
+            default -> Collections.EMPTY_LIST;
+        };
+
+    }
 
 }

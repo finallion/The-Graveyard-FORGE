@@ -99,17 +99,13 @@ public class TheGraveyardClient {
 
     @SubscribeEvent
     public void registerEntityModels(ModelEvent.RegisterAdditional event) {
-        event.register(SarcophagusBlockEntityRenderer.SARCOPHAGUS_FOOT);
-        event.register(SarcophagusBlockEntityRenderer.SARCOPHAGUS_HEAD);
-        event.register(SarcophagusBlockEntityRenderer.SARCOPHAGUS_FOOT_LID);
-        event.register(SarcophagusBlockEntityRenderer.SARCOPHAGUS_HEAD_LID);
+        event.register(new ResourceLocation(TheGraveyard.MOD_ID, "item/sarcophagus_base"));
+        event.register(new ResourceLocation(TheGraveyard.MOD_ID, "item/sarcophagus_lid"));
 
         for (Block block : TGBlocks.getCoffins()) {
             String woodType = block.getDescriptionId().split("\\.")[2];
-            event.register(new ResourceLocation(TheGraveyard.MOD_ID, "block/" + woodType + "_foot"));
-            event.register(new ResourceLocation(TheGraveyard.MOD_ID, "block/" + woodType + "_foot_lid"));
-            event.register(new ResourceLocation(TheGraveyard.MOD_ID, "block/" + woodType + "_head"));
-            event.register(new ResourceLocation(TheGraveyard.MOD_ID, "block/" + woodType + "_head_lid"));
+            event.register(new ResourceLocation(TheGraveyard.MOD_ID, "item/" + woodType + "_base"));
+            event.register(new ResourceLocation(TheGraveyard.MOD_ID, "item/" + woodType + "_lid"));
         }
 
     }

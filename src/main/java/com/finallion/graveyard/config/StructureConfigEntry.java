@@ -2,8 +2,6 @@ package com.finallion.graveyard.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class StructureConfigEntry {
@@ -18,8 +16,8 @@ public class StructureConfigEntry {
     public ForgeConfigSpec.LongValue salt;
     private final List<String> default_biomeWhitelist;
     public ForgeConfigSpec.ConfigValue<List<String>> biomeWhitelist;
-    private final List<String> default_modIdWhitelist;
-    public ForgeConfigSpec.ConfigValue<List<String>> modIdWhitelist;
+    private final List<String> default_biomeBlacklist;
+    public ForgeConfigSpec.ConfigValue<List<String>> biomeBlacklist;
     private final int default_terrainCheckRadius;
     public ForgeConfigSpec.IntValue terrainCheckRadius;
     private final int default_maxTerrainHeightDifference;
@@ -27,17 +25,17 @@ public class StructureConfigEntry {
     private final boolean default_canSpawnGraveyardMobs;
     public ForgeConfigSpec.BooleanValue canSpawnGraveyardMobs;
 
-    public StructureConfigEntry(int spacing, int separation, int salt, List<String> biomeWhitelist, List<String> modIdWhitelist, int terrainCheckRadius, int maxTerrainHeightDifference, boolean canSpawnGraveyardMobs) {
-        this(true, spacing, separation, salt, biomeWhitelist, modIdWhitelist, terrainCheckRadius, maxTerrainHeightDifference, canSpawnGraveyardMobs);
+    public StructureConfigEntry(int spacing, int separation, int salt, List<String> biomeWhitelist, List<String> biomeBlacklist, int terrainCheckRadius, int maxTerrainHeightDifference, boolean canSpawnGraveyardMobs) {
+        this(true, spacing, separation, salt, biomeWhitelist, biomeBlacklist, terrainCheckRadius, maxTerrainHeightDifference, canSpawnGraveyardMobs);
     }
 
-    private StructureConfigEntry(boolean canGenerate, int spacing, int separation, int salt, List<String> biomeWhitelist, List<String> modIdWhitelist, int terrainCheckRadius, int maxTerrainHeightDifference, boolean canSpawnGraveyardMobs) {
+    private StructureConfigEntry(boolean canGenerate, int spacing, int separation, int salt, List<String> biomeWhitelist, List<String> biomeBlacklist, int terrainCheckRadius, int maxTerrainHeightDifference, boolean canSpawnGraveyardMobs) {
         this.default_canGenerate = canGenerate;
         this.default_spacing = spacing;
         this.default_separation = separation;
         this.default_salt = salt;
         this.default_biomeWhitelist = biomeWhitelist;
-        this.default_modIdWhitelist = modIdWhitelist;
+        this.default_biomeBlacklist = biomeBlacklist;
         this.default_terrainCheckRadius = terrainCheckRadius;
         this.default_maxTerrainHeightDifference = maxTerrainHeightDifference;
         this.default_canSpawnGraveyardMobs = canSpawnGraveyardMobs;

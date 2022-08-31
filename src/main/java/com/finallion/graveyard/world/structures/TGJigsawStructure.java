@@ -1,19 +1,17 @@
 package com.finallion.graveyard.world.structures;
 
-import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.TGEntities;
-
 import com.finallion.graveyard.init.TGStructureType;
-import com.finallion.graveyard.util.BiomeSelectionUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ChunkPos;
@@ -30,10 +28,10 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
-import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class TGJigsawStructure extends Structure {
     public static final int MAX_SIZE = 128;
@@ -66,7 +64,7 @@ public class TGJigsawStructure extends Structure {
                     Codec.INT.fieldOf("terrain_check_size").forGetter(structure -> structure.terrainCheckSize),
                     Codec.INT.fieldOf("max_height_difference").forGetter(structure -> structure.maxHeightDifference),
                     Codec.STRING.listOf().fieldOf("whitelist").orElse(new ArrayList<>()).forGetter(config -> config.whitelist),
-                    Codec.STRING.listOf().fieldOf("mod_whitelist").orElse(new ArrayList<>()).forGetter(config -> config.modWhitelist),
+                    Codec.STRING.listOf().fieldOf("mod_whitelist").orElse(new ArrayList<>()).forGetter(config -> config.blacklist),
                     Codec.STRING.fieldOf("structure_name").forGetter(config -> config.structureName))
                     .apply(instance, TGJigsawStructure::new));
 
@@ -81,11 +79,11 @@ public class TGJigsawStructure extends Structure {
     public final int terrainCheckSize;
     public final int maxHeightDifference;
     public final List<String> whitelist;
-    public final List<String> modWhitelist;
+    public final List<String> blacklist;
     public final String structureName;
     protected final Structure.StructureSettings config;
 
-    public TGJigsawStructure(Structure.StructureSettings config, Holder<StructureTemplatePool> startPool, Optional<ResourceLocation> startJigsawName, int size, HeightProvider startHeight, Boolean useExpansionHack, Optional<Heightmap.Types> projectStartToHeightmap, int maxDistanceFromCenter, int terrainCheckSize, int maxHeightDifference, List<String> whitelist, List<String> modWhitelist, String structureName) {
+    public TGJigsawStructure(Structure.StructureSettings config, Holder<StructureTemplatePool> startPool, Optional<ResourceLocation> startJigsawName, int size, HeightProvider startHeight, Boolean useExpansionHack, Optional<Heightmap.Types> projectStartToHeightmap, int maxDistanceFromCenter, int terrainCheckSize, int maxHeightDifference, List<String> whitelist, List<String> blacklist, String structureName) {
         super(config);
         this.config = config;
         this.startPool = startPool;
@@ -98,16 +96,16 @@ public class TGJigsawStructure extends Structure {
         this.maxHeightDifference = maxHeightDifference;
         this.terrainCheckSize = terrainCheckSize;
         this.whitelist = whitelist;
-        this.modWhitelist = modWhitelist;
+        this.blacklist = blacklist;
         this.structureName = structureName;
     }
 
-    public TGJigsawStructure(Structure.StructureSettings config, Holder<StructureTemplatePool> startPool, int size, HeightProvider startHeight, boolean useExpansionHack, Heightmap.Types projectStartToHeightmap, int terrainCheckSize, int maxHeightDifference, List<String> whitelist, List<String> modWhitelist, String structureName) {
-        this(config, startPool, Optional.empty(), size, startHeight, useExpansionHack, Optional.of(projectStartToHeightmap), 80, terrainCheckSize, maxHeightDifference, whitelist, modWhitelist, structureName);
+    public TGJigsawStructure(Structure.StructureSettings config, Holder<StructureTemplatePool> startPool, int size, HeightProvider startHeight, boolean useExpansionHack, Heightmap.Types projectStartToHeightmap, int terrainCheckSize, int maxHeightDifference, List<String> whitelist, List<String> blacklist, String structureName) {
+        this(config, startPool, Optional.empty(), size, startHeight, useExpansionHack, Optional.of(projectStartToHeightmap), 80, terrainCheckSize, maxHeightDifference, whitelist, blacklist, structureName);
     }
 
-    public TGJigsawStructure(Structure.StructureSettings config, Holder<StructureTemplatePool> startPool, int size, HeightProvider startHeight, boolean useExpansionHack, int terrainCheckSize, int maxHeightDifference, List<String> whitelist, List<String> modWhitelist, String structureName) {
-        this(config, startPool, Optional.empty(), size, startHeight, useExpansionHack, Optional.empty(), 80, terrainCheckSize, maxHeightDifference, whitelist, modWhitelist, structureName);
+    public TGJigsawStructure(Structure.StructureSettings config, Holder<StructureTemplatePool> startPool, int size, HeightProvider startHeight, boolean useExpansionHack, int terrainCheckSize, int maxHeightDifference, List<String> whitelist, List<String> blacklist, String structureName) {
+        this(config, startPool, Optional.empty(), size, startHeight, useExpansionHack, Optional.empty(), 80, terrainCheckSize, maxHeightDifference, whitelist, blacklist, structureName);
     }
 
 
@@ -132,11 +130,11 @@ public class TGJigsawStructure extends Structure {
             int y = random.nextInt(maxHeight - minHeight) + minHeight;
             blockpos = new BlockPos(x, y, z);
 
-            if (!TGJigsawStructure.canGenerateUnderground(context, structureName)) {
+            if (!TGJigsawStructure.canGenerateUnderground(context, whitelist, blacklist)) {
                 return Optional.empty();
             }
         } else {
-            if (!TGJigsawStructure.canGenerate(context, terrainCheckSize, structureName, blockpos, maxHeightDifference)) {
+            if (!TGJigsawStructure.canGenerate(context, terrainCheckSize, blockpos, maxHeightDifference, whitelist, blacklist)) {
                 return Optional.empty();
             }
         }
@@ -152,16 +150,16 @@ public class TGJigsawStructure extends Structure {
                 this.maxDistanceFromCenter);
     }
 
-    private static boolean canGenerateUnderground(Structure.GenerationContext context, String name) {
-        if (!isCorrectBiome(context, name)) {
+    private static boolean canGenerateUnderground(Structure.GenerationContext context, List<String> whitelist, List<String> blacklist) {
+        if (!isCorrectBiome(context, whitelist, blacklist)) {
             return false;
         }
 
         return true;
     }
 
-    private static boolean canGenerate(Structure.GenerationContext context, int size, String name, BlockPos centerOfChunk, int maxHeightDifference) {
-        if (!isCorrectBiome(context, name)) {
+    private static boolean canGenerate(Structure.GenerationContext context, int size, BlockPos centerOfChunk, int maxHeightDifference, List<String> whitelist, List<String> blacklist) {
+        if (!isCorrectBiome(context, whitelist, blacklist)) {
             return false;
         }
 
@@ -176,7 +174,7 @@ public class TGJigsawStructure extends Structure {
         return true;
     }
 
-    protected static boolean isCorrectBiome(Structure.GenerationContext context, String name) {
+    protected static boolean isCorrectBiome(Structure.GenerationContext context, List<String> whitelist, List<String> blacklist) {
         BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(0);
 
         Holder<Biome> biome = context.chunkGenerator().getBiomeSource().getNoiseBiome(
@@ -184,10 +182,27 @@ public class TGJigsawStructure extends Structure {
                 QuartPos.fromBlock(blockpos.getY()),
                 QuartPos.fromBlock(blockpos.getZ()), context.randomState().sampler());
 
-        if (BiomeSelectionUtil.parseBiomes(getBiomeWhiteList(name), getModIdWhiteList(name), biome)) {
-            return true;
+        String biomeName = biome.unwrapKey().orElseThrow().location().toString();
+
+        if (blacklist.contains(biomeName)) {
+            return false;
         }
 
+        for (String biomeInList : whitelist) {
+            if (biomeInList.startsWith("#")) { // check if biome is in tag
+                String[] parts = biomeInList.substring(1).split(":");
+                TagKey<Biome> tag = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(parts[0], parts[1]));
+                Registry<Biome> registry = context.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
+
+                if (registry.isKnownTagName(tag)) {
+                    if (registry.getTag(tag).orElseThrow().contains(biome)) {
+                        return true;
+                    }
+                }
+            } else if (whitelist.contains(biomeName)) { // check if biome is on whitelist
+                return true;
+            }
+        }
         return false;
     }
 
@@ -238,7 +253,6 @@ public class TGJigsawStructure extends Structure {
         return TGStructureType.TG_JIGSAW;
     }
 
-    // TODO move to StructureConfigEntry, this is just a very dirty, very quick way to make 1.19 work
     private boolean canGenerate(String name) {
         return switch (name) {
             case "haunted_house" -> GraveyardConfig.COMMON.canGenerateHauntedHouse.get();
@@ -258,49 +272,4 @@ public class TGJigsawStructure extends Structure {
             default -> false;
         };
     }
-
-    public static List<String> getBiomeWhiteList(String name) {
-        return switch (name) {
-            case "haunted_house" -> (List<String>) GraveyardConfig.COMMON.whitelistHauntedHouse.get();
-            case "large_graveyard" -> (List<String>) GraveyardConfig.COMMON.whitelistLargeGraveyard.get();
-            case "medium_graveyard" -> (List<String>) GraveyardConfig.COMMON.whitelistMediumGraveyard.get();
-            case "small_graveyard" -> (List<String>) GraveyardConfig.COMMON.whitelistSmallGraveyard.get();
-            case "small_desert_graveyard" -> (List<String>) GraveyardConfig.COMMON.whitelistSmallDesertGraveyard.get();
-            case "small_grave" -> (List<String>) GraveyardConfig.COMMON.whitelistSmallGrave.get();
-            case "small_mountain_grave" -> (List<String>) GraveyardConfig.COMMON.whitelistSmallMountainGrave.get();
-            case "small_savanna_grave" -> (List<String>) GraveyardConfig.COMMON.whitelistSmallSavannaGrave.get();
-            case "small_desert_grave" -> (List<String>) GraveyardConfig.COMMON.whitelistSmallDesertGrave.get();
-            case "mushroom_grave" -> (List<String>) GraveyardConfig.COMMON.whitelistMushroomGrave.get();
-            case "memorial_tree" -> (List<String>) GraveyardConfig.COMMON.whitelistMemorialTree.get();
-            case "crypt" -> (List<String>) GraveyardConfig.COMMON.whitelistCrypt.get();
-            case "altar" -> (List<String>) GraveyardConfig.COMMON.whitelistAltar.get();
-            case "giant_mushroom" -> (List<String>) GraveyardConfig.COMMON.whitelistGiantMushroom.get();
-            default -> Collections.EMPTY_LIST;
-        };
-
-    }
-
-    public static List<String> getModIdWhiteList(String name) {
-        return switch (name) {
-            case "haunted_house" -> (List<String>) GraveyardConfig.COMMON.modWhitelistHauntedHouse.get();
-            case "large_graveyard" -> (List<String>) GraveyardConfig.COMMON.modWhitelistLargeGraveyard.get();
-            case "medium_graveyard" -> (List<String>) GraveyardConfig.COMMON.modWhitelistMediumGraveyard.get();
-            case "small_graveyard" -> (List<String>) GraveyardConfig.COMMON.modWhitelistSmallGraveyard.get();
-            case "small_desert_graveyard" -> (List<String>) GraveyardConfig.COMMON.modWhitelistSmallDesertGraveyard.get();
-            case "small_grave" -> (List<String>) GraveyardConfig.COMMON.modWhitelistSmallGrave.get();
-            case "small_mountain_grave" -> (List<String>) GraveyardConfig.COMMON.modWhitelistSmallMountainGrave.get();
-            case "small_savanna_grave" -> (List<String>) GraveyardConfig.COMMON.modWhitelistSmallSavannaGrave.get();
-            case "small_desert_grave" -> (List<String>) GraveyardConfig.COMMON.modWhitelistSmallDesertGrave.get();
-            case "mushroom_grave" -> (List<String>) GraveyardConfig.COMMON.modWhitelistMushroomGrave.get();
-            case "memorial_tree" -> (List<String>) GraveyardConfig.COMMON.modWhitelistMemorialTree.get();
-            case "crypt" -> (List<String>) GraveyardConfig.COMMON.modWhitelistCrypt.get();
-            case "altar" -> (List<String>) GraveyardConfig.COMMON.modWhitelistAltar.get();
-            case "giant_mushroom" -> (List<String>) GraveyardConfig.COMMON.modWhitelistGiantMushroom.get();
-            default -> Collections.EMPTY_LIST;
-        };
-
-    }
-
-
-
 }

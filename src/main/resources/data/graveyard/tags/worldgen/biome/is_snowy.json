@@ -1,0 +1,101 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:snowy_taiga",
+    "minecraft:grove",
+    "minecraft:snowy_slopes",
+    "minecraft:snowy_plains",
+    {
+      "id": "biomesoplenty:snowy_maple_woods",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:snowy_coniferous_forest",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:muskeg",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:rainbow_hills",
+      "required": false
+    },
+    {
+      "id": "byg:frosted_taiga",
+      "required": false
+    },
+    {
+      "id": "byg:frosted_coniferous_forest",
+      "required": false
+    },
+    {
+      "id": "projectvibrantjourneys:snowy_boreal_forest",
+      "required": false
+    },
+    {
+      "id": "projectvibrantjourneys:snowy_redwoods",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_fen",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_thermal_taiga",
+      "required": false
+    },
+    {
+      "id": "wythers:deep_snowy_taiga",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_peaks",
+      "required": false
+    },
+    {
+      "id": "wythers:icy_crags",
+      "required": false
+    },
+    {
+      "id": "wythers:icy_volcano",
+      "required": false
+    },
+    {
+      "id": "terralith:alpine_grove",
+      "required": false
+    },
+    {
+      "id": "terralith:cold_shrubland",
+      "required": false
+    },
+    {
+      "id": "terralith:snowy_badlands",
+      "required": false
+    },
+    {
+      "id": "terralith:snowy_shield",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:snowy_fir_clearing",
+      "required": false
+    },
+    {
+      "id": "#c:snowy_plains",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_bog",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_tundra",
+      "required": false
+    },
+    {
+      "id": "wythers:ice_cap",
+      "required": false
+    }
+  ]
+}

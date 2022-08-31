@@ -4,7 +4,6 @@ import com.finallion.graveyard.blockentities.SarcophagusBlockEntity;
 import com.finallion.graveyard.blockentities.enums.SarcophagusPart;
 import com.finallion.graveyard.entities.WraithEntity;
 import com.finallion.graveyard.init.TGAdvancements;
-import com.finallion.graveyard.init.TGBlocks;
 import com.finallion.graveyard.init.TGEntities;
 import com.finallion.graveyard.init.TGTileEntities;
 import it.unimi.dsi.fastutil.floats.Float2FloatFunction;
@@ -18,25 +17,29 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.*;
-import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.LidBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.Random;
 import java.util.function.BiPredicate;
-import java.util.function.Supplier;
 
 /*
 THINGS TO CHECK IF THE MODEL CASTS UNWANTED SHADOWS:
@@ -62,12 +65,15 @@ public class SarcophagusBlock extends AbstractCoffinBlock<SarcophagusBlockEntity
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     public static final BooleanProperty PLAYER_PLACED = BlockStateProperties.LOCKED;
     public static final BooleanProperty IS_COFFIN = BlockStateProperties.LIT;
-
+    private final String lidRL;
+    private final String baseRL;
 
     // open state missing
-    public SarcophagusBlock(Properties properties, boolean isCoffin) {
+    public SarcophagusBlock(Properties properties, boolean isCoffin, String lid, String base) {
         super(properties, TGTileEntities.SARCOPHAGUS_BLOCK_ENTITY::get);
         this.registerDefaultState(this.stateDefinition.any().setValue(PART, SarcophagusPart.FOOT).setValue(WATERLOGGED, false).setValue(PLAYER_PLACED, false).setValue(IS_COFFIN, isCoffin));
+        this.baseRL = base;
+        this.lidRL = lid;
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_51562_) {
@@ -86,9 +92,6 @@ public class SarcophagusBlock extends AbstractCoffinBlock<SarcophagusBlockEntity
             return super.updateShape(p_49525_, p_49526_, p_49527_, p_49528_, p_49529_, p_49530_);
         }
     }
-
-
-
 
     private static Direction getNeighbourDirection(SarcophagusPart p_49534_, Direction p_49535_) {
         return p_49534_ == SarcophagusPart.FOOT ? p_49535_ : p_49535_.getOpposite();
@@ -256,6 +259,14 @@ public class SarcophagusBlock extends AbstractCoffinBlock<SarcophagusBlockEntity
     public static Direction getConnectedDirection(BlockState p_51585_) {
         Direction direction = p_51585_.getValue(FACING);
         return p_51585_.getValue(PART) == SarcophagusPart.HEAD ? direction.getOpposite() : direction;
+    }
+
+    public String getLid() {
+        return lidRL;
+    }
+
+    public String getBase() {
+        return baseRL;
     }
 
     /*

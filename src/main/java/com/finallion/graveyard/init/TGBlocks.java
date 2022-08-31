@@ -116,16 +116,17 @@ public class TGBlocks {
     public static final RegistryObject<Block> SMALL_GREEN_URN = BLOCKS.register("small_green_urn", () -> new UrnBlock());
     public static final RegistryObject<Block> SMALL_LIME_URN = BLOCKS.register("small_lime_urn", () -> new UrnBlock());
 
-    public static final RegistryObject<Block> SARCOPHAGUS = BLOCKS.register("sarcophagus", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.STONE).noOcclusion().strength(1.5F), false));
-    public static final RegistryObject<Block> OAK_COFFIN = BLOCKS.register("oak_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true));
-    public static final RegistryObject<Block> SPRUCE_COFFIN = BLOCKS.register("spruce_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true));
-    public static final RegistryObject<Block> BIRCH_COFFIN = BLOCKS.register("birch_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true));
-    public static final RegistryObject<Block> DARK_OAK_COFFIN = BLOCKS.register("dark_oak_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true));
-    public static final RegistryObject<Block> JUNGLE_COFFIN = BLOCKS.register("jungle_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true));
-    public static final RegistryObject<Block> ACACIA_COFFIN = BLOCKS.register("acacia_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true));
-    public static final RegistryObject<Block> WARPED_COFFIN = BLOCKS.register("warped_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true));
-    public static final RegistryObject<Block> CRIMSON_COFFIN = BLOCKS.register("crimson_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true));
-    public static final RegistryObject<Block> MANGROVE_COFFIN = BLOCKS.register("mangrove_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true));
+    public static final RegistryObject<Block> SARCOPHAGUS = BLOCKS.register("sarcophagus", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.STONE).noOcclusion().strength(1.5F), false, "sarcophagus_lid", "sarcophagus_base"));
+    public static final RegistryObject<Block> OAK_COFFIN = BLOCKS.register("oak_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "oak_coffin_lid", "oak_coffin_base"));
+    public static final RegistryObject<Block> SPRUCE_COFFIN = BLOCKS.register("spruce_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "spruce_coffin_lid", "spruce_coffin_base"));
+    public static final RegistryObject<Block> BIRCH_COFFIN = BLOCKS.register("birch_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "birch_coffin_lid", "birch_coffin_base"));
+    public static final RegistryObject<Block> DARK_OAK_COFFIN = BLOCKS.register("dark_oak_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "dark_oak_coffin_lid", "dark_oak_coffin_base"));
+    public static final RegistryObject<Block> JUNGLE_COFFIN = BLOCKS.register("jungle_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "jungle_coffin_lid", "jungle_coffin_base"));
+    public static final RegistryObject<Block> ACACIA_COFFIN = BLOCKS.register("acacia_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "acacia_coffin_lid", "acacia_coffin_base"));
+    public static final RegistryObject<Block> WARPED_COFFIN = BLOCKS.register("warped_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "warped_coffin_lid", "warped_coffin_base"));
+    public static final RegistryObject<Block> CRIMSON_COFFIN = BLOCKS.register("crimson_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "crimson_coffin_lid", "crimson_coffin_base"));
+    public static final RegistryObject<Block> MANGROVE_COFFIN = BLOCKS.register("mangrove_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "mangrove_coffin_lid", "mangrove_coffin_base"));
+
 
     public static List<Block> getCoffins() {
         coffins.add(OAK_COFFIN.get());
