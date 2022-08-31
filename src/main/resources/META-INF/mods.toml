@@ -15,7 +15,7 @@ The Graveyard adds new structures, mobs and blocks to your minecraft world, them
 [[dependencies.graveyard]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[42.0.1,)" #mandatory
+    versionRange="[43.1.1,)" #mandatory
     ordering="NONE"
     side="BOTH"
 [[dependencies.graveyard]]
@@ -27,7 +27,7 @@ The Graveyard adds new structures, mobs and blocks to your minecraft world, them
 [[dependencies.graveyard]]
     modId="geckolib3"
     mandatory=true
-    versionRange="[3.1.12,)"
+    versionRange="[3.1.18,)"
     ordering="NONE"
     side="BOTH"
 

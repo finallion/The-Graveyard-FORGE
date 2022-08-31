@@ -1,10 +1,8 @@
 package com.finallion.graveyard.blockentities;
 
 import com.finallion.graveyard.blockentities.animation.SarcophagusLidAnimator;
-import com.finallion.graveyard.init.TGBlocks;
 import com.finallion.graveyard.init.TGTileEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -21,11 +19,12 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.entity.*;
+import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
+import net.minecraft.world.level.block.entity.LidBlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.phys.AABB;
 
 public class SarcophagusBlockEntity extends RandomizableContainerBlockEntity implements LidBlockEntity {
     private static final int EVENT_SET_OPEN_COUNT = 1;
@@ -144,6 +143,12 @@ public class SarcophagusBlockEntity extends RandomizableContainerBlockEntity imp
         double f = (double) p_155340_.getZ() + 0.5D;
 
         p_155339_.playSound((Player)null, d, e, f, p_155342_, SoundSource.BLOCKS, 0.75F, -70.0F);
+    }
+
+    // prevents model from clipping to invis when in the corner of the screen, needs to override shouldRenderOffScreen in the blockentityrenderer
+    @Override
+    public AABB getRenderBoundingBox() {
+        return new AABB(this.getBlockPos().offset(-1, 0, -1), this.getBlockPos().offset(2, 2, 2));
     }
 
     /*
