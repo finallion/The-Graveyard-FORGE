@@ -56,6 +56,11 @@ public class SarcophagusBlockEntityRenderer<T extends BlockEntity & LidBlockEnti
         return true;
     }
 
+    @Override
+    public int getViewDistance() {
+        return 45;
+    }
+
     private void render(SarcophagusBlockEntity entity, PoseStack matrixStack, MultiBufferSource vertexConsumer, int light, int overlay, float g, BakedModel model, boolean isLid) {
         matrixStack.pushPose();
 
@@ -70,8 +75,8 @@ public class SarcophagusBlockEntityRenderer<T extends BlockEntity & LidBlockEnti
         }
 
         if (isLid) {
-            matrixStack.translate(g * 0.25, g * 0.25, 0.0F); // lid offset to the ground and away from body
-            matrixStack.mulPose(Vector3f.ZN.rotationDegrees(g * 70)); // lid rotation
+            matrixStack.translate(g * 0.3, g * 0.3, 0.0F); // lid offset to the ground and away from body
+            matrixStack.mulPose(Vector3f.ZN.rotationDegrees(g * 45)); // lid rotation
         }
 
         Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(matrixStack.last(), vertexConsumer.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), entity.getBlockState(), model, 1.0F, 1.0F, 1.0F, light, overlay);

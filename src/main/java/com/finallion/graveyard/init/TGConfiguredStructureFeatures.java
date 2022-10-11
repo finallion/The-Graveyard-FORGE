@@ -195,6 +195,31 @@ public class TGConfiguredStructureFeatures {
             )
     );
 
+    public static final Holder<Structure> LICH_PRISON_STRUCTURE_CONFIG = register(TGStructureTypeKeys.LICH_PRISON,
+            new TGJigsawStructure(createConfig(TGTags.IS_OVERWORLD, addMobSpawnsToStructure("lich_prison"), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE),
+                    LichPrisonStructure.LichPrisonGenerator.STARTING_POOL, 1,
+                    ConstantHeight.of(VerticalAnchor.absolute(0)), true, Heightmap.Types.WORLD_SURFACE_WG,
+                    getTerrainCheck("lich_prison"),
+                    getTerrainDifference("lich_prison"),
+                    getBiomeWhiteList("lich_prison"),
+                    getBiomeBlackList("lich_prison"),
+                    "lich_prison"
+            )
+    );
+
+    public static final Holder<Structure> RUINS_STRUCTURE_CONFIG = register(TGStructureTypeKeys.RUINS,
+            new TGJigsawStructure(createConfig(TGTags.IS_OVERWORLD, addMobSpawnsToStructure("ruins"), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_BOX),
+                    RuinsStructure.RuinsGenerator.STARTING_POOL, 1,
+                    ConstantHeight.of(VerticalAnchor.absolute(0)), true, Heightmap.Types.WORLD_SURFACE_WG,
+                    getTerrainCheck("ruins"),
+                    getTerrainDifference("ruins"),
+                    getBiomeWhiteList("ruins"),
+                    getBiomeBlackList("ruins"),
+                    "ruins"
+            )
+    );
+
+
 
 
     private static Structure.StructureSettings createConfig(TagKey<Biome> biomeTag, Map<MobCategory, StructureSpawnOverride> spawns, GenerationStep.Decoration featureStep, TerrainAdjustment terrainAdaptation) {
@@ -206,7 +231,8 @@ public class TGConfiguredStructureFeatures {
         return BuiltinRegistries.register(BuiltinRegistries.STRUCTURES, p_236534_, p_236535_);
     }
 
-    public static void init() {}
+    public static void init() {
+    }
 
 
     private static Map<MobCategory, StructureSpawnOverride> addMobSpawnsToStructure(String name) {
@@ -237,6 +263,8 @@ public class TGConfiguredStructureFeatures {
             case "crypt" -> GraveyardConfig.COMMON.canSpawnGraveyardMobsCrypt.get();
             case "altar" -> GraveyardConfig.COMMON.canSpawnGraveyardMobsAltar.get();
             case "giant_mushroom" -> GraveyardConfig.COMMON.canSpawnGraveyardMobsGiantMushroom.get();
+            case "lich_prison" -> GraveyardConfig.COMMON.canSpawnGraveyardMobsLichPrison.get();
+            case "ruins" -> GraveyardConfig.COMMON.canSpawnGraveyardMobsRuins.get();
             default -> false;
         };
     }
@@ -257,6 +285,8 @@ public class TGConfiguredStructureFeatures {
             case "crypt" -> GraveyardConfig.COMMON.terrainCheckRadiusCrypt.get();
             case "altar" -> GraveyardConfig.COMMON.terrainCheckRadiusAltar.get();
             case "giant_mushroom" -> GraveyardConfig.COMMON.terrainCheckRadiusGiantMushroom.get();
+            case "lich_prison" -> GraveyardConfig.COMMON.terrainCheckRadiusLichPrison.get();
+            case "ruins" -> GraveyardConfig.COMMON.terrainCheckRadiusRuins.get();
             default -> 0;
         };
     }
@@ -277,6 +307,8 @@ public class TGConfiguredStructureFeatures {
             case "crypt" -> GraveyardConfig.COMMON.terrainHeightDifferenceCrypt.get();
             case "altar" -> GraveyardConfig.COMMON.terrainHeightDifferenceAltar.get();
             case "giant_mushroom" -> GraveyardConfig.COMMON.terrainHeightDifferenceGiantMushroom.get();
+            case "lich_prison" -> GraveyardConfig.COMMON.terrainHeightDifferenceLichPrison.get();
+            case "ruins" -> GraveyardConfig.COMMON.terrainHeightDifferenceRuins.get();
             default -> 0;
         };
     }
@@ -297,6 +329,8 @@ public class TGConfiguredStructureFeatures {
             case "crypt" -> (List<String>) GraveyardConfig.COMMON.whitelistCrypt.get();
             case "altar" -> (List<String>) GraveyardConfig.COMMON.whitelistAltar.get();
             case "giant_mushroom" -> (List<String>) GraveyardConfig.COMMON.whitelistGiantMushroom.get();
+            case "lich_prison" -> (List<String>) GraveyardConfig.COMMON.whitelistLichPrison.get();
+            case "ruins" -> (List<String>) GraveyardConfig.COMMON.whitelistRuins.get();
             default -> Collections.EMPTY_LIST;
         };
 
@@ -318,6 +352,8 @@ public class TGConfiguredStructureFeatures {
             case "crypt" -> (List<String>) GraveyardConfig.COMMON.blacklistCrypt.get();
             case "altar" -> (List<String>) GraveyardConfig.COMMON.blacklistAltar.get();
             case "giant_mushroom" -> (List<String>) GraveyardConfig.COMMON.blacklistGiantMushroom.get();
+            case "lich_prison" -> (List<String>) GraveyardConfig.COMMON.blacklistLichPrison.get();
+            case "ruins" -> (List<String>) GraveyardConfig.COMMON.blacklistRuins.get();
             default -> Collections.EMPTY_LIST;
         };
 

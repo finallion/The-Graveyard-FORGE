@@ -2,6 +2,7 @@ package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.entities.*;
+import com.finallion.graveyard.entities.projectiles.SkullEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -26,10 +27,20 @@ public class TGEntities {
     public static final RegistryObject<EntityType<GhoulEntity>> GHOUL = ENTITIES.register("ghoul", () -> EntityType.Builder.of(GhoulEntity::new, MobCategory.MONSTER).sized(0.8F, 2.1F).build(TheGraveyard.MOD_ID + ":ghoul")); // if hitbox is set to 0.9 the ghoul wont move
     public static final RegistryObject<EntityType<NightmareEntity>> NIGHTMARE = ENTITIES.register("nightmare", () -> EntityType.Builder.of(NightmareEntity::new, MobCategory.MONSTER).sized(0.6F, 2.6F).build(TheGraveyard.MOD_ID + ":nightmare"));
     public static final RegistryObject<EntityType<RevenantEntity>> REVENANT = ENTITIES.register("revenant", () -> EntityType.Builder.of(RevenantEntity::new, MobCategory.MONSTER).sized(0.6F, 1.9F).build(TheGraveyard.MOD_ID + ":revenant"));
+    public static final RegistryObject<EntityType<FallingCorpse>> FALLING_CORPSE = ENTITIES.register("falling_corpse", () -> EntityType.Builder.of(FallingCorpse::new, MobCategory.MONSTER).sized(0.4F, 0.5F).build(TheGraveyard.MOD_ID + ":falling_corpse"));
+    public static final RegistryObject<EntityType<LichEntity>> LICH = ENTITIES.register("lich", () -> EntityType.Builder.of(LichEntity::new, MobCategory.MONSTER).sized(0.9F, 4.0F).build(TheGraveyard.MOD_ID + ":lich"));
 
     public static final RegistryObject<EntityType<WraithEntity>> WRAITH = ENTITIES.register("wraith", () -> EntityType.Builder.of(WraithEntity::new, MobCategory.MONSTER).sized(0.6F, 1.8F).build(TheGraveyard.MOD_ID + ":wraith"));
     public static final RegistryObject<EntityType<CorruptedPillager>> CORRUPTED_PILLAGER = ENTITIES.register("corrupted_pillager", () -> EntityType.Builder.of(CorruptedPillager::new, MobCategory.MONSTER).sized(0.6F, 1.9F).build(TheGraveyard.MOD_ID + ":corrupted_pillager"));
     public static final RegistryObject<EntityType<CorruptedVindicator>> CORRUPTED_VINDICATOR = ENTITIES.register("corrupted_vindicator", () -> EntityType.Builder.of(CorruptedVindicator::new, MobCategory.MONSTER).sized(0.6F, 1.9F).build(TheGraveyard.MOD_ID + ":corrupted_vindicator"));
+
+    public static final RegistryObject<EntityType<GhoulingEntity>> GHOULING = ENTITIES.register("ghouling", () -> EntityType.Builder.of(GhoulingEntity::new, MobCategory.CREATURE).sized(0.7F, 2.0F).build(TheGraveyard.MOD_ID + ":ghouling"));
+    public static final RegistryObject<EntityType<SkullEntity>> SKULL = ENTITIES.register("skull", () -> EntityType.Builder
+            .<SkullEntity>of(SkullEntity::new, MobCategory.MISC)
+            .setTrackingRange(4)
+            .updateInterval(10)
+            .sized(0.25F, 0.25F)
+            .build(TheGraveyard.MOD_ID + ":skull"));
 
 
     @SubscribeEvent
@@ -43,6 +54,9 @@ public class TGEntities {
         event.put(TGEntities.WRAITH.get(), WraithEntity.createAttributes().build());
         event.put(TGEntities.CORRUPTED_PILLAGER.get(), CorruptedPillager.createAttributes().build());
         event.put(TGEntities.CORRUPTED_VINDICATOR.get(), CorruptedVindicator.createAttributes().build());
+        event.put(TGEntities.FALLING_CORPSE.get(), FallingCorpse.createAttributes().build());
+        event.put(TGEntities.GHOULING.get(), GhoulingEntity.createAttributes().build());
+        event.put(TGEntities.LICH.get(), LichEntity.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -56,6 +70,8 @@ public class TGEntities {
         SpawnPlacements.register(TGEntities.WRAITH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
         SpawnPlacements.register(TGEntities.CORRUPTED_PILLAGER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
         SpawnPlacements.register(TGEntities.CORRUPTED_VINDICATOR.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
+        SpawnPlacements.register(TGEntities.LICH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
+        SpawnPlacements.register(TGEntities.FALLING_CORPSE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
 
     }
 

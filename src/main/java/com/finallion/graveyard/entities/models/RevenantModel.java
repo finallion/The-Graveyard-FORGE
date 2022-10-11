@@ -5,7 +5,6 @@ import com.finallion.graveyard.entities.RevenantEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-
 public class RevenantModel extends AnimatedGeoModel<RevenantEntity> {
 
     @Override

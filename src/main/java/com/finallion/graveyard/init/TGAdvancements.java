@@ -12,6 +12,8 @@ public class TGAdvancements {
     public static TGAdvancementTrigger DIM_LIGHT = CriteriaTriggers.register(new TGAdvancementTrigger(new ResourceLocation("graveyard:dim_light")));
     public static TGAdvancementTrigger KILL_HORDE = CriteriaTriggers.register(new TGAdvancementTrigger(new ResourceLocation("graveyard:kill_horde")));
     public static TGAdvancementTrigger SPAWN_WRAITH = CriteriaTriggers.register(new TGAdvancementTrigger(new ResourceLocation("graveyard:spawn_wraith")));
+    public static TGAdvancementTrigger EQUIP_COFFIN = CriteriaTriggers.register(new TGAdvancementTrigger(new ResourceLocation("graveyard:equip_coffin")));
 
-    public static void init() {}
+    public static void init() {
+    }
 }

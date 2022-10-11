@@ -1,7 +1,6 @@
 package com.finallion.graveyard.entities.renders.features;
 
 
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.CreeperModel;
@@ -12,11 +11,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.monster.Creeper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-
-@OnlyIn(Dist.CLIENT)
 public class SkeletonCreeperEyes extends RenderLayer<Creeper, CreeperModel<Creeper>> {
 
     public SkeletonCreeperEyes(RenderLayerParent<Creeper, CreeperModel<Creeper>> p_117346_) {

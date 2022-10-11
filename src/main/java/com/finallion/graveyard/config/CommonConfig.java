@@ -151,6 +151,26 @@ public class CommonConfig {
     public final ForgeConfigSpec.IntValue terrainHeightDifferenceGiantMushroom;
     public final ForgeConfigSpec.BooleanValue canSpawnGraveyardMobsGiantMushroom;
 
+    public final ForgeConfigSpec.BooleanValue canGenerateLichPrison;
+    public final ForgeConfigSpec.IntValue spacingLichPrison;
+    public final ForgeConfigSpec.IntValue separationLichPrison;
+    public final ForgeConfigSpec.LongValue saltLichPrison;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistLichPrison;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistLichPrison;
+    public final ForgeConfigSpec.IntValue terrainCheckRadiusLichPrison;
+    public final ForgeConfigSpec.IntValue terrainHeightDifferenceLichPrison;
+    public final ForgeConfigSpec.BooleanValue canSpawnGraveyardMobsLichPrison;
+
+    public final ForgeConfigSpec.BooleanValue canGenerateRuins;
+    public final ForgeConfigSpec.IntValue spacingRuins;
+    public final ForgeConfigSpec.IntValue separationRuins;
+    public final ForgeConfigSpec.LongValue saltRuins;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistRuins;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistRuins;
+    public final ForgeConfigSpec.IntValue terrainCheckRadiusRuins;
+    public final ForgeConfigSpec.IntValue terrainHeightDifferenceRuins;
+    public final ForgeConfigSpec.BooleanValue canSpawnGraveyardMobsRuins;
+
 
     public final ForgeConfigSpec.BooleanValue enableGhoul;
     public final ForgeConfigSpec.IntValue weightGhoul;
@@ -485,6 +505,32 @@ public class CommonConfig {
         this.terrainCheckRadiusGiantMushroom = builder.defineInRange("giantMushroom.terrainCheckRadius", 10, 0, 250);
         this.terrainHeightDifferenceGiantMushroom = builder.defineInRange("giantMushroom.terrainHeightDifference", 3, 1, 100);
         this.canSpawnGraveyardMobsGiantMushroom = builder.define("giantMushroom.canSpawnMobs", false);
+
+        this.canGenerateLichPrison = builder.define("lichPrison.generate", true);
+        this.spacingLichPrison = builder.defineInRange("lichPrison.spacing", 30, 0, 200);
+        this.separationLichPrison = builder.defineInRange("lichPrison.separation", 28, 0, 200);
+        this.saltLichPrison = builder.defineInRange("lichPrison.salt", 258195719, 0, 10000000000L);
+        this.whitelistLichPrison = builder.defineList("lichPrison.whitelist", Arrays.asList(
+                "#minecraft:is_ocean"), o -> o instanceof String);
+        this.blacklistLichPrison = builder.defineList("lichPrison.blacklist", Arrays.asList(
+                "minecraft:cold_ocean",
+                "minecraft:deep_cold_ocean",
+                "minecraft:frozen_ocean",
+                "minecraft:deep_frozen_ocean"), o -> o instanceof String);
+        this.terrainCheckRadiusLichPrison = builder.defineInRange("lichPrison.terrainCheckRadius", 1, 0, 250);
+        this.terrainHeightDifferenceLichPrison = builder.defineInRange("lichPrison.terrainHeightDifference", 1, 1, 100);
+        this.canSpawnGraveyardMobsLichPrison = builder.define("lichPrison.canSpawnMobs", false);
+
+        this.canGenerateRuins = builder.define("ruins.generate", true);
+        this.spacingRuins = builder.defineInRange("ruins.spacing", 22, 0, 200);
+        this.separationRuins = builder.defineInRange("ruins.separation", 20, 0, 200);
+        this.saltRuins = builder.defineInRange("ruins.salt", 467108394, 0, 10000000000L);
+        this.whitelistRuins = builder.defineList("ruins.whitelist", Arrays.asList(
+                "#minecraft:is_forest"), o -> o instanceof String);
+        this.blacklistRuins = builder.defineList("ruins.blacklist", Collections.emptyList(), o -> o instanceof String);
+        this.terrainCheckRadiusRuins = builder.defineInRange("ruins.terrainCheckRadius", 25, 0, 250);
+        this.terrainHeightDifferenceRuins = builder.defineInRange("ruins.terrainHeightDifference", 3, 1, 100);
+        this.canSpawnGraveyardMobsRuins = builder.define("ruins.canSpawnMobs", false);
 
         builder.pop();
 

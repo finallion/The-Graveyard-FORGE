@@ -111,9 +111,14 @@ public class SpawnRules {
                 // RegistryAccess causes massive delay on game startup. Since this loads only once and not on runtime, use BuiltinRegistries.
                 //Registry<Biome> registry = RegistryAccess.builtinCopy().registryOrThrow(Registry.BIOME_REGISTRY);
 
-                if (BuiltinRegistries.BIOME.getTag(tag).orElseThrow().contains(biome)) {
-                    return true;
+
+                if (BuiltinRegistries.BIOME.isKnownTagName(tag)) {
+                    if (BuiltinRegistries.BIOME.getTag(tag).orElseThrow().contains(biome)) {
+                        return true;
+                    }
                 }
+
+
 
             } else if (biomeWhitelist.contains(biomeName)) { // check if biome is on whitelist
                 return true;

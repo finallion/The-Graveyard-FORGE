@@ -63,8 +63,6 @@ public class BoneDisplayBlock extends Block implements SimpleWaterloggedBlock {
     }
 
 
-
-
     static {
         FACING = BlockStateProperties.HORIZONTAL_FACING;
         WATERLOGGED = BlockStateProperties.WATERLOGGED;

@@ -21,6 +21,8 @@ public class TGStructureTypeKeys {
     public static ResourceKey<Structure> ALTAR = of("altar");
     public static ResourceKey<Structure> GIANT_MUSHROOM = of("giant_mushroom");
     public static ResourceKey<Structure> CRYPT = of("crypt");
+    public static ResourceKey<Structure> LICH_PRISON = of("lich_prison");
+    public static ResourceKey<Structure> RUINS = of("ruins");
 
     private static ResourceKey<Structure> of(String id) {
         return ResourceKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(TheGraveyard.MOD_ID, id));

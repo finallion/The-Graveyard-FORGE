@@ -9,12 +9,9 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
-@OnlyIn(Dist.CLIENT)
 public class RevenantEyesFeatureRenderer extends GeoLayerRenderer<RevenantEntity> {
     private final RenderType TEXTURE = RenderType.eyes(new ResourceLocation("graveyard:textures/entity/revenant_eyes.png"));
     private final IGeoRenderer<RevenantEntity> renderer;

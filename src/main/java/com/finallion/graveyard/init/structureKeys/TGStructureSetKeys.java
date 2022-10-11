@@ -1,6 +1,5 @@
 package com.finallion.graveyard.init.structureKeys;
 
-import com.finallion.graveyard.TheGraveyard;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -21,6 +20,8 @@ public class TGStructureSetKeys {
     public static ResourceKey<StructureSet> ALTARS = of("altars");
     public static ResourceKey<StructureSet> GIANT_MUSHROOMS = of("giant_mushrooms");
     public static ResourceKey<StructureSet> CRYPTS = of("crypts");
+    public static ResourceKey<StructureSet> LICH_PRISONS = of("lich_prisons");
+    public static ResourceKey<StructureSet> RUINS = of("ruins");
 
 
     private static ResourceKey<StructureSet> of(String p_209839_) {

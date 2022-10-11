@@ -1,7 +1,9 @@
 package com.finallion.graveyard.entities;
 
-import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.GraveyardConfig;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -10,14 +12,19 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import java.util.Random;
-
 public abstract class HostileGraveyardEntity extends Monster {
     private String name;
+    private static final EntityDataAccessor<Boolean> CAN_BURN_IN_SUNLIGHT;
 
     public HostileGraveyardEntity(EntityType<? extends Monster> entityType, Level world, String name) {
         super(entityType, world);
         this.name = name;
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        this.entityData.define(CAN_BURN_IN_SUNLIGHT, true);
+        super.defineSynchedData();
     }
 
     @Override
@@ -27,6 +34,14 @@ public abstract class HostileGraveyardEntity extends Monster {
 
     protected boolean isSunSensitive() {
         return true;
+    }
+
+    private boolean canBurnInSunlight() {
+        return entityData.get(CAN_BURN_IN_SUNLIGHT);
+    }
+
+    public void setCanBurnInSunlight(boolean bool) {
+        entityData.set(CAN_BURN_IN_SUNLIGHT, bool);
     }
 
     // TODO: do mob config and access like structure config
@@ -77,7 +92,7 @@ public abstract class HostileGraveyardEntity extends Monster {
     @Override
     public void aiStep() {
         if (this.isAlive()) {
-            boolean flag = this.isSunSensitive() && this.isSunBurnTick() && getSunBurnConfigBoolean(name);
+            boolean flag = this.isSunSensitive() && this.isSunBurnTick() && getSunBurnConfigBoolean(name) && canBurnInSunlight();
             if (flag) {
                 ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
                 if (!itemstack.isEmpty()) {
@@ -100,6 +115,12 @@ public abstract class HostileGraveyardEntity extends Monster {
 
         super.aiStep();
     }
+
+
+    static {
+        CAN_BURN_IN_SUNLIGHT = SynchedEntityData.defineId(HostileGraveyardEntity.class, EntityDataSerializers.BOOLEAN);
+    }
+
 
 
 

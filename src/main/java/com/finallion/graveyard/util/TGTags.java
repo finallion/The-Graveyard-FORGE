@@ -8,7 +8,8 @@ import net.minecraft.world.level.biome.Biome;
 
 public class TGTags {
 
-    public static void init() {}
+    public static void init() {
+    }
 
     public static TagKey<Biome> IS_OVERWORLD = biomeTag("is_overworld");
 

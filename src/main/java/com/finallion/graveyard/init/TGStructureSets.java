@@ -1,8 +1,6 @@
 package com.finallion.graveyard.init;
 
-import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.GraveyardConfig;
-import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.init.structureKeys.TGStructureSetKeys;
 import net.minecraft.data.worldgen.StructureSets;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
@@ -11,7 +9,6 @@ import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 public class TGStructureSets {
 
     public static void init() {
-
         StructureSets.register(TGStructureSetKeys.HAUNTED_HOUSES, TGConfiguredStructureFeatures.HAUNTED_HOUSE_STRUCTURE_CONFIG,
                 new RandomSpreadStructurePlacement(
                         getSpacing("haunted_house"),
@@ -110,7 +107,24 @@ public class TGStructureSets {
                         RandomSpreadType.LINEAR,
                         Math.toIntExact(getSalt("crypt"))));
 
+        StructureSets.register(TGStructureSetKeys.LICH_PRISONS, TGConfiguredStructureFeatures.LICH_PRISON_STRUCTURE_CONFIG,
+                new RandomSpreadStructurePlacement(
+                        getSpacing("lich_prison"),
+                        getSeparation("lich_prison"),
+                        RandomSpreadType.LINEAR,
+                        Math.toIntExact(getSalt("lich_prison"))));
+
+
+        StructureSets.register(TGStructureSetKeys.RUINS, TGConfiguredStructureFeatures.RUINS_STRUCTURE_CONFIG,
+                new RandomSpreadStructurePlacement(
+                        getSpacing("ruins"),
+                        getSeparation("ruins"),
+                        RandomSpreadType.LINEAR,
+                        Math.toIntExact(getSalt("ruins"))));
+
     }
+
+
 
 
     // TODO move to StructureConfigEntry, this is just a very dirty, very quick way to make 1.19 work
@@ -130,6 +144,8 @@ public class TGStructureSets {
             case "crypt" -> GraveyardConfig.COMMON.saltCrypt.get();
             case "altar" -> GraveyardConfig.COMMON.saltAltar.get();
             case "giant_mushroom" -> GraveyardConfig.COMMON.saltGiantMushroom.get();
+            case "ruins" -> GraveyardConfig.COMMON.saltRuins.get();
+            case "lich_prison" -> GraveyardConfig.COMMON.saltLichPrison.get();
             default -> 0;
         };
     }
@@ -150,6 +166,8 @@ public class TGStructureSets {
             case "crypt" -> GraveyardConfig.COMMON.spacingCrypt.get();
             case "altar" -> GraveyardConfig.COMMON.spacingAltar.get();
             case "giant_mushroom" -> GraveyardConfig.COMMON.spacingGiantMushroom.get();
+            case "ruins" -> GraveyardConfig.COMMON.spacingRuins.get();
+            case "lich_prison" -> GraveyardConfig.COMMON.spacingLichPrison.get();
             default -> 0;
         };
     }
@@ -170,6 +188,8 @@ public class TGStructureSets {
             case "crypt" -> GraveyardConfig.COMMON.separationCrypt.get();
             case "altar" -> GraveyardConfig.COMMON.separationAltar.get();
             case "giant_mushroom" -> GraveyardConfig.COMMON.separationGiantMushroom.get();
+            case "ruins" -> GraveyardConfig.COMMON.separationRuins.get();
+            case "lich_prison" -> GraveyardConfig.COMMON.separationLichPrison.get();
             default -> 0;
         };
     }

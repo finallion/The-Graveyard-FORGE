@@ -3,9 +3,12 @@ package com.finallion.graveyard;
 import com.finallion.graveyard.client.TheGraveyardClient;
 import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.*;
+import com.finallion.graveyard.item.VialOfBlood;
 import com.finallion.graveyard.util.SpawnRules;
 import com.finallion.graveyard.util.TGTags;
 import com.mojang.serialization.Codec;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -17,6 +20,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -43,10 +47,13 @@ public class TheGraveyard {
 
         TGBlocks.BLOCKS.register(modEventBus);
         TGItems.ITEMS.register(modEventBus);
+        TGSounds.SOUNDS.register(modEventBus);
         TGEntities.ENTITIES.register(modEventBus);
         TGFeatures.FEATURES.register(modEventBus);
         TGTileEntities.TILE_ENTITIES.register(modEventBus);
         TGParticles.PARTICLES.register(modEventBus);
+
+        modEventBus.addListener(this::setupClient);
 
         final DeferredRegister<Codec<? extends BiomeModifier>> serializers = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, MOD_ID);
         serializers.register(modEventBus);
@@ -57,6 +64,19 @@ public class TheGraveyard {
 
         //modEventBus.addListener(DataGenerators::gatherData);
 
+    }
+
+    public void setupClient(final FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            /* CHANGING ITEM TEXTURE */
+            ItemProperties.register(TGItems.VIAL_OF_BLOOD.get(), new ResourceLocation("charged"), (stack, world, entity, seed) -> {
+                if (entity != null && stack.is(TGItems.VIAL_OF_BLOOD.get())) {
+                    return VialOfBlood.getBlood(stack);
+                }
+                return 0.0F;
+            });
+
+        });
     }
 
     public void setup(final FMLCommonSetupEvent event) {

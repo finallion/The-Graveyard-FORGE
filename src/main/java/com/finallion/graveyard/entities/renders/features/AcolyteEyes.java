@@ -5,17 +5,13 @@ import com.finallion.graveyard.entities.AcolyteEntity;
 import com.finallion.graveyard.entities.models.CorruptedIllagerModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.IllagerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class AcolyteEyes extends RenderLayer<AcolyteEntity, CorruptedIllagerModel<AcolyteEntity>> {
 
     public AcolyteEyes(RenderLayerParent<AcolyteEntity, CorruptedIllagerModel<AcolyteEntity>> p_117346_) {

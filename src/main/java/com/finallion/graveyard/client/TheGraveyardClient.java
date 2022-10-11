@@ -12,9 +12,12 @@ import com.finallion.graveyard.init.TGEntities;
 import com.finallion.graveyard.init.TGParticles;
 import com.finallion.graveyard.init.TGTileEntities;
 import com.finallion.graveyard.particles.GraveyardFogParticle;
+import com.finallion.graveyard.particles.GraveyardHandParticle;
+import com.finallion.graveyard.particles.GraveyardSoulParticle;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.particle.SonicBoomParticle;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -58,6 +61,10 @@ public class TheGraveyardClient {
     @SubscribeEvent
     public void initParticles(RegisterParticleProvidersEvent event){
         event.register(TGParticles.GRAVEYARD_FOG_PARTICLE.get(), GraveyardFogParticle.FogFactory::new);
+        event.register(TGParticles.GRAVEYARD_SOUL_PARTICLE.get(), GraveyardSoulParticle.Provider::new);
+        event.register(TGParticles.GRAVEYARD_HAND_PARTICLE.get(), GraveyardHandParticle.Provider::new);
+        event.register(TGParticles.GRAVEYARD_LEFT_HAND_PARTICLE.get(), GraveyardHandParticle.Provider::new);
+        event.register(TGParticles.GRAVEYARD_SOUL_BEAM_PARTICLE.get(), SonicBoomParticle.Provider::new);
     }
 
     @SubscribeEvent
@@ -71,6 +78,10 @@ public class TheGraveyardClient {
         event.registerEntityRenderer(TGEntities.CORRUPTED_PILLAGER.get(), CorruptedPillagerRenderer::new);
         event.registerEntityRenderer(TGEntities.CORRUPTED_VINDICATOR.get(), CorruptedVindicatorRenderer::new);
         event.registerEntityRenderer(TGEntities.WRAITH.get(), WraithRenderer::new);
+        event.registerEntityRenderer(TGEntities.LICH.get(), LichRenderer::new);
+        event.registerEntityRenderer(TGEntities.FALLING_CORPSE.get(), FallingCorpseRenderer::new);
+        event.registerEntityRenderer(TGEntities.SKULL.get(), SkullEntityRenderer::new);
+        event.registerEntityRenderer(TGEntities.GHOULING.get(), GhoulingRenderer::new);
 
         event.registerBlockEntityRenderer(TGTileEntities.GRAVESTONE_BLOCK_ENTITY.get(), GravestoneBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(TGTileEntities.SARCOPHAGUS_BLOCK_ENTITY.get(), SarcophagusBlockEntityRenderer::new);

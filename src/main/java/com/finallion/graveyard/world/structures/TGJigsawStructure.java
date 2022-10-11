@@ -12,6 +12,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ChunkPos;
@@ -133,7 +134,19 @@ public class TGJigsawStructure extends Structure {
             if (!TGJigsawStructure.canGenerateUnderground(context, whitelist, blacklist)) {
                 return Optional.empty();
             }
-        } else {
+        } else if (structureName.equals("lich_prison")) {
+            ChunkPos chunkPos = context.chunkPos();
+            RandomSource random = context.random();
+
+            int x = random.nextInt(chunkPos.getMaxBlockX() - chunkPos.getMinBlockX()) + chunkPos.getMinBlockX();
+            int z = random.nextInt(chunkPos.getMaxBlockZ() - chunkPos.getMiddleBlockZ()) + chunkPos.getMiddleBlockZ();
+            int y = 210;
+            blockpos = new BlockPos(x, y, z);
+
+            if (!TGJigsawStructure.canGenerateInTheAir(context, whitelist, blacklist)) {
+                return Optional.empty();
+            }
+        }else {
             if (!TGJigsawStructure.canGenerate(context, terrainCheckSize, blockpos, maxHeightDifference, whitelist, blacklist)) {
                 return Optional.empty();
             }
@@ -157,6 +170,15 @@ public class TGJigsawStructure extends Structure {
 
         return true;
     }
+
+    private static boolean canGenerateInTheAir(Structure.GenerationContext context, List<String> whitelist, List<String> blacklist) {
+        if (!isCorrectBiome(context, whitelist, blacklist)) {
+            return false;
+        }
+
+        return true;
+    }
+
 
     private static boolean canGenerate(Structure.GenerationContext context, int size, BlockPos centerOfChunk, int maxHeightDifference, List<String> whitelist, List<String> blacklist) {
         if (!isCorrectBiome(context, whitelist, blacklist)) {
@@ -269,6 +291,8 @@ public class TGJigsawStructure extends Structure {
             case "crypt" -> GraveyardConfig.COMMON.canGenerateCrypt.get();
             case "altar" -> GraveyardConfig.COMMON.canGenerateAltar.get();
             case "giant_mushroom" -> GraveyardConfig.COMMON.canGenerateGiantMushroom.get();
+            case "ruins" -> GraveyardConfig.COMMON.canGenerateRuins.get();
+            case "lich_prison" -> GraveyardConfig.COMMON.canGenerateLichPrison.get();
             default -> false;
         };
     }

@@ -68,6 +68,14 @@ public class TGBlocks {
     public static final RegistryObject<Block> CREEPER_SKELETON = BLOCKS.register("creeper_skeleton", () -> new BoneDisplayBlock());
     public static final RegistryObject<Block> SKELETON_HAND = BLOCKS.register("skeleton_hand", () -> new BoneDisplayBlock());
     public static final RegistryObject<Block> WITHER_SKELETON_HAND = BLOCKS.register("wither_skeleton_hand", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> BONE_REMAINS = BLOCKS.register("bone_remains", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> WITHER_BONE_REMAINS = BLOCKS.register("wither_bone_remains", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> LATERALLY_LYING_SKELETON = BLOCKS.register("laterally_lying_skeleton", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> LATERALLY_LYING_WITHER_SKELETON = BLOCKS.register("laterally_lying_wither_skeleton", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> SKULL_ON_PIKE = BLOCKS.register("skull_on_pike", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> WITHER_SKULL_ON_PIKE = BLOCKS.register("wither_skull_on_pike", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> TORSO_PILE = BLOCKS.register("torso_pile", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> WITHER_TORSO_PILE = BLOCKS.register("wither_torso_pile", () -> new BoneDisplayBlock());
 
 
     public static final RegistryObject<Block> VASE_BLOCK = BLOCKS.register("vase_block", () -> new VaseBlock());
@@ -126,6 +134,16 @@ public class TGBlocks {
     public static final RegistryObject<Block> WARPED_COFFIN = BLOCKS.register("warped_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "warped_coffin_lid", "warped_coffin_base"));
     public static final RegistryObject<Block> CRIMSON_COFFIN = BLOCKS.register("crimson_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "crimson_coffin_lid", "crimson_coffin_base"));
     public static final RegistryObject<Block> MANGROVE_COFFIN = BLOCKS.register("mangrove_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "mangrove_coffin_lid", "mangrove_coffin_base"));
+
+    public static final RegistryObject<Block> ALTAR = BLOCKS.register("altar", () -> new AltarBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 3600000.0F).noLootTable()));
+    public static final RegistryObject<Block> ALTAR_SIDE = BLOCKS.register("altar_side", () -> new AltarSideBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 1200.0F).noLootTable()));
+    public static final RegistryObject<Block> ALTAR_CORNER = BLOCKS.register("altar_corner", () -> new AltarCornerBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 1200.0F).noLootTable()));
+    public static final RegistryObject<Block> ALTAR_CENTER = BLOCKS.register("altar_center", () -> new AltarCenterBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 1200.0F).noLootTable()));
+
+    public static final RegistryObject<Block> LOWER_BONE_STAFF = BLOCKS.register("lower_bone_staff", OminousBoneStaffFragment::new);
+    public static final RegistryObject<Block> MIDDLE_BONE_STAFF = BLOCKS.register("middle_bone_staff", OminousBoneStaffFragment::new);
+    public static final RegistryObject<Block> UPPER_BONE_STAFF = BLOCKS.register("upper_bone_staff", OminousBoneStaffFragment::new);
+
 
 
     public static List<Block> getCoffins() {

@@ -5,11 +5,9 @@ import com.finallion.graveyard.entities.ReaperEntity;
 import com.finallion.graveyard.entities.models.ReaperModel;
 import com.finallion.graveyard.entities.renders.features.ReaperEyesFeatureRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
-@OnlyIn(Dist.CLIENT)
+
 public class ReaperRenderer extends GeoEntityRenderer<ReaperEntity> {
 
     public ReaperRenderer(EntityRendererProvider.Context renderManager) {
