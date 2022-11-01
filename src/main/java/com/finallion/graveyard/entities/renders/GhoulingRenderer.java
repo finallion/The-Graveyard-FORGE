@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
@@ -49,7 +50,7 @@ public class GhoulingRenderer extends GeoEntityRenderer<GhoulingEntity> {
             //stack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(bone.getRotationZ()));
             stack.translate(1.3D, 0.86D, 0.0D);
             stack.scale(2.0F, 2.0F, 2.0F);
-            Minecraft.getInstance().getItemRenderer().renderStatic(offHand, ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb, 0);
+            Minecraft.getInstance().getItemRenderer().renderStatic(ghouling.getItemBySlot(EquipmentSlot.OFFHAND), ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb, 0);
             stack.popPose();
             bufferIn = rtb.getBuffer(RenderType.entityTranslucent(whTexture));
         }

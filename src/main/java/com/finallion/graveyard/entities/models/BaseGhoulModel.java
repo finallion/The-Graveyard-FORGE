@@ -24,11 +24,12 @@ public class BaseGhoulModel extends AnimatedGeoModel<GhoulEntity> {
         return new ResourceLocation(TheGraveyard.MOD_ID, "animations/ghoul/ghoul.animation.json");
     }
 
-    @Override
-    public void setLivingAnimations(GhoulEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
 
-        switch (entity.getVariant()) {
+    @Override
+    public void setCustomAnimations(GhoulEntity animatable, int instanceId, AnimationEvent animationEvent) {
+        super.setCustomAnimations(animatable, instanceId, animationEvent);
+
+        switch (animatable.getVariant()) {
             case 1 -> texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin2.png");
             case 2 -> texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin3.png");
             case 3 -> texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin4.png");
