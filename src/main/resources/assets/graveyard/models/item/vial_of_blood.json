@@ -1,0 +1,56 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "graveyard:item/vial_of_blood_08"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "charged": 0.1
+            },
+            "model": "graveyard:item/vial_of_blood_01"
+        },
+        {
+            "predicate": {
+                "charged": 0.2
+            },
+            "model": "graveyard:item/vial_of_blood_02"
+        },
+        {
+            "predicate": {
+                "charged": 0.3
+            },
+            "model": "graveyard:item/vial_of_blood_03"
+        },
+        {
+            "predicate": {
+                "charged": 0.4
+            },
+            "model": "graveyard:item/vial_of_blood_04"
+        },
+        {
+            "predicate": {
+                "charged": 0.5
+            },
+            "model": "graveyard:item/vial_of_blood_05"
+        },
+        {
+            "predicate": {
+                "charged": 0.6
+            },
+            "model": "graveyard:item/vial_of_blood_06"
+        },
+        {
+            "predicate": {
+                "charged": 0.7
+            },
+            "model": "graveyard:item/vial_of_blood_07"
+        },
+        {
+            "predicate": {
+                "charged": 0.8
+            },
+            "model": "graveyard:item/vial_of_blood_08"
+        }
+    ]
+}

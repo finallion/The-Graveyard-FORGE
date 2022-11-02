@@ -1,7 +1,6 @@
 package com.finallion.graveyard.world.structures;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.init.TGConfiguredStructureFeatures;
 import com.google.common.collect.ImmutableList;
@@ -10,7 +9,6 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.Pools;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
@@ -23,9 +21,9 @@ public class SmallMountainGraveStructure extends AbstractGraveyardStructure {
 
     public SmallMountainGraveStructure(Codec<JigsawConfiguration> codec) {
         super(new StructureConfigEntry(12, 8, 725689810,
-                        Arrays.asList("#" + Biome.BiomeCategory.MOUNTAIN.getName(), "#" + Biome.BiomeCategory.EXTREME_HILLS.getName()),
-                        Collections.emptyList(), Arrays.asList("#minecraft", "#terralith"), false),
-                4, "small_mountain_grave");
+                        Arrays.asList("#minecraft:mountain", "#minecraft:extreme_hills"),
+                        Collections.emptyList(), 4, 3, false),
+                "small_mountain_grave");
     }
 
     @Override

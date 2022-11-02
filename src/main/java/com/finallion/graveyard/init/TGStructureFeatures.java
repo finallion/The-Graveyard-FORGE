@@ -24,24 +24,9 @@ public class TGStructureFeatures {
     public static final StructureFeature<JigsawConfiguration> ALTAR_STRUCTURE = register("altar", new AltarStructure(JigsawConfiguration.CODEC));
     public static final StructureFeature<JigsawConfiguration> GIANT_MUSHROOM_STRUCTURE = register("giant_mushroom", new GiantMushroomStructure(JigsawConfiguration.CODEC));
     public static final StructureFeature<JigsawConfiguration> CRYPT_STRUCTURE = register("crypt", new CryptStructure(JigsawConfiguration.CODEC));
+    public static final StructureFeature<JigsawConfiguration> LICH_PRISON_STRUCTURE = register("lich_prison", new LichPrisonStructure(JigsawConfiguration.CODEC));
+    public static final StructureFeature<JigsawConfiguration> RUINS_STRUCTURE = register("ruins", new RuinsStructure(JigsawConfiguration.CODEC));
 
-    /*
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> MEDIUM_GRAVEYARD_STRUCTURE = STRUCTURES.register("medium_graveyard", () -> new MediumGraveyardStructure(JigsawConfiguration.CODEC));
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_GRAVEYARD_STRUCTURE = STRUCTURES.register("small_graveyard", () -> new SmallGraveyardStructure(JigsawConfiguration.CODEC));
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> LARGE_GRAVEYARD_STRUCTURE = STRUCTURES.register("large_graveyard", () -> new LargeGraveyardStructure(JigsawConfiguration.CODEC));
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> MUSHROOM_GRAVE_STRUCTURE = STRUCTURES.register("mushroom_grave", () -> new MushroomGraveStructure(JigsawConfiguration.CODEC));
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> HAUNTED_HOUSE_STRUCTURE = STRUCTURES.register("haunted_house", () -> new HauntedHouseStructure(JigsawConfiguration.CODEC));
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> MEMORIAL_TREE_STRUCTURE = STRUCTURES.register("memorial_tree", () -> new MemorialTreeStructure(JigsawConfiguration.CODEC));
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_DESERT_GRAVEYARD_STRUCTURE = STRUCTURES.register("small_desert_graveyard", () -> new SmallDesertGraveyardStructure(JigsawConfiguration.CODEC));
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_GRAVE_STRUCTURE = STRUCTURES.register("small_grave", () -> new SmallGraveStructure(JigsawConfiguration.CODEC));
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_DESERT_GRAVE_STRUCTURE = STRUCTURES.register("small_desert_grave", () -> new SmallDesertGraveStructure(JigsawConfiguration.CODEC));
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_SAVANNA_GRAVE_STRUCTURE = STRUCTURES.register("small_savanna_grave", () -> new SmallSavannaGraveStructure(JigsawConfiguration.CODEC));
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> SMALL_MOUNTAIN_GRAVE_STRUCTURE = STRUCTURES.register("small_mountain_grave", () -> new SmallMountainGraveStructure(JigsawConfiguration.CODEC));
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> ALTAR_STRUCTURE = STRUCTURES.register("altar", () -> new AltarStructure(JigsawConfiguration.CODEC));
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> GIANT_MUSHROOM_STRUCTURE = STRUCTURES.register("giant_mushroom", () -> new GiantMushroomStructure(JigsawConfiguration.CODEC));
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> CRYPT_STRUCTURE = STRUCTURES.register("crypt", () -> new CryptStructure(JigsawConfiguration.CODEC));
-
-     */
     private static StructureFeature<JigsawConfiguration> register(String name, StructureFeature<JigsawConfiguration> feature) {
         STRUCTURES.register(name, () -> feature);
         return feature;

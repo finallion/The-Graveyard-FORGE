@@ -1,12 +1,8 @@
 package com.finallion.graveyard.world.structures;
 
 import com.finallion.graveyard.config.StructureConfigEntry;
-import com.finallion.graveyard.util.BiomeCheckUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.QuartPos;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
@@ -85,15 +81,12 @@ public abstract class AbstractUndergroundStructure extends StructureFeature<Jigs
 
 
     protected static boolean isCorrectBiome(PieceGeneratorSupplier.Context<JigsawConfiguration> context, StructureConfigEntry config, String name) {
-        BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(0);
-
-        Holder<Biome> biome = context.chunkGenerator().m_203495_(QuartPos.fromBlock(blockpos.getX()), QuartPos.fromBlock(blockpos.getY()), QuartPos.fromBlock(blockpos.getZ()));
-        if (config.canGenerate.get() &&
-                BiomeCheckUtil.parseBiomes(config.whitelist.get(), config.blacklist.get(), biome) &&
-                BiomeCheckUtil.parseWhitelistedMods(config.modWhitelist.get(), biome)) {
+        if (config.canGenerate.get() && AbstractGraveyardStructure.parseWhitelistedMods(context, config.biomeWhitelist.get(), config.biomeBlacklist.get())) {
             return true;
         }
         return false;
     }
+
+
 
 }

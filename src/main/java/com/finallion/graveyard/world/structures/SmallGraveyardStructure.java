@@ -1,7 +1,6 @@
 package com.finallion.graveyard.world.structures;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.init.TGConfiguredStructureFeatures;
 import com.google.common.collect.ImmutableList;
@@ -10,7 +9,6 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.Pools;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
@@ -23,9 +21,12 @@ public class SmallGraveyardStructure extends AbstractGraveyardStructure {
 
     public SmallGraveyardStructure(Codec<JigsawConfiguration> codec) {
         super(new StructureConfigEntry(20, 18, 240451934,
-                        Arrays.asList("#" + Biome.BiomeCategory.PLAINS.getName()),
-                        Collections.emptyList(), Arrays.asList("#minecraft", "#terralith"), false),
-                15, "small_graveyard");
+                        Arrays.asList(
+                                "#minecraft:plains",
+                                "terralith:blooming_plateau",
+                                "terralith:blooming_valley"),
+                        Collections.emptyList(), 15, 3, false),
+                "small_graveyard");
     }
 
 

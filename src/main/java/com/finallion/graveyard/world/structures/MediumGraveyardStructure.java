@@ -1,7 +1,6 @@
 package com.finallion.graveyard.world.structures;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.init.TGConfiguredStructureFeatures;
 import com.google.common.collect.ImmutableList;
@@ -10,7 +9,6 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.Pools;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
@@ -23,12 +21,18 @@ public class MediumGraveyardStructure extends AbstractGraveyardStructure {
 
     public MediumGraveyardStructure(Codec<JigsawConfiguration> codec) {
         super(new StructureConfigEntry(18, 16,1690192399,
-                        Arrays.asList("minecraft:forest", "minecraft:flower_forest", "terralith:brushland", "terralith:blooming_valley", "terralith:temperate_highlands", "graveyard_biomes:eroded_haunted_forest"),
+                        Arrays.asList(
+                                "minecraft:forest",
+                                "minecraft:flower_forest",
+                                "minecraft:windswept_forest",
+                                "terralith:brushland",
+                                "terralith:blooming_valley",
+                                "terralith:temperate_highlands",
+                                "graveyard_biomes:eroded_haunted_forest"),
                         Collections.emptyList(),
-                        Arrays.asList("#minecraft", "#graveyard_biomes", "#terralith"), true), // blacklist birch and dark forest
-                30, "medium_graveyard");
+                        30, 3, true), // blacklist birch and dark forest
+              "medium_graveyard");
     }
-
 
     @Override
     public ConfiguredStructureFeature<?, ?> getStructureFeature() {

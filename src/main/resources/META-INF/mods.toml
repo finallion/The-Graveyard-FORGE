@@ -3,13 +3,13 @@ loaderVersion="[38,)" #mandatory
 license="All rights reserved"
 [[mods]] #mandatory
 modId="graveyard" #mandatory
-version="1.9.2" #mandatory
+version="1.9.3" #mandatory
 displayName="The Graveyard" #mandatory
 logoFile="graveyard_logo.png" #optional
 credits="" #optional
 authors="Finallion" #optional
 description='''
-The Graveyard adds new structures, mobs and blocks to your minecraft world, themed around the graveyard!
+The Graveyard adds new structures, bosses, mobs and blocks to your minecraft world, themed around the graveyard!
 '''
 
 [[dependencies.graveyard]] #optional
@@ -27,7 +27,7 @@ The Graveyard adds new structures, mobs and blocks to your minecraft world, them
 [[dependencies.graveyard]]
     modId="geckolib3"
     mandatory=true
-    versionRange="[3.0.12,)"
+    versionRange="[3.0.53,)"
     ordering="NONE"
     side="BOTH"
 

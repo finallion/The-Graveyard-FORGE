@@ -1,7 +1,9 @@
 package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
+import com.finallion.graveyard.item.BoneStaffItem;
 import com.finallion.graveyard.item.DaggerItem;
+import com.finallion.graveyard.item.VialOfBlood;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tiers;
@@ -145,5 +147,32 @@ public class TGItems {
     public static final RegistryObject<Item> WARPED_COFFIN_BASE = ITEMS.register("warped_coffin_base", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> CRIMSON_COFFIN_LID = ITEMS.register("crimson_coffin_lid", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> CRIMSON_COFFIN_BASE = ITEMS.register("crimson_coffin_base", () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> VIAL_OF_BLOOD = ITEMS.register("vial_of_blood", VialOfBlood::new);
+
+    public static final RegistryObject<Item> TORSO_PILE = ITEMS.register("torso_pile", () -> new BlockItem(TGBlocks.TORSO_PILE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> WITHER_TORSO_PILE = ITEMS.register("wither_torso_pile", () -> new BlockItem(TGBlocks.WITHER_TORSO_PILE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> SKULL_ON_PIKE = ITEMS.register("skull_on_pike", () -> new BlockItem(TGBlocks.SKULL_ON_PIKE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> WITHER_SKULL_ON_PIKE = ITEMS.register("wither_skull_on_pike", () -> new BlockItem(TGBlocks.WITHER_SKULL_ON_PIKE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> BONE_REMAINS = ITEMS.register("bone_remains", () -> new BlockItem(TGBlocks.BONE_REMAINS.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> WITHER_BONE_REMAINS = ITEMS.register("wither_bone_remains", () -> new BlockItem(TGBlocks.WITHER_BONE_REMAINS.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> LATERALLY_LYING_SKELETON = ITEMS.register("laterally_lying_skeleton", () -> new BlockItem(TGBlocks.LATERALLY_LYING_SKELETON.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> LATERALLY_LYING_WITHER_SKELETON = ITEMS.register("laterally_lying_wither_skeleton", () -> new BlockItem(TGBlocks.LATERALLY_LYING_WITHER_SKELETON.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+
+    public static final RegistryObject<Item> WHITE_BONE_STAFF = ITEMS.register("white_bone_staff", () -> new BoneStaffItem((byte) 1));
+    public static final RegistryObject<Item> BLACK_BONE_STAFF = ITEMS.register("black_bone_staff", () -> new BoneStaffItem((byte) 2));
+    public static final RegistryObject<Item> RED_BONE_STAFF = ITEMS.register("red_bone_staff", () -> new BoneStaffItem((byte) 3));
+    public static final RegistryObject<Item> CYAN_BONE_STAFF = ITEMS.register("cyan_bone_staff", () -> new BoneStaffItem((byte) 4));
+    public static final RegistryObject<Item> PURPLE_BONE_STAFF = ITEMS.register("purple_bone_staff", () -> new BoneStaffItem((byte) 5));
+
+
+    public static final RegistryObject<Item> ALTAR = ITEMS.register("altar", () -> new BlockItem(TGBlocks.ALTAR.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> ALTAR_SIDE = ITEMS.register("altar_side", () -> new BlockItem(TGBlocks.ALTAR_SIDE.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> ALTAR_CORNER = ITEMS.register("altar_corner", () -> new BlockItem(TGBlocks.ALTAR_CORNER.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> ALTAR_CENTER = ITEMS.register("altar_center", () -> new BlockItem(TGBlocks.ALTAR_CENTER.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> UPPER_BONE_STAFF = ITEMS.register("upper_bone_staff", () -> new BlockItem(TGBlocks.UPPER_BONE_STAFF.get(), new Item.Properties().stacksTo(1).tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> MIDDLE_BONE_STAFF = ITEMS.register("middle_bone_staff", () -> new BlockItem(TGBlocks.MIDDLE_BONE_STAFF.get(), new Item.Properties().stacksTo(1).tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> LOWER_BONE_STAFF = ITEMS.register("lower_bone_staff", () -> new BlockItem(TGBlocks.LOWER_BONE_STAFF.get(), new Item.Properties().stacksTo(1).tab(TheGraveyard.GROUP)));
+
 
 }

@@ -4,7 +4,10 @@ import com.finallion.graveyard.client.TheGraveyardClient;
 import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.events.ServerEvents;
 import com.finallion.graveyard.init.*;
+import com.finallion.graveyard.item.VialOfBlood;
 import com.finallion.graveyard.util.TGTags;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -16,6 +19,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -42,15 +46,31 @@ public class TheGraveyard {
         modEventBus.addListener(this::setup);
         TGBlocks.BLOCKS.register(modEventBus);
         TGItems.ITEMS.register(modEventBus);
+        TGSounds.SOUNDS.register(modEventBus);
         TGEntities.ENTITIES.register(modEventBus);
         TGFeatures.FEATURES.register(modEventBus);
         TGStructureFeatures.STRUCTURES.register(modEventBus);
         TGTileEntities.TILE_ENTITIES.register(modEventBus);
         TGParticles.PARTICLES.register(modEventBus);
 
+        modEventBus.addListener(this::setupClient);
+
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC);
 
 
+    }
+
+    public void setupClient(final FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            /* CHANGING ITEM TEXTURE */
+            ItemProperties.register(TGItems.VIAL_OF_BLOOD.get(), new ResourceLocation("charged"), (stack, world, entity, seed) -> {
+                if (entity != null && stack.is(TGItems.VIAL_OF_BLOOD.get())) {
+                    return VialOfBlood.getBlood(stack);
+                }
+                return 0.0F;
+            });
+
+        });
     }
 
     public void setup(final FMLCommonSetupEvent event) {

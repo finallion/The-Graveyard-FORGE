@@ -12,6 +12,9 @@ import com.finallion.graveyard.init.TGEntities;
 import com.finallion.graveyard.init.TGParticles;
 import com.finallion.graveyard.init.TGTileEntities;
 import com.finallion.graveyard.particles.GraveyardFogParticle;
+import com.finallion.graveyard.particles.GraveyardHandParticle;
+import com.finallion.graveyard.particles.GraveyardSoulParticle;
+import com.finallion.graveyard.particles.SonicBoomParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
@@ -62,6 +65,10 @@ public class TheGraveyardClient {
     @SubscribeEvent
     public void initParticles(ParticleFactoryRegisterEvent event){
         Minecraft.getInstance().particleEngine.register(TGParticles.GRAVEYARD_FOG_PARTICLE.get(), GraveyardFogParticle.FogFactory::new);
+        Minecraft.getInstance().particleEngine.register(TGParticles.GRAVEYARD_SOUL_PARTICLE.get(), GraveyardSoulParticle.Provider::new);
+        Minecraft.getInstance().particleEngine.register(TGParticles.GRAVEYARD_HAND_PARTICLE.get(), GraveyardHandParticle.Provider::new);
+        Minecraft.getInstance().particleEngine.register(TGParticles.GRAVEYARD_LEFT_HAND_PARTICLE.get(), GraveyardHandParticle.Provider::new);
+        Minecraft.getInstance().particleEngine.register(TGParticles.GRAVEYARD_SOUL_BEAM_PARTICLE.get(), SonicBoomParticle.Provider::new);
     }
 
     @SubscribeEvent
@@ -75,6 +82,10 @@ public class TheGraveyardClient {
         event.registerEntityRenderer(TGEntities.CORRUPTED_PILLAGER.get(), CorruptedPillagerRenderer::new);
         event.registerEntityRenderer(TGEntities.CORRUPTED_VINDICATOR.get(), CorruptedVindicatorRenderer::new);
         event.registerEntityRenderer(TGEntities.WRAITH.get(), WraithRenderer::new);
+        event.registerEntityRenderer(TGEntities.LICH.get(), LichRenderer::new);
+        event.registerEntityRenderer(TGEntities.FALLING_CORPSE.get(), FallingCorpseRenderer::new);
+        event.registerEntityRenderer(TGEntities.SKULL.get(), SkullEntityRenderer::new);
+        event.registerEntityRenderer(TGEntities.GHOULING.get(), GhoulingRenderer::new);
 
         event.registerBlockEntityRenderer(TGTileEntities.GRAVESTONE_BLOCK_ENTITY.get(), GravestoneBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(TGTileEntities.SARCOPHAGUS_BLOCK_ENTITY.get(), SarcophagusBlockEntityRenderer::new);
@@ -117,6 +128,17 @@ public class TheGraveyardClient {
         ItemBlockRenderTypes.setRenderLayer(TGBlocks.DARK_IRON_DOOR.get(), CUTOUT_MIPPED);
         ItemBlockRenderTypes.setRenderLayer(TGBlocks.DARK_IRON_TRAPDOOR.get(), CUTOUT_MIPPED);
 
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.BONE_REMAINS.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.WITHER_BONE_REMAINS.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.TORSO_PILE.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.WITHER_TORSO_PILE.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.SKULL_ON_PIKE.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.WITHER_SKULL_ON_PIKE.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LATERALLY_LYING_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LATERALLY_LYING_WITHER_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LOWER_BONE_STAFF.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.MIDDLE_BONE_STAFF.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.UPPER_BONE_STAFF.get(), CUTOUT_MIPPED);
     }
 
 

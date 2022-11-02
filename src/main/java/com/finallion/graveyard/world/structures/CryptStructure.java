@@ -21,10 +21,11 @@ public class CryptStructure extends AbstractUndergroundStructure {
 
     public CryptStructure(Codec<JigsawConfiguration> codec) {
         super(new StructureConfigEntry(14, 12, 893183913,
-                        Arrays.asList("#underground"),
-                        Collections.emptyList(), Arrays.asList("#minecraft", "#terralith"), false),
+                        Arrays.asList("#forge:underground"),
+                        Collections.emptyList(), 1, 3, false),
                 "crypt");
     }
+
 
     @Override
     public ConfiguredStructureFeature<?, ?> getStructureFeature() {

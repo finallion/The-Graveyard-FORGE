@@ -11,11 +11,8 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 
-@OnlyIn(Dist.CLIENT)
 public class PillagerEyes extends RenderLayer<CorruptedPillager, CorruptedIllagerModel<CorruptedPillager>> {
 
     public PillagerEyes(RenderLayerParent<CorruptedPillager, CorruptedIllagerModel<CorruptedPillager>> context) {

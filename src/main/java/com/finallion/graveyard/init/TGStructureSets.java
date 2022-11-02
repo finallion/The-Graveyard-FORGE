@@ -1,12 +1,8 @@
 package com.finallion.graveyard.init;
 
-import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.GraveyardConfig;
-import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.init.structureKeys.TGStructureSetKeys;
-import com.finallion.graveyard.world.structures.AbstractGraveyardStructure;
 import net.minecraft.data.worldgen.StructureSets;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 
@@ -111,6 +107,20 @@ public class TGStructureSets {
                         GraveyardConfig.COMMON.structureConfigEntries.get("crypt").separation.get(),
                         RandomSpreadType.LINEAR,
                         Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("crypt").salt.get())));
+
+        StructureSets.m_211131_(TGStructureSetKeys.LICH_PRISONS, TGConfiguredStructureFeatures.LICH_PRISON_STRUCTURE_CONFIG,
+                new RandomSpreadStructurePlacement(
+                        GraveyardConfig.COMMON.structureConfigEntries.get("lich_prison").spacing.get(),
+                        GraveyardConfig.COMMON.structureConfigEntries.get("lich_prison").separation.get(),
+                        RandomSpreadType.LINEAR,
+                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("lich_prison").salt.get())));
+
+        StructureSets.m_211131_(TGStructureSetKeys.RUINS, TGConfiguredStructureFeatures.RUINS_STRUCTURE_CONFIG,
+                new RandomSpreadStructurePlacement(
+                        GraveyardConfig.COMMON.structureConfigEntries.get("ruins").spacing.get(),
+                        GraveyardConfig.COMMON.structureConfigEntries.get("ruins").separation.get(),
+                        RandomSpreadType.LINEAR,
+                        Math.toIntExact(GraveyardConfig.COMMON.structureConfigEntries.get("ruins").salt.get())));
 
     }
 

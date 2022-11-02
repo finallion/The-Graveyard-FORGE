@@ -25,18 +25,19 @@ public class BaseGhoulModel extends AnimatedGeoModel<GhoulEntity> {
     }
 
     @Override
-    public void setLivingAnimations(GhoulEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(GhoulEntity animatable, int instanceId, AnimationEvent animationEvent) {
+        super.setCustomAnimations(animatable, instanceId, animationEvent);
 
-        switch (entity.getVariant()) {
-            case 1: texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin2.png"); break;
-            case 2: texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin3.png"); break;
-            case 3: texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin4.png"); break;
-            case 4: texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin5.png"); break;
-            case 5: texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin6.png"); break;
-            case 6: texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin7.png"); break;
-            case 7: texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin8.png"); break;
-            default: texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin1.png"); break;
+        switch (animatable.getVariant()) {
+            case 1 -> texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin2.png");
+            case 2 -> texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin3.png");
+            case 3 -> texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin4.png");
+            case 4 -> texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin5.png");
+            case 5 -> texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin6.png");
+            case 6 -> texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin7.png");
+            case 7 -> texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin8.png");
+            case 10 -> texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin9.png");
+            default -> texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/ghoul_skin1.png");
         };
     }
 }

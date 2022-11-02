@@ -8,7 +8,6 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.Pools;
-import net.minecraft.data.worldgen.Pools;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
@@ -22,14 +21,14 @@ public class AltarStructure extends AbstractGraveyardStructure {
 
     public AltarStructure(Codec<JigsawConfiguration> codec) {
         super(new StructureConfigEntry(30, 24, 1093123913,
-                        Arrays.asList("minecraft:snowy_plains"),
-                        Collections.emptyList(), Arrays.asList("#minecraft", "#terralith"), false), // only allow in birch forests
-                7, "altar");
+                        Arrays.asList("minecraft:snowy_plains", "minecraft:ice_spikes"),
+                        Collections.emptyList(), 7, 3, false), // only allow in birch forests
+                "altar");
     }
 
     @Override
     public ConfiguredStructureFeature<?, ?> getStructureFeature() {
-        return TGConfiguredStructureFeatures.MEMORIAL_TREE_STRUCTURE_CONFIG.m_203334_();
+        return TGConfiguredStructureFeatures.ALTAR_STRUCTURE_CONFIG.m_203334_();
     }
 
 

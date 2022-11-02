@@ -1,7 +1,6 @@
 package com.finallion.graveyard.world.structures;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.init.TGConfiguredStructureFeatures;
 import com.google.common.collect.ImmutableList;
@@ -10,30 +9,22 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.Pools;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.random.WeightedRandomList;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
-import net.minecraftforge.common.util.Lazy;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 public class SmallDesertGraveyardStructure extends AbstractGraveyardStructure {
 
     public SmallDesertGraveyardStructure(Codec<JigsawConfiguration> codec) {
         super(new StructureConfigEntry(32, 28, 598017285,
-                        Arrays.asList("#" + Biome.BiomeCategory.DESERT.getName()),
-                        Collections.emptyList(), Arrays.asList("#minecraft", "#terralith"), false),
-                20, "small_desert_graveyard");
+                        Arrays.asList("minecraft:desert"),
+                        Collections.emptyList(), 20, 3, false),
+                "small_desert_graveyard");
     }
-
-
 
     @Override
     public ConfiguredStructureFeature<?, ?> getStructureFeature() {

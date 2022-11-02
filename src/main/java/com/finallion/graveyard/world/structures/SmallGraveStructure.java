@@ -1,7 +1,6 @@
 package com.finallion.graveyard.world.structures;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.init.TGConfiguredStructureFeatures;
 import com.google.common.collect.ImmutableList;
@@ -10,7 +9,6 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.Pools;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
@@ -23,9 +21,20 @@ public class SmallGraveStructure extends AbstractGraveyardStructure {
 
     public SmallGraveStructure(Codec<JigsawConfiguration> codec) {
         super(new StructureConfigEntry(12, 8, 661903018,
-                        Arrays.asList("#" + Biome.BiomeCategory.TAIGA.getName(), "#" + Biome.BiomeCategory.FOREST.getName(), "#" + Biome.BiomeCategory.PLAINS.getName()),
-                        Collections.emptyList(), Arrays.asList("#minecraft", "#graveyard_biomes", "#terralith"), false),
-                4, "small_grave");
+                        Arrays.asList(
+                                "minecraft:forest",
+                                "minecraft:sunflower_plains",
+                                "#minecraft:plains",
+                                "minecraft:meadow",
+                                "minecraft:windswept_forest",
+                                "minecraft:old_growth_birch_forest",
+                                "minecraft:taiga",
+                                "minecraft:flower_forest",
+                                "minecraft:birch_forest",
+                                "terralith:blooming_plateau",
+                                "terralith:blooming_valley"),
+                        Collections.emptyList(), 4, 3, false),
+                "small_grave");
     }
 
     @Override

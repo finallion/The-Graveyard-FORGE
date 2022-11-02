@@ -11,11 +11,8 @@ import net.minecraft.client.renderer.entity.layers.CreeperPowerLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.monster.Creeper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 
-@OnlyIn(Dist.CLIENT)
 public class SkeletonCreeperRender extends MobRenderer<Creeper, CreeperModel<Creeper>> {
     private static final ResourceLocation CREEPER_LOCATION = new ResourceLocation(TheGraveyard.MOD_ID,"textures/entity/skeleton_creeper.png");
 

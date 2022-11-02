@@ -21,6 +21,8 @@ public class TGConfiguredStructureFeatureKeys {
     public static ResourceKey<ConfiguredStructureFeature<?, ?>> ALTAR = of("altar");
     public static ResourceKey<ConfiguredStructureFeature<?, ?>> GIANT_MUSHROOM = of("giant_mushroom");
     public static ResourceKey<ConfiguredStructureFeature<?, ?>> CRYPT = of("crypt");
+    public static ResourceKey<ConfiguredStructureFeature<?, ?>> LICH_PRISON = of("lich_prison");
+    public static ResourceKey<ConfiguredStructureFeature<?, ?>> RUINS = of("ruins");
 
     private static ResourceKey<ConfiguredStructureFeature<?, ?>> of(String id) {
         return ResourceKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, new ResourceLocation(TheGraveyard.MOD_ID, id));

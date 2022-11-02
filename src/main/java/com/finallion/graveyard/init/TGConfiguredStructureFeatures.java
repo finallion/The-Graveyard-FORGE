@@ -6,17 +6,13 @@ import com.finallion.graveyard.util.StructureSpawnPool;
 import com.finallion.graveyard.util.TGTags;
 import com.finallion.graveyard.world.structures.*;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.data.worldgen.PillagerOutpostPools;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
-import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride;
 
 import java.util.ArrayList;
@@ -80,7 +76,15 @@ public class TGConfiguredStructureFeatures {
 
     public static final Holder<ConfiguredStructureFeature<?, ?>> CRYPT_STRUCTURE_CONFIG = register(TGConfiguredStructureFeatureKeys.CRYPT,
             TGStructureFeatures.CRYPT_STRUCTURE.m_209773_(
-                    new JigsawConfiguration(CryptStructure.CryptGenerator.STARTING_POOL, 7), TGTags.IS_OVERWORLD, false, addMobSpawnsToStructure(GraveyardConfig.COMMON.structureConfigEntries.get("crypt").canSpawnGraveyardMobs.get(), "")));
+                    new JigsawConfiguration(CryptStructure.CryptGenerator.STARTING_POOL, 6), TGTags.IS_OVERWORLD, false, addMobSpawnsToStructure(GraveyardConfig.COMMON.structureConfigEntries.get("crypt").canSpawnGraveyardMobs.get(), "")));
+
+    public static final Holder<ConfiguredStructureFeature<?, ?>> LICH_PRISON_STRUCTURE_CONFIG = register(TGConfiguredStructureFeatureKeys.LICH_PRISON,
+            TGStructureFeatures.LICH_PRISON_STRUCTURE.m_209773_(
+                    new JigsawConfiguration(LichPrisonStructure.LichPrisonGenerator.STARTING_POOL, 1), TGTags.IS_OVERWORLD, false, addMobSpawnsToStructure(GraveyardConfig.COMMON.structureConfigEntries.get("lich_prison").canSpawnGraveyardMobs.get(), "")));
+
+    public static final Holder<ConfiguredStructureFeature<?, ?>> RUINS_STRUCTURE_CONFIG = register(TGConfiguredStructureFeatureKeys.RUINS,
+            TGStructureFeatures.RUINS_STRUCTURE.m_209773_(
+                    new JigsawConfiguration(RuinsStructure.RuinsGenerator.STARTING_POOL, 1), TGTags.IS_OVERWORLD, true, addMobSpawnsToStructure(GraveyardConfig.COMMON.structureConfigEntries.get("ruins").canSpawnGraveyardMobs.get(), "")));
 
 
     public static void init() {

@@ -1,7 +1,6 @@
 package com.finallion.graveyard.world.structures;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.config.StructureConfigEntry;
 import com.finallion.graveyard.init.TGConfiguredStructureFeatures;
 import com.finallion.graveyard.init.TGProcessors;
@@ -11,10 +10,8 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.Pools;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
-import net.minecraft.world.level.levelgen.structure.PostPlacementProcessor;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 
@@ -28,11 +25,19 @@ public class HauntedHouseStructure extends AbstractGraveyardStructure {
                         25,
                         20,
                         451235912,
-                        Arrays.asList("minecraft:dark_forest", "#" + Biome.BiomeCategory.SWAMP.getName(), "terralith:moonlight_valley", "terralith:cloud_forest", "graveyard_biomes:haunted_lakes"),
+                        Arrays.asList(
+                                "minecraft:dark_forest",
+                                "#forge:swamp",
+                                "minecraft:old_growth_pine_taiga",
+                                "minecraft:old_growth_spruce_taiga",
+                                "terralith:moonlight_valley",
+                                "terralith:cloud_forest",
+                                "graveyard_biomes:haunted_lakes"
+                        ),
                         Collections.emptyList(),
-                        Arrays.asList("#minecraft", "#graveyard_biomes", "#terralith"),
+                        30, 5,
                         false), // only allow in swamp and dark forest
-                30,  "haunted_house");
+                "haunted_house");
     }
 
 

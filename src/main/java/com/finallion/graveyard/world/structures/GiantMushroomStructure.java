@@ -24,11 +24,11 @@ public class GiantMushroomStructure extends AbstractGraveyardStructure {
                         20,
                         18,
                         365012356,
-                        Arrays.asList("#mushroom"),
+                        Arrays.asList("#forge:mushroom"),
                         Collections.emptyList(),
-                        Arrays.asList("#minecraft", "#terralith"),
+                        10, 3,
                         false),
-                10, "giant_mushroom");
+               "giant_mushroom");
     }
 
     @Override

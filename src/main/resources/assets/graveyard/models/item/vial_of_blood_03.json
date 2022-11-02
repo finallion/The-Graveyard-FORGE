@@ -1,0 +1,6 @@
+{
+    "parent": "graveyard:item/vial_of_blood",
+    "textures": {
+        "layer0": "graveyard:item/vial_of_blood_03"
+    }
+}

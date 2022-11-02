@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "bloody=false": {
+      "model": "graveyard:block/altar"
+    },
+    "bloody=true": {
+      "model": "graveyard:block/bloody_altar"
+    }
+  }
+}

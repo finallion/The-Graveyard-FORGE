@@ -1,7 +1,6 @@
 package com.finallion.graveyard.entities.renders.features;
 
 
-import com.finallion.graveyard.entities.CorruptedPillager;
 import com.finallion.graveyard.entities.CorruptedVindicator;
 import com.finallion.graveyard.entities.models.CorruptedIllagerModel;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -12,10 +11,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class VindicatorEyes extends RenderLayer<CorruptedVindicator, CorruptedIllagerModel<CorruptedVindicator>> {
 
     public VindicatorEyes(RenderLayerParent<CorruptedVindicator, CorruptedIllagerModel<CorruptedVindicator>> context) {

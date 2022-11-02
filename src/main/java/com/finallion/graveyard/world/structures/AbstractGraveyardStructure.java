@@ -1,17 +1,15 @@
 package com.finallion.graveyard.world.structures;
 
-import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.config.StructureConfigEntry;
-import com.finallion.graveyard.util.BiomeCheckUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
-import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -23,22 +21,18 @@ import net.minecraft.world.level.levelgen.structure.PostPlacementProcessor;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
-import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.util.Lazy;
+import net.minecraftforge.common.BiomeDictionary;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public abstract class AbstractGraveyardStructure extends StructureFeature<JigsawConfiguration> {
     private final StructureConfigEntry structureConfigEntry;
     private String structureName;
 
-    public AbstractGraveyardStructure(StructureConfigEntry config, int size, String name) {
-        super(JigsawConfiguration.CODEC, (context -> AbstractGraveyardStructure.createPiecesGenerator(context, config, size, name)), PostPlacementProcessor.NONE);
+    public AbstractGraveyardStructure(StructureConfigEntry config, String name) {
+        super(JigsawConfiguration.CODEC, (context -> AbstractGraveyardStructure.createPiecesGenerator(context, config, name)), PostPlacementProcessor.NONE);
         this.structureConfigEntry = config;
         this.structureName = name;
     }
@@ -49,7 +43,7 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
         return GenerationStep.Decoration.SURFACE_STRUCTURES;
     }
 
-    private static boolean isFeatureChunk(PieceGeneratorSupplier.Context<JigsawConfiguration> context, StructureConfigEntry config, int size, String name) {
+    private static boolean isFeatureChunk(PieceGeneratorSupplier.Context<JigsawConfiguration> context, StructureConfigEntry config, String name) {
         BlockPos centerOfChunk = context.chunkPos().getMiddleBlockPosition(0);
 
         if (!isCorrectBiome(context, config, name)) {
@@ -57,7 +51,7 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
         }
 
 
-        if (!isTerrainFlat(context.chunkGenerator(), centerOfChunk.getX(), centerOfChunk.getZ(), context.heightAccessor(), size)) {
+        if (!isTerrainFlat(context.chunkGenerator(), centerOfChunk.getX(), centerOfChunk.getZ(), context.heightAccessor(), config.terrainCheckRadius.get(), config.maxTerrainHeightDifference.get())) {
             return false;
         }
 
@@ -69,10 +63,10 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
         return true;
     }
 
-    public static Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context, StructureConfigEntry config, int size, String name) {
+    public static Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context, StructureConfigEntry config, String name) {
         BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(0);
 
-        if (!AbstractGraveyardStructure.isFeatureChunk(context, config, size, name)) {
+        if (!AbstractGraveyardStructure.isFeatureChunk(context, config, name)) {
             return Optional.empty();
         }
 
@@ -99,7 +93,7 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
 
     public abstract ConfiguredStructureFeature<?, ?> getStructureFeature();
 
-    protected static boolean isTerrainFlat(ChunkGenerator generator, int chunkX, int chunkZ, LevelHeightAccessor heightLimitView, int size) {
+    protected static boolean isTerrainFlat(ChunkGenerator generator, int chunkX, int chunkZ, LevelHeightAccessor heightLimitView, int size, int maxHeightDifference) {
         // center of generation is chunkX 0 chunkZ (i)
         // checks:
         //
@@ -132,35 +126,60 @@ public abstract class AbstractGraveyardStructure extends StructureFeature<Jigsaw
         int maxSides = Math.max(Math.max(j1, p1), Math.max(o1, k1));
         int maxHeight = Math.max(maxSides, i1);
 
-        return Math.abs(maxHeight - minHeight) <= GraveyardConfig.COMMON.maxTerrainHeightDifference.get();
+        return Math.abs(maxHeight - minHeight) <= maxHeightDifference;
     }
 
-    /*
-    protected static boolean isWater(ChunkGenerator generator, int chunkX, int chunkZ, LevelHeightAccessor heightLimitView, int size) {
-        Set<Biome> biomesInAreaOne = generator.getBiomeSource().getBiomesWithin(chunkX, 0, chunkZ, size, generator.climateSampler());
-
-        for (Biome biome : biomesInAreaOne) {
-            if (biome.getBiomeCategory() == Biome.BiomeCategory.OCEAN || biome.getBiomeCategory() == Biome.BiomeCategory.RIVER || biome.getBiomeCategory() == Biome.BiomeCategory.BEACH) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-     */
 
     protected static boolean isCorrectBiome(PieceGeneratorSupplier.Context<JigsawConfiguration> context, StructureConfigEntry config, String name) {
-        BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(0);
-
-        Holder<Biome> biome = context.chunkGenerator().m_203495_(QuartPos.fromBlock(blockpos.getX()), QuartPos.fromBlock(blockpos.getY()), QuartPos.fromBlock(blockpos.getZ()));
-
-        if (config.canGenerate.get() &&
-                BiomeCheckUtil.parseBiomes(config.whitelist.get(), config.blacklist.get(), biome) &&
-                BiomeCheckUtil.parseWhitelistedMods(config.modWhitelist.get(), biome)) {
+        if (config.canGenerate.get() && parseWhitelistedMods(context, config.biomeWhitelist.get(), config.biomeBlacklist.get())) {
             return true;
         }
         return false;
     }
+
+
+    public static boolean parseWhitelistedMods(PieceGeneratorSupplier.Context<JigsawConfiguration> context, List<? extends  String> whitelist, List<? extends  String> blacklist) {
+        BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(0);
+
+        Holder<Biome> biome = context.chunkGenerator().m_203495_(QuartPos.fromBlock(blockpos.getX()), QuartPos.fromBlock(blockpos.getY()), QuartPos.fromBlock(blockpos.getZ()));
+
+        String biomeName = biome.m_203543_().orElseThrow().location().toString();
+
+        if (blacklist.contains(biomeName)) {
+            return false;
+        }
+
+        for (String biomeInList : whitelist) {
+            if (biomeInList.startsWith("#")) { // check if biome is in tag
+                String[] parts = biomeInList.substring(1).split(":");
+                TagKey<Biome> tag = TagKey.m_203882_(Registry.BIOME_REGISTRY, new ResourceLocation(parts[0], parts[1]));
+                Registry<Biome> registry = context.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
+
+                // vanilla tags
+                if (registry.m_203658_(tag)) { // registry has tag
+                    if (registry.m_203431_(tag).orElseThrow().m_203333_(biome)) { // tag contains biome
+                        return true;
+                    }
+                }
+
+                // forge tags
+                if (BiomeDictionary.Type.hasType(parts[1])) {   // if the tag from the whitelist exists
+                    for (BiomeDictionary.Type type : BiomeDictionary.Type.getAll()) {
+                        if (type.getName().equalsIgnoreCase(parts[1]) && biome.m_203543_().isPresent()) { // find the biomes from the tag
+                            if (BiomeDictionary.getBiomes(type).contains(biome.m_203543_().get())) { // check if tag contains the biome, the structure placement is looking at!
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+            } else if (whitelist.contains(biomeName)) { // check if biome is on whitelist
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
 

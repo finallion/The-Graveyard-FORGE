@@ -70,7 +70,8 @@ public class GravestoneBlockEntityRenderer implements BlockEntityRenderer<Graves
         matrixStack.scale(0.010416667F, -0.010416667F, 0.010416667F);
 
 
-        int i = signBlockEntity.getColor().getTextColor();
+        //int i = signBlockEntity.getColor().getTextColor();
+        int i = getDarkColor(signBlockEntity);
 
         FormattedCharSequence[] aformattedcharsequence = signBlockEntity.getRenderMessages(Minecraft.getInstance().isTextFilteringEnabled(), (p_173653_) -> {
             List<FormattedCharSequence> list = this.font.split(p_173653_, 90);
