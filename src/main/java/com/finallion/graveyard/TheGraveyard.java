@@ -55,7 +55,7 @@ public class TheGraveyard {
 
         modEventBus.addListener(this::setupClient);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC, "graveyard-common-1.18.2.toml");
 
 
     }
