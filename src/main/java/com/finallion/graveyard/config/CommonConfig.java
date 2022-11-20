@@ -1,11 +1,14 @@
 package com.finallion.graveyard.config;
 
 
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.io.WritingMode;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.io.File;
 import java.util.*;
 
 public class CommonConfig {
@@ -274,6 +277,27 @@ public class CommonConfig {
     public final ForgeConfigSpec.BooleanValue disableWitherSkeletonSpawner;
     public final ForgeConfigSpec.IntValue maxTerrainHeightDifference;
 
+    public final ForgeConfigSpec.DoubleValue healthInCastingPhase;
+    public final ForgeConfigSpec.DoubleValue healthInHuntingPhase;
+    public final ForgeConfigSpec.DoubleValue damageCastingPhase;
+    public final ForgeConfigSpec.DoubleValue damageHuntingPhaseAddition;
+    public final ForgeConfigSpec.DoubleValue armor;
+    public final ForgeConfigSpec.DoubleValue armorToughness;
+    public final ForgeConfigSpec.DoubleValue speedInHuntPhase;
+    public final ForgeConfigSpec.IntValue durationHuntingPhase;
+    public final ForgeConfigSpec.IntValue durationFallingCorpseSpell;
+    public final ForgeConfigSpec.IntValue durationHealingSpell;
+    public final ForgeConfigSpec.IntValue durationLevitationSpell;
+    public final ForgeConfigSpec.IntValue maxAmountSkullsInShootSkullSpell;
+    public final ForgeConfigSpec.IntValue maxSummonedMobs;
+    public final ForgeConfigSpec.IntValue maxGroupSizeSummonedMobs;
+    public final ForgeConfigSpec.IntValue ghoulSpawnTimerInFight;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> isBloodCollectableEntity;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> isBossSummonableItem;
+    public final ForgeConfigSpec.BooleanValue summoningNeedsStaffFragments;
+    public final ForgeConfigSpec.BooleanValue isMultiphaseFight;
+    public final ForgeConfigSpec.BooleanValue isInvulnerableDuringSpells;
+
     public CommonConfig(ForgeConfigSpec.Builder builder) {
         builder.comment(" Welcome to The Graveyard Config!" +
                 "\n" +
@@ -317,7 +341,7 @@ public class CommonConfig {
 
         this.canGenerateHauntedHouse = builder.define("hauntedHouse.generate", true);
         this.spacingHauntedHouse = builder.defineInRange("hauntedHouse.spacing", 20, 0, 200);
-        this.separationHauntedHouse = builder.defineInRange("hauntedHouse.separation", 15, 0, 200);
+        this.separationHauntedHouse = builder.defineInRange("hauntedHouse.separation", 18, 0, 200);
         this.saltHauntedHouse = builder.defineInRange("hauntedHouse.salt", 451235912, 0, 10000000000L);
         this.whitelistHauntedHouse = builder.defineList("hauntedHouse.whitelist", Arrays.asList(
                 "minecraft:dark_forest",
@@ -333,8 +357,8 @@ public class CommonConfig {
         this.canSpawnGraveyardMobsHauntedHouse = builder.define("hauntedHouse.canSpawnMobs", false);
 
         this.canGenerateLargeGraveyard = builder.define("largeGraveyard.generate", true);
-        this.spacingLargeGraveyard = builder.defineInRange("largeGraveyard.spacing", 12, 0, 200);
-        this.separationLargeGraveyard = builder.defineInRange("largeGraveyard.separation", 10, 0, 200);
+        this.spacingLargeGraveyard = builder.defineInRange("largeGraveyard.spacing", 18, 0, 200);
+        this.separationLargeGraveyard = builder.defineInRange("largeGraveyard.separation", 16, 0, 200);
         this.saltLargeGraveyard = builder.defineInRange("largeGraveyard.salt", 304812394, 0, 10000000000L);
         this.whitelistLargeGraveyard = builder.defineList("largeGraveyard.whitelist", Arrays.asList(
                 "minecraft:taiga",
@@ -369,8 +393,8 @@ public class CommonConfig {
         this.canSpawnGraveyardMobsMediumGraveyard = builder.define("mediumGraveyard.canSpawnMobs", true);
 
         this.canGenerateMemorialTree = builder.define("memorialTree.generate", true);
-        this.spacingMemorialTree = builder.defineInRange("memorialTree.spacing", 14, 0, 200);
-        this.separationMemorialTree = builder.defineInRange("memorialTree.separation", 12, 0, 200);
+        this.spacingMemorialTree = builder.defineInRange("memorialTree.spacing", 18, 0, 200);
+        this.separationMemorialTree = builder.defineInRange("memorialTree.separation", 16, 0, 200);
         this.saltMemorialTree = builder.defineInRange("memorialTree.salt", 529239621, 0, 10000000000L);
         this.whitelistMemorialTree = builder.defineList("memorialTree.whitelist", Arrays.asList(
                 "minecraft:old_growth_birch_forest",
@@ -449,8 +473,8 @@ public class CommonConfig {
         this.canSpawnGraveyardMobsSmallSavannaGrave = builder.define("smallSavannaGrave.canSpawnMobs", false);
 
         this.canGenerateSmallGraveyard = builder.define("smallGraveyard.generate", true);
-        this.spacingSmallGraveyard = builder.defineInRange("smallGraveyard.spacing", 20, 0, 200);
-        this.separationSmallGraveyard = builder.defineInRange("smallGraveyard.separation", 18, 0, 200);
+        this.spacingSmallGraveyard = builder.defineInRange("smallGraveyard.spacing", 24, 0, 200);
+        this.separationSmallGraveyard = builder.defineInRange("smallGraveyard.separation", 22, 0, 200);
         this.saltSmallGraveyard = builder.defineInRange("smallGraveyard.salt", 240451934, 0, 10000000000L);
         this.whitelistSmallGraveyard = builder.defineList("smallGraveyard.whitelist", Arrays.asList(
                 "#forge:is_plains",
@@ -507,8 +531,8 @@ public class CommonConfig {
         this.canSpawnGraveyardMobsGiantMushroom = builder.define("giantMushroom.canSpawnMobs", false);
 
         this.canGenerateLichPrison = builder.define("lichPrison.generate", true);
-        this.spacingLichPrison = builder.defineInRange("lichPrison.spacing", 30, 0, 200);
-        this.separationLichPrison = builder.defineInRange("lichPrison.separation", 28, 0, 200);
+        this.spacingLichPrison = builder.defineInRange("lichPrison.spacing", 100, 0, 200);
+        this.separationLichPrison = builder.defineInRange("lichPrison.separation", 96, 0, 200);
         this.saltLichPrison = builder.defineInRange("lichPrison.salt", 258195719, 0, 10000000000L);
         this.whitelistLichPrison = builder.defineList("lichPrison.whitelist", Arrays.asList(
                 "#minecraft:is_ocean"), o -> o instanceof String);
@@ -628,6 +652,29 @@ public class CommonConfig {
 
         builder.pop();
 
+        builder.push("The Graveyard - Corrupted Champion Config");
+        this.healthInCastingPhase = builder.defineInRange("corruptedChampion.healthInCastingPhase", 400.0D, 1.0D, 1024.0D);
+        this.healthInHuntingPhase = builder.defineInRange("corruptedChampion.healthInHuntingPhase", 200.0D, 1.0D, 1024.0D);
+        this.damageCastingPhase = builder.defineInRange("corruptedChampion.damageCastingPhase", 30.0D, 1.0D, 2048.0D);
+        this.damageHuntingPhaseAddition = builder.defineInRange("corruptedChampion.damageHuntingPhaseAddition", 40.0D, 1.0D, 2048.0D);
+        this.armor = builder.defineInRange("corruptedChampion.armor", 18.0D, 0, 30.0D);
+        this.armorToughness = builder.defineInRange("corruptedChampion.armorToughness", 14.0D, 0, 20.0D);
+        this.speedInHuntPhase = builder.defineInRange("corruptedChampion.speedInHuntPhase", 0.15D, 0, 1024.0D);
+        this.durationHuntingPhase = builder.defineInRange("corruptedChampion.durationHuntingPhase", 800, 0, 100000);
+        this.durationFallingCorpseSpell = builder.defineInRange("corruptedChampion.durationFallingCorpseSpell", 400, 0, 100000);
+        this.durationHealingSpell = builder.defineInRange("corruptedChampion.durationHealingSpell", 700, 0, 100000);
+        this.durationLevitationSpell = builder.defineInRange("corruptedChampion.durationLevitationSpell", 150, 0, 100000);
+        this.maxAmountSkullsInShootSkullSpell = builder.defineInRange("corruptedChampion.maxAmountSkullsInShootSkullSpell", 5, 1, 100);
+        this.maxSummonedMobs = builder.defineInRange("corruptedChampion.maxSummonedMobs", 30, 0, 100);
+        this.maxGroupSizeSummonedMobs = builder.defineInRange("corruptedChampion.maxGroupSizeSummonedMobs", 5, 1, 100);
+        this.ghoulSpawnTimerInFight = builder.defineInRange("corruptedChampion.ghoulSpawnTimerInFight", 6000, 0, 100000);
+        this.isBloodCollectableEntity = builder.defineList("corruptedChampion.isBloodCollectableEntity", List.of("entity.minecraft.villager"), o -> o instanceof String);
+        this.isBossSummonableItem = builder.defineList("corruptedChampion.isBossSummonableItem", List.of("item.minecraft.debug_stick"), o -> o instanceof String);
+        this.summoningNeedsStaffFragments = builder.define("corruptedChampion.summoningNeedsStaffFragments", true);
+        this.isMultiphaseFight = builder.define("corruptedChampion.isMultiphaseFight", true);
+        this.isInvulnerableDuringSpells = builder.define("corruptedChampion.isInvulnerableDuringSpells", true);
+        builder.pop();
+
         builder.push("The Graveyard - Horde Config");
         this.enableHorde = builder.define("horde.generate", true);
         this.mobSpawnAttempts = builder.defineInRange("horde.mobSpawnAttempts", 40, 0, 1000);
@@ -656,5 +703,15 @@ public class CommonConfig {
 
         return new ArrayList<>(biomes.stream().map(value -> value.location().toString()).toList());
 
+    }
+
+    /*
+    Credit to AzureDoom and Tslat
+     */
+    public static void loadConfig(ForgeConfigSpec config, String path) {
+        final CommentedFileConfig file = CommentedFileConfig.builder(new File(path)).sync().autosave()
+                .writingMode(WritingMode.REPLACE).build();
+        file.load();
+        config.setConfig(file);
     }
 }

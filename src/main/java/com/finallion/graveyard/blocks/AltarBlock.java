@@ -1,13 +1,31 @@
 package com.finallion.graveyard.blocks;
 
 
+import com.finallion.graveyard.config.GraveyardConfig;
+import com.finallion.graveyard.entities.LichEntity;
 import com.finallion.graveyard.init.TGBlocks;
+import com.finallion.graveyard.init.TGEntities;
+import com.finallion.graveyard.init.TGItems;
 import com.finallion.graveyard.init.TGSounds;
+import com.finallion.graveyard.item.VialOfBlood;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -16,6 +34,7 @@ import net.minecraft.world.level.block.state.pattern.BlockPattern;
 import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 public class AltarBlock extends Block {
     public static final BooleanProperty BLOODY = BooleanProperty.create("bloody");
@@ -57,4 +76,79 @@ public class AltarBlock extends Block {
         return COMPLETED_ALTAR;
     }
 
+    @Override
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand p_60507_, BlockHitResult p_60508_) {
+        ItemStack stack = player.getMainHandItem();
+
+        float blood = 0.0F;
+        if (stack.is(TGItems.VIAL_OF_BLOOD.get())) {
+            blood = VialOfBlood.getBlood(stack);
+        }
+
+        if (state.is(TGBlocks.ALTAR.get()) && (blood >= 0.8F || GraveyardConfig.COMMON.isBossSummonableItem.get().contains(stack.getItem().getDescriptionId())) && world.getDifficulty() != Difficulty.PEACEFUL && world.isNight()) {
+            BlockPattern.BlockPatternMatch result = AltarBlock.getCompletedFramePattern().find(world, pos);
+
+            if (!state.getValue(AltarBlock.BLOODY) && (result != null || !GraveyardConfig.COMMON.summoningNeedsStaffFragments.get())) {
+                player.level.playSound(null, player.blockPosition(), TGSounds.VIAL_SPLASH.get(), SoundSource.BLOCKS, 5.0F, 1.0F);
+                world.setBlock(pos, state.setValue(AltarBlock.BLOODY, true), 3);
+
+                Direction direction;
+
+                if (result == null) {
+                    direction = Direction.NORTH;
+                } else {
+                    direction = result.getUp();
+                }
+
+                if (!world.isClientSide()) {
+                    if (!player.isCreative()) {
+                        ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
+                        ItemUtils.createFilledResult(stack, player, bottle);
+                        player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 430));
+                    }
+
+                    BlockPos corner = pos.offset(-8, 0, -8);
+
+                    // searches square around altar
+                    for(int i = 0; i < 16; ++i) {
+                        for(int j = 0; j < 16; ++j) {
+                            for(int k = 0; k < 2;++k) {
+                                BlockPos iteratorPos = new BlockPos(corner.offset(i, k, j));
+                                BlockState blockState = world.getBlockState(iteratorPos);
+
+                                if (blockState.getBlock() instanceof OminousBoneStaffFragment) {
+                                    world.setBlock(iteratorPos, Blocks.AIR.defaultBlockState(), 3);
+                                }
+                            }
+                        }
+                    }
+
+                    LichEntity lich = (LichEntity) TGEntities.LICH.get().create(world);
+                    BlockPos blockPos = pos.above();
+                    lich.setYHeadRot(direction.getOpposite().toYRot());
+                    lich.setYBodyRot(direction.getOpposite().toYRot());
+                    lich.setYRot(direction.getOpposite().toYRot());
+                    lich.moveTo((double)blockPos.getX() + 0.5D, (double)blockPos.getY() + 0.55D, (double)blockPos.getZ() + 0.5D, 0.0F, 0.0F);
+                    lich.onSummoned(direction.getOpposite(), pos.above());
+
+
+                    for (ServerPlayer serverplayer : world.getEntitiesOfClass(ServerPlayer.class, lich.getBoundingBox().inflate(50.0D))) {
+                        CriteriaTriggers.SUMMONED_ENTITY.trigger(serverplayer, lich);
+                    }
+
+
+
+                    world.addFreshEntity(lich);
+                    lich.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 5));
+
+                    return InteractionResult.CONSUME;
+                }
+
+                return InteractionResult.sidedSuccess(player.level.isClientSide);
+            }
+        }
+
+
+        return super.use(state, world, pos, player, p_60507_, p_60508_);
+    }
 }

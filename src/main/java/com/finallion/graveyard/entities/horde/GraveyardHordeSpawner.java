@@ -1,6 +1,5 @@
 package com.finallion.graveyard.entities.horde;
 
-import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.entities.HordeGraveyardEntity;
 import com.finallion.graveyard.entities.HostileGraveyardEntity;
@@ -11,23 +10,16 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
-import net.minecraft.world.entity.monster.PatrollingMonster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.CustomSpawner;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.Fluids;
-
-import java.util.Random;
 
 public class GraveyardHordeSpawner {
     private int nextTick;
@@ -104,6 +96,8 @@ public class GraveyardHordeSpawner {
         BlockState blockstate = p_64565_.getBlockState(p_64566_);
         BlockState downState = p_64565_.getBlockState(p_64566_.below());
         if (!NaturalSpawner.isValidEmptySpawnBlock(p_64565_, p_64566_, blockstate, blockstate.getFluidState(), TGEntities.GHOUL.get())) {
+            return false;
+        } else if (p_64565_.getLightEmission(p_64566_) > 1) {
             return false;
         } else if (blockstate.getFluidState().is(Fluids.WATER) || downState.getFluidState().is(Fluids.WATER) ) {
             return false;

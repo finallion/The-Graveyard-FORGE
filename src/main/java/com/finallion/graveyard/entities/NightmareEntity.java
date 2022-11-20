@@ -72,7 +72,12 @@ public class NightmareEntity extends HostileGraveyardEntity implements IAnimatab
 
     public NightmareEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world, "nightmare");
-        this.maxUpStep = 1.0F;
+        //this.maxUpStep = 1.0F;
+    }
+
+    @Override
+    public float getStepHeight() {
+        return 1.0F;
     }
 
     @Override

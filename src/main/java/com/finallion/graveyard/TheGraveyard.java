@@ -1,6 +1,7 @@
 package com.finallion.graveyard;
 
 import com.finallion.graveyard.client.TheGraveyardClient;
+import com.finallion.graveyard.config.CommonConfig;
 import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.*;
 import com.finallion.graveyard.item.VialOfBlood;
@@ -23,6 +24,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
@@ -59,8 +61,10 @@ public class TheGraveyard {
         serializers.register(modEventBus);
         serializers.register("mobspawns", SpawnRules.ModSpawnModifier::makeCodec);
 
-
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC);
+        CommonConfig.loadConfig(GraveyardConfig.COMMON_SPEC, FMLPaths.CONFIGDIR.get().resolve(MOD_ID + "-common.toml").toString());
+
+        //modEventBus.addListener(this::onCreateEntityAttributes);
 
         //modEventBus.addListener(DataGenerators::gatherData);
 
@@ -92,6 +96,24 @@ public class TheGraveyard {
         });
     }
 
+
+    /*
+    public void onCreateEntityAttributes(EntityAttributeModificationEvent event) {
+        event.add(TGEntities.LICH.get(), Attributes.MAX_HEALTH, GraveyardConfig.COMMON.healthInCastingPhase.get());
+        event.add(TGEntities.LICH.get(), Attributes.ATTACK_DAMAGE, GraveyardConfig.COMMON.damageCastingPhase.get());
+        event.add(TGEntities.LICH.get(), Attributes.ARMOR, GraveyardConfig.COMMON.armor.get());
+        event.add(TGEntities.LICH.get(), Attributes.ARMOR_TOUGHNESS, GraveyardConfig.COMMON.armorToughness.get());
+
+        event.put(TGEntities.LICH.get(), AttributeSupplier.builder()
+                .add(Attributes.MAX_HEALTH, GraveyardConfig.COMMON.healthInCastingPhase.get())
+                .add(Attributes.ATTACK_DAMAGE, GraveyardConfig.COMMON.damageCastingPhase.get())
+                .add(Attributes.ARMOR, GraveyardConfig.COMMON.armor.get())
+                .add(Attributes.ARMOR_TOUGHNESS, GraveyardConfig.COMMON.armorToughness.get()).build());
+
+
+    }
+
+     */
 
     public static final CreativeModeTab GROUP = new CreativeModeTab ("graveyard_group") {
         @Override

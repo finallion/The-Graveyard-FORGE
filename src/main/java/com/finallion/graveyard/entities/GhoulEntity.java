@@ -211,9 +211,13 @@ public class GhoulEntity extends AngerableGraveyardEntity implements IAnimatable
             return PlayState.CONTINUE;
         }
 
+        if (!event.isMoving() && !isRaging()) {
+            event.getController().setAnimation(IDLE_ANIMATION);
+        }
+
         /* IDLE */
         if (getAnimationState() == ANIMATION_IDLE && getAttackAnimTimer() <= 0 && !event.isMoving()) {
-            event.getController().setAnimation(IDLE_ANIMATION);
+            setAnimationState(ANIMATION_IDLE);
             return PlayState.CONTINUE;
         }
 

@@ -1,6 +1,7 @@
 package com.finallion.graveyard.entities;
 
 import com.finallion.graveyard.blocks.AltarBlock;
+import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.entities.ai.goals.LichMeleeGoal;
 import com.finallion.graveyard.entities.projectiles.SkullEntity;
 import com.finallion.graveyard.init.TGEntities;
@@ -63,15 +64,15 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 public class LichEntity extends Monster implements IAnimatable {
-    private final ServerBossEvent bossBar = (ServerBossEvent)(new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.WHITE, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true).setCreateWorldFog(true);
+    private final ServerBossEvent bossBar = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.WHITE, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true).setCreateWorldFog(true);
     private AnimationFactory factory = GeckoLibUtil.createFactory(this);
     protected static final TargetingConditions HEAD_TARGET_PREDICATE;
     private static final Predicate<LivingEntity> CAN_ATTACK_PREDICATE;
     private static final UUID ATTACKING_SPEED_BOOST_ID = UUID.fromString("020E0DFB-87AE-4653-9556-831010E291A0");
     private static final UUID ATTACKING_DMG_BOOST_ID = UUID.fromString("120E0DFB-87AE-4653-9776-831010E291A1");
-    private static final AttributeModifier ATTACKING_SPEED_BOOST;
     private static final AttributeModifier CRAWL_SPEED_BOOST;
-    private static final AttributeModifier DMG_BOOST;
+    private static final AttributeModifier ATTACKING_SPEED_BOOST = new AttributeModifier(ATTACKING_SPEED_BOOST_ID, "Attacking speed boost", GraveyardConfig.COMMON.speedInHuntPhase.get(), AttributeModifier.Operation.ADDITION);
+    private static final AttributeModifier DMG_BOOST = new AttributeModifier(ATTACKING_DMG_BOOST_ID, "Damage speed boost", GraveyardConfig.COMMON.damageHuntingPhaseAddition.get(), AttributeModifier.Operation.ADDITION);
     // animation
     private final AnimationBuilder SPAWN_ANIMATION = new AnimationBuilder().addAnimation("spawn", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
     private final AnimationBuilder IDLE_ANIMATION = new AnimationBuilder().addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP);
@@ -122,18 +123,19 @@ public class LichEntity extends Monster implements IAnimatable {
     private static final EntityDataAccessor<Integer> LEVITATION_DURATION_TIMER;
 
     // constants
-    private static final int SPAWN_INVUL_TIMER = 420;
+    private static final int SPAWN_INVUL_TIMER = 490;
     private static final int DEFAULT_INVUL_TIMER = 200;
-    private final float HEALTH_PHASE_01 = 400.0F;
-    private final float HEALTH_PHASE_02 = 200.0F;
+    private final float HEALTH_PHASE_01 = GraveyardConfig.COMMON.healthInCastingPhase.get().floatValue();
+    private final float HEALTH_PHASE_02 = GraveyardConfig.COMMON.healthInHuntingPhase.get().floatValue();
     public final int ATTACK_ANIMATION_DURATION = 40;
     private final int START_PHASE_TWO_ANIMATION_DURATION = 121;
     private final int START_PHASE_THREE_ANIMATION_DURATION = 220;
     private final int START_PHASE_TWO_PARTICLES = 80;
-    private final int CORPSE_SPELL_DURATION = 400;
+    private final int CORPSE_SPELL_DURATION = GraveyardConfig.COMMON.durationFallingCorpseSpell.get();
     private final int HUNT_COOLDOWN = 600;
-    private final int HUNT_DURATION = 800;
-    private final int HEALING_DURATION = 700;
+    private final int HUNT_DURATION = GraveyardConfig.COMMON.durationHuntingPhase.get();
+    private final int HEALING_DURATION = GraveyardConfig.COMMON.durationHealingSpell.get();
+    private final int LEVITATION_DURATION = GraveyardConfig.COMMON.durationLevitationSpell.get();
     protected static final EntityDimensions CRAWL_DIMENSIONS;
     // variables
     private int huntCooldownTicker = 100; // initial cooldown from spawn time until first spell, will be set in goal
@@ -193,7 +195,7 @@ public class LichEntity extends Monster implements IAnimatable {
         }
 
         if (getPhase() == 1) {
-            if (getAnimationState() == ANIMATION_IDLE && getAttackAnimTimer() <= 0 && getInvulnerableTimer() <= 0) {
+            if (getAnimationState() == ANIMATION_IDLE && getAttackAnimTimer() <= 0 && getInvulnerableTimer() <= 0 && getAnimationState() != ANIMATION_SHOOT_SKULL) {
                 event.getController().setAnimation(IDLE_ANIMATION);
                 return PlayState.CONTINUE;
             } else if ((getAnimationState() != ANIMATION_SHOOT_SKULL || getAnimationState() != ANIMATION_SUMMON || getAnimationState() != ANIMATION_CONJURE_FANG || getAnimationState() != ANIMATION_CORPSE_SPELL) && getAttackAnimTimer() > 0) {
@@ -293,12 +295,12 @@ public class LichEntity extends Monster implements IAnimatable {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 400.0F)
+                .add(Attributes.MAX_HEALTH, GraveyardConfig.COMMON.healthInCastingPhase.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.0D)
-                .add(Attributes.ATTACK_DAMAGE, 30.0D)
+                .add(Attributes.ATTACK_DAMAGE, GraveyardConfig.COMMON.damageCastingPhase.get())
                 .add(Attributes.FOLLOW_RANGE, 25.0D)
-                .add(Attributes.ARMOR, 18.0D)
-                .add(Attributes.ARMOR_TOUGHNESS, 14.0D)
+                .add(Attributes.ARMOR, GraveyardConfig.COMMON.armor.get())
+                .add(Attributes.ARMOR_TOUGHNESS, GraveyardConfig.COMMON.armorToughness.get())
                 .add(Attributes.KNOCKBACK_RESISTANCE, 5.0D);
     }
 
@@ -322,7 +324,7 @@ public class LichEntity extends Monster implements IAnimatable {
         }
 
         if (getInvulnerableTimer() > 80 && random.nextInt(6) == 0 && getPhase() == 1) {
-            MathUtil.createParticleFlare(this.getLevel(), this.getX() - 1.0D, this.getY() - 1.0D + 3.5D - (float) getInvulnerableTimer() / 100, this.getZ() - 1.0D, random.nextInt(300) + 150, ParticleTypes.SOUL, ParticleTypes.SOUL_FIRE_FLAME, random, false);
+            MathUtil.createParticleFlare(this.getLevel(), this.getX() - 0.75D, this.getY() - 1.0D + 3.5D - (float) getInvulnerableTimer() / 100, this.getZ() - 0.75D, random.nextInt(300) + 150, ParticleTypes.SOUL, ParticleTypes.SOUL_FIRE_FLAME, random, false);
         }
 
         if (getInvulnerableTimer() > 80 && getPhase() == 1) {
@@ -330,7 +332,7 @@ public class LichEntity extends Monster implements IAnimatable {
         }
 
         if (this.deathTime > 0 && this.deathTime <= 100 && random.nextInt(4) == 0) {
-            MathUtil.createParticleFlare(this.getLevel(), this.getX() - 1.0D, this.getY() - 1, this.getZ() - 1.0D, random.nextInt(300) + 150, ParticleTypes.SOUL, ParticleTypes.SOUL_FIRE_FLAME, random, false);
+            MathUtil.createParticleFlare(this.getLevel(), this.getX() - 0.75D, this.getY() - 1, this.getZ() - 0.75D, random.nextInt(300) + 150, ParticleTypes.SOUL, ParticleTypes.SOUL_FIRE_FLAME, random, false);
         }
 
         if (getPhaseInvulnerableTimer() > 0 && getInvulnerableTimer() <= 0 && getPhase() == 1) {
@@ -378,9 +380,9 @@ public class LichEntity extends Monster implements IAnimatable {
         int duration = getFightDurationTimer();
         setFightDurationTimer(duration + 1);
         if (duration > 400) {
-            if (duration < 6000 && duration % 400 == 0) {
+            if (duration < GraveyardConfig.COMMON.ghoulSpawnTimerInFight.get() && duration % 400 == 0) {
                 summonMob(false);
-            } else if (duration >= 6000 && duration < 10000 && duration % 600 == 0) {
+            } else if (duration >= GraveyardConfig.COMMON.ghoulSpawnTimerInFight.get() && duration < GraveyardConfig.COMMON.ghoulSpawnTimerInFight.get() * 2 && duration % 600 == 0) {
                 summonMob(true);
             }
         }
@@ -422,7 +424,7 @@ public class LichEntity extends Monster implements IAnimatable {
                 Iterator<Player> iterator = playersInRange.iterator();
                 while (iterator.hasNext()) {
                     Player player = iterator.next();
-                    if (getPhaseInvulnerableTimer() == 0 || getPhaseInvulnerableTimer() % 300 == 0) {
+                    if ((getPhaseInvulnerableTimer() == 0 || getPhaseInvulnerableTimer() % 300 == 0) && !player.isCreative() && GraveyardConfig.COMMON.isInvulnerableDuringSpells.get()) {
                         for (int i = 0; i <= 3; i++) {
                             BlockPos targetPos = new BlockPos(this.getX() + Mth.nextInt(random, -10, 10), this.getY(), this.getZ() + Mth.nextInt(random, -10, 10));
                             if (level.getBlockState(targetPos).isAir() && level.getBlockState(targetPos.above()).isAir() && !level.getBlockState(targetPos.below()).isAir()) {
@@ -431,15 +433,17 @@ public class LichEntity extends Monster implements IAnimatable {
                             }
                         }
                     }
-                    if (getPhaseInvulnerableTimer() % 50 == 0) {
+                    if (getPhaseInvulnerableTimer() % 50 == 0 && !player.isCreative()) {
                         player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 80, 2));
                     }
                 }
 
                 setCanMove(true);
-                if (getPhaseInvulnerableTimer() == 0) {
+                if (getPhaseInvulnerableTimer() == 0 && GraveyardConfig.COMMON.isInvulnerableDuringSpells.get()) {
                     playHuntSound();
-                    this.setPhaseInvulTimer(HUNT_DURATION); // acts as hunt duration counter
+                    if (GraveyardConfig.COMMON.isInvulnerableDuringSpells.get()) {
+                        this.setPhaseInvulTimer(HUNT_DURATION); // acts as hunt duration counter
+                    }
                 }
 
                 if (getPhaseInvulnerableTimer() == 400) {
@@ -526,10 +530,10 @@ public class LichEntity extends Monster implements IAnimatable {
             Iterator<Player> iterator = playersInRange.iterator();
             while (iterator.hasNext()) {
                 Player player = iterator.next();
-                if (getHealTimer() == HEALING_DURATION) {
+                if (getHealTimer() == HEALING_DURATION && !player.isCreative()) {
                     player.teleportTo(this.getX(), this.getY() - 15.0D, this.getZ());
                 }
-                if (!player.hasEffect(MobEffects.DIG_SLOWDOWN)) {
+                if (!player.hasEffect(MobEffects.DIG_SLOWDOWN) && !player.isCreative()) {
                     player.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 40, 1));
                     player.addEffect(new MobEffectInstance(MobEffects.WITHER, 50, 1));
                 }
@@ -612,7 +616,7 @@ public class LichEntity extends Monster implements IAnimatable {
         }
 
         if (this.deathTime == 160 && !this.level.isClientSide()) {
-            this.level.broadcastEntityEvent(this, (byte)60);
+            this.level.broadcastEntityEvent(this, (byte) 60);
             this.remove(RemovalReason.KILLED);
         }
     }
@@ -679,7 +683,7 @@ public class LichEntity extends Monster implements IAnimatable {
             if ((this.getInvulnerableTimer() > 0 || this.getPhaseInvulnerableTimer() > 0) && source != DamageSource.OUT_OF_WORLD) {
                 return false;
             } else {
-                if (amount > this.getHealth() && getPhase() < 5 && source != DamageSource.OUT_OF_WORLD) {
+                if (amount > this.getHealth() && getPhase() < 5 && source != DamageSource.OUT_OF_WORLD && GraveyardConfig.COMMON.isMultiphaseFight.get()) {
                     //amount = this.getHealth() - 1;
                     respawn();
                     return false;
@@ -764,13 +768,13 @@ public class LichEntity extends Monster implements IAnimatable {
     private boolean summonMob(boolean hard) {
         AABB box = (new AABB(this.blockPosition())).inflate(35.0D);
         List<HostileGraveyardEntity> mobs = getLevel().getEntitiesOfClass(HostileGraveyardEntity.class, box);
-        if (mobs.size() > 30) {
+        if (mobs.size() >= GraveyardConfig.COMMON.maxSummonedMobs.get()) {
             return false;
         }
 
         for (int i = 10; i > 0; i--) {
             BlockPos pos = new BlockPos(this.getBlockX() + Mth.nextInt(random, -15, 15), this.getBlockY(), this.getBlockZ() + Mth.nextInt(random, -15, 15));
-            int amount = random.nextInt(5) + 1;
+            int amount = random.nextInt(GraveyardConfig.COMMON.maxGroupSizeSummonedMobs.get()) + 1;
             if (level.getBlockState(pos).isAir() && level.getBlockState(pos.above()).isAir() && level.getBlockState(pos.above().above()).isAir() && !level.getBlockState(pos.below()).isAir()) {
                 if (!hard) {
                     for (int ii = 0; ii < amount; ++ii) {
@@ -1085,8 +1089,6 @@ public class LichEntity extends Monster implements IAnimatable {
         HEAD_TARGET_PREDICATE = TargetingConditions.forCombat().range(20.0D).selector(CAN_ATTACK_PREDICATE);
         CRAWL_DIMENSIONS = EntityDimensions.fixed(1.8F, 2.0F);
         CRAWL_SPEED_BOOST = new AttributeModifier(ATTACKING_SPEED_BOOST_ID, "Attacking speed boost", 0.18D, AttributeModifier.Operation.ADDITION);
-        ATTACKING_SPEED_BOOST = new AttributeModifier(ATTACKING_SPEED_BOOST_ID, "Attacking speed boost", 0.15D, AttributeModifier.Operation.ADDITION);
-        DMG_BOOST = new AttributeModifier(ATTACKING_DMG_BOOST_ID, "Damage speed boost", 40.0D, AttributeModifier.Operation.ADDITION);
     }
 
     public class SummonFallenCorpsesGoal extends Goal {
@@ -1112,8 +1114,10 @@ public class LichEntity extends Monster implements IAnimatable {
         @Override
         public void start() {
             // make invulnerable during spell, prevents lich melee attack
-            setPhaseInvulTimer(CORPSE_SPELL_DURATION);
-            setCorpseSpellTimer(400);
+            if (GraveyardConfig.COMMON.isInvulnerableDuringSpells.get()) {
+                setPhaseInvulTimer(CORPSE_SPELL_DURATION);
+            }
+            setCorpseSpellTimer(CORPSE_SPELL_DURATION);
             playCorpseSpellSound();
             this.lich.teleportTo(this.lich.homePos.getX() + 0.5D, this.lich.homePos.getY() + 0.5D, this.lich.homePos.getZ() + 0.5D);
 
@@ -1159,6 +1163,13 @@ public class LichEntity extends Monster implements IAnimatable {
                 summonMob(true);
             }
 
+            if (positions.size() <= 3) {
+                setCorpseSpellTimer(0);
+                setPhaseInvulTimer(0);
+                stop();
+                return;
+            }
+
             ServerLevel serverlevel = (ServerLevel) LichEntity.this.level;
             FallingCorpse corpse = (FallingCorpse) TGEntities.FALLING_CORPSE.get().create(serverlevel);
             BlockPos blockPos = positions.get(random.nextInt(positions.size()));
@@ -1169,7 +1180,7 @@ public class LichEntity extends Monster implements IAnimatable {
             if (random.nextInt(CORPSE_SPAWN_RARITY_PLAYER) == 0 && list.size() > 0) {
                 FallingCorpse corpse2 = (FallingCorpse) TGEntities.FALLING_CORPSE.get().create(serverlevel);
                 Player target = list.get(random.nextInt(list.size()));
-                if (target != null) {
+                if (target != null && !target.isCreative()) {
                     BlockPos blockPos2 = target.blockPosition().offset(0, FALL_HEIGHT, 0);
                     corpse2.moveTo((double) blockPos2.getX() + 0.5D, (double) blockPos2.getY() + 0.55D, (double) blockPos2.getZ() + 0.5D);
                     serverlevel.addFreshEntity(corpse2);
@@ -1214,7 +1225,7 @@ public class LichEntity extends Monster implements IAnimatable {
                     Level world = this.mob.level;
                     ++this.cooldown;
 
-                    if (this.cooldown == 15) {
+                    if (this.cooldown == 10) {
                         playShootSound();
                         setAnimationState(ANIMATION_SHOOT_SKULL);
                     }
@@ -1230,7 +1241,7 @@ public class LichEntity extends Monster implements IAnimatable {
                         skull.moveTo(this.mob.getX() - vec3d3.x * 0.5, this.mob.getY(0.5D) + 1.25D, this.mob.getZ() - vec3d3.z * 0.5D);
                         world.addFreshEntity(skull);
 
-                        int amount = random.nextInt(5) + 2;
+                        int amount = random.nextInt(GraveyardConfig.COMMON.maxAmountSkullsInShootSkullSpell.get()) + 2;
                         for (int i = 0; i < amount; ++i) {
                             SkullEntity devSkull = new SkullEntity(this.mob.level, this.mob, this.mob.getRandom().triangle(e, 2.297D * h), f, this.mob.getRandom().triangle(g, 2.297D * h));
                             devSkull.moveTo(this.mob.getX() - vec3d3.x * 0.5, this.mob.getY(0.5D) + 1.25D, this.mob.getZ() - vec3d3.z * 0.5D);
@@ -1315,7 +1326,7 @@ public class LichEntity extends Monster implements IAnimatable {
         }
 
         public void start() {
-            setLevitationDurationTimer(150);
+            setLevitationDurationTimer(LEVITATION_DURATION);
 
             List<Player> player = getPlayersInRange(30.0D);
             Iterator<Player> it = player.iterator();
@@ -1323,7 +1334,9 @@ public class LichEntity extends Monster implements IAnimatable {
 
             while (it.hasNext()) {
                 playerEntity = (Player) it.next();
-                playerEntity.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 150, 1));
+                if (!playerEntity.isCreative()) {
+                    playerEntity.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 150, 1));
+                }
             }
 
             playLevitationSound();
@@ -1417,7 +1430,7 @@ public class LichEntity extends Monster implements IAnimatable {
             if (getConjureFangTimer() > 1) {
                 setAnimationState(ANIMATION_CONJURE_FANG);
 
-                if (getLevitationDurationTimer() == 1) {
+                if (getConjureFangTimer() == 1) {
                     setAnimationState(ANIMATION_IDLE);
                 }
             }

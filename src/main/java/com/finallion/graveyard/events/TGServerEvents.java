@@ -21,6 +21,7 @@ import java.util.Map;
 public class TGServerEvents {
     private static Map<ResourceLocation, GraveyardHordeSpawner> spawners = new HashMap<>();
 
+
     @SubscribeEvent
     public static void onServerStart(ServerStartingEvent event) {
         MinecraftServer server = event.getServer();
