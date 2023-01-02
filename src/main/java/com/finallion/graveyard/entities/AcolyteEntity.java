@@ -3,14 +3,12 @@ package com.finallion.graveyard.entities;
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.init.TGAdvancements;
 import com.finallion.graveyard.item.DaggerItem;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,8 +16,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 public class AcolyteEntity extends CorruptedIllager {
@@ -29,7 +27,7 @@ public class AcolyteEntity extends CorruptedIllager {
     }
 
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_34084_) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Registry.ITEM.get(new ResourceLocation(TheGraveyard.MOD_ID, "bone_dagger"))));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(TheGraveyard.MOD_ID, "bone_dagger"))));
     }
 
     public static AttributeSupplier.Builder createAttributes() {

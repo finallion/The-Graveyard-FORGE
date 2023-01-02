@@ -14,7 +14,7 @@ public class TGSounds {
     public static final RegistryObject<SoundEvent> ALTAR_AMBIENT = build("block.altar.ambient");
     public static final RegistryObject<SoundEvent> BONE_PLACED = build("block.bone.placed");
     public static final RegistryObject<SoundEvent> BONE_AMBIENT = build("block.bone.ambient");
-    public static final RegistryObject<SoundEvent> VIAL_SPLASH = build("item.vial.spawn");
+    public static final RegistryObject<SoundEvent> VIAL_SPLASH = build("item.vial.splash");
 
     public static final RegistryObject<SoundEvent> LICH_SPAWN = build("entity.lich.spawn");
     public static final RegistryObject<SoundEvent> LICH_MELEE = build("entity.lich.melee");
@@ -32,7 +32,7 @@ public class TGSounds {
     public static final RegistryObject<SoundEvent> LICH_HURT = build("entity.lich.hurt");
 
     private static RegistryObject<SoundEvent> build(String id) {
-        return SOUNDS.register(id, () -> new SoundEvent(new ResourceLocation(TheGraveyard.MOD_ID, id)));
+        return SOUNDS.register(id, () -> SoundEvent.m_262824_(new ResourceLocation(TheGraveyard.MOD_ID, id)));
     }
 
 

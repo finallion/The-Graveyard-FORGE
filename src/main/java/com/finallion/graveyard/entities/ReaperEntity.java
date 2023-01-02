@@ -26,26 +26,25 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class ReaperEntity extends HostileGraveyardEntity implements IAnimatable {
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
-    private final AnimationBuilder DEATH_ANIMATION = new AnimationBuilder().addAnimation("death", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-    private final AnimationBuilder IDLE_ANIMATION = new AnimationBuilder().addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder WALK_ANIMATION = new AnimationBuilder().addAnimation("walk", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder SPAWN_ANIMATION = new AnimationBuilder().addAnimation("spawn", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-    private final AnimationBuilder ATTACK_ANIMATION = new AnimationBuilder().addAnimation("attack", ILoopType.EDefaultLoopTypes.LOOP);
+public class ReaperEntity extends HostileGraveyardEntity implements GeoEntity {
+    private AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
+    private final RawAnimation DEATH_ANIMATION = RawAnimation.begin().then("death", Animation.LoopType.PLAY_ONCE);
+    private final RawAnimation IDLE_ANIMATION = RawAnimation.begin().then("idle", Animation.LoopType.LOOP);
+    private final RawAnimation WALK_ANIMATION = RawAnimation.begin().then("walk", Animation.LoopType.LOOP);
+    private final RawAnimation SPAWN_ANIMATION = RawAnimation.begin().then("spawn", Animation.LoopType.PLAY_ONCE);
+    private final RawAnimation ATTACK_ANIMATION = RawAnimation.begin().then("attack", Animation.LoopType.LOOP);
     protected final byte ANIMATION_IDLE = 0;
     protected final byte ANIMATION_WALK = 1;
     protected final byte ANIMATION_SPAWN = 2;
@@ -112,30 +111,38 @@ public class ReaperEntity extends HostileGraveyardEntity implements IAnimatable 
     }
 
     @SuppressWarnings("rawtypes")
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        AnimationController controller = event.getController();
-        float limbSwingAmount = event.getLimbSwingAmount();
-        boolean isMoving = !(limbSwingAmount > -0.05F && limbSwingAmount < 0.05F);
-        boolean isDying = this.isDeadOrDying();
-        boolean isAttacking = this.isAggressive();
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController(this, "controller", 2, event -> {
+            AnimationController controller = event.getController();
+            float limbSwingAmount = event.getLimbSwingAmount();
+            boolean isMoving = !(limbSwingAmount > -0.05F && limbSwingAmount < 0.05F);
+            boolean isDying = this.isDeadOrDying();
+            boolean isAttacking = this.isAggressive();
 
-        if (isDying) {
-            controller.setAnimation(DEATH_ANIMATION);
+            if (isDying) {
+                controller.setAnimation(DEATH_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+
+            if (isAttacking || isCharging()) {
+                controller.setAnimation(ATTACK_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+
+            byte currentAnimation = getAnimation();
+            switch (currentAnimation) {
+                case ANIMATION_ATTACK -> controller.setAnimation(ATTACK_ANIMATION);
+                default -> controller.setAnimation(isMoving ? WALK_ANIMATION : IDLE_ANIMATION);
+            }
+
             return PlayState.CONTINUE;
-        }
+        }));
+    }
 
-        if (isAttacking || isCharging()) {
-            controller.setAnimation(ATTACK_ANIMATION);
-            return PlayState.CONTINUE;
-        }
 
-        byte currentAnimation = getAnimation();
-        switch (currentAnimation) {
-            case ANIMATION_ATTACK: controller.setAnimation(ATTACK_ANIMATION); break;
-            default: controller.setAnimation(isMoving ? WALK_ANIMATION : IDLE_ANIMATION); break;
-        }
-
-        return PlayState.CONTINUE;
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return factory;
     }
 
     @Nullable
@@ -181,17 +188,6 @@ public class ReaperEntity extends HostileGraveyardEntity implements IAnimatable 
 
     public void setAnimation(byte animation) {
         entityData.set(ANIMATION, animation);
-    }
-
-
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
-    }
-
-
-    @Override
-    public AnimationFactory getFactory() {
-        return this.factory;
     }
 
 

@@ -6,7 +6,7 @@ import com.finallion.graveyard.blockentities.enums.SarcophagusPart;
 import com.finallion.graveyard.blocks.SarcophagusBlock;
 import com.finallion.graveyard.init.TGTileEntities;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import it.unimi.dsi.fastutil.floats.Float2FloatFunction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -66,7 +66,7 @@ public class SarcophagusBlockEntityRenderer<T extends BlockEntity & LidBlockEnti
 
         Direction direction = entity.getBlockState().getValue(SarcophagusBlock.FACING).getOpposite();
         float f = direction.toYRot();
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(-f));
+        matrixStack.m_252781_(Axis.f_252436_.m_252977_(-f));
 
         switch (direction) {
             case EAST -> matrixStack.translate(-1.0F, 0F, 1.0F);
@@ -76,7 +76,7 @@ public class SarcophagusBlockEntityRenderer<T extends BlockEntity & LidBlockEnti
 
         if (isLid) {
             matrixStack.translate(g * 0.3, g * 0.3, 0.0F); // lid offset to the ground and away from body
-            matrixStack.mulPose(Vector3f.ZN.rotationDegrees(g * 45)); // lid rotation
+            matrixStack.m_252781_(Axis.f_252393_.m_252977_(g * 45)); // lid rotation
         }
 
         Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(matrixStack.last(), vertexConsumer.getBuffer(ItemBlockRenderTypes.getRenderType(entity.getBlockState(), true)), entity.getBlockState(), model, 1.0F, 1.0F, 1.0F, light, overlay);

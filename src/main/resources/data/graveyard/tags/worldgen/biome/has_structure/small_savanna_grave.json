@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:is_dry/overworld",
+    {"id": "terralith:savanna_badlands", "required": false},
+    {"id": "terralith:savanna_slopes", "required": false},
+    {"id": "terralith:fractured_savanna", "required": false}
+  ]
+}

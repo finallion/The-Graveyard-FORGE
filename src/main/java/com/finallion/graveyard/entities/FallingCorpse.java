@@ -16,20 +16,19 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class FallingCorpse extends Monster implements IAnimatable {
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
-    private final AnimationBuilder FALLING_ANIMATION = new AnimationBuilder().addAnimation("falling", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder LANDING_ANIMATION = new AnimationBuilder().addAnimation("landing", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("despawn", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+public class FallingCorpse extends Monster implements GeoEntity {
+    private AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
+    private final RawAnimation FALLING_ANIMATION = RawAnimation.begin().then("falling", Animation.LoopType.LOOP);
+    private final RawAnimation LANDING_ANIMATION = RawAnimation.begin().then("landing", Animation.LoopType.PLAY_ONCE).then("despawn", Animation.LoopType.PLAY_ONCE);
     private static final EntityDataAccessor<Boolean> IS_FALLING;
     private static final EntityDataAccessor<Boolean> HAS_COLLIDED;
     private final float DAMAGE = 10.0F;
@@ -50,16 +49,24 @@ public class FallingCorpse extends Monster implements IAnimatable {
         this.rotation = rotation;
     }
 
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (isFalling()) {
-            event.getController().setAnimation(FALLING_ANIMATION);
-            return PlayState.CONTINUE;
-        } else {
-            event.getController().setAnimation(LANDING_ANIMATION);
-            return PlayState.CONTINUE;
-        }
-
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar animationData) {
+        animationData.add(new AnimationController<>(this, "controller", 0, event -> {
+            if (isFalling()) {
+                event.setAnimation(FALLING_ANIMATION);
+                return PlayState.CONTINUE;
+            } else {
+                event.getController().setAnimation(LANDING_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+        }));
     }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return factory;
+    }
+
     // I don't want the red overlay on death, so bypass landing effects and kill the mob after some ticks (in mobTick())
     @Override
     public boolean causeFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
@@ -89,11 +96,6 @@ public class FallingCorpse extends Monster implements IAnimatable {
         this.entityData.define(HAS_COLLIDED, false);
     }
 
-
-    @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
-    }
 
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -157,10 +159,6 @@ public class FallingCorpse extends Monster implements IAnimatable {
         super.playerTouch(p_20081_);
     }
 
-    @Override
-    public AnimationFactory getFactory() {
-        return factory;
-    }
 
     public boolean isFalling() {
         return this.entityData.get(IS_FALLING);

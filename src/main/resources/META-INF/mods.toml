@@ -3,7 +3,7 @@ loaderVersion="[38,)" #mandatory
 license="All rights reserved"
 [[mods]] #mandatory
 modId="graveyard" #mandatory
-version="2.2" #mandatory
+version="2.3" #mandatory
 displayName="The Graveyard" #mandatory
 logoFile="graveyard_logo.png" #optional
 credits="" #optional
@@ -15,7 +15,7 @@ The Graveyard adds new structures, bosses, mobs and blocks to your minecraft wor
 [[dependencies.graveyard]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[43.1.1,)" #mandatory
+    versionRange="[44.0.48,)" #mandatory
     ordering="NONE"
     side="BOTH"
 [[dependencies.graveyard]]
@@ -25,9 +25,9 @@ The Graveyard adds new structures, bosses, mobs and blocks to your minecraft wor
     ordering="NONE"
     side="BOTH"
 [[dependencies.graveyard]]
-    modId="geckolib3"
+    modId="geckolib"
     mandatory=true
-    versionRange="[3.1.34,)"
+    versionRange="[4.0.3,)"
     ordering="NONE"
     side="BOTH"
 

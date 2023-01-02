@@ -10,9 +10,6 @@ import com.finallion.graveyard.util.TGTags;
 import com.mojang.serialization.Codec;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.world.BiomeModifier;
@@ -29,7 +26,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import software.bernie.geckolib3.GeckoLib;
+import software.bernie.geckolib.GeckoLib;
 
 
 @Mod("graveyard")
@@ -51,7 +48,7 @@ public class TheGraveyard {
         TGItems.ITEMS.register(modEventBus);
         TGSounds.SOUNDS.register(modEventBus);
         TGEntities.ENTITIES.register(modEventBus);
-        TGFeatures.FEATURES.register(modEventBus);
+        TGConfiguredStructureFeatures.STRUCTURES.register(modEventBus);
         TGTileEntities.TILE_ENTITIES.register(modEventBus);
         TGParticles.PARTICLES.register(modEventBus);
 
@@ -88,10 +85,7 @@ public class TheGraveyard {
             TGAdvancements.init();
             TGTags.init();
             TGStructureType.init();
-            TGConfiguredFeatures.registerConfiguredFeatures();
-            TGConfiguredFeatures.registerPlacedFeatures();
             TGProcessors.registerProcessors();
-            TGStructureSets.init();
             TGConfiguredStructureFeatures.init();
         });
     }
@@ -115,12 +109,5 @@ public class TheGraveyard {
 
      */
 
-    public static final CreativeModeTab GROUP = new CreativeModeTab ("graveyard_group") {
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(Items.SKELETON_SKULL);
-        }
-
-    };
 
 }

@@ -15,7 +15,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 
 import java.util.Collection;
@@ -58,7 +57,7 @@ public class SkeletonCreeper extends Creeper {
 
     public void explode() {
         if (!this.level.isClientSide) {
-            Explosion.BlockInteraction explosion$mode = Explosion.BlockInteraction.NONE;
+            Level.ExplosionInteraction explosion$mode = Level.ExplosionInteraction.NONE;
             float f = this.isPowered() ? 2.0F : 1.0F;
 
             if (canStart()) {
@@ -67,7 +66,7 @@ public class SkeletonCreeper extends Creeper {
             }
 
             this.dead = true;
-            this.level.explode(this, this.getX(), this.getY(), this.getZ(), (float)this.explosionRadius * f, explosion$mode);
+            this.level.m_254849_(this, this.getX(), this.getY(), this.getZ(), (float)this.explosionRadius * f, explosion$mode);
             this.discard();
             this.spawnLingeringCloud();
         }

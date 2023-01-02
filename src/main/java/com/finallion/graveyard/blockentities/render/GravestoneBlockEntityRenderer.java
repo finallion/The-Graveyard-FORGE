@@ -8,7 +8,7 @@ import com.google.common.collect.Maps;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -60,7 +60,7 @@ public class GravestoneBlockEntityRenderer implements BlockEntityRenderer<Graves
 
         float rotation = -(blockState.getValue(GravestoneBlock.FACING).toYRot());
         //float h = -((float)((Integer)blockState.getStructure(SignBlock.ROTATION) * 360) / 16.0F);
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
+        matrixStack.m_252781_(Axis.f_252436_.m_252977_(rotation));
         matrixStack.pushPose();
         // size
         matrixStack.scale(0.6666667F, -0.6666667F, -0.6666667F);
@@ -96,9 +96,9 @@ public class GravestoneBlockEntityRenderer implements BlockEntityRenderer<Graves
             FormattedCharSequence formattedcharsequence = aformattedcharsequence[i1];
             float f3 = (float)(-this.font.width(formattedcharsequence) / 2);
             if (flag) {
-                this.font.drawInBatch8xOutline(formattedcharsequence, f3, (float)(i1 * 10 - 20), k, i, matrixStack.last().pose(), vertexConsumerProvider, l);
+                this.font.drawInBatch8xOutline(formattedcharsequence, f3, (float)(i1 * 10 - 20), k, i, matrixStack.last().m_252922_(), vertexConsumerProvider, l);
             } else {
-                this.font.drawInBatch(formattedcharsequence, f3, (float)(i1 * 10 - 20), k, false, matrixStack.last().pose(), vertexConsumerProvider, false, 0, l);
+                this.font.m_252916_(formattedcharsequence, f3, (float)(i1 * 10 - 20), k, false, matrixStack.last().m_252922_(), vertexConsumerProvider, false, 0, l);
             }
         }
 
@@ -114,7 +114,7 @@ public class GravestoneBlockEntityRenderer implements BlockEntityRenderer<Graves
         matrixStack.scale(2.28F, 2.15F, 2.28F);
 
         float rotation = -((float)state.getValue(GravestoneBlock.FACING).toYRot());
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
+        matrixStack.m_252781_(Axis.f_252436_.m_252977_(rotation));
         Minecraft.getInstance().getItemRenderer().renderStatic(new ItemStack(state.getBlock().asItem(), 1), ItemTransforms.TransformType.GROUND, i, j, matrixStack, vertexConsumerProvider, 2);
 
 

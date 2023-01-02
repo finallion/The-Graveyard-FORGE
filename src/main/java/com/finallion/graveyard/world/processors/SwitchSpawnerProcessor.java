@@ -1,6 +1,5 @@
 package com.finallion.graveyard.world.processors;
 
-import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.TGProcessors;
 import com.mojang.serialization.Codec;
@@ -30,8 +29,7 @@ public class SwitchSpawnerProcessor extends StructureProcessor {
             if (blockEntity instanceof SpawnerBlockEntity) {
                 CompoundTag nbtCompound = structureBlockInfo2.nbt.getCompound("SpawnData");
                 if (nbtCompound.toString().contains("wither_skeleton")) {
-                    ((SpawnerBlockEntity)blockEntity).getSpawner().setEntityId(EntityType.SKELETON);
-                    //TheGraveyard.LOGGER.error("The Graveyard Config: Wither Skeleton Spawner switched to Skeleton Spawner at " + worldPos);
+                    ((SpawnerBlockEntity)blockEntity).m_252803_(EntityType.SKELETON, settings.getRandom(worldPos));
                 }
             }
         }

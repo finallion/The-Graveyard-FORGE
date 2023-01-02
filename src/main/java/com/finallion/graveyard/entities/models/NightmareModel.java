@@ -3,10 +3,10 @@ package com.finallion.graveyard.entities.models;
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.entities.NightmareEntity;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
 
-public class NightmareModel extends AnimatedGeoModel<NightmareEntity> {
+public class NightmareModel extends GeoModel<NightmareEntity> {
 
     @Override
     public ResourceLocation getModelResource(NightmareEntity object) {

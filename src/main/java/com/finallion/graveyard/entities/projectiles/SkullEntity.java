@@ -4,6 +4,7 @@ import com.finallion.graveyard.init.TGEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -33,7 +34,7 @@ public class SkullEntity extends AbstractHurtingProjectile {
         super(TGEntities.SKULL.get(), owner, directionX, directionY, directionZ, world);
     }
 
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return new ClientboundAddEntityPacket(this);
     }
 
@@ -84,8 +85,8 @@ public class SkullEntity extends AbstractHurtingProjectile {
     protected void onHit(HitResult p_37628_) {
         super.onHit(p_37628_);
         if (!this.level.isClientSide) {
-            Explosion.BlockInteraction explosion$blockinteraction = Explosion.BlockInteraction.NONE;
-            this.level.explode(this, this.getX(), this.getY(), this.getZ(), 2.0F, false, explosion$blockinteraction);
+            Level.ExplosionInteraction explosion$blockinteraction = Level.ExplosionInteraction.NONE;
+            this.level.m_255391_(this, this.getX(), this.getY(), this.getZ(), 2.0F, false, explosion$blockinteraction);
             this.discard();
         }
 

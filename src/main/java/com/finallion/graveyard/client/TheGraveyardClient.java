@@ -19,6 +19,7 @@ import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.particle.SonicBoomParticle;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.GrassColor;
@@ -85,7 +86,7 @@ public class TheGraveyardClient {
 
         event.registerBlockEntityRenderer(TGTileEntities.GRAVESTONE_BLOCK_ENTITY.get(), GravestoneBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(TGTileEntities.SARCOPHAGUS_BLOCK_ENTITY.get(), SarcophagusBlockEntityRenderer::new);
-        event.registerBlockEntityRenderer(TGTileEntities.BRAZIER_BLOCK_ENTITY.get(), BrazierBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(TGTileEntities.BRAZIER_BLOCK_ENTITY.get(), (BlockEntityRendererProvider.Context rendererDispatcherIn) -> new BrazierBlockEntityRenderer());
     }
 
     @SubscribeEvent
@@ -120,5 +121,6 @@ public class TheGraveyardClient {
         }
 
     }
+
 
 }

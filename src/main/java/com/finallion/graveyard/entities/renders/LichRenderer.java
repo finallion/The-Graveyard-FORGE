@@ -9,19 +9,20 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class LichRenderer extends GeoEntityRenderer<LichEntity> {
 
     public LichRenderer(EntityRendererProvider.Context context) {
         super(context, new LichModel());
         this.shadowRadius = 1.0F;
-        this.addLayer(new LichEyesFeatureRenderer(this));
+        this.addRenderLayer(new LichEyesFeatureRenderer(this));
     }
 
     @Override
-    public RenderType getRenderType(LichEntity animatable, float partialTicks, PoseStack stack, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.entityCutoutNoCull(textureLocation);
+    public RenderType getRenderType(LichEntity animatable, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
+        return RenderType.entityCutoutNoCull(texture);
     }
 
     // stops the vanilla death animation

@@ -1,6 +1,6 @@
 {
   "type": "graveyard:mobspawns",
-  "biomes": "#graveyard:is_overworld",
+  "biomes": "#graveyard:skeleton_creeper_spawns",
   "spawn": {
     "type": "graveyard:skeleton_creeper",
     "maxCount": 4,

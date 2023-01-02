@@ -7,18 +7,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.QuartPos;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -30,8 +26,6 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class TGJigsawStructure extends Structure {
@@ -64,8 +58,6 @@ public class TGJigsawStructure extends Structure {
                     Codec.intRange(1, 128).fieldOf("max_distance_from_center").forGetter(structure -> structure.maxDistanceFromCenter),
                     Codec.INT.fieldOf("terrain_check_size").forGetter(structure -> structure.terrainCheckSize),
                     Codec.INT.fieldOf("max_height_difference").forGetter(structure -> structure.maxHeightDifference),
-                    Codec.STRING.listOf().fieldOf("whitelist").orElse(new ArrayList<>()).forGetter(config -> config.whitelist),
-                    Codec.STRING.listOf().fieldOf("mod_whitelist").orElse(new ArrayList<>()).forGetter(config -> config.blacklist),
                     Codec.STRING.fieldOf("structure_name").forGetter(config -> config.structureName))
                     .apply(instance, TGJigsawStructure::new));
 
@@ -79,12 +71,10 @@ public class TGJigsawStructure extends Structure {
     public final int maxDistanceFromCenter;
     public final int terrainCheckSize;
     public final int maxHeightDifference;
-    public final List<String> whitelist;
-    public final List<String> blacklist;
     public final String structureName;
     protected final Structure.StructureSettings config;
 
-    public TGJigsawStructure(Structure.StructureSettings config, Holder<StructureTemplatePool> startPool, Optional<ResourceLocation> startJigsawName, int size, HeightProvider startHeight, Boolean useExpansionHack, Optional<Heightmap.Types> projectStartToHeightmap, int maxDistanceFromCenter, int terrainCheckSize, int maxHeightDifference, List<String> whitelist, List<String> blacklist, String structureName) {
+    public TGJigsawStructure(Structure.StructureSettings config, Holder<StructureTemplatePool> startPool, Optional<ResourceLocation> startJigsawName, int size, HeightProvider startHeight, Boolean useExpansionHack, Optional<Heightmap.Types> projectStartToHeightmap, int maxDistanceFromCenter, int terrainCheckSize, int maxHeightDifference, String structureName) {
         super(config);
         this.config = config;
         this.startPool = startPool;
@@ -96,17 +86,15 @@ public class TGJigsawStructure extends Structure {
         this.maxDistanceFromCenter = maxDistanceFromCenter;
         this.maxHeightDifference = maxHeightDifference;
         this.terrainCheckSize = terrainCheckSize;
-        this.whitelist = whitelist;
-        this.blacklist = blacklist;
         this.structureName = structureName;
     }
 
-    public TGJigsawStructure(Structure.StructureSettings config, Holder<StructureTemplatePool> startPool, int size, HeightProvider startHeight, boolean useExpansionHack, Heightmap.Types projectStartToHeightmap, int terrainCheckSize, int maxHeightDifference, List<String> whitelist, List<String> blacklist, String structureName) {
-        this(config, startPool, Optional.empty(), size, startHeight, useExpansionHack, Optional.of(projectStartToHeightmap), 80, terrainCheckSize, maxHeightDifference, whitelist, blacklist, structureName);
+    public TGJigsawStructure(Structure.StructureSettings config, Holder<StructureTemplatePool> startPool, int size, HeightProvider startHeight, boolean useExpansionHack, Heightmap.Types projectStartToHeightmap, int terrainCheckSize, int maxHeightDifference, String structureName) {
+        this(config, startPool, Optional.empty(), size, startHeight, useExpansionHack, Optional.of(projectStartToHeightmap), 80, terrainCheckSize, maxHeightDifference, structureName);
     }
 
-    public TGJigsawStructure(Structure.StructureSettings config, Holder<StructureTemplatePool> startPool, int size, HeightProvider startHeight, boolean useExpansionHack, int terrainCheckSize, int maxHeightDifference, List<String> whitelist, List<String> blacklist, String structureName) {
-        this(config, startPool, Optional.empty(), size, startHeight, useExpansionHack, Optional.empty(), 80, terrainCheckSize, maxHeightDifference, whitelist, blacklist, structureName);
+    public TGJigsawStructure(Structure.StructureSettings config, Holder<StructureTemplatePool> startPool, int size, HeightProvider startHeight, boolean useExpansionHack, int terrainCheckSize, int maxHeightDifference, String structureName) {
+        this(config, startPool, Optional.empty(), size, startHeight, useExpansionHack, Optional.empty(), 80, terrainCheckSize, maxHeightDifference, structureName);
     }
 
 
@@ -131,9 +119,6 @@ public class TGJigsawStructure extends Structure {
             int y = random.nextInt(maxHeight - minHeight) + minHeight;
             blockpos = new BlockPos(x, y, z);
 
-            if (!TGJigsawStructure.canGenerateUnderground(context, whitelist, blacklist)) {
-                return Optional.empty();
-            }
         } else if (structureName.equals("lich_prison")) {
             ChunkPos chunkPos = context.chunkPos();
             RandomSource random = context.random();
@@ -143,11 +128,8 @@ public class TGJigsawStructure extends Structure {
             int y = 210;
             blockpos = new BlockPos(x, y, z);
 
-            if (!TGJigsawStructure.canGenerateInTheAir(context, whitelist, blacklist)) {
-                return Optional.empty();
-            }
         }else {
-            if (!TGJigsawStructure.canGenerate(context, terrainCheckSize, blockpos, maxHeightDifference, whitelist, blacklist)) {
+            if (!TGJigsawStructure.canGenerate(context, terrainCheckSize, blockpos, maxHeightDifference)) {
                 return Optional.empty();
             }
         }
@@ -163,71 +145,13 @@ public class TGJigsawStructure extends Structure {
                 this.maxDistanceFromCenter);
     }
 
-    private static boolean canGenerateUnderground(Structure.GenerationContext context, List<String> whitelist, List<String> blacklist) {
-        if (!isCorrectBiome(context, whitelist, blacklist)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private static boolean canGenerateInTheAir(Structure.GenerationContext context, List<String> whitelist, List<String> blacklist) {
-        if (!isCorrectBiome(context, whitelist, blacklist)) {
-            return false;
-        }
-
-        return true;
-    }
-
-
-    private static boolean canGenerate(Structure.GenerationContext context, int size, BlockPos centerOfChunk, int maxHeightDifference, List<String> whitelist, List<String> blacklist) {
-        if (!isCorrectBiome(context, whitelist, blacklist)) {
-            return false;
-        }
-
-        if (!isTerrainFlat(context, centerOfChunk, size / 2, maxHeightDifference)) {
-            return false;
-        }
-
+    private static boolean canGenerate(Structure.GenerationContext context, int size, BlockPos centerOfChunk, int maxHeightDifference) {
         if (!isTerrainFlat(context, centerOfChunk, size, maxHeightDifference)) {
             return false;
         }
 
         return true;
     }
-
-    protected static boolean isCorrectBiome(Structure.GenerationContext context, List<String> whitelist, List<String> blacklist) {
-        BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(0);
-
-        Holder<Biome> biome = context.chunkGenerator().getBiomeSource().getNoiseBiome(
-                QuartPos.fromBlock(blockpos.getX()),
-                QuartPos.fromBlock(blockpos.getY()),
-                QuartPos.fromBlock(blockpos.getZ()), context.randomState().sampler());
-
-        String biomeName = biome.unwrapKey().orElseThrow().location().toString();
-
-        if (blacklist.contains(biomeName)) {
-            return false;
-        }
-
-        for (String biomeInList : whitelist) {
-            if (biomeInList.startsWith("#")) { // check if biome is in tag
-                String[] parts = biomeInList.substring(1).split(":");
-                TagKey<Biome> tag = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(parts[0], parts[1]));
-                Registry<Biome> registry = context.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
-
-                if (registry.isKnownTagName(tag)) {
-                    if (registry.getTag(tag).orElseThrow().contains(biome)) {
-                        return true;
-                    }
-                }
-            } else if (whitelist.contains(biomeName)) { // check if biome is on whitelist
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     protected static boolean isTerrainFlat(Structure.GenerationContext context, BlockPos centerChunk, int size, int maxHeightDifference) {
         ChunkGenerator generator = context.chunkGenerator();

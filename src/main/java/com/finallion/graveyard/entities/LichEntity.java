@@ -47,15 +47,14 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -63,9 +62,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-public class LichEntity extends Monster implements IAnimatable {
+public class LichEntity extends Monster implements GeoEntity {
     private final ServerBossEvent bossBar = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.WHITE, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true).setCreateWorldFog(true);
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
     protected static final TargetingConditions HEAD_TARGET_PREDICATE;
     private static final Predicate<LivingEntity> CAN_ATTACK_PREDICATE;
     private static final UUID ATTACKING_SPEED_BOOST_ID = UUID.fromString("020E0DFB-87AE-4653-9556-831010E291A0");
@@ -74,21 +73,21 @@ public class LichEntity extends Monster implements IAnimatable {
     private static final AttributeModifier ATTACKING_SPEED_BOOST = new AttributeModifier(ATTACKING_SPEED_BOOST_ID, "Attacking speed boost", GraveyardConfig.COMMON.speedInHuntPhase.get(), AttributeModifier.Operation.ADDITION);
     private static final AttributeModifier DMG_BOOST = new AttributeModifier(ATTACKING_DMG_BOOST_ID, "Damage speed boost", GraveyardConfig.COMMON.damageHuntingPhaseAddition.get(), AttributeModifier.Operation.ADDITION);
     // animation
-    private final AnimationBuilder SPAWN_ANIMATION = new AnimationBuilder().addAnimation("spawn", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-    private final AnimationBuilder IDLE_ANIMATION = new AnimationBuilder().addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder ATTACK_ANIMATION = new AnimationBuilder().addAnimation("attack", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder CORPSE_SPELL_ANIMATION = new AnimationBuilder().addAnimation("corpse_spell", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder START_PHASE_2_ANIMATION = new AnimationBuilder().addAnimation("phase_two", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-    private final AnimationBuilder PHASE_2_IDLE_ANIMATION = new AnimationBuilder().addAnimation("phase_two_idle", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder PHASE_2_ATTACK_ANIMATION = new AnimationBuilder().addAnimation("phase_two_attack", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder START_PHASE_3_ANIMATION = new AnimationBuilder().addAnimation("phase_three", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-    private final AnimationBuilder PHASE_3_ATTACK_ANIMATION = new AnimationBuilder().addAnimation("crawl", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder DEATH_ANIMATION = new AnimationBuilder().addAnimation("death", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-    private final AnimationBuilder SHOOT_SKULL_ANIMATION = new AnimationBuilder().addAnimation("attack", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder SUMMON_ANIMATION = new AnimationBuilder().addAnimation("summon", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder CONJURE_FANG_ANIMATION = new AnimationBuilder().addAnimation("corpse_spell", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder STUNNED_ANIMATION = new AnimationBuilder().addAnimation("stunned", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder CRAWL_IDLE_ANIMATION = new AnimationBuilder().addAnimation("crawl_idle", ILoopType.EDefaultLoopTypes.LOOP);
+    private final RawAnimation SPAWN_ANIMATION = RawAnimation.begin().then("spawn", Animation.LoopType.PLAY_ONCE);
+    private final RawAnimation IDLE_ANIMATION = RawAnimation.begin().then("idle", Animation.LoopType.LOOP);
+    private final RawAnimation ATTACK_ANIMATION = RawAnimation.begin().then("attack", Animation.LoopType.LOOP);
+    private final RawAnimation CORPSE_SPELL_ANIMATION = RawAnimation.begin().then("corpse_spell", Animation.LoopType.LOOP);
+    private final RawAnimation START_PHASE_2_ANIMATION = RawAnimation.begin().then("phase_two", Animation.LoopType.PLAY_ONCE);
+    private final RawAnimation PHASE_2_IDLE_ANIMATION = RawAnimation.begin().then("phase_two_idle", Animation.LoopType.LOOP);
+    private final RawAnimation PHASE_2_ATTACK_ANIMATION = RawAnimation.begin().then("phase_two_attack", Animation.LoopType.LOOP);
+    private final RawAnimation START_PHASE_3_ANIMATION = RawAnimation.begin().then("phase_three", Animation.LoopType.PLAY_ONCE);
+    private final RawAnimation PHASE_3_ATTACK_ANIMATION = RawAnimation.begin().then("crawl", Animation.LoopType.LOOP);
+    private final RawAnimation DEATH_ANIMATION = RawAnimation.begin().then("death", Animation.LoopType.PLAY_ONCE);
+    private final RawAnimation SHOOT_SKULL_ANIMATION = RawAnimation.begin().then("attack", Animation.LoopType.LOOP);
+    private final RawAnimation SUMMON_ANIMATION = RawAnimation.begin().then("summon", Animation.LoopType.LOOP);
+    private final RawAnimation CONJURE_FANG_ANIMATION = RawAnimation.begin().then("corpse_spell", Animation.LoopType.LOOP);
+    private final RawAnimation STUNNED_ANIMATION = RawAnimation.begin().then("stunned", Animation.LoopType.LOOP);
+    private final RawAnimation CRAWL_IDLE_ANIMATION = RawAnimation.begin().then("crawl_idle", Animation.LoopType.LOOP);
     protected static final int ANIMATION_SPAWN = 0;
     protected static final int ANIMATION_IDLE = 1;
     protected static final int ANIMATION_MELEE = 2;
@@ -113,6 +112,7 @@ public class LichEntity extends Monster implements IAnimatable {
     private static final EntityDataAccessor<Integer> PHASE_THREE_START_ANIM_TIMER; // main phase two to three
     private static final EntityDataAccessor<Integer> PHASE; // divides fight into three main phases and two transitions, animations are named after the main phase
     private static final EntityDataAccessor<Integer> ANIMATION;
+    private static final EntityDataAccessor<Integer> HUNT_TIMER;
     private static final EntityDataAccessor<Boolean> CAN_HUNT_START;
     private static final EntityDataAccessor<Boolean> CAN_MOVE;
 
@@ -148,134 +148,127 @@ public class LichEntity extends Monster implements IAnimatable {
         super(entityType, world);
     }
 
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (getAnimationState() == ANIMATION_SPAWN && getInvulnerableTimer() >= 0) {
-            event.getController().setAnimation(SPAWN_ANIMATION);
-            return PlayState.CONTINUE;
-        }
-
-        return PlayState.CONTINUE;
-    }
-
-    // animation handler
-    private <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
-
-        // set from the respawn method, stops all animations from previous phases
-        if (getAnimationState() == ANIMATION_STOP) {
-            return PlayState.STOP;
-        }
-
-        /* PHASE 1 */
-        // takes one tick to get to this method (from mobtick)
-        // do not attack when: the spawn invul timer is active, the phase is incorrect or the phase invul timer was set from a spell
-        if (getAnimationState() == ANIMATION_MELEE && getAttackAnimTimer() == (ATTACK_ANIMATION_DURATION - 1) && isAggressive() && !(this.isDeadOrDying() || this.getHealth() < 0.01) && canMeeleAttack() && getAnimationState() != ANIMATION_SPAWN) {
-            setAttackAnimTimer(ATTACK_ANIMATION_DURATION - 2); // disables to call the animation immediately after (seems to be called multiple times per tick, per frame tick?)
-            event.getController().setAnimation(ATTACK_ANIMATION);
-            return PlayState.CONTINUE;
-        }
-
-        if (getAnimationState() == ANIMATION_CORPSE_SPELL && getPhase() == 1) {
-            event.getController().setAnimation(CORPSE_SPELL_ANIMATION);
-            return PlayState.CONTINUE;
-        }
-
-        if (getAnimationState() == ANIMATION_SHOOT_SKULL && getPhase() == 1) {
-            event.getController().setAnimation(SHOOT_SKULL_ANIMATION);
-            return PlayState.CONTINUE;
-        }
-
-        if (getAnimationState() == ANIMATION_SUMMON && getPhase() == 1) {
-            event.getController().setAnimation(SUMMON_ANIMATION);
-            return PlayState.CONTINUE;
-        }
-
-        if (getAnimationState() == ANIMATION_CONJURE_FANG && getPhase() == 1) {
-            event.getController().setAnimation(CONJURE_FANG_ANIMATION);
-            return PlayState.CONTINUE;
-        }
-
-        if (getPhase() == 1) {
-            if (getAnimationState() == ANIMATION_IDLE && getAttackAnimTimer() <= 0 && getInvulnerableTimer() <= 0 && getAnimationState() != ANIMATION_SHOOT_SKULL) {
-                event.getController().setAnimation(IDLE_ANIMATION);
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar animationData) {
+        animationData.add(new AnimationController(this, "controller", 0, event -> {
+            if (getAnimationState() == ANIMATION_SPAWN && getInvulnerableTimer() >= 0) {
+                event.getController().setAnimation(SPAWN_ANIMATION);
                 return PlayState.CONTINUE;
-            } else if ((getAnimationState() != ANIMATION_SHOOT_SKULL || getAnimationState() != ANIMATION_SUMMON || getAnimationState() != ANIMATION_CONJURE_FANG || getAnimationState() != ANIMATION_CORPSE_SPELL) && getAttackAnimTimer() > 0) {
-                setAnimationState(ANIMATION_MELEE);
             }
-        }
 
-        /* TRANSITION PHASE 2 */
-        if (getAnimationState() == ANIMATION_START_PHASE_2 && getPhase() == 2) {
-            event.getController().setAnimation(START_PHASE_2_ANIMATION);
             return PlayState.CONTINUE;
-        }
-        /* PHASE 3 */
-        if (getAnimationState() == ANIMATION_STUNNED && getPhase() == 3) {
-            event.getController().setAnimation(STUNNED_ANIMATION);
-            return PlayState.CONTINUE;
-        }
-
-        if (getAnimationState() == ANIMATION_PHASE_2_IDLE && getPhase() == 3) {
-            event.getController().setAnimation(PHASE_2_IDLE_ANIMATION);
-            return PlayState.CONTINUE;
-        }
-
-        if (getAnimationState() == ANIMATION_PHASE_2_ATTACK && getPhase() == 3) {
-            event.getController().setAnimation(PHASE_2_ATTACK_ANIMATION);
-            return PlayState.CONTINUE;
-        }
-
-
-        /* PHASE 4 */
-        if (getAnimationState() == ANIMATION_START_PHASE_3 && getPhase() == 4) {
-            event.getController().setAnimation(START_PHASE_3_ANIMATION);
-            return PlayState.CONTINUE;
-        }
-
-        /* PHASE 5 */
-        if (!event.isMoving() && getPhase() == 5 && !(this.isDeadOrDying() || this.getHealth() < 0.01)) {
-            event.getController().setAnimation(CRAWL_IDLE_ANIMATION);
-            return PlayState.CONTINUE;
-        }
-
-        if (getAnimationState() == ANIMATION_PHASE_3_ATTACK && getPhase() == 5 && !(this.isDeadOrDying() || this.getHealth() < 0.01)) {
-            event.getController().setAnimation(PHASE_3_ATTACK_ANIMATION);
-            return PlayState.CONTINUE;
-        }
-
-        /* DEATH */
-        if (this.isDeadOrDying() || this.getHealth() < 0.01) {
-            event.getController().setAnimation(DEATH_ANIMATION);
-            return PlayState.CONTINUE;
-        }
-
-
-        /* STOPPERS */
-        // stops attack animation from looping
-        if (getPhase() == 1) {
-            if (getAttackAnimTimer() <= 0 && getInvulnerableTimer() <= 0) {
-                setAnimationState(ANIMATION_IDLE);
+        }));
+        animationData.add(new AnimationController(this, "controller2", 0, event -> {
+            // set from the respawn method, stops all animations from previous phases
+            if (getAnimationState() == ANIMATION_STOP) {
                 return PlayState.STOP;
             }
 
-            // stops idle animation from looping
-            if (getAttackAnimTimer() > 0 && getAnimationState() == ANIMATION_IDLE) {
-                return PlayState.STOP;
+            /* PHASE 1 */
+            // takes one tick to get to this method (from mobtick)
+            // do not attack when: the spawn invul timer is active, the phase is incorrect or the phase invul timer was set from a spell
+            if (getAnimationState() == ANIMATION_MELEE && getAttackAnimTimer() == (ATTACK_ANIMATION_DURATION - 1) && isAggressive() && !(this.isDeadOrDying() || this.getHealth() < 0.01) && canMeeleAttack() && getAnimationState() != ANIMATION_SPAWN) {
+                setAttackAnimTimer(ATTACK_ANIMATION_DURATION - 2); // disables to call the animation immediately after (seems to be called multiple times per tick, per frame tick?)
+                event.getController().setAnimation(ATTACK_ANIMATION);
+                return PlayState.CONTINUE;
             }
-        }
+
+            if (getAnimationState() == ANIMATION_CORPSE_SPELL && getPhase() == 1) {
+                event.getController().setAnimation(CORPSE_SPELL_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+
+            if (getAnimationState() == ANIMATION_SHOOT_SKULL && getPhase() == 1) {
+                event.getController().setAnimation(SHOOT_SKULL_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+
+            if (getAnimationState() == ANIMATION_SUMMON && getPhase() == 1) {
+                event.getController().setAnimation(SUMMON_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+
+            if (getAnimationState() == ANIMATION_CONJURE_FANG && getPhase() == 1) {
+                event.getController().setAnimation(CONJURE_FANG_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+
+            if (getPhase() == 1) {
+                if (getAnimationState() == ANIMATION_IDLE && getAttackAnimTimer() <= 0 && getInvulnerableTimer() <= 0 && getAnimationState() != ANIMATION_SHOOT_SKULL) {
+                    event.getController().setAnimation(IDLE_ANIMATION);
+                    return PlayState.CONTINUE;
+                } else if ((getAnimationState() != ANIMATION_SHOOT_SKULL || getAnimationState() != ANIMATION_SUMMON || getAnimationState() != ANIMATION_CONJURE_FANG || getAnimationState() != ANIMATION_CORPSE_SPELL) && getAttackAnimTimer() > 0) {
+                    setAnimationState(ANIMATION_MELEE);
+                }
+            }
+
+            /* TRANSITION PHASE 2 */
+            if (getAnimationState() == ANIMATION_START_PHASE_2 && getPhase() == 2) {
+                event.getController().setAnimation(START_PHASE_2_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+            /* PHASE 3 */
+            if (getAnimationState() == ANIMATION_STUNNED && getPhase() == 3) {
+                event.getController().setAnimation(STUNNED_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+
+            if (getAnimationState() == ANIMATION_PHASE_2_IDLE && getPhase() == 3) {
+                event.getController().setAnimation(PHASE_2_IDLE_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+
+            if (getAnimationState() == ANIMATION_PHASE_2_ATTACK && getPhase() == 3) {
+                event.getController().setAnimation(PHASE_2_ATTACK_ANIMATION);
+                return PlayState.CONTINUE;
+            }
 
 
-        return PlayState.CONTINUE;
+            /* PHASE 4 */
+            if (getAnimationState() == ANIMATION_START_PHASE_3 && getPhase() == 4) {
+                event.getController().setAnimation(START_PHASE_3_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+
+            /* PHASE 5 */
+            if (!event.isMoving() && getPhase() == 5 && !(this.isDeadOrDying() || this.getHealth() < 0.01)) {
+                event.getController().setAnimation(CRAWL_IDLE_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+
+            if (getAnimationState() == ANIMATION_PHASE_3_ATTACK && getPhase() == 5 && !(this.isDeadOrDying() || this.getHealth() < 0.01)) {
+                event.getController().setAnimation(PHASE_3_ATTACK_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+
+            /* DEATH */
+            if (this.isDeadOrDying() || this.getHealth() < 0.01) {
+                event.getController().setAnimation(DEATH_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+
+
+            /* STOPPERS */
+            // stops attack animation from looping
+            if (getPhase() == 1) {
+                if (getAttackAnimTimer() <= 0 && getInvulnerableTimer() <= 0) {
+                    setAnimationState(ANIMATION_IDLE);
+                    return PlayState.STOP;
+                }
+
+                // stops idle animation from looping
+                if (getAttackAnimTimer() > 0 && getAnimationState() == ANIMATION_IDLE) {
+                    return PlayState.STOP;
+                }
+            }
+
+
+            return PlayState.CONTINUE;
+        }));
     }
 
-
     @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
-        animationData.addAnimationController(new AnimationController(this, "controller2", 0, this::predicate2));
-    }
-
-    @Override
-    public AnimationFactory getFactory() {
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
         return factory;
     }
 
@@ -323,11 +316,11 @@ public class LichEntity extends Monster implements IAnimatable {
             }
         }
 
-        if (getInvulnerableTimer() > 80 && random.nextInt(6) == 0 && getPhase() == 1) {
+        if (getInvulnerableTimer() > 60 && random.nextInt(6) == 0 && getPhase() == 1) {
             MathUtil.createParticleFlare(this.getLevel(), this.getX() - 0.75D, this.getY() - 1.0D + 3.5D - (float) getInvulnerableTimer() / 100, this.getZ() - 0.75D, random.nextInt(300) + 150, ParticleTypes.SOUL, ParticleTypes.SOUL_FIRE_FLAME, random, false);
         }
 
-        if (getInvulnerableTimer() > 80 && getPhase() == 1) {
+        if (getInvulnerableTimer() > 20 && getPhase() == 1) {
             MathUtil.createParticleCircle(this.getLevel(), this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D, 5, ParticleTypes.SOUL_FIRE_FLAME, this.getRandom(), 1.0F);
         }
 
@@ -424,7 +417,7 @@ public class LichEntity extends Monster implements IAnimatable {
                 Iterator<Player> iterator = playersInRange.iterator();
                 while (iterator.hasNext()) {
                     Player player = iterator.next();
-                    if ((getPhaseInvulnerableTimer() == 0 || getPhaseInvulnerableTimer() % 300 == 0) && !player.isCreative() && GraveyardConfig.COMMON.isInvulnerableDuringSpells.get()) {
+                    if ((getHuntTimer() == 0 || getHuntTimer() % 300 == 0) && !player.isCreative() && GraveyardConfig.COMMON.isInvulnerableDuringSpells.get()) {
                         for (int i = 0; i <= 3; i++) {
                             BlockPos targetPos = new BlockPos(this.getX() + Mth.nextInt(random, -10, 10), this.getY(), this.getZ() + Mth.nextInt(random, -10, 10));
                             if (level.getBlockState(targetPos).isAir() && level.getBlockState(targetPos.above()).isAir() && !level.getBlockState(targetPos.below()).isAir()) {
@@ -433,20 +426,21 @@ public class LichEntity extends Monster implements IAnimatable {
                             }
                         }
                     }
-                    if (getPhaseInvulnerableTimer() % 50 == 0 && !player.isCreative()) {
+                    if (getHuntTimer() % 50 == 0 && !player.isCreative()) {
                         player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 80, 2));
                     }
                 }
 
                 setCanMove(true);
-                if (getPhaseInvulnerableTimer() == 0 && GraveyardConfig.COMMON.isInvulnerableDuringSpells.get()) {
+                if (getHuntTimer() == 0) {
                     playHuntSound();
+                    setHuntTimer(HUNT_DURATION);
                     if (GraveyardConfig.COMMON.isInvulnerableDuringSpells.get()) {
                         this.setPhaseInvulTimer(HUNT_DURATION); // acts as hunt duration counter
                     }
                 }
 
-                if (getPhaseInvulnerableTimer() == 400) {
+                if (getHuntTimer() == 400) {
                     playHuntSound();
                 }
                 setAnimationState(ANIMATION_PHASE_2_ATTACK);
@@ -460,8 +454,8 @@ public class LichEntity extends Monster implements IAnimatable {
                 }
             }
 
-            // if the invul (= hunt duration) runs out, set cooldown
-            if (getPhaseInvulnerableTimer() == 1 && getHuntCooldownTicker() == 0 && canHuntStart()) {
+            // if the hunt runs out, set cooldown
+            if (getHuntTimer() == 1 && getHuntCooldownTicker() == 0 && canHuntStart()) {
                 this.teleportTo(homePos.getX() + 0.5D, homePos.getY() + 0.5D, homePos.getZ() + 0.5D);
                 this.setHuntCooldownTicker(HUNT_COOLDOWN);
                 setAnimationState(ANIMATION_STUNNED);
@@ -469,6 +463,11 @@ public class LichEntity extends Monster implements IAnimatable {
                 setCanMove(false);
                 entityAttributeInstance.removeModifier(ATTACKING_SPEED_BOOST);
                 entityAttributeDmgInstance.removeModifier(DMG_BOOST);
+            }
+
+            if (this.getHuntTimer() > 0) {
+                int timer = getHuntTimer() - 1;
+                this.setHuntTimer(timer);
             }
         }
         /* END PHASE 3 FIGHT LOGIC */
@@ -498,6 +497,22 @@ public class LichEntity extends Monster implements IAnimatable {
 
         /* TRANSITION MAIN PHASE TWO to THREE, == PHASE FOUR */
         if (getPhase() == 4) {
+
+            if (!GraveyardConfig.COMMON.isInvulnerableDuringSpells.get() && canHuntStart()) {
+                AttributeInstance entityAttributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+                AttributeInstance entityAttributeDmgInstance = this.getAttribute(Attributes.ATTACK_DAMAGE);
+
+
+                this.teleportTo(homePos.getX() + 0.5D, homePos.getY() + 0.5D, homePos.getZ() + 0.5D);
+                this.setHuntCooldownTicker(HUNT_COOLDOWN);
+                setAnimationState(ANIMATION_STUNNED);
+                setHuntStart(false);
+                setCanMove(false);
+                entityAttributeInstance.removeModifier(ATTACKING_SPEED_BOOST);
+                entityAttributeDmgInstance.removeModifier(DMG_BOOST);
+            }
+
+
             int phaseThreeTimer = getStartPhaseThreeAnimTimer();
             if (getPhaseInvulnerableTimer() == 0) {
                 setPhaseInvulTimer(START_PHASE_THREE_ANIMATION_DURATION); // invul
@@ -786,7 +801,7 @@ public class LichEntity extends Monster implements IAnimatable {
                 } else {
                     for (int ii = 0; ii < amount - 1; ++ii) {
                         GhoulEntity ghoul = TGEntities.GHOUL.get().create(level);
-                        ghoul.setVariant((byte) 10);
+                        ghoul.setVariant((byte) 9);
                         ghoul.moveTo(pos.getX(), pos.getY(), pos.getZ());
                         ghoul.setCanBurnInSunlight(false);
                         level.addFreshEntity(ghoul);
@@ -830,6 +845,14 @@ public class LichEntity extends Monster implements IAnimatable {
 
     public void setInvulTimer(int ticks) {
         this.entityData.set(INVUL_TIMER, ticks);
+    }
+
+    public int getHuntTimer() {
+        return (Integer) this.entityData.get(HUNT_TIMER);
+    }
+
+    public void setHuntTimer(int ticks) {
+        this.entityData.set(HUNT_TIMER, ticks);
     }
 
     public int getFightDurationTimer() {
@@ -998,6 +1021,7 @@ public class LichEntity extends Monster implements IAnimatable {
         super.defineSynchedData();
         this.entityData.define(CAN_MOVE, false);
         this.entityData.define(INVUL_TIMER, 0);
+        this.entityData.define(HUNT_TIMER, 0);
         this.entityData.define(FIGHT_DURATION_TIMER, 0);
         this.entityData.define(HEAL_DURATION_TIMER, 0);
         this.entityData.define(LEVITATION_DURATION_TIMER, 0);
@@ -1073,6 +1097,7 @@ public class LichEntity extends Monster implements IAnimatable {
     static {
         INVUL_TIMER = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.INT);
         PHASE_INVUL_TIMER = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.INT);
+        HUNT_TIMER = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.INT);
         ATTACK_ANIM_TIMER = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.INT);
         PHASE_TWO_START_ANIM_TIMER = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.INT);
         PHASE_THREE_START_ANIM_TIMER = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.INT);

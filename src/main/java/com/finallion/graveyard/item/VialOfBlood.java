@@ -1,6 +1,5 @@
 package com.finallion.graveyard.item;
 
-import com.finallion.graveyard.TheGraveyard;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -16,7 +15,7 @@ public class VialOfBlood extends Item {
     private static final String BlOOD_KEY = "Blood";
 
     public VialOfBlood() {
-        super(new Item.Properties().stacksTo(1).tab(TheGraveyard.GROUP));
+        super(new Item.Properties().stacksTo(1));
     }
 
     public static float getBlood(ItemStack stack) {

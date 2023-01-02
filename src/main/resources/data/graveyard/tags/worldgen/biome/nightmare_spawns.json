@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:is_spooky",
+    "#forge:is_plains",
+    "#forge:is_snowy",
+    "#forge:is_dry/overworld",
+    "#forge:is_swamp"
+  ]
+}

@@ -3,12 +3,12 @@ package com.finallion.graveyard.entities.renders;
 import com.finallion.graveyard.entities.FallingCorpse;
 import com.finallion.graveyard.entities.models.FallingCorpseModel;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class FallingCorpseRenderer extends GeoEntityRenderer<FallingCorpse> {
 
@@ -24,8 +24,8 @@ public class FallingCorpseRenderer extends GeoEntityRenderer<FallingCorpse> {
     }
 
     @Override
-    public RenderType getRenderType(FallingCorpse animatable, float partialTicks, PoseStack stack, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.entityCutoutNoCull(textureLocation);
+    public RenderType getRenderType(FallingCorpse animatable, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
+        return RenderType.entityCutoutNoCull(texture);
     }
 
 }

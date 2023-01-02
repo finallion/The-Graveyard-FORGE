@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:forest",
+    "#forge:is_plains",
+    "#forge:is_coniferous",
+    "#forge:is_dense/overworld",
+    "minecraft:windswept_forest",
+    {"id": "terralith:blooming_plateau", "required": false},
+    {"id": "terralith:blooming_valley", "required": false}
+  ]
+}

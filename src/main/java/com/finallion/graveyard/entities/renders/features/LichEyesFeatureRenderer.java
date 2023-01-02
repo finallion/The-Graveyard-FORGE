@@ -9,39 +9,38 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
-import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.renderer.GeoRenderer;
+import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 
-public class LichEyesFeatureRenderer extends GeoLayerRenderer<LichEntity> {
-    private RenderType TEXTURE;
-    private final IGeoRenderer<LichEntity> renderer;
+public class LichEyesFeatureRenderer extends GeoRenderLayer<LichEntity> {
+    private RenderType TEXTURE = RenderType.eyes(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/lich_eye_texture.png"));
+    private final GeoRenderer<LichEntity> renderer;
 
-    public LichEyesFeatureRenderer(IGeoRenderer<LichEntity> entityRendererIn) {
+    public LichEyesFeatureRenderer(GeoRenderer<LichEntity> entityRendererIn) {
         super(entityRendererIn);
         this.renderer = entityRendererIn;
     }
 
     @Override
-    public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, LichEntity entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        TEXTURE = RenderType.eyes(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/lich_eye_texture.png"));
-        VertexConsumer vertexConsumer = bufferIn.getBuffer(TEXTURE);
-
-        renderer.render(
-                getEntityModel().getModel(getEntityModel().getModelResource(entityLivingBaseIn)),
-                entityLivingBaseIn,
-                partialTicks,
-                TEXTURE,
-                matrixStackIn,
-                bufferIn,
+    public void render(PoseStack poseStack, LichEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+        VertexConsumer vertexConsumer = bufferSource.getBuffer(TEXTURE);
+        renderer.actuallyRender(
+                poseStack,
+                animatable,
+                bakedModel,
+                renderType,
+                bufferSource,
                 vertexConsumer,
+                true,
+                partialTick,
                 15728640,
                 OverlayTexture.NO_OVERLAY,
                 1.0F, 1.0F, 1.0F, 1.0F
         );
-
-
     }
+
 
 
 }
