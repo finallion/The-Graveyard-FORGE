@@ -20,7 +20,6 @@ public class TGFileWriterReader {
             File file = new File(server.getWorldPath(LevelResource.ROOT).toString() + "/graveyardGhoulingUUIDmapping.txt");
             if (file.exists()) {
                 try (BufferedReader reader = new BufferedReader(new FileReader(server.getWorldPath(LevelResource.ROOT).toString() + "/graveyardGhoulingUUIDmapping.txt"))) {
-                    System.out.println("Reading Graveyard Ghouling UUIDs from graveyardGhoulingUUIDMapping.txt.");
                     while ((line = reader.readLine()) != null) {
                         String[] keyValuePair = line.split(":", 2);
 
@@ -44,7 +43,6 @@ public class TGFileWriterReader {
             try {
                 FileWriter fileWriter = new FileWriter(server.getWorldPath(LevelResource.ROOT).toString() + "/graveyardGhoulingUUIDmapping.txt");
                 BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                System.out.println("Saving Graveyard Ghouling UUIDs in graveyardGhoulingUUIDMapping.txt.");
 
                 for (Map.Entry<UUID, UUID> entry : BoneStaffItem.ownerGhoulingMapping.entrySet()) {
                     bufferedWriter.write(entry.getKey() + ":" + entry.getValue());

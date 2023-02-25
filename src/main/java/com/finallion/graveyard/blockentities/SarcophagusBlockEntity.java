@@ -176,8 +176,4 @@ public class SarcophagusBlockEntity extends RandomizableContainerBlockEntity imp
     public boolean isCoffin() {
         return this.getBlockState().getValue(BlockStateProperties.LIT);
     }
-
-
-
-
 }

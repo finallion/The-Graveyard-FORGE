@@ -109,6 +109,7 @@
     {"id": "terralith:jungle_mountains", "required":  false},
     {"id": "terralith:lavender_forest", "required":  false},
     {"id": "terralith:lavender_valley", "required":  false},
+    {"id": "terralith:lush_desert", "required":  false},
     {"id": "terralith:lush_valley", "required":  false},
     {"id": "terralith:mirage_isles", "required":  false},
     {"id": "terralith:moonlight_grove", "required":  false},

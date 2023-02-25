@@ -197,8 +197,7 @@ public class TGJigsawStructure extends Structure {
     }
 
     protected static boolean isCorrectBiome(Structure.GenerationContext context, List<String> whitelist, List<String> blacklist) {
-        BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(0);
-
+        BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(64);
         Holder<Biome> biome = context.chunkGenerator().getBiomeSource().getNoiseBiome(
                 QuartPos.fromBlock(blockpos.getX()),
                 QuartPos.fromBlock(blockpos.getY()),
