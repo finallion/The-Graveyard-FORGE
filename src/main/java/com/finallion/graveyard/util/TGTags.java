@@ -13,6 +13,13 @@ public class TGTags {
 
     public static TagKey<Biome> IS_OVERWORLD = biomeTag("is_overworld");
 
+    public static TagKey<Biome> GHOUL_SPAWNS = TagKey.create(Registries.f_256952_, new ResourceLocation(TheGraveyard.MOD_ID, "ghoul_spawns"));
+    public static TagKey<Biome> REVENANT_SPAWNS = TagKey.create(Registries.f_256952_, new ResourceLocation(TheGraveyard.MOD_ID, "revenant_spawns"));
+    public static TagKey<Biome> NIGHTMARE_SPAWNS = TagKey.create(Registries.f_256952_, new ResourceLocation(TheGraveyard.MOD_ID, "nightmare_spawns"));
+    public static TagKey<Biome> SKELETON_CREEPER_SPAWNS = TagKey.create(Registries.f_256952_, new ResourceLocation(TheGraveyard.MOD_ID, "skeleton_creeper_spawns"));
+    public static TagKey<Biome> REAPER_SPAWNS = TagKey.create(Registries.f_256952_, new ResourceLocation(TheGraveyard.MOD_ID, "reaper_spawns"));
+
+
     public static TagKey<Biome> biomeTag(String name) {
         return TagKey.create(Registries.f_256952_, new ResourceLocation(TheGraveyard.MOD_ID, name));
     }

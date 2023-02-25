@@ -64,7 +64,6 @@ public class TheGraveyard {
         //modEventBus.addListener(this::onCreateEntityAttributes);
 
         //modEventBus.addListener(DataGenerators::gatherData);
-
     }
 
     public void setupClient(final FMLClientSetupEvent event) {
