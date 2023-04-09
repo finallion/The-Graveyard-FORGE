@@ -117,6 +117,9 @@ public class CommonConfig {
     public final ForgeConfigSpec.BooleanValue disableWitherSkeletonSpawner;
     public final ForgeConfigSpec.IntValue maxTerrainHeightDifference;
 
+    public final ForgeConfigSpec.ConfigValue<Double> healthPhaseOne;
+    public final ForgeConfigSpec.ConfigValue<Double> healthPhaseTwo;
+
     public CommonConfig(ForgeConfigSpec.Builder builder) {
         builder.comment(" Welcome to The Graveyard Config!" +
                 "\n" +
@@ -316,6 +319,11 @@ public class CommonConfig {
         this.urnHasDoubleInventory = builder.define("urn.urnHasDoubleInventory", true);
         this.disableWitherSkeletonSpawner = builder.define("spawner.disableWitherSkeletonSpawner", false);
         this.maxTerrainHeightDifference = builder.defineInRange("terrain.maxTerrainHeightDifference", 6, 1, 100);
+        builder.pop();
+
+        builder.push("The Graveyard - Corrupted Champion Config");
+        this.healthPhaseOne = builder.defineInRange("lich.healthPhaseOne", 400.0D, 1, 1024);
+        this.healthPhaseTwo = builder.defineInRange("lich.healthPhaseTwo", 200.0D, 1, 1024);
         builder.pop();
     }
 

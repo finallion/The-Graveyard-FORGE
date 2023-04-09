@@ -61,7 +61,6 @@ public class VialOfBlood extends Item {
         Level world = context.getLevel();
         float blood = VialOfBlood.getBlood(stack);
 
-        System.out.println(world.isNight() || world.dimensionType().hasFixedTime());
         if (blockState.is(TGBlocks.ALTAR.get()) && playerEntity!= null && blood >= 0.8F && world.getDifficulty() != Difficulty.PEACEFUL && (world.isNight() || world.dimensionType().hasFixedTime())) {
             BlockPattern.BlockPatternMatch result = AltarBlock.getCompletedFramePattern().find(world, context.getClickedPos());
 

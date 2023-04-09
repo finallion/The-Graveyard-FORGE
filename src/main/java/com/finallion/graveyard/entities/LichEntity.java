@@ -1,6 +1,7 @@
 package com.finallion.graveyard.entities;
 
 import com.finallion.graveyard.blocks.AltarBlock;
+import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.entities.ai.goals.LichMeleeGoal;
 import com.finallion.graveyard.entities.projectiles.SkullEntity;
 import com.finallion.graveyard.init.TGEntities;
@@ -119,8 +120,8 @@ public class LichEntity extends Monster implements IAnimatable {
     // constants
     private static final int SPAWN_INVUL_TIMER = 420;
     private static final int DEFAULT_INVUL_TIMER = 200;
-    private final float HEALTH_PHASE_01 = 400.0F;
-    private final float HEALTH_PHASE_02 = 200.0F;
+    private final float HEALTH_PHASE_01 = GraveyardConfig.COMMON.healthPhaseOne.get().floatValue();
+    private final float HEALTH_PHASE_02 = GraveyardConfig.COMMON.healthPhaseTwo.get().floatValue();
     public final int ATTACK_ANIMATION_DURATION = 40;
     private final int START_PHASE_TWO_ANIMATION_DURATION = 121;
     private final int START_PHASE_THREE_ANIMATION_DURATION = 220;
@@ -288,13 +289,13 @@ public class LichEntity extends Monster implements IAnimatable {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 400.0F)
+                .add(Attributes.MAX_HEALTH, GraveyardConfig.COMMON.healthPhaseOne.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.0D)
                 .add(Attributes.ATTACK_DAMAGE, 30.0D)
                 .add(Attributes.FOLLOW_RANGE, 25.0D)
                 .add(Attributes.ARMOR, 18.0D)
                 .add(Attributes.ARMOR_TOUGHNESS, 14.0D)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 5.0D);
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
     }
 
 
@@ -565,7 +566,6 @@ public class LichEntity extends Monster implements IAnimatable {
             }
 
             super.customServerAiStep();
-
             this.bossBar.setProgress(this.getHealth() / this.getMaxHealthPerPhase());
         }
     }
