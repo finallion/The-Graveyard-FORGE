@@ -1,12 +1,12 @@
 package com.finallion.graveyard.entities;
 
 
+import com.finallion.graveyard.init.TGSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -194,26 +194,22 @@ public class ReaperEntity extends HostileGraveyardEntity implements IAnimatable 
         return this.factory;
     }
 
-
     @Override
     public void playAmbientSound() {
-        this.playSound(SoundEvents.VEX_AMBIENT, 1.0F, -10.0F);
+        this.playSound(TGSounds.REAPER_AMBIENT.get(), 1.0F, -10.0F);
     }
 
-
-    @Nullable
     @Override
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        this.playSound(SoundEvents.VEX_HURT, 1.0F, -10.0F);
-        return super.getHurtSound(p_184601_1_);
+    protected void playHurtSound(DamageSource source) {
+        this.playSound(TGSounds.REAPER_HURT.get(), 1.0F, -10.0F);
     }
 
-    @Nullable
     @Override
-    protected SoundEvent getDeathSound() {
-        this.playSound(SoundEvents.VEX_DEATH, 1.0F, -10.0F);
-        return super.getDeathSound();
+    public void die(DamageSource source) {
+        super.die(source);
+        this.playSound(TGSounds.REAPER_DEATH.get(), 1.0F, -10.0F);
     }
+
 
     class CopyOwnerTargetGoal extends TargetGoal {
         private final TargetingConditions copyOwnerTargeting = TargetingConditions.forNonCombat().ignoreLineOfSight().ignoreInvisibilityTesting();

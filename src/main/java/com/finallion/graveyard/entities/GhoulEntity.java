@@ -2,13 +2,13 @@ package com.finallion.graveyard.entities;
 
 import com.finallion.graveyard.entities.ai.goals.GhoulMeleeAttackGoal;
 import com.finallion.graveyard.init.TGSounds;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -345,18 +345,23 @@ public class GhoulEntity extends AngerableGraveyardEntity implements IAnimatable
 
     @Override
     public void playAmbientSound() {
-        this.playSound(SoundEvents.HUSK_AMBIENT, 1.0F, -5.0F);
+        this.playSound(TGSounds.GHOUL_AMBIENT.get(), 1.0F, -5.0F);
+    }
+
+    @Override
+    public void playStepSound(BlockPos pos, BlockState state) {
+        this.playSound(TGSounds.GHOUL_STEP.get(), 0.5F, -1.0F);
     }
 
     @Override
     protected void playHurtSound(DamageSource source) {
-        this.playSound(SoundEvents.HUSK_HURT, 1.0F, -5.0F);
+        this.playSound(TGSounds.GHOUL_HURT.get(), 1.0F, -5.0F);
     }
 
     @Override
     public void die(DamageSource source) {
         super.die(source);
-        this.playSound(SoundEvents.HUSK_DEATH, 1.0F, -5.0F);
+        this.playSound(TGSounds.GHOUL_DEATH.get(), 1.0F, -5.0F);
     }
 
     static {

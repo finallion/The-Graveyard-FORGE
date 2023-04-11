@@ -2,23 +2,23 @@
   "variants": {
     "snowy=false": [
       {
-        "model": "graveyard:block/grass_block"
+        "model": "minecraft:block/grass_block"
       },
       {
-        "model": "graveyard:block/grass_block",
+        "model": "minecraft:block/grass_block",
         "y": 90
       },
       {
-        "model": "graveyard:block/grass_block",
+        "model": "minecraft:block/grass_block",
         "y": 180
       },
       {
-        "model": "graveyard:block/grass_block",
+        "model": "minecraft:block/grass_block",
         "y": 270
       }
     ],
     "snowy=true": {
-      "model": "graveyard:block/grass_block_snow"
+      "model": "minecraft:block/grass_block_snow"
     }
   }
 }

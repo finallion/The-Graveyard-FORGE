@@ -11,23 +11,13 @@ public class TGTags {
     public static void init() {
     }
 
-    public static TagKey<Biome> IS_OVERWORLD = biomeTag("is_overworld");
 
-    public static TagKey<Biome> IS_DESERT = biomeTag("is_desert");
-    public static TagKey<Biome> IS_SAVANNA = biomeTag("is_savanna");
-    public static TagKey<Biome> IS_MESA = biomeTag("is_mesa");
-    public static TagKey<Biome> IS_PLAINS = biomeTag("is_plains");
-    public static TagKey<Biome> IS_FOREST = biomeTag("is_forest");
-    public static TagKey<Biome> IS_SNOWY = biomeTag("is_snowy");
-    public static TagKey<Biome> IS_BEACH = biomeTag("is_beach");
-    public static TagKey<Biome> IS_MOUNTAIN = biomeTag("is_mountain");
-    public static TagKey<Biome> IS_JUNGLE = biomeTag("is_jungle");
-    public static TagKey<Biome> IS_SWAMP = biomeTag("is_swamp");
-    public static TagKey<Biome> IS_UNDERGROUND = biomeTag("is_underground");
-    public static TagKey<Biome> IS_SPOOKY = biomeTag("is_spooky");
+    public static final TagKey<Biome> GHOUL_SPAWNS = biomeTag("ghoul_spawns");
+    public static final TagKey<Biome> NIGHTMARE_SPAWNS = biomeTag("nightmare_spawns");
+    public static final TagKey<Biome> REAPER_SPAWNS = biomeTag("reaper_spawns");
+    public static final TagKey<Biome> REVENANT_SPAWNS = biomeTag("revenant_spawns");
+    public static final TagKey<Biome> SKELETON_CREEPER_SPAWNS = biomeTag("skeleton_creeper_spawns");
 
-    public static final TagKey<Biome> GHOUL_SPAWN = biomeTag("ghoul_spawn");
-    public static final TagKey<Biome> SPAWN_INCLUDE_LIST = biomeTag("spawn_include");
 
     public static TagKey<Biome> biomeTag(String name) {
         return TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(TheGraveyard.MOD_ID, name));

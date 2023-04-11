@@ -32,6 +32,11 @@ public class TGMossBlock extends MossBlock {
                 if (world.isClientSide()) {
                     world.addParticle(TGParticles.GRAVEYARD_FOG_PARTICLE.get(), (double) pos.getX() + random.nextDouble(), (double) pos.getY() + random.nextDouble(), (double) pos.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
                 }
+
+            }
+
+            if (random.nextInt(250) == 0) {
+                world.addParticle(TGParticles.GRAVEYARD_HAND_PARTICLE.get(), (double)pos.getX() + random.nextDouble(), (double)pos.getY() + 1.2D, (double)pos.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
             }
         }
 

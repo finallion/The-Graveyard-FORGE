@@ -2,6 +2,7 @@ package com.finallion.graveyard.entities;
 
 import com.finallion.graveyard.blocks.BrazierBlock;
 import com.finallion.graveyard.init.TGAdvancements;
+import com.finallion.graveyard.init.TGSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -348,12 +349,12 @@ public class WraithEntity extends HostileGraveyardEntity implements IAnimatable 
 
     @Override
     public void playAmbientSound() {
-        this.playSound(SoundEvents.SOUL_ESCAPE, 1.5F, -10.0F);
+        this.playSound(TGSounds.WRAITH_AMBIENT.get(), 1.5F, -10.0F);
     }
 
     @Override
     protected void playHurtSound(DamageSource source) {
-        this.playSound(SoundEvents.SOUL_SAND_HIT, 1.0F, -10.0F);
+        this.playSound(TGSounds.WRAITH_HURT.get(), 1.0F, -10.0F);
     }
 
     @Override
@@ -364,7 +365,7 @@ public class WraithEntity extends HostileGraveyardEntity implements IAnimatable 
 
     private void playDeathSound() {
         for (int i = 0; i < 10; i++) {
-            this.playSound(SoundEvents.SOUL_ESCAPE, 2.5F, -10.0F);
+            this.playSound(TGSounds.WRAITH_AMBIENT.get(), 2.5F, -10.0F);
         }
     }
 

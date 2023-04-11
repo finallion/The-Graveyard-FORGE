@@ -77,15 +77,15 @@ public class AltarBlock extends Block {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand p_60507_, BlockHitResult p_60508_) {
-        ItemStack stack = player.getMainHandItem();
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult p_60508_) {
+        ItemStack stack = player.getItemInHand(hand);
 
         float blood = 0.0F;
         if (stack.is(TGItems.VIAL_OF_BLOOD.get())) {
             blood = VialOfBlood.getBlood(stack);
         }
 
-        if (state.is(TGBlocks.ALTAR.get()) && (blood >= 0.8F || GraveyardConfig.COMMON.isBossSummonableItem.get().contains(stack.getItem().getDescriptionId())) && world.getDifficulty() != Difficulty.PEACEFUL && world.isNight()) {
+        if (state.is(TGBlocks.ALTAR.get()) && (blood >= 0.8F || GraveyardConfig.COMMON.isBossSummonableItem.get().contains(stack.getItem().getDescriptionId())) && world.getDifficulty() != Difficulty.PEACEFUL && (world.isNight() || world.dimensionType().hasFixedTime())) {
             BlockPattern.BlockPatternMatch result = AltarBlock.getCompletedFramePattern().find(world, pos);
 
             if (!state.getValue(AltarBlock.BLOODY) && (result != null || !GraveyardConfig.COMMON.summoningNeedsStaffFragments.get())) {
@@ -149,6 +149,6 @@ public class AltarBlock extends Block {
         }
 
 
-        return super.use(state, world, pos, player, p_60507_, p_60508_);
+        return super.use(state, world, pos, player, hand, p_60508_);
     }
 }

@@ -1,6 +1,7 @@
 package com.finallion.graveyard.entities.ai.goals;
 
 import com.finallion.graveyard.entities.GhoulingEntity;
+import com.finallion.graveyard.init.TGSounds;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -130,6 +131,7 @@ public class GhoulingMeleeAttackGoal extends Goal {
         if (squaredDistance <= d && this.cooldown <= 0) {
             this.resetCooldown(20);
             if (this.mob.getAttackAnimTimer() == 0) {
+                this.mob.playSound(TGSounds.GHOULING_ATTACK.get(), 1.0F, -1.0F);
                 this.mob.setAttackAnimTimer(this.mob.ATTACK_ANIMATION_DURATION);
                 animationTicker = this.mob.ATTACK_ANIMATION_DURATION;
                 canFinishAttack = true;

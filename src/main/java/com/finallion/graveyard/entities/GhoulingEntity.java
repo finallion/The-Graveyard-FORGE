@@ -1,12 +1,13 @@
 package com.finallion.graveyard.entities;
 
-import com.finallion.graveyard.entities.ai.goals.AttackWithOwnerGoal;
-import com.finallion.graveyard.entities.ai.goals.FollowOwnerGoal;
-import com.finallion.graveyard.entities.ai.goals.GhoulingMeleeAttackGoal;
-import com.finallion.graveyard.entities.ai.goals.TrackOwnerAttackerGoal;
+import com.finallion.graveyard.entities.ai.goals.*;
 import com.finallion.graveyard.init.TGAdvancements;
 import com.finallion.graveyard.init.TGBlocks;
+import com.finallion.graveyard.init.TGParticles;
+import com.finallion.graveyard.init.TGSounds;
 import com.finallion.graveyard.item.BoneStaffItem;
+import com.finallion.graveyard.util.MathUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -16,6 +17,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -25,6 +28,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -65,6 +69,7 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
     private static final EntityDataAccessor<Integer> ATTACK_ANIM_TIMER;
     private static final EntityDataAccessor<Integer> ANIMATION;
     private static final EntityDataAccessor<Integer> SPAWN_TIMER;
+    private static final EntityDataAccessor<Integer> TELEPORT_TIMER;
     private static final EntityDataAccessor<ItemStack> STAFF;
     private static final EntityDataAccessor<Boolean> COFFIN;
     private static final EntityDataAccessor<Byte> VARIANT;
@@ -93,6 +98,7 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(1, new GhoulingEscapeDangerGoal(1.5D));
+        this.goalSelector.addGoal(2, new SitGoal(this));
         //this.goalSelector.addGoal();(3, new WanderAroundGoal(this, 1.0F));
         this.goalSelector.addGoal(5, new GhoulingMeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
@@ -106,7 +112,7 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
     public static AttributeSupplier.Builder createAttributes() {
         return PathfinderMob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 50.0D)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 0.4D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.5D)
                 .add(Attributes.ARMOR_TOUGHNESS, 2.0D)
                 .add(Attributes.ARMOR, 5.0D)
                 .add(Attributes.ATTACK_DAMAGE, 6.5D)
@@ -122,6 +128,7 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
         this.entityData.define(ATTACK_ANIM_TIMER, 0);
         this.entityData.define(COFFIN, false);
         this.entityData.define(SPAWN_TIMER, 0);
+        this.entityData.define(TELEPORT_TIMER, 0);
         this.entityData.define(VARIANT, (byte)0);
         //this.dataTracker.startTracking(CAN_COLLECT, false);
     }
@@ -183,6 +190,7 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
         return PlayState.CONTINUE;
     }
 
+    // mob tick
     protected void customServerAiStep() {
         // ATTACK TIMER
         if (this.getAttackAnimTimer() == ATTACK_ANIMATION_DURATION) {
@@ -198,11 +206,38 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
             this.setSpawnTimer(getSpawnTimer() - 1);
         }
 
+        if (this.getTeleportTimer() > 0) {
+            this.setTeleportTimer(getTeleportTimer() - 1);
+        }
+
         if (this.getHealth() < this.getMaxHealth()) {
             this.heal(0.01F);
         }
 
         super.customServerAiStep();
+    }
+
+    // tick movement
+    @Override
+    public void baseTick() {
+        if (getSpawnTimer() == 50) {
+            level.playSound(null, this.blockPosition(), TGSounds.GHOULING_SPAWN.get(), SoundSource.HOSTILE, 5.0F, 1.5F);
+            level.playSound(null, this.blockPosition(), TGSounds.GHOUL_ROAR.get(), SoundSource.HOSTILE, 1.0F, -2.0F);
+        }
+
+        if (isInSittingPose() && random.nextInt(5) == 0) {
+            MathUtil.createParticleCircle(level, this.getX(), this.getY() + 0.6D, this.getZ(), 0.0D, 0.0D, 0.0D, 1.5F, TGParticles.GRAVEYARD_SOUL_PARTICLE.get(), level.random, 0.5F);
+        }
+
+        if (getTeleportTimer() > 0) {
+            if (getTeleportTimer() == 10) {
+                playSound(SoundEvents.SOUL_ESCAPE, 2.0F, -10.0F);
+            }
+            MathUtil.createParticleCircle(level, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D, 1.5F, TGParticles.GRAVEYARD_SOUL_PARTICLE.get(), level.random, 0.5F);
+            MathUtil.createParticleCircle(level, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D, 1.5F, ParticleTypes.SOUL_FIRE_FLAME, level.random, 0.5F);
+        }
+
+        super.baseTick();
     }
 
     @Override
@@ -238,6 +273,14 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
         this.entityData.set(ATTACK_ANIM_TIMER, time);
     }
 
+    public int getTeleportTimer() {
+        return (Integer) this.entityData.get(TELEPORT_TIMER);
+    }
+
+    public void setTeleportTimer(int time) {
+        this.entityData.set(TELEPORT_TIMER, time);
+    }
+
     public void onSummoned() {
         this.setAnimationState(ANIMATION_SPAWN);
         setSpawnTimer(50);
@@ -262,7 +305,7 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
 
-        if (!this.level.isClientSide()) {
+        if (!this.level.isClientSide() && isOwner(player)) {
             if (this.hasCoffin() && player.isCrouching()) {
                 player.openMenu(this);
                 return InteractionResult.SUCCESS;
@@ -270,8 +313,9 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
 
             if (!itemStack.isEmpty()) {
                 if (!this.hasCoffin() && GHOULING_HOLDABLE.contains(itemStack.getItem())) {
-                    this.setItemSlot(EquipmentSlot.OFFHAND, itemStack);
+                    this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(itemStack.getItem()));
                     if (inventory == null) {
+                        this.playSound(SoundEvents.CHEST_CLOSE, 1.0F, -5.0F);
                         TGAdvancements.EQUIP_COFFIN.trigger((ServerPlayer) player);
                         inventory = new SimpleContainer(54);
                         this.setHasCoffin(true);
@@ -282,7 +326,29 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
                     return InteractionResult.SUCCESS;
                 }
             }
+
+            if (itemStack.getItem() instanceof BoneStaffItem && !player.isCrouching()) {
+                InteractionResult actionResult = super.mobInteract(player, hand);
+                if (!actionResult.consumesAction()) {
+                    this.playSound(TGSounds.GHOULING_GROAN.get(), 1.0F, -2.0F);
+                    if (isInSittingPose()) {
+                        player.displayClientMessage(Component.translatable("entity.graveyard.ghouling.nowait"), true);
+                    } else {
+                        player.displayClientMessage(Component.translatable("entity.graveyard.ghouling.wait"), true);
+                    }
+
+                    this.setSitting(!this.isSitting());
+                    this.jumping = false;
+                    this.navigation.stop();
+                    this.setTarget((LivingEntity) null);
+
+                    return InteractionResult.SUCCESS;
+                }
+
+                return actionResult;
+            }
         }
+
         return super.mobInteract(player, hand);
     }
 
@@ -355,6 +421,23 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
             BoneStaffItem.ownerGhoulingMapping.remove(this.uuid, getOwnerUuid());
         }
         super.die(source);
+        this.playSound(TGSounds.GHOULING_DEATH.get(), 1.0F, -2.0F);
+    }
+
+
+    @Override
+    public void playAmbientSound() {
+        this.playSound(TGSounds.GHOULING_AMBIENT.get(), 1.0F, -1.0F);
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        this.playSound(TGSounds.GHOULING_STEP.get(), 0.3F, 0.0F);
+    }
+
+    @Override
+    protected void playHurtSound(DamageSource source) {
+        this.playSound(TGSounds.GHOULING_HURT.get(), 1.0F, -1.0F);
     }
 
     @Override
@@ -424,6 +507,7 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
         ATTACK_ANIM_TIMER = SynchedEntityData.defineId(GhoulingEntity.class, EntityDataSerializers.INT);
         ANIMATION = SynchedEntityData.defineId(GhoulingEntity.class, EntityDataSerializers.INT);
         SPAWN_TIMER = SynchedEntityData.defineId(GhoulingEntity.class, EntityDataSerializers.INT);
+        TELEPORT_TIMER = SynchedEntityData.defineId(GhoulingEntity.class, EntityDataSerializers.INT);
         COFFIN = SynchedEntityData.defineId(GhoulingEntity.class, EntityDataSerializers.BOOLEAN);
         VARIANT = SynchedEntityData.defineId(GhoulingEntity.class, EntityDataSerializers.BYTE);
         STAFF = SynchedEntityData.defineId(GhoulingEntity.class, EntityDataSerializers.ITEM_STACK);

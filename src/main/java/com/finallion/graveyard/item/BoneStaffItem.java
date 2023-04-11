@@ -96,10 +96,11 @@ public class BoneStaffItem extends Item {
 
             if (!stack.getTag().contains("OwnerUUID")) {
                 stack.getOrCreateTag().putUUID("OwnerUUID", player.getUUID());
-                player.sendSystemMessage(Component.literal("I hear and obey..."));
+                player.displayClientMessage(Component.translatable("entity.graveyard.ghouling.spawn"), true);
             } else {
-                player.sendSystemMessage(Component.literal("Death... is a mere inconvenience."));
+                player.displayClientMessage(Component.translatable("entity.graveyard.ghouling.respawn"), true);
             }
+
 
             /* END TAG INPUT */
             ownerGhoulingMapping.putIfAbsent(ghouling.getUUID(), player.getUUID());
@@ -121,7 +122,7 @@ public class BoneStaffItem extends Item {
         if (!world.isClientSide) {
             if (nbt != null && nbt.contains("GhoulingUUID") && nbt.contains("OwnerUUID")) {
                 if (user.getUUID().compareTo(nbt.getUUID("OwnerUUID")) != 0) { // case wrong owner
-                    user.sendSystemMessage(Component.literal("I don't obey your orders, you are no master of mine!"));
+                    user.displayClientMessage(Component.translatable("entity.graveyard.ghouling.obey"), true);
                     return InteractionResultHolder.fail(stack);
                 } else {
                     UUID ghoulingUUID = nbt.getUUID("GhoulingUUID");
@@ -158,6 +159,7 @@ public class BoneStaffItem extends Item {
                                 if (entity instanceof LivingEntity livingEntity) {
                                     ghouling.setTarget(livingEntity);
                                     ghouling.setAggressive(true);
+                                    ghouling.setSitting(false);
                                 }
                             }
                         }

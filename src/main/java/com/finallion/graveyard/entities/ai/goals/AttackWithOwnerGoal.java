@@ -2,7 +2,6 @@ package com.finallion.graveyard.entities.ai.goals;
 
 import com.finallion.graveyard.entities.GraveyardMinionEntity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -21,13 +20,17 @@ public class AttackWithOwnerGoal extends TargetGoal {
     }
 
     public boolean canUse() {
-        LivingEntity livingentity = this.tameAnimal.getOwner();
-        if (livingentity == null) {
-            return false;
+        if (!this.tameAnimal.isSitting()) {
+            LivingEntity livingentity = this.tameAnimal.getOwner();
+            if (livingentity == null) {
+                return false;
+            } else {
+                this.ownerLastHurt = livingentity.getLastHurtMob();
+                int i = livingentity.getLastHurtMobTimestamp();
+                return i != this.timestamp && this.canAttack(this.ownerLastHurt, TargetingConditions.DEFAULT) && this.tameAnimal.wantsToAttack(this.ownerLastHurt, livingentity);
+            }
         } else {
-            this.ownerLastHurt = livingentity.getLastHurtMob();
-            int i = livingentity.getLastHurtMobTimestamp();
-            return i != this.timestamp && this.canAttack(this.ownerLastHurt, TargetingConditions.DEFAULT) && this.tameAnimal.wantsToAttack(this.ownerLastHurt, livingentity);
+            return false;
         }
     }
 

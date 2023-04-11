@@ -1,12 +1,12 @@
 package com.finallion.graveyard.entities;
 
 import com.finallion.graveyard.entities.ai.goals.RevenantMeleeAttackGoal;
+import com.finallion.graveyard.init.TGSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobType;
@@ -225,6 +225,11 @@ public class RevenantEntity extends AngerableGraveyardEntity implements IAnimata
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (source == DamageSource.CRAMMING ||source == DamageSource.IN_WALL || source == DamageSource.STARVE || source == DamageSource.OUT_OF_WORLD || source == DamageSource.ON_FIRE) {
+            setCanReanimate(false);
+            setReanimateAnimTimer(0);
+        }
+
         if (amount >= getHealth() && canReanimate() && random.nextInt(3) == 0) {
             setCanReanimate(false);
             setReanimateAnimTimer(REANIMATE_DURATION);
@@ -248,26 +253,25 @@ public class RevenantEntity extends AngerableGraveyardEntity implements IAnimata
         data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
     }
 
-
     @Override
     public void playAmbientSound() {
-        this.playSound(SoundEvents.WITHER_SKELETON_AMBIENT, 1.0F, 1.0F);
+        this.playSound(TGSounds.REVENANT_AMBIENT.get(), 1.0F, 1.0F);
     }
 
     @Override
     protected void playHurtSound(DamageSource source) {
-        this.playSound(SoundEvents.WITHER_SKELETON_HURT, 1.0F, 1.0F);
+        this.playSound(TGSounds.REVENANT_HURT.get(), 1.0F, 1.0F);
     }
 
     @Override
     public void die(DamageSource source) {
         super.die(source);
-        this.playSound(SoundEvents.WITHER_SKELETON_DEATH, 1.0F, 1.0F);
+        this.playSound(TGSounds.REVENANT_DEATH.get(), 1.0F, 1.0F);
     }
 
     @Override
-    protected void playStepSound(BlockPos p_20135_, BlockState p_20136_) {
-        this.playSound(SoundEvents.WITHER_SKELETON_STEP, 0.15F, 1.0F);
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        this.playSound(TGSounds.REVENANT_STEP.get(), 0.15F, 1.0F);
     }
 
     public int getAnimationState() {

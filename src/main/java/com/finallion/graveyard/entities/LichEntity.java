@@ -70,7 +70,8 @@ public class LichEntity extends Monster implements IAnimatable {
     private static final Predicate<LivingEntity> CAN_ATTACK_PREDICATE;
     private static final UUID ATTACKING_SPEED_BOOST_ID = UUID.fromString("020E0DFB-87AE-4653-9556-831010E291A0");
     private static final UUID ATTACKING_DMG_BOOST_ID = UUID.fromString("120E0DFB-87AE-4653-9776-831010E291A1");
-    private static final AttributeModifier CRAWL_SPEED_BOOST;
+    private static final UUID CRAWL_SPEED_BOOST_ID = UUID.fromString("120E0DFB-87AE-1978-9776-831010E291A2");
+    private static final AttributeModifier CRAWL_SPEED_BOOST = new AttributeModifier(CRAWL_SPEED_BOOST_ID, "Crawl speed boost", 0.18D, AttributeModifier.Operation.ADDITION);;
     private static final AttributeModifier ATTACKING_SPEED_BOOST = new AttributeModifier(ATTACKING_SPEED_BOOST_ID, "Attacking speed boost", GraveyardConfig.COMMON.speedInHuntPhase.get(), AttributeModifier.Operation.ADDITION);
     private static final AttributeModifier DMG_BOOST = new AttributeModifier(ATTACKING_DMG_BOOST_ID, "Damage speed boost", GraveyardConfig.COMMON.damageHuntingPhaseAddition.get(), AttributeModifier.Operation.ADDITION);
     // animation
@@ -113,6 +114,7 @@ public class LichEntity extends Monster implements IAnimatable {
     private static final EntityDataAccessor<Integer> PHASE_THREE_START_ANIM_TIMER; // main phase two to three
     private static final EntityDataAccessor<Integer> PHASE; // divides fight into three main phases and two transitions, animations are named after the main phase
     private static final EntityDataAccessor<Integer> ANIMATION;
+    private static final EntityDataAccessor<Integer> HUNT_TIMER;
     private static final EntityDataAccessor<Boolean> CAN_HUNT_START;
     private static final EntityDataAccessor<Boolean> CAN_MOVE;
 
@@ -301,7 +303,7 @@ public class LichEntity extends Monster implements IAnimatable {
                 .add(Attributes.FOLLOW_RANGE, 25.0D)
                 .add(Attributes.ARMOR, GraveyardConfig.COMMON.armor.get())
                 .add(Attributes.ARMOR_TOUGHNESS, GraveyardConfig.COMMON.armorToughness.get())
-                .add(Attributes.KNOCKBACK_RESISTANCE, 5.0D);
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
     }
 
 
@@ -360,6 +362,24 @@ public class LichEntity extends Monster implements IAnimatable {
             if (altar.getBlock() instanceof AltarBlock) {
                 getLevel().setBlock(homePos.below(), altar.setValue(AltarBlock.BLOODY, false), 3);
             }
+        }
+
+        if (canHuntStart()) {
+            List<Player> playersInRange = getPlayersInRange(30.0D);
+            Iterator<Player> iterator = playersInRange.iterator();
+            while (iterator.hasNext()) {
+                Player player = iterator.next();
+                if ((getHuntTimer() == 0 || getHuntTimer() % 300 == 0) && !player.isCreative() && GraveyardConfig.COMMON.isInvulnerableDuringSpells.get()) {
+                    player.playSound(SoundEvents.CHORUS_FRUIT_TELEPORT, 2.5F, -5.0F);
+                    for (int i = 0; i < 10; i++) {
+                        MathUtil.createParticleCircle(this.getLevel(), player.getX(), player.getY(), player.getZ(), 0.0D, 0.01D, 0.0D, 1.0F, TGParticles.GRAVEYARD_SOUL_PARTICLE.get(), this.getRandom(), 0.5F);
+                    }
+                }
+            }
+        }
+
+        if (!canHuntStart() && random.nextInt(5) == 0) {
+            level.playSound(null, this.blockPosition(), SoundEvents.SOUL_ESCAPE, SoundSource.HOSTILE, 4.0F, -10.0F);
         }
 
         super.aiStep();
@@ -424,29 +444,31 @@ public class LichEntity extends Monster implements IAnimatable {
                 Iterator<Player> iterator = playersInRange.iterator();
                 while (iterator.hasNext()) {
                     Player player = iterator.next();
-                    if ((getPhaseInvulnerableTimer() == 0 || getPhaseInvulnerableTimer() % 300 == 0) && !player.isCreative() && GraveyardConfig.COMMON.isInvulnerableDuringSpells.get()) {
-                        for (int i = 0; i <= 3; i++) {
+                    if ((getHuntTimer() == 0 || getHuntTimer() % 300 == 0) && !player.isCreative() && GraveyardConfig.COMMON.isInvulnerableDuringSpells.get()) {
+                        for (int i = 0; i <= 5; i++) {
                             BlockPos targetPos = new BlockPos(this.getX() + Mth.nextInt(random, -10, 10), this.getY(), this.getZ() + Mth.nextInt(random, -10, 10));
-                            if (level.getBlockState(targetPos).isAir() && level.getBlockState(targetPos.above()).isAir() && !level.getBlockState(targetPos.below()).isAir()) {
-                                player.teleportTo(this.getX() + Mth.nextInt(random, -10, 10), this.getY(), this.getZ() + Mth.nextInt(random, -10, 10));
+
+                            if (level.getBlockState(targetPos).isAir() && level.getBlockState(targetPos.above()).isAir() && level.getBlockState(targetPos.below()).isSolidRender(level, targetPos.below())) {
+                                player.teleportTo(targetPos.getX(), targetPos.getY(), targetPos.getZ());
                                 break;
                             }
                         }
                     }
-                    if (getPhaseInvulnerableTimer() % 50 == 0 && !player.isCreative()) {
+                    if (getHuntTimer() % 50 == 0 && !player.isCreative()) {
                         player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 80, 2));
                     }
                 }
 
                 setCanMove(true);
-                if (getPhaseInvulnerableTimer() == 0 && GraveyardConfig.COMMON.isInvulnerableDuringSpells.get()) {
+                if (getHuntTimer() == 0) {
                     playHuntSound();
+                    setHuntTimer(HUNT_DURATION);
                     if (GraveyardConfig.COMMON.isInvulnerableDuringSpells.get()) {
                         this.setPhaseInvulTimer(HUNT_DURATION); // acts as hunt duration counter
                     }
                 }
 
-                if (getPhaseInvulnerableTimer() == 400) {
+                if (getHuntTimer() == 400) {
                     playHuntSound();
                 }
                 setAnimationState(ANIMATION_PHASE_2_ATTACK);
@@ -461,7 +483,7 @@ public class LichEntity extends Monster implements IAnimatable {
             }
 
             // if the invul (= hunt duration) runs out, set cooldown
-            if (getPhaseInvulnerableTimer() == 1 && getHuntCooldownTicker() == 0 && canHuntStart()) {
+            if (getHuntTimer() == 1 && getHuntCooldownTicker() == 0 && canHuntStart()) {
                 this.teleportTo(homePos.getX() + 0.5D, homePos.getY() + 0.5D, homePos.getZ() + 0.5D);
                 this.setHuntCooldownTicker(HUNT_COOLDOWN);
                 setAnimationState(ANIMATION_STUNNED);
@@ -469,6 +491,11 @@ public class LichEntity extends Monster implements IAnimatable {
                 setCanMove(false);
                 entityAttributeInstance.removeModifier(ATTACKING_SPEED_BOOST);
                 entityAttributeDmgInstance.removeModifier(DMG_BOOST);
+            }
+
+            if (this.getHuntTimer() > 0) {
+                int timer = getHuntTimer() - 1;
+                this.setHuntTimer(timer);
             }
         }
         /* END PHASE 3 FIGHT LOGIC */
@@ -498,6 +525,20 @@ public class LichEntity extends Monster implements IAnimatable {
 
         /* TRANSITION MAIN PHASE TWO to THREE, == PHASE FOUR */
         if (getPhase() == 4) {
+            // config adaption
+            if (!GraveyardConfig.COMMON.isInvulnerableDuringSpells.get() && canHuntStart()) {
+                AttributeInstance entityAttributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+                AttributeInstance entityAttributeDmgInstance = this.getAttribute(Attributes.ATTACK_DAMAGE);
+
+                this.teleportTo(homePos.getX() + 0.75D, homePos.getY() + 0.5D, homePos.getZ() + 0.75D);
+                this.setHuntCooldownTicker(HUNT_COOLDOWN);
+                setAnimationState(ANIMATION_STUNNED);
+                setHuntStart(false);
+                setCanMove(false);
+                entityAttributeInstance.removeModifier(ATTACKING_SPEED_BOOST);
+                entityAttributeDmgInstance.removeModifier(DMG_BOOST);
+            }
+
             int phaseThreeTimer = getStartPhaseThreeAnimTimer();
             if (getPhaseInvulnerableTimer() == 0) {
                 setPhaseInvulTimer(START_PHASE_THREE_ANIMATION_DURATION); // invul
@@ -531,7 +572,7 @@ public class LichEntity extends Monster implements IAnimatable {
             while (iterator.hasNext()) {
                 Player player = iterator.next();
                 if (getHealTimer() == HEALING_DURATION && !player.isCreative()) {
-                    player.teleportTo(this.getX(), this.getY() - 15.0D, this.getZ());
+                    player.teleportTo(this.getX(), this.getY() + GraveyardConfig.COMMON.playerTeleportYOffset.get(), this.getZ());
                 }
                 if (!player.hasEffect(MobEffects.DIG_SLOWDOWN) && !player.isCreative()) {
                     player.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 40, 1));
@@ -660,7 +701,6 @@ public class LichEntity extends Monster implements IAnimatable {
         return false;
     }
 
-
     public boolean canChangeDimensions() {
         return false;
     }
@@ -766,34 +806,36 @@ public class LichEntity extends Monster implements IAnimatable {
 
 
     private boolean summonMob(boolean hard) {
-        AABB box = (new AABB(this.blockPosition())).inflate(35.0D);
-        List<HostileGraveyardEntity> mobs = getLevel().getEntitiesOfClass(HostileGraveyardEntity.class, box);
-        if (mobs.size() >= GraveyardConfig.COMMON.maxSummonedMobs.get()) {
-            return false;
-        }
+        if (this.getHuntTimer() <= 1) { // do not summon mobs when lich is hunting
+            AABB box = (new AABB(this.blockPosition())).inflate(35.0D);
+            List<HostileGraveyardEntity> mobs = getLevel().getEntitiesOfClass(HostileGraveyardEntity.class, box);
+            if (mobs.size() >= GraveyardConfig.COMMON.maxSummonedMobs.get()) {
+                return false;
+            }
 
-        for (int i = 10; i > 0; i--) {
-            BlockPos pos = new BlockPos(this.getBlockX() + Mth.nextInt(random, -15, 15), this.getBlockY(), this.getBlockZ() + Mth.nextInt(random, -15, 15));
-            int amount = random.nextInt(GraveyardConfig.COMMON.maxGroupSizeSummonedMobs.get()) + 1;
-            if (level.getBlockState(pos).isAir() && level.getBlockState(pos.above()).isAir() && level.getBlockState(pos.above().above()).isAir() && !level.getBlockState(pos.below()).isAir()) {
-                if (!hard) {
-                    for (int ii = 0; ii < amount; ++ii) {
-                        RevenantEntity revenant = TGEntities.REVENANT.get().create(level);
-                        revenant.moveTo(pos.getX(), pos.getY(), pos.getZ());
-                        revenant.setCanBurnInSunlight(false);
-                        level.addFreshEntity(revenant);
+            for (int i = 10; i > 0; i--) {
+                BlockPos pos = new BlockPos(this.getBlockX() + Mth.nextInt(random, -15, 15), this.getBlockY(), this.getBlockZ() + Mth.nextInt(random, -15, 15));
+                int amount = random.nextInt(GraveyardConfig.COMMON.maxGroupSizeSummonedMobs.get()) + 1;
+                if (level.getBlockState(pos).isAir() && level.getBlockState(pos.above()).isAir() && level.getBlockState(pos.above().above()).isAir() && !level.getBlockState(pos.below()).isAir()) {
+                    if (!hard) {
+                        for (int ii = 0; ii < amount; ++ii) {
+                            RevenantEntity revenant = TGEntities.REVENANT.get().create(level);
+                            revenant.moveTo(pos.getX(), pos.getY(), pos.getZ());
+                            revenant.setCanBurnInSunlight(false);
+                            level.addFreshEntity(revenant);
+                        }
+                    } else {
+                        for (int ii = 0; ii < amount - 1; ++ii) {
+                            GhoulEntity ghoul = TGEntities.GHOUL.get().create(level);
+                            ghoul.setVariant((byte) 10);
+                            ghoul.moveTo(pos.getX(), pos.getY(), pos.getZ());
+                            ghoul.setCanBurnInSunlight(false);
+                            level.addFreshEntity(ghoul);
+                        }
                     }
-                } else {
-                    for (int ii = 0; ii < amount - 1; ++ii) {
-                        GhoulEntity ghoul = TGEntities.GHOUL.get().create(level);
-                        ghoul.setVariant((byte) 10);
-                        ghoul.moveTo(pos.getX(), pos.getY(), pos.getZ());
-                        ghoul.setCanBurnInSunlight(false);
-                        level.addFreshEntity(ghoul);
-                    }
+                    return true;
+
                 }
-                return true;
-
             }
         }
         return false;
@@ -879,6 +921,15 @@ public class LichEntity extends Monster implements IAnimatable {
     public void setPhaseInvulTimer(int ticks) {
         this.entityData.set(PHASE_INVUL_TIMER, ticks);
     }
+
+    public int getHuntTimer() {
+        return (Integer) this.entityData.get(HUNT_TIMER);
+    }
+
+    public void setHuntTimer(int ticks) {
+        this.entityData.set(HUNT_TIMER, ticks);
+    }
+
 
     public int getAnimationState() {
         return this.entityData.get(ANIMATION);
@@ -998,6 +1049,7 @@ public class LichEntity extends Monster implements IAnimatable {
         super.defineSynchedData();
         this.entityData.define(CAN_MOVE, false);
         this.entityData.define(INVUL_TIMER, 0);
+        this.entityData.define(HUNT_TIMER, 0);
         this.entityData.define(FIGHT_DURATION_TIMER, 0);
         this.entityData.define(HEAL_DURATION_TIMER, 0);
         this.entityData.define(LEVITATION_DURATION_TIMER, 0);
@@ -1073,6 +1125,7 @@ public class LichEntity extends Monster implements IAnimatable {
     static {
         INVUL_TIMER = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.INT);
         PHASE_INVUL_TIMER = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.INT);
+        HUNT_TIMER = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.INT);
         ATTACK_ANIM_TIMER = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.INT);
         PHASE_TWO_START_ANIM_TIMER = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.INT);
         PHASE_THREE_START_ANIM_TIMER = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.INT);
@@ -1088,7 +1141,6 @@ public class LichEntity extends Monster implements IAnimatable {
         CAN_ATTACK_PREDICATE = Entity::isAlwaysTicking;
         HEAD_TARGET_PREDICATE = TargetingConditions.forCombat().range(20.0D).selector(CAN_ATTACK_PREDICATE);
         CRAWL_DIMENSIONS = EntityDimensions.fixed(1.8F, 2.0F);
-        CRAWL_SPEED_BOOST = new AttributeModifier(ATTACKING_SPEED_BOOST_ID, "Attacking speed boost", 0.18D, AttributeModifier.Operation.ADDITION);
     }
 
     public class SummonFallenCorpsesGoal extends Goal {
@@ -1106,7 +1158,7 @@ public class LichEntity extends Monster implements IAnimatable {
 
         @Override
         public boolean canUse() {
-            return getCorpseSpellTimer() <= -400 // cooldown
+            return getCorpseSpellTimer() <= -GraveyardConfig.COMMON.cooldownCorpseSpell.get() // cooldown
                     && random.nextInt(75) == 0
                     && canSpellCast();
         }
@@ -1272,7 +1324,7 @@ public class LichEntity extends Monster implements IAnimatable {
         public boolean canUse() {
             return this.mob.getHealth() <= 300.0F
                     && random.nextInt(30) == 0
-                    && this.mob.getHealTimer() <= -600
+                    && this.mob.getHealTimer() <= -GraveyardConfig.COMMON.cooldownTeleportPlayerAndHeal.get()
                     && this.mob.getLevitationDurationTimer() <= -60
                     && canSpellCast();
         }
@@ -1322,7 +1374,9 @@ public class LichEntity extends Monster implements IAnimatable {
         }
 
         public boolean canUse() {
-            return canSpellCast() && random.nextInt(125) == 0 && this.mob.getLevitationDurationTimer() <= -400; // cooldown
+            return canSpellCast()
+                    && random.nextInt(125) == 0
+                    && this.mob.getLevitationDurationTimer() <= -GraveyardConfig.COMMON.cooldownLevitationSpell.get(); // cooldown
         }
 
         public void start() {

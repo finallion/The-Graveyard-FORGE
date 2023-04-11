@@ -5,6 +5,7 @@ import com.finallion.graveyard.config.CommonConfig;
 import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.*;
 import com.finallion.graveyard.item.VialOfBlood;
+import com.finallion.graveyard.recipe.TGRecipeTypes;
 import com.finallion.graveyard.util.SpawnRules;
 import com.finallion.graveyard.util.TGTags;
 import com.mojang.serialization.Codec;
@@ -51,7 +52,10 @@ public class TheGraveyard {
         TGItems.ITEMS.register(modEventBus);
         TGSounds.SOUNDS.register(modEventBus);
         TGEntities.ENTITIES.register(modEventBus);
-        TGFeatures.FEATURES.register(modEventBus);
+        TGConfiguredStructureFeatures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
+        TGScreens.MENUS.register(modEventBus);
+        TGRecipeTypes.RECIPE_TYPES.register(modEventBus);
+        TGRecipeTypes.RECIPE_SERIALIZERS.register(modEventBus);
         TGTileEntities.TILE_ENTITIES.register(modEventBus);
         TGParticles.PARTICLES.register(modEventBus);
 
@@ -63,10 +67,6 @@ public class TheGraveyard {
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC);
         CommonConfig.loadConfig(GraveyardConfig.COMMON_SPEC, FMLPaths.CONFIGDIR.get().resolve(MOD_ID + "-common.toml").toString());
-
-        //modEventBus.addListener(this::onCreateEntityAttributes);
-
-        //modEventBus.addListener(DataGenerators::gatherData);
 
     }
 
@@ -88,39 +88,15 @@ public class TheGraveyard {
             TGAdvancements.init();
             TGTags.init();
             TGStructureType.init();
-            TGConfiguredFeatures.registerConfiguredFeatures();
-            TGConfiguredFeatures.registerPlacedFeatures();
             TGProcessors.registerProcessors();
-            TGStructureSets.init();
-            TGConfiguredStructureFeatures.init();
         });
     }
-
-
-    /*
-    public void onCreateEntityAttributes(EntityAttributeModificationEvent event) {
-        event.add(TGEntities.LICH.get(), Attributes.MAX_HEALTH, GraveyardConfig.COMMON.healthInCastingPhase.get());
-        event.add(TGEntities.LICH.get(), Attributes.ATTACK_DAMAGE, GraveyardConfig.COMMON.damageCastingPhase.get());
-        event.add(TGEntities.LICH.get(), Attributes.ARMOR, GraveyardConfig.COMMON.armor.get());
-        event.add(TGEntities.LICH.get(), Attributes.ARMOR_TOUGHNESS, GraveyardConfig.COMMON.armorToughness.get());
-
-        event.put(TGEntities.LICH.get(), AttributeSupplier.builder()
-                .add(Attributes.MAX_HEALTH, GraveyardConfig.COMMON.healthInCastingPhase.get())
-                .add(Attributes.ATTACK_DAMAGE, GraveyardConfig.COMMON.damageCastingPhase.get())
-                .add(Attributes.ARMOR, GraveyardConfig.COMMON.armor.get())
-                .add(Attributes.ARMOR_TOUGHNESS, GraveyardConfig.COMMON.armorToughness.get()).build());
-
-
-    }
-
-     */
 
     public static final CreativeModeTab GROUP = new CreativeModeTab ("graveyard_group") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(Items.SKELETON_SKULL);
         }
-
     };
 
 }

@@ -1,7 +1,6 @@
 package com.finallion.graveyard.world.structures;
 
 import com.finallion.graveyard.config.GraveyardConfig;
-import com.finallion.graveyard.init.TGEntities;
 import com.finallion.graveyard.init.TGStructureType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -13,13 +12,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.WeightedRandomList;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
@@ -35,21 +31,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class TGJigsawStructure extends Structure {
-    public static final int MAX_SIZE = 128;
-
-    public static final WeightedRandomList<MobSpawnSettings.SpawnerData> MONSTER_SPAWNS = WeightedRandomList.create(
-            new MobSpawnSettings.SpawnerData(TGEntities.SKELETON_CREEPER.get(), 35, 1, 2),
-            new MobSpawnSettings.SpawnerData(TGEntities.GHOUL.get(), 50, 1, 3),
-            new MobSpawnSettings.SpawnerData(TGEntities.REVENANT.get(), 45, 1, 3)
-    );
-
-    public static final WeightedRandomList<MobSpawnSettings.SpawnerData> EMPTY = WeightedRandomList.create();
-
-    public static final WeightedRandomList<MobSpawnSettings.SpawnerData> ILLAGER_SPAWNS = WeightedRandomList.create(
-            new MobSpawnSettings.SpawnerData(EntityType.PILLAGER, 10, 1, 1),
-            new MobSpawnSettings.SpawnerData(EntityType.VINDICATOR, 10, 1, 1)
-    );
-
 
     //StructureConfigEntry config
     public static final Codec<TGJigsawStructure> CODEC = RecordCodecBuilder.create(instance ->

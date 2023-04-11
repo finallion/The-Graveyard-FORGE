@@ -29,51 +29,22 @@ public class SpawnRules {
         @Override
         public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
             if (phase == Phase.ADD) {
-                if (this.spawn.type == TGEntities.GHOUL.get() && GraveyardConfig.COMMON.enableGhoul.get()) {
+                if (this.spawn.type == TGEntities.GHOUL.get() && GraveyardConfig.COMMON.enableGhoul.get() && biome.is(TGTags.GHOUL_SPAWNS)) {
                     MobSpawnSettings.SpawnerData data = new MobSpawnSettings.SpawnerData(this.spawn.type, GraveyardConfig.COMMON.weightGhoul.get(), GraveyardConfig.COMMON.minGroupSizeGhoul.get(), GraveyardConfig.COMMON.maxGroupSizeGhoul.get());
-                    if (parseBiomes(GraveyardConfig.COMMON.whitelistGhoul.get(), GraveyardConfig.COMMON.blacklistGhoul.get(), biome)) {
-                        builder.getMobSpawnSettings().addSpawn(this.spawn.type.getCategory(), data);
-                    }
-                } else if (this.spawn.type == TGEntities.REVENANT.get() && GraveyardConfig.COMMON.enableRevenant.get()) {
+                    builder.getMobSpawnSettings().addSpawn(this.spawn.type.getCategory(), data);
+                } else if (this.spawn.type == TGEntities.REVENANT.get() && GraveyardConfig.COMMON.enableRevenant.get() && biome.is(TGTags.REVENANT_SPAWNS)) {
                     MobSpawnSettings.SpawnerData data = new MobSpawnSettings.SpawnerData(this.spawn.type, GraveyardConfig.COMMON.weightRevenant.get(), GraveyardConfig.COMMON.minGroupSizeRevenant.get(), GraveyardConfig.COMMON.maxGroupSizeRevenant.get());
-                    if (parseBiomes(GraveyardConfig.COMMON.whitelistRevenant.get(), GraveyardConfig.COMMON.blacklistRevenant.get(), biome)) {
-                        builder.getMobSpawnSettings().addSpawn(this.spawn.type.getCategory(), data);
-                    }
-                } else if (this.spawn.type == TGEntities.REAPER.get() && GraveyardConfig.COMMON.enableReaper.get()) {
+                    builder.getMobSpawnSettings().addSpawn(this.spawn.type.getCategory(), data);
+                } else if (this.spawn.type == TGEntities.REAPER.get() && GraveyardConfig.COMMON.enableReaper.get() && biome.is(TGTags.REAPER_SPAWNS)) {
                     MobSpawnSettings.SpawnerData data = new MobSpawnSettings.SpawnerData(this.spawn.type, GraveyardConfig.COMMON.weightReaper.get(), GraveyardConfig.COMMON.minGroupSizeReaper.get(), GraveyardConfig.COMMON.maxGroupSizeReaper.get());
-                    if (parseBiomes(GraveyardConfig.COMMON.whitelistReaper.get(), GraveyardConfig.COMMON.blacklistReaper.get(), biome)) {
-                        builder.getMobSpawnSettings().addSpawn(this.spawn.type.getCategory(), data);
-                    }
-                } else if (this.spawn.type == TGEntities.NIGHTMARE.get() && GraveyardConfig.COMMON.enableNightmare.get()) {
+                    builder.getMobSpawnSettings().addSpawn(this.spawn.type.getCategory(), data);
+                } else if (this.spawn.type == TGEntities.NIGHTMARE.get() && GraveyardConfig.COMMON.enableNightmare.get() && biome.is(TGTags.NIGHTMARE_SPAWNS)) {
                     MobSpawnSettings.SpawnerData data = new MobSpawnSettings.SpawnerData(this.spawn.type, GraveyardConfig.COMMON.weightNightmare.get(), GraveyardConfig.COMMON.minGroupSizeNightmare.get(), GraveyardConfig.COMMON.maxGroupSizeNightmare.get());
-                    if (parseBiomes(GraveyardConfig.COMMON.whitelistNightmare.get(), GraveyardConfig.COMMON.blacklistNightmare.get(), biome)) {
-                        builder.getMobSpawnSettings().addSpawn(this.spawn.type.getCategory(), data);
-                    }
-                } else if (this.spawn.type == TGEntities.WRAITH.get() && GraveyardConfig.COMMON.enableWraith.get()) {
-                    MobSpawnSettings.SpawnerData data = new MobSpawnSettings.SpawnerData(this.spawn.type, GraveyardConfig.COMMON.weightWraith.get(), GraveyardConfig.COMMON.minGroupSizeWraith.get(), GraveyardConfig.COMMON.maxGroupSizeWraith.get());
-                    if (parseBiomes(GraveyardConfig.COMMON.whitelistWraith.get(), GraveyardConfig.COMMON.blacklistWraith.get(), biome)) {
-                        builder.getMobSpawnSettings().addSpawn(this.spawn.type.getCategory(), data);
-                    }
-                } else if (this.spawn.type == TGEntities.SKELETON_CREEPER.get() && GraveyardConfig.COMMON.enableSkeletonCreeper.get()) {
+                    builder.getMobSpawnSettings().addSpawn(this.spawn.type.getCategory(), data);
+                }  else if (this.spawn.type == TGEntities.SKELETON_CREEPER.get() && GraveyardConfig.COMMON.enableSkeletonCreeper.get() && biome.is(TGTags.SKELETON_CREEPER_SPAWNS)) {
                     MobSpawnSettings.SpawnerData data = new MobSpawnSettings.SpawnerData(this.spawn.type, GraveyardConfig.COMMON.weightSkeletonCreeper.get(), GraveyardConfig.COMMON.minGroupSizeSkeletonCreeper.get(), GraveyardConfig.COMMON.maxGroupSizeSkeletonCreeper.get());
-                    if (parseBiomes(GraveyardConfig.COMMON.whitelistSkeletonCreeper.get(), GraveyardConfig.COMMON.blacklistSkeletonCreeper.get(), biome)) {
-                        builder.getMobSpawnSettings().addSpawn(this.spawn.type.getCategory(), data);
-                    }
-                } else if (this.spawn.type == TGEntities.ACOLYTE.get() && GraveyardConfig.COMMON.enableAcolyte.get()) {
-                    MobSpawnSettings.SpawnerData data = new MobSpawnSettings.SpawnerData(this.spawn.type, GraveyardConfig.COMMON.weightAcolyte.get(), GraveyardConfig.COMMON.minGroupSizeAcolyte.get(), GraveyardConfig.COMMON.maxGroupSizeAcolyte.get());
-                    if (parseBiomes(GraveyardConfig.COMMON.whitelistAcolyte.get(), GraveyardConfig.COMMON.blacklistAcolyte.get(), biome)) {
-                        builder.getMobSpawnSettings().addSpawn(this.spawn.type.getCategory(), data);
-                    }
-                } else if (this.spawn.type == TGEntities.CORRUPTED_VINDICATOR.get() && GraveyardConfig.COMMON.enableCorruptedVindicator.get()) {
-                    MobSpawnSettings.SpawnerData data = new MobSpawnSettings.SpawnerData(this.spawn.type, GraveyardConfig.COMMON.weightCorruptedVindicator.get(), GraveyardConfig.COMMON.minGroupSizeCorruptedVindicator.get(), GraveyardConfig.COMMON.maxGroupSizeCorruptedVindicator.get());
-                    if (parseBiomes(GraveyardConfig.COMMON.whitelistCorruptedVindicator.get(), GraveyardConfig.COMMON.blacklistCorruptedVindicator.get(), biome)) {
-                        builder.getMobSpawnSettings().addSpawn(this.spawn.type.getCategory(), data);
-                    }
-                } else if (this.spawn.type == TGEntities.CORRUPTED_PILLAGER.get() && GraveyardConfig.COMMON.enableCorruptedPillager.get()) {
-                    MobSpawnSettings.SpawnerData data = new MobSpawnSettings.SpawnerData(this.spawn.type, GraveyardConfig.COMMON.weightCorruptedPillager.get(), GraveyardConfig.COMMON.minGroupSizeCorruptedPillager.get(), GraveyardConfig.COMMON.maxGroupSizeCorruptedPillager.get());
-                    if (parseBiomes(GraveyardConfig.COMMON.whitelistCorruptedPillager.get(), GraveyardConfig.COMMON.blacklistCorruptedPillager.get(), biome)) {
-                        builder.getMobSpawnSettings().addSpawn(this.spawn.type.getCategory(), data);
-                    }
+                    builder.getMobSpawnSettings().addSpawn(this.spawn.type.getCategory(), data);
+
                 }
             }
         }

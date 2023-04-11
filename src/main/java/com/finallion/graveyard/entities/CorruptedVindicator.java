@@ -1,12 +1,14 @@
 package com.finallion.graveyard.entities;
 
-import net.minecraft.sounds.SoundEvents;
+import com.finallion.graveyard.init.TGSounds;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 
 public class CorruptedVindicator extends CorruptedIllager {
@@ -40,18 +42,22 @@ public class CorruptedVindicator extends CorruptedIllager {
 
     @Override
     public void playAmbientSound() {
-        this.playSound(SoundEvents.ZOMBIE_VILLAGER_AMBIENT, 0.8F, 0.0F);
+        this.playSound(TGSounds.CORRUPTED_ILLAGER_AMBIENT.get(), 0.8F, 0.0F);
     }
 
     @Override
     protected void playHurtSound(DamageSource source) {
-        this.playSound(SoundEvents.ZOMBIE_VILLAGER_HURT, 0.8F, 0.0F);
+        this.playSound(TGSounds.CORRUPTED_ILLAGER_HURT.get(), 0.8F, 0.0F);
     }
-
 
     @Override
     public void die(DamageSource source) {
         super.die(source);
-        this.playSound(SoundEvents.ZOMBIE_VILLAGER_DEATH, 0.8F, 0.0F);
+        this.playSound(TGSounds.CORRUPTED_ILLAGER_DEATH.get(), 0.8F, 0.0F);
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        this.playSound(TGSounds.CORRUPTED_ILLAGER_STEP.get(), 0.8F, 0.0F);
     }
 }
