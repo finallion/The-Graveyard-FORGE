@@ -1,13 +1,12 @@
 package com.finallion.graveyard.blocks;
 
 
-import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.block.RotatedPillarBlock;
 
 public class TGDeepslateBlock extends RotatedPillarBlock {
 
 
-    public TGDeepslateBlock(BlockBehaviour.Properties settings) {
+    public TGDeepslateBlock(Properties settings) {
         super(settings);
     }
 

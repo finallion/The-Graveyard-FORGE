@@ -1,13 +1,14 @@
 package com.finallion.graveyard.advancements;
 
 import com.google.gson.JsonObject;
-import cpw.mods.modlauncher.api.ITransformationService;
-import net.minecraft.advancements.critereon.*;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.advancements.criterion.*;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.loot.ConditionArrayParser;
+import net.minecraft.loot.ConditionArraySerializer;
+import net.minecraft.util.ResourceLocation;
 
 
-public class TGAdvancementTrigger extends SimpleCriterionTrigger<TGAdvancementTrigger.Condition> {
+public class TGAdvancementTrigger extends AbstractCriterionTrigger<TGAdvancementTrigger.Condition> {
     public final ResourceLocation identifier;
 
     public TGAdvancementTrigger(ResourceLocation identifier) {
@@ -15,11 +16,7 @@ public class TGAdvancementTrigger extends SimpleCriterionTrigger<TGAdvancementTr
     }
 
 
-    public Condition createInstance(JsonObject jsonObject, EntityPredicate.Composite extended, DeserializationContext advancementEntityPredicateDeserializer) {
-        return new Condition(extended, identifier);
-    }
-
-    public void trigger(ServerPlayer p_148030_) {
+    public void trigger(ServerPlayerEntity p_148030_) {
         this.trigger(p_148030_, (p_148028_) -> {
             return true;
         });
@@ -30,20 +27,25 @@ public class TGAdvancementTrigger extends SimpleCriterionTrigger<TGAdvancementTr
         return identifier;
     }
 
+    @Override
+    protected Condition createInstance(JsonObject p_230241_1_, EntityPredicate.AndPredicate extended, ConditionArrayParser p_230241_3_) {
+        return new Condition(extended, identifier);
+    }
 
-    public static class Condition extends AbstractCriterionTriggerInstance {
 
-        public Condition(EntityPredicate.Composite player, ResourceLocation identifier) {
+    public static class Condition extends CriterionInstance {
+
+        public Condition(EntityPredicate.AndPredicate player, ResourceLocation identifier) {
             super(identifier, player);
         }
 
 
-        public static ConstructBeaconTrigger.TriggerInstance constructedBeacon(MinMaxBounds.Ints range) {
-            return new ConstructBeaconTrigger.TriggerInstance(EntityPredicate.Composite.ANY, range);
+        public static ConstructBeaconTrigger.Instance constructedBeacon(MinMaxBounds.IntBound range) {
+            return new ConstructBeaconTrigger.Instance(EntityPredicate.AndPredicate.ANY, range);
         }
 
 
-        public JsonObject serializeToJson(SerializationContext predicateSerializer) {
+        public JsonObject serializeToJson(ConditionArraySerializer predicateSerializer) {
             JsonObject jsonObject = super.serializeToJson(predicateSerializer);
             return jsonObject;
         }

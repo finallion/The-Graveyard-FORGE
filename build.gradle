@@ -103,7 +103,7 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.77')
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.106')
     if (System.getProperty("idea.sync.active") != "true") {
         annotationProcessor 'org.spongepowered:mixin:0.8.3:processor'
     }

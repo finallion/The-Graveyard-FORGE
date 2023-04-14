@@ -2,29 +2,23 @@ package com.finallion.graveyard.blocks;
 
 import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.TGParticles;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.MossBlock;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.GrassBlock;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
-public class TGMossBlock extends MossBlock {
+import java.util.Properties;
+import java.util.Random;
 
+public class TGMossBlock extends GrassBlock {
 
     public TGMossBlock(Properties settings) {
         super(settings);
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockGetter p_49823_, BlockPos p_49824_, BlockState p_49825_) {
-        return new ItemStack(Items.MOSS_BLOCK);
-    }
-
-    // graveyard fog
-    public void animateTick(BlockState p_180655_1_, Level world, BlockPos pos, RandomSource random) {
+    public void animateTick(BlockState p_180655_1_, World world, BlockPos pos, Random random) {
         super.animateTick(p_180655_1_, world, pos, random);
 
         if (GraveyardConfig.COMMON.enableMossParticle.get()) {
@@ -39,8 +33,6 @@ public class TGMossBlock extends MossBlock {
                 world.addParticle(TGParticles.GRAVEYARD_HAND_PARTICLE.get(), (double)pos.getX() + random.nextDouble(), (double)pos.getY() + 1.2D, (double)pos.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
             }
         }
-
-
     }
 
 

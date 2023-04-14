@@ -1,17 +1,18 @@
 package com.finallion.graveyard.blocks;
 
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.GrassBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ToolAction;
-import net.minecraftforge.common.ToolActions;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.GrassBlock;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
+
+import javax.annotation.Nullable;
 
 public class TGGrassBlock extends GrassBlock {
 
@@ -20,18 +21,18 @@ public class TGGrassBlock extends GrassBlock {
         super(settings);
     }
 
-
     @Override
-    public ItemStack getCloneItemStack(BlockGetter p_49823_, BlockPos p_49824_, BlockState p_49825_) {
+    public ItemStack getCloneItemStack(IBlockReader p_185473_1_, BlockPos p_185473_2_, BlockState p_185473_3_) {
         return new ItemStack(Items.GRASS_BLOCK);
     }
 
+    @Nullable
     @Override
-    public @Nullable BlockState getToolModifiedState(BlockState state, UseOnContext context, ToolAction toolAction, boolean simulate) {
-        if (ToolActions.SHOVEL_FLATTEN == toolAction) {
-            return Blocks.DIRT_PATH.defaultBlockState();
+    public BlockState getToolModifiedState(BlockState state, World world, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) {
+        if (ToolType.SHOVEL == toolType) {
+            return Blocks.GRASS_PATH.defaultBlockState();
         }
-
-        return super.getToolModifiedState(state, context, toolAction, simulate);
+        return super.getToolModifiedState(state, world, pos, player, stack, toolType);
     }
+
 }

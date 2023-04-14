@@ -1,7 +1,7 @@
 package com.finallion.graveyard.blockentities.animation;
 
 
-import net.minecraft.util.Mth;
+import net.minecraft.util.math.MathHelper;
 
 public class SarcophagusLidAnimator {
     private boolean shouldBeOpen;
@@ -20,7 +20,7 @@ public class SarcophagusLidAnimator {
     }
 
     public float getOpenness(float p_155376_) {
-        return Mth.lerp(p_155376_, this.oOpenness, this.openness);
+        return MathHelper.lerp(p_155376_, this.oOpenness, this.openness);
     }
 
     public void shouldBeOpen(boolean p_155378_) {
