@@ -1,6 +1,5 @@
 package com.finallion.graveyard.trades;
 
-import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.init.TGItems;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -22,11 +21,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
-import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.Nullable;
 
 
-@Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+//@Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class NamelessHangedTradeOffers {
     public static final Int2ObjectMap<VillagerTrades.ItemListing[]> NAMELESS_HANGED_TRADES;
 

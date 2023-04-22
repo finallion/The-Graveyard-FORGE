@@ -41,6 +41,7 @@ public class TGSounds {
     public static final RegistryObject<SoundEvent> REAPER_AMBIENT = build("entity.reaper.ambient");
     public static final RegistryObject<SoundEvent> REAPER_HURT = build("entity.reaper.hurt");
     public static final RegistryObject<SoundEvent> REAPER_DEATH = build("entity.reaper.death");
+    public static final RegistryObject<SoundEvent> REAPER_CHARGE = build("entity.reaper.charge");
 
     public static final RegistryObject<SoundEvent> GHOUL_ROAR = build("entity.ghoul.roar");
     public static final RegistryObject<SoundEvent> GHOUL_AMBIENT = build("entity.ghoul.ambient");
@@ -75,6 +76,8 @@ public class TGSounds {
 
     public static final RegistryObject<SoundEvent> URN_OPEN = build("block.urn.open");
     public static final RegistryObject<SoundEvent> URN_CLOSE = build("block.urn.close");
+
+    public static final RegistryObject<SoundEvent> OSSUARY_OPEN = build("block.ossuary.open");
 
     public static final RegistryObject<SoundEvent> SARCOPHAGUS_USE = build("block.sarcophagus.use");
 

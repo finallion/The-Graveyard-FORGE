@@ -52,7 +52,7 @@ public class TheGraveyard {
         TGItems.ITEMS.register(modEventBus);
         TGSounds.SOUNDS.register(modEventBus);
         TGEntities.ENTITIES.register(modEventBus);
-        TGConfiguredStructureFeatures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
+        TGConfiguredStructureFeatures.STRUCTURES.register(modEventBus);
         TGScreens.MENUS.register(modEventBus);
         TGRecipeTypes.RECIPE_TYPES.register(modEventBus);
         TGRecipeTypes.RECIPE_SERIALIZERS.register(modEventBus);
@@ -65,8 +65,8 @@ public class TheGraveyard {
         serializers.register(modEventBus);
         serializers.register("mobspawns", SpawnRules.ModSpawnModifier::makeCodec);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC);
-        CommonConfig.loadConfig(GraveyardConfig.COMMON_SPEC, FMLPaths.CONFIGDIR.get().resolve(MOD_ID + "-common.toml").toString());
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC, "graveyard-1.19.x-common.toml");
+        CommonConfig.loadConfig(GraveyardConfig.COMMON_SPEC, FMLPaths.CONFIGDIR.get().resolve(MOD_ID + "-1.19.x-common.toml").toString());
 
     }
 

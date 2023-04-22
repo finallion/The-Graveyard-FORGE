@@ -25,6 +25,7 @@ public class CommonConfig {
     public final ForgeConfigSpec.BooleanValue canGenerateGiantMushroom;
     public final ForgeConfigSpec.BooleanValue canGenerateLichPrison;
     public final ForgeConfigSpec.BooleanValue canGenerateRuins;
+    public final ForgeConfigSpec.BooleanValue canGenerateDeadTree;
 
     public final ForgeConfigSpec.BooleanValue enableGhoul;
     public final ForgeConfigSpec.IntValue weightGhoul;
@@ -150,6 +151,7 @@ public class CommonConfig {
         this.canGenerateGiantMushroom = builder.define("giantMushroom.generate", true);
         this.canGenerateLichPrison = builder.define("lichPrison.generate", true);
         this.canGenerateRuins = builder.define("ruins.generate", true);
+        this.canGenerateDeadTree = builder.define("deadTree.generate", true);
 
         builder.pop();
 
@@ -160,21 +162,21 @@ public class CommonConfig {
         this.minGroupSizeGhoul = builder.defineInRange("ghoul.minGroupSizeGhoul", 2, 1, 100);
         this.maxGroupSizeGhoul = builder.defineInRange("ghoul.maxGroupSizeGhoul", 5, 1, 100);
         this.ghoulCanBurnInSunlight = builder.define("ghoul.canBurnInSunlight", true);
-        this.ghoulCanBeWithered = builder.define("ghoul.canBeWithered", false);
+        this.ghoulCanBeWithered = builder.define("ghoul.canBeWithered", true);
 
         this.enableRevenant = builder.define("revenant.enabled", true);
         this.weightRevenant = builder.defineInRange("revenant.weight", 25, 0, 100);
         this.minGroupSizeRevenant = builder.defineInRange("revenant.minGroupSizeRevenant", 5, 1, 100);
         this.maxGroupSizeRevenant = builder.defineInRange("revenant.maxGroupSizeRevenant", 8, 1, 100);
         this.revenantCanBurnInSunlight = builder.define("revenant.canBurnInSunlight", true);
-        this.revenantCanBeWithered = builder.define("revenant.canBeWithered", false);
+        this.revenantCanBeWithered = builder.define("revenant.canBeWithered", true);
 
         this.enableReaper = builder.define("reaper.enabled", true);
         this.weightReaper = builder.defineInRange("reaper.weight", 10, 0, 100);
         this.minGroupSizeReaper = builder.defineInRange("reaper.minGroupSizeReaper", 2, 1, 100);
         this.maxGroupSizeReaper = builder.defineInRange("reaper.maxGroupSizeGhoul", 3, 1, 100);
         this.reaperCanBurnInSunlight = builder.define("reaper.canBurnInSunlight", true);
-        this.reaperCanBeWithered = builder.define("reaper.canBeWithered", false);
+        this.reaperCanBeWithered = builder.define("reaper.canBeWithered", true);
 
         this.enableNightmare = builder.define("nightmare.enabled", true);
         this.weightNightmare = builder.defineInRange("nightmare.weight", 10, 0, 100);
@@ -188,11 +190,11 @@ public class CommonConfig {
         this.minGroupSizeSkeletonCreeper = builder.defineInRange("skeleton_creeper.minGroupSizeSkeletonCreeper", 1, 1, 100);
         this.maxGroupSizeSkeletonCreeper = builder.defineInRange("skeleton_creeper.maxGroupSizeSkeletonCreeper", 4, 1, 100);
         this.skeletonCreeperCanBurnInSunlight = builder.define("skeleton_creeper.canBurnInSunlight", true);
-        this.skeletonCreeperCanBeWithered = builder.define("skeleton_creeper.canBeWithered", false);
+        this.skeletonCreeperCanBeWithered = builder.define("skeleton_creeper.canBeWithered", true);
 
         this.enableAcolyte = builder.define("acolyte.enabled", false);
         this.acolyteCanBurnInSunlight = builder.define("acolyte.canBurnInSunlight", false);
-        this.acolyteCanBeWithered = builder.define("acolyte.canBeWithered", false);
+        this.acolyteCanBeWithered = builder.define("acolyte.canBeWithered", true);
 
         this.enableWraith = builder.define("wraith.enabled", false);
         this.wraithCanBurnInSunlight = builder.define("wraith.canBurnInSunlight", true);
@@ -200,11 +202,11 @@ public class CommonConfig {
 
         this.enableCorruptedPillager = builder.define("corruptedPillager.enabled", false);
         this.corruptedPillagerCanBurnInSunlight = builder.define("corruptedPillager.canBurnInSunlight", true);
-        this.corruptedPillagerCanBeWithered = builder.define("corruptedPillager.canBeWithered", false);
+        this.corruptedPillagerCanBeWithered = builder.define("corruptedPillager.canBeWithered", true);
 
         this.enableCorruptedVindicator = builder.define("corruptedVindicator.enabled", false);
         this.corruptedVindicatorCanBurnInSunlight = builder.define("corruptedVindicator.canBurnInSunlight", true);
-        this.corruptedVindicatorCanBeWithered = builder.define("corruptedVindicator.canBeWithered", false);
+        this.corruptedVindicatorCanBeWithered = builder.define("corruptedVindicator.canBeWithered", true);
 
         builder.pop();
 
@@ -252,6 +254,7 @@ public class CommonConfig {
         this.disableWitherSkeletonSpawner = builder.define("spawner.disableWitherSkeletonSpawner", false);
         builder.pop();
     }
+
 
 
     /*

@@ -6,16 +6,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.QuartPos;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
@@ -145,67 +141,20 @@ public class TGJigsawStructure extends Structure {
     }
 
     private static boolean canGenerateUnderground(Structure.GenerationContext context, List<String> whitelist, List<String> blacklist) {
-        if (!isCorrectBiome(context, whitelist, blacklist)) {
-            return false;
-        }
-
         return true;
     }
 
     private static boolean canGenerateInTheAir(Structure.GenerationContext context, List<String> whitelist, List<String> blacklist) {
-        if (!isCorrectBiome(context, whitelist, blacklist)) {
-            return false;
-        }
-
         return true;
     }
 
 
     private static boolean canGenerate(Structure.GenerationContext context, int size, BlockPos centerOfChunk, int maxHeightDifference, List<String> whitelist, List<String> blacklist) {
-        if (!isCorrectBiome(context, whitelist, blacklist)) {
-            return false;
-        }
-
-        if (!isTerrainFlat(context, centerOfChunk, size / 2, maxHeightDifference)) {
-            return false;
-        }
-
         if (!isTerrainFlat(context, centerOfChunk, size, maxHeightDifference)) {
             return false;
         }
 
         return true;
-    }
-
-    protected static boolean isCorrectBiome(Structure.GenerationContext context, List<String> whitelist, List<String> blacklist) {
-        BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(64);
-        Holder<Biome> biome = context.chunkGenerator().getBiomeSource().getNoiseBiome(
-                QuartPos.fromBlock(blockpos.getX()),
-                QuartPos.fromBlock(blockpos.getY()),
-                QuartPos.fromBlock(blockpos.getZ()), context.randomState().sampler());
-
-        String biomeName = biome.unwrapKey().orElseThrow().location().toString();
-
-        if (blacklist.contains(biomeName)) {
-            return false;
-        }
-
-        for (String biomeInList : whitelist) {
-            if (biomeInList.startsWith("#")) { // check if biome is in tag
-                String[] parts = biomeInList.substring(1).split(":");
-                TagKey<Biome> tag = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(parts[0], parts[1]));
-                Registry<Biome> registry = context.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
-
-                if (registry.isKnownTagName(tag)) {
-                    if (registry.getTag(tag).orElseThrow().contains(biome)) {
-                        return true;
-                    }
-                }
-            } else if (whitelist.contains(biomeName)) { // check if biome is on whitelist
-                return true;
-            }
-        }
-        return false;
     }
 
 
@@ -273,6 +222,7 @@ public class TGJigsawStructure extends Structure {
             case "giant_mushroom" -> GraveyardConfig.COMMON.canGenerateGiantMushroom.get();
             case "ruins" -> GraveyardConfig.COMMON.canGenerateRuins.get();
             case "lich_prison" -> GraveyardConfig.COMMON.canGenerateLichPrison.get();
+            case "dead_tree" -> GraveyardConfig.COMMON.canGenerateDeadTree.get();
             default -> false;
         };
     }

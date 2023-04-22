@@ -2,6 +2,7 @@ package com.finallion.graveyard.entities;
 
 import com.finallion.graveyard.init.TGSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -50,10 +51,14 @@ public class CorruptedVindicator extends CorruptedIllager {
         this.playSound(TGSounds.CORRUPTED_ILLAGER_HURT.get(), 0.8F, 0.0F);
     }
 
+
+    protected SoundEvent getDeathSound() {
+        return TGSounds.CORRUPTED_ILLAGER_DEATH.get();
+    }
+
     @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        this.playSound(TGSounds.CORRUPTED_ILLAGER_DEATH.get(), 0.8F, 0.0F);
+    public float getVoicePitch() {
+        return 0.0F;
     }
 
     @Override

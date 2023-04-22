@@ -1,13 +1,11 @@
 {
   "replace": false,
   "values": [
-    "#c:dead",
-    "#c:plains",
-    "#c:snowy",
-    "#c:snowy_plains",
-    "#c:desert",
-    "#c:savanna",
-    "#c:badlands",
-    "#c:swamp"
+    "#forge:is_plains",
+    "#forge:is_snowy",
+    "#forge:is_sandy",
+    "#forge:is_wasteland",
+    "#forge:is_dry/overworld",
+    "#forge:is_swamp"
   ]
 }

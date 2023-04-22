@@ -7,7 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -204,12 +204,15 @@ public class ReaperEntity extends HostileGraveyardEntity implements IAnimatable 
         this.playSound(TGSounds.REAPER_HURT.get(), 1.0F, -10.0F);
     }
 
-    @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        this.playSound(TGSounds.REAPER_DEATH.get(), 1.0F, -10.0F);
+
+    protected SoundEvent getDeathSound() {
+        return TGSounds.REAPER_DEATH.get();
     }
 
+    @Override
+    public float getVoicePitch() {
+        return -10.0F;
+    }
 
     class CopyOwnerTargetGoal extends TargetGoal {
         private final TargetingConditions copyOwnerTargeting = TargetingConditions.forNonCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
@@ -319,7 +322,7 @@ public class ReaperEntity extends HostileGraveyardEntity implements IAnimatable 
             }
 
             ReaperEntity.this.setIsCharging(true);
-            ReaperEntity.this.playSound(SoundEvents.VEX_CHARGE, 1.0F, -10.0F);
+            ReaperEntity.this.playSound(TGSounds.REAPER_CHARGE.get(), 1.0F, -10.0F);
         }
 
         public void stop() {

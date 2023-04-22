@@ -17,6 +17,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -421,7 +422,15 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
             BoneStaffItem.ownerGhoulingMapping.remove(this.uuid, getOwnerUuid());
         }
         super.die(source);
-        this.playSound(TGSounds.GHOULING_DEATH.get(), 1.0F, -2.0F);
+    }
+
+    protected SoundEvent getDeathSound() {
+        return TGSounds.GHOULING_DEATH.get();
+    }
+
+    @Override
+    public float getVoicePitch() {
+        return -2.0F;
     }
 
 

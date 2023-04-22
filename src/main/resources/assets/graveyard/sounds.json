@@ -234,6 +234,14 @@
     ],
     "subtitle": "subtitles.entity.graveyard.reaper.death"
   },
+  "entity.reaper.charge": {
+    "sounds": [
+      "minecraft:mob/vex/charge1",
+      "minecraft:mob/vex/charge2",
+      "minecraft:mob/vex/charge3"
+    ],
+    "subtitle": "subtitles.entity.graveyard.reaper.charge"
+  },
 
   "entity.nightmare.ambient": {
     "sounds": [
@@ -327,6 +335,13 @@
       "minecraft:block/chest/close3"
     ],
     "subtitle": "subtitles.block.graveyard.coffin.close"
+  },
+
+  "block.ossuary.open": {
+    "sounds": [
+      "minecraft:block/enderchest/open"
+    ],
+    "subtitle": "subtitles.block.graveyard.ossuary.open"
   },
 
   "block.urn.open": {

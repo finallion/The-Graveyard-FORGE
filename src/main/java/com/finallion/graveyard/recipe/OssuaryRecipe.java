@@ -21,4 +21,9 @@ public class OssuaryRecipe extends CarvingRecipe {
     public ItemStack getToastSymbol() {
         return new ItemStack(TGBlocks.LEANING_SKELETON.get());
     }
+
+    @Override
+    public boolean isSpecial() {
+        return true;
+    }
 }

@@ -111,7 +111,7 @@ public class NamelessHangedEntity extends AbstractVillager implements IAnimatabl
 
     public void aiStep() {
         if (this.level.isClientSide) {
-            this.level.addParticle(ParticleTypes.ASH, this.getX(0.5D), this.getY() + 1.75D, this.getZ(0.5D), 0, 0, 0);
+            this.level.addParticle(ParticleTypes.ASH, this.getRandomX(0.5D), this.getY() + 1.75D, this.getRandomZ(0.5D), 0, 0, 0);
         }
 
         super.aiStep();

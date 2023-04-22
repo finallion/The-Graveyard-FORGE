@@ -7,6 +7,7 @@ import com.finallion.graveyard.item.DaggerItem;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -44,10 +45,14 @@ public class AcolyteEntity extends CorruptedIllager {
         this.playSound(TGSounds.ACOLYTE_HURT.get(), 1.0F, 0.75F);
     }
 
+
+    protected SoundEvent getDeathSound() {
+        return TGSounds.ACOLYTE_DEATH.get();
+    }
+
     @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        this.playSound(TGSounds.ACOLYTE_DEATH.get(), 1.0F, 0.75F);
+    public float getVoicePitch() {
+        return 0.75F;
     }
 
 

@@ -2,6 +2,7 @@ package com.finallion.graveyard.blockentities;
 
 
 import com.finallion.graveyard.blocks.OssuaryBlock;
+import com.finallion.graveyard.init.TGSounds;
 import com.finallion.graveyard.init.TGTileEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -24,9 +25,12 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class OssuaryBlockEntity extends BlockEntity implements IAnimatable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
-    private final AnimationBuilder OPEN = new AnimationBuilder().addAnimation("open", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME);
+    private final AnimationBuilder OPEN = new AnimationBuilder().addAnimation("open", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP);
     private final AnimationBuilder CLOSE = new AnimationBuilder().addAnimation("close", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME);
+    private final AnimationBuilder IDLE = new AnimationBuilder().addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP);
     private boolean playedSound = false;
+    private boolean canClose = false; // ugly fast workaround for hold-on-last-frame not working in Geckolib3
+    private int timer = 0;
 
     public OssuaryBlockEntity(BlockPos pos, BlockState state) {
         super(TGTileEntities.OSSUARY_BLOCK_ENTITY.get(), pos, state);
@@ -34,27 +38,30 @@ public class OssuaryBlockEntity extends BlockEntity implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
+        animationData.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         AnimationState state = event.getController().getAnimationState();
+        if (timer > 0) timer--;
         if (this.getBlockState().getValue(OssuaryBlock.OPEN)) {
             if (state == AnimationState.Stopped)  {
                 if (level != null && !playedSound) {
                     Player playerEntity = level.getNearestPlayer((double)worldPosition.getX() + 0.5D, (double)worldPosition.getY() + 0.5D, (double)worldPosition.getZ() + 0.5D, 4.0D, false);
                     if (playerEntity != null) {
-                        playerEntity.playNotifySound(SoundEvents.ENDER_CHEST_OPEN, SoundSource.BLOCKS, 1.0F, -2.0F);
+                        playerEntity.playNotifySound(TGSounds.OSSUARY_OPEN.get(), SoundSource.BLOCKS, 1.0F, -2.0F);
                         playedSound = true;
+                        timer = 160;
                     }
                 }
 
                 event.getController().setAnimation(OPEN);
             }
             return PlayState.CONTINUE;
-        } else if (!this.getBlockState().hasProperty(OssuaryBlock.OPEN)) {
+        } else if (!this.getBlockState().getValue(OssuaryBlock.OPEN) && timer == 0) {
             event.getController().setAnimation(CLOSE);
             if (playedSound) playedSound = false;
+
 
             return PlayState.CONTINUE;
         }
@@ -73,9 +80,9 @@ public class OssuaryBlockEntity extends BlockEntity implements IAnimatable {
         }
 
         Player playerEntity = world.getNearestPlayer((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, 4.0D, false);
-        if (playerEntity != null && !state.hasProperty(OssuaryBlock.OPEN)) {
+        if (playerEntity != null && !state.getValue(OssuaryBlock.OPEN)) {
             world.setBlock(pos, state.setValue(OssuaryBlock.OPEN, true), 3);
-        } else if (playerEntity == null && state.hasProperty(OssuaryBlock.OPEN)) {
+        } else if (playerEntity == null && state.getValue(OssuaryBlock.OPEN)) {
             world.setBlock(pos, state.setValue(OssuaryBlock.OPEN, false), 3);
             //world.playSound((PlayerEntity) null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ENDER_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, -3.0F);
         }

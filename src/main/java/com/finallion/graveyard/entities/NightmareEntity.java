@@ -11,6 +11,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -269,10 +270,13 @@ public class NightmareEntity extends HostileGraveyardEntity implements IAnimatab
         this.playSound(TGSounds.NIGHTMARE_HURT.get(), 1.0F, -10.0F);
     }
 
+    protected SoundEvent getDeathSound() {
+        return TGSounds.NIGHTMARE_DEATH.get();
+    }
+
     @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        this.playSound(TGSounds.NIGHTMARE_DEATH.get(), 1.0F, -10.0F);
+    public float getVoicePitch() {
+        return -10.0F;
     }
 
     boolean isLookingAtMe(Player p_32535_) {

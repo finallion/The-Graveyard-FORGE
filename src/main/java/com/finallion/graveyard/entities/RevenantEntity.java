@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobType;
@@ -263,10 +264,14 @@ public class RevenantEntity extends AngerableGraveyardEntity implements IAnimata
         this.playSound(TGSounds.REVENANT_HURT.get(), 1.0F, 1.0F);
     }
 
+
+    protected SoundEvent getDeathSound() {
+        return TGSounds.REVENANT_DEATH.get();
+    }
+
     @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        this.playSound(TGSounds.REVENANT_DEATH.get(), 1.0F, 1.0F);
+    public float getVoicePitch() {
+        return 1.0F;
     }
 
     @Override

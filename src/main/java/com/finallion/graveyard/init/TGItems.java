@@ -26,9 +26,8 @@ public class TGItems {
     public static final RegistryObject<Item> REAPER_SPAWN_EGG = ITEMS.register("reaper_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.REAPER, 1381653, 7456477, (new Item.Properties()).tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> REVENANT_SPAWN_EGG = ITEMS.register("revenant_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.REVENANT, 12965589, 9765908, (new Item.Properties()).tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> NIGHTMARE_SPAWN_EGG = ITEMS.register("nightmare_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.NIGHTMARE, 592137, 4718849, (new Item.Properties()).tab(TheGraveyard.GROUP)));
-    public static final RegistryObject<Item> LICH_SPAWN_EGG = ITEMS.register("", () -> new ForgeSpawnEggItem(TGEntities.LICH, 13750223, 4144959, (new Item.Properties()).tab(TheGraveyard.GROUP)));
-    public static final RegistryObject<Item> NAMELESS_HANGED_SPAWN_EGG = ITEMS.register("", () -> new ForgeSpawnEggItem(TGEntities.NAMELESS_HANGED, 5389367, 9803156, (new Item.Properties()).tab(TheGraveyard.GROUP)));
-
+    public static final RegistryObject<Item> LICH_SPAWN_EGG = ITEMS.register("lich_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.LICH, 13750223, 4144959, (new Item.Properties()).tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> NAMELESS_HANGED_SPAWN_EGG = ITEMS.register("nameless_hanged_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.NAMELESS_HANGED, 5389367, 9803156, (new Item.Properties()).tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> WRAITH_SPAWN_EGG = ITEMS.register("wraith_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.WRAITH, 1644568, 16777215, (new Item.Properties()).tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> CORRUPTED_PILLAGER_SPAWN_EGG = ITEMS.register("corrupted_pillager_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.CORRUPTED_PILLAGER, 7567737, 4924973, (new Item.Properties()).tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> CORRUPTED_VINDICATOR_SPAWN_EGG = ITEMS.register("corrupted_vindicator_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.CORRUPTED_VINDICATOR, 7567737, 2380632, (new Item.Properties()).tab(TheGraveyard.GROUP)));

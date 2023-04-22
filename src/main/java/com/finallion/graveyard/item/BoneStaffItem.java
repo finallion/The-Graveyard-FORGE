@@ -131,6 +131,7 @@ public class BoneStaffItem extends Item {
                         if (user.isCrouching()) {
                             ghouling.setTarget(null);
                             ghouling.setAggressive(false);
+                            ghouling.setTeleportTimer(15);
                             ghouling.teleportTo(user.getX(), user.getY(), user.getZ());
                         } else {
                             Predicate<Entity> predicate = entity -> {

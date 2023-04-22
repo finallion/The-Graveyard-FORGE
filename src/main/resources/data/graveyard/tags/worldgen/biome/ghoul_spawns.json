@@ -1,9 +1,8 @@
 {
   "replace": false,
   "values": [
-    "#c:dead",
-    "#c:forest",
-    "#c:wasteland",
-    "#c:swamp"
+    "#forge:is_coniferous",
+    "#forge:is_dense/overworld",
+    "#forge:is_swamp"
   ]
 }

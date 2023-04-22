@@ -19,6 +19,7 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.particle.SonicBoomParticle;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.GrassColor;
@@ -37,12 +38,13 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class TheGraveyardClient {
     //private static final RenderType CUTOUT_MIPPED = RenderType.cutoutMipped();
     public static final ModelLayerLocation CORRUPTED_ILLAGER_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(TheGraveyard.MOD_ID, "corrupted_illager"), "main");
+    private static final RenderType CUTOUT_MIPPED = RenderType.cutoutMipped();
 
 
     public TheGraveyardClient() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        //modEventBus.addListener(this::clientInit);
+        modEventBus.addListener(this::clientInit);
         modEventBus.addListener(this::initParticles);
         modEventBus.addListener(this::onBlockColorsInit);
         modEventBus.addListener(this::onItemColorsInit);
@@ -66,6 +68,10 @@ public class TheGraveyardClient {
         event.registerLayerDefinition(CORRUPTED_ILLAGER_MODEL_LAYER, CorruptedIllagerModel::createBodyModel);
     }
 
+    @SubscribeEvent
+    public void clientInit(FMLClientSetupEvent event) {
+        //ItemBlockRenderTypes.setRenderLayer(TGBlocks.TG_GRASS_BLOCK.get(), CUTOUT_MIPPED);
+    }
 
     @SubscribeEvent
     public void initParticles(RegisterParticleProvidersEvent event){

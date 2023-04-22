@@ -230,6 +230,9 @@ public class WraithEntity extends HostileGraveyardEntity implements IAnimatable 
     @Override
     protected void tickDeath() {
         ++this.deathTime;
+        for (int i = 0; i < 5; i++) {
+            this.playSound(TGSounds.WRAITH_AMBIENT.get(), 2.0F, -10.0F);
+        }
         if (this.deathTime == 42 && !this.level.isClientSide()) {
             this.level.broadcastEntityEvent(this, (byte)60);
             this.remove(RemovalReason.KILLED);
@@ -355,18 +358,6 @@ public class WraithEntity extends HostileGraveyardEntity implements IAnimatable 
     @Override
     protected void playHurtSound(DamageSource source) {
         this.playSound(TGSounds.WRAITH_HURT.get(), 1.0F, -10.0F);
-    }
-
-    @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        playDeathSound();
-    }
-
-    private void playDeathSound() {
-        for (int i = 0; i < 10; i++) {
-            this.playSound(TGSounds.WRAITH_AMBIENT.get(), 2.5F, -10.0F);
-        }
     }
 
 

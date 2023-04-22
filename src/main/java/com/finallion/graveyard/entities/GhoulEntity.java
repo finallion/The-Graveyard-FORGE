@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -358,10 +359,13 @@ public class GhoulEntity extends AngerableGraveyardEntity implements IAnimatable
         this.playSound(TGSounds.GHOUL_HURT.get(), 1.0F, -5.0F);
     }
 
+    protected SoundEvent getDeathSound() {
+        return TGSounds.GHOUL_DEATH.get();
+    }
+
     @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        this.playSound(TGSounds.GHOUL_DEATH.get(), 1.0F, -5.0F);
+    public float getVoicePitch() {
+        return -5.0F;
     }
 
     static {
