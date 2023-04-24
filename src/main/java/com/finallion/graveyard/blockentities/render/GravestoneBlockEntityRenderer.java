@@ -27,7 +27,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.phys.Vec3;
@@ -151,8 +150,8 @@ public class GravestoneBlockEntityRenderer implements BlockEntityRenderer<Graves
 
     public static WoodType getSignType(Block block) {
         WoodType signType2;
-        if (block instanceof SignBlock) {
-            signType2 = ((SignBlock)block).type();
+        if (block instanceof GravestoneBlock) {
+            signType2 = ((GravestoneBlock)block).type();
         } else {
             signType2 = WoodType.CRIMSON;
         }
