@@ -88,6 +88,7 @@ public class CommonConfig {
 
     public final ForgeConfigSpec.BooleanValue urnHasDoubleInventory;
     public final ForgeConfigSpec.BooleanValue disableWitherSkeletonSpawner;
+    public final ForgeConfigSpec.BooleanValue enableBossMusic;
 
     public final ForgeConfigSpec.DoubleValue healthInCastingPhase;
     public final ForgeConfigSpec.DoubleValue healthInHuntingPhase;
@@ -130,7 +131,11 @@ public class CommonConfig {
                 "Configure graveyard fog particles rising from moss and set the chance of spawning them (higher numbers = lower chance of spawning). \n " +
                 "Configure if hordes of graveyard mobs can spawn and set their size and frequency. \n " +
                 "Configure if urns have a double chest inventory. \n " +
-                "Configure if the wither skeleton spawner in the large graveyard will be replaced by a skeleton spawner. \n "
+                "Configure if the wither skeleton spawner in the large graveyard will be replaced by a skeleton spawner. \n ",
+                "Configure if boss music plays during the fight against the Corrupted Champion. \n ",
+                "\n",
+                "Music: \n",
+                "Incarnated Evil by Rotch Gwylt (Official The Graveyard Soundtrack). \n "
         );
 
         builder.push("The Graveyard - Structures Config");
@@ -251,6 +256,7 @@ public class CommonConfig {
 
         builder.push("The Graveyard - Additional Config");
         this.urnHasDoubleInventory = builder.define("urn.urnHasDoubleInventory", true);
+        this.enableBossMusic = builder.define("bossMusic.enableBossMusic", true);
         this.disableWitherSkeletonSpawner = builder.define("spawner.disableWitherSkeletonSpawner", false);
         builder.pop();
     }

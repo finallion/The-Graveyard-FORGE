@@ -460,5 +460,12 @@
       "graveyard:entity/lich/heal"
     ],
     "subtitle": "subtitles.entity.graveyard.lich.heal"
+  },
+
+  "entity.lich.theme_01": {
+    "sounds": [
+      "graveyard:entity/lich/theme_01"
+    ],
+    "subtitle": "subtitles.entity.graveyard.lich.theme_01"
   }
 }

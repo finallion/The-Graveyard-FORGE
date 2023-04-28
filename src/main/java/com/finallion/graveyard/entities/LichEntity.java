@@ -7,6 +7,7 @@ import com.finallion.graveyard.entities.projectiles.SkullEntity;
 import com.finallion.graveyard.init.TGEntities;
 import com.finallion.graveyard.init.TGParticles;
 import com.finallion.graveyard.init.TGSounds;
+import com.finallion.graveyard.sounds.BossMusicPlayer;
 import com.finallion.graveyard.util.MathUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -115,6 +116,7 @@ public class LichEntity extends Monster implements IAnimatable {
     private static final EntityDataAccessor<Integer> PHASE; // divides fight into three main phases and two transitions, animations are named after the main phase
     private static final EntityDataAccessor<Integer> ANIMATION;
     private static final EntityDataAccessor<Integer> HUNT_TIMER;
+    private static final EntityDataAccessor<Integer> MUSIC_DELAY;
     private static final EntityDataAccessor<Boolean> CAN_HUNT_START;
     private static final EntityDataAccessor<Boolean> CAN_MOVE;
 
@@ -125,6 +127,8 @@ public class LichEntity extends Monster implements IAnimatable {
     private static final EntityDataAccessor<Integer> LEVITATION_DURATION_TIMER;
 
     // constants
+    private static final byte MUSIC_PLAY_ID = 67;
+    private static final byte MUSIC_STOP_ID = 68;
     private static final int SPAWN_INVUL_TIMER = 490;
     private static final int DEFAULT_INVUL_TIMER = 200;
     private final float HEALTH_PHASE_01 = GraveyardConfig.COMMON.healthInCastingPhase.get().floatValue();
@@ -306,6 +310,25 @@ public class LichEntity extends Monster implements IAnimatable {
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
     }
 
+    @Override
+    public void tick() {
+        if (!level.isClientSide && getBossMusic() != null) {
+            if (canPlayMusic()) {
+                this.level.broadcastEntityEvent(this, MUSIC_PLAY_ID);
+            }
+            else {
+                this.level.broadcastEntityEvent(this, MUSIC_STOP_ID);
+            }
+        }
+        super.tick();
+    }
+
+    @Override
+    public void handleEntityEvent(byte id) {
+        if (id == MUSIC_PLAY_ID && getMusicDelay() == 85) BossMusicPlayer.playBossMusic(this);
+        else if (id == MUSIC_STOP_ID) BossMusicPlayer.stopBossMusic(this);
+        else super.handleEntityEvent(id);
+    }
 
     /* PARTICLE HANDLING */
     @Override
@@ -380,6 +403,10 @@ public class LichEntity extends Monster implements IAnimatable {
 
         if (!canHuntStart() && random.nextInt(5) == 0) {
             level.playSound(null, this.blockPosition(), SoundEvents.SOUL_ESCAPE, SoundSource.HOSTILE, 4.0F, -10.0F);
+        }
+
+        if (getMusicDelay() < 85) {
+            setMusicDelay(getMusicDelay() + 1);
         }
 
         super.aiStep();
@@ -979,6 +1006,15 @@ public class LichEntity extends Monster implements IAnimatable {
         this.huntCooldownTicker = huntCooldownTicker;
     }
 
+
+    public int getMusicDelay() {
+        return (Integer) this.entityData.get(MUSIC_DELAY);
+    }
+
+    public void setMusicDelay(int time) {
+        this.entityData.set(MUSIC_DELAY, time);
+    }
+
     /* END GETTER AND SETTER */
 
     ///////////////////////
@@ -1037,10 +1073,21 @@ public class LichEntity extends Monster implements IAnimatable {
         this.level.playSound(null, this.blockPosition(), TGSounds.LICH_IDLE.get(), SoundSource.HOSTILE, 15.0F, 1.0F);
     }
 
-
     @Override
     protected SoundEvent getHurtSound(DamageSource p_33034_) {
         return TGSounds.LICH_HURT.get();
+    }
+
+    public SoundEvent getBossMusic() {
+        return TGSounds.LICH_THEME_01.get();
+    }
+
+    protected boolean canPlayMusic() {
+        return !isSilent() /*&& getTarget() instanceof Player*/;
+    }
+
+    public boolean canPlayerHearMusic(Player player) {
+        return player != null /*&& canAttack(player)*/ && distanceTo(player) < 2500;
     }
 
     /* SOUNDS END */
@@ -1049,6 +1096,7 @@ public class LichEntity extends Monster implements IAnimatable {
         super.defineSynchedData();
         this.entityData.define(CAN_MOVE, false);
         this.entityData.define(INVUL_TIMER, 0);
+        this.entityData.define(MUSIC_DELAY, 0);
         this.entityData.define(HUNT_TIMER, 0);
         this.entityData.define(FIGHT_DURATION_TIMER, 0);
         this.entityData.define(HEAL_DURATION_TIMER, 0);
@@ -1066,6 +1114,7 @@ public class LichEntity extends Monster implements IAnimatable {
 
     // on game stop
     public void addAdditionalSaveData(CompoundTag nbt) {
+        nbt.putInt("MusicDelay", getMusicDelay());
         nbt.putInt("Invul", getInvulnerableTimer());
         nbt.putInt("PhaseInvul", getPhaseInvulnerableTimer());
         nbt.putInt("Phase", Math.max(getPhase(), 1));
@@ -1087,6 +1136,7 @@ public class LichEntity extends Monster implements IAnimatable {
     public void readAdditionalSaveData(CompoundTag nbt) {
         if (!nbt.contains("Invul")) { // if tag is empty, set to default phase 1
             this.setInvulTimer(0);
+            this.setMusicDelay(0);
             this.setPhaseInvulTimer(0);
             this.setPhase(1);
             this.setAnimationState(ANIMATION_IDLE);
@@ -1101,6 +1151,7 @@ public class LichEntity extends Monster implements IAnimatable {
             this.setHuntStart(false);
         } else {
             this.setInvulTimer(nbt.getInt("Invul"));
+            this.setMusicDelay(nbt.getInt("MusicDelay"));
             this.setPhaseInvulTimer(nbt.getInt("PhaseInvul"));
             this.setPhase(nbt.getInt("Phase"));
             this.setAnimationState(nbt.getInt("Anim"));
@@ -1138,6 +1189,7 @@ public class LichEntity extends Monster implements IAnimatable {
         PHASE = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.INT);
         CAN_HUNT_START = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.BOOLEAN);
         CAN_MOVE = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.BOOLEAN);
+        MUSIC_DELAY = SynchedEntityData.defineId(LichEntity.class, EntityDataSerializers.INT);
         CAN_ATTACK_PREDICATE = Entity::isAlwaysTicking;
         HEAD_TARGET_PREDICATE = TargetingConditions.forCombat().range(20.0D).selector(CAN_ATTACK_PREDICATE);
         CRAWL_DIMENSIONS = EntityDimensions.fixed(1.8F, 2.0F);

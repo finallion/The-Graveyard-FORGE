@@ -1,6 +1,7 @@
 package com.finallion.graveyard.entities;
 
 import com.finallion.graveyard.config.GraveyardConfig;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -87,6 +88,24 @@ public abstract class HostileGraveyardEntity extends Monster {
 
         return super.canBeAffected(effect);
     }
+
+    // on game stop
+    public void addAdditionalSaveData(CompoundTag nbt) {
+        nbt.putBoolean("canBurn", canBurnInSunlight());
+        super.addAdditionalSaveData(nbt);
+    }
+
+    // on game load
+    public void readAdditionalSaveData(CompoundTag nbt) {
+        if (!nbt.contains("canBurn")) {
+            this.setCanBurnInSunlight(canBurnInSunlight());
+        } else {
+            this.setCanBurnInSunlight(nbt.getBoolean("canBurn"));
+        }
+
+        super.readAdditionalSaveData(nbt);
+    }
+
 
 
     @Override

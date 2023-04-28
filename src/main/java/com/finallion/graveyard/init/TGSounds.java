@@ -87,6 +87,8 @@ public class TGSounds {
 
     public static final RegistryObject<SoundEvent> VIAL_SPLASH = build("item.vial.splash");
 
+    public static final RegistryObject<SoundEvent> LICH_THEME_01 = build("entity.lich.theme_01");
+
 
     private static RegistryObject<SoundEvent> build(String id) {
         return SOUNDS.register(id, () -> new SoundEvent(new ResourceLocation(TheGraveyard.MOD_ID, id)));
