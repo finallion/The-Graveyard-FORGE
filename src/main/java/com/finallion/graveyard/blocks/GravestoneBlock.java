@@ -148,9 +148,10 @@ public class GravestoneBlock extends StandingSignBlock {
     }
 
 
-
-
-
+    @Override
+    public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
+        return false;
+    }
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter p_220071_2_, BlockPos p_220071_3_, CollisionContext p_220071_4_) {

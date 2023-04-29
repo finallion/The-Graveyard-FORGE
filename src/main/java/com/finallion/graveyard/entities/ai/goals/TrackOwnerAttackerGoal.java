@@ -22,13 +22,17 @@ public class TrackOwnerAttackerGoal extends TargetGoal {
     }
 
     public boolean canUse() {
-        LivingEntity livingentity = this.tameAnimal.getOwner();
-        if (livingentity == null) {
-            return false;
+        if (!this.tameAnimal.isSitting()) {
+            LivingEntity livingentity = this.tameAnimal.getOwner();
+            if (livingentity == null) {
+                return false;
+            } else {
+                this.ownerLastHurtBy = livingentity.getLastHurtByMob();
+                int i = livingentity.getLastHurtByMobTimestamp();
+                return i != this.timestamp && this.canAttack(this.ownerLastHurtBy, TargetingConditions.DEFAULT) && this.tameAnimal.wantsToAttack(this.ownerLastHurtBy, livingentity);
+            }
         } else {
-            this.ownerLastHurtBy = livingentity.getLastHurtByMob();
-            int i = livingentity.getLastHurtByMobTimestamp();
-            return i != this.timestamp && this.canAttack(this.ownerLastHurtBy, TargetingConditions.DEFAULT) && this.tameAnimal.wantsToAttack(this.ownerLastHurtBy, livingentity);
+            return false;
         }
     }
 

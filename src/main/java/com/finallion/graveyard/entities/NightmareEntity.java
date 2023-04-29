@@ -253,22 +253,23 @@ public class NightmareEntity extends HostileGraveyardEntity implements IAnimatab
         return this.factory;
     }
 
-
     @Override
     public void playAmbientSound() {
-        this.playSound(SoundEvents.ENDERMAN_AMBIENT, 1.0F, -10.0F);
+        this.playSound(TGSounds.NIGHTMARE_AMBIENT.get(), 1.0F, -10.0F);
     }
 
     @Override
     protected void playHurtSound(DamageSource source) {
-        this.playSound(SoundEvents.ENDERMAN_HURT, 1.0F, -10.0F);
+        this.playSound(TGSounds.NIGHTMARE_HURT.get(), 1.0F, -10.0F);
     }
 
+    protected SoundEvent getDeathSound() {
+        return TGSounds.NIGHTMARE_DEATH.get();
+    }
 
     @Override
-    public void die(DamageSource p_21014_) {
-        super.die(p_21014_);
-        this.playSound(SoundEvents.ENDERMAN_DEATH, 1.0F, -10.0F);
+    public float getVoicePitch() {
+        return -10.0F;
     }
 
     boolean isLookingAtMe(Player p_32535_) {

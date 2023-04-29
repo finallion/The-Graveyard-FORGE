@@ -1,18 +1,14 @@
 package com.finallion.graveyard.blockentities;
 
-import com.finallion.graveyard.blocks.UrnBlock;
 import com.finallion.graveyard.config.GraveyardConfig;
-import com.finallion.graveyard.init.TGBlocks;
+import com.finallion.graveyard.init.TGSounds;
 import com.finallion.graveyard.init.TGTileEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.CompoundContainer;
 import net.minecraft.world.Container;
@@ -22,14 +18,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.entity.*;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.ChestType;
 
 public class UrnBlockEntity extends RandomizableContainerBlockEntity {
     private static final int EVENT_SET_OPEN_COUNT = 1;
@@ -37,11 +31,11 @@ public class UrnBlockEntity extends RandomizableContainerBlockEntity {
 
     private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
         protected void onOpen(Level p_155357_, BlockPos p_155358_, BlockState p_155359_) {
-            UrnBlockEntity.playSound(p_155357_, p_155358_, p_155359_, SoundEvents.BARREL_OPEN);
+            UrnBlockEntity.playSound(p_155357_, p_155358_, p_155359_, TGSounds.URN_OPEN.get());
         }
 
         protected void onClose(Level p_155367_, BlockPos p_155368_, BlockState p_155369_) {
-            UrnBlockEntity.playSound(p_155367_, p_155368_, p_155369_, SoundEvents.BARREL_CLOSE);
+            UrnBlockEntity.playSound(p_155367_, p_155368_, p_155369_, TGSounds.URN_CLOSE.get());
         }
 
         protected void openerCountChanged(Level p_155361_, BlockPos p_155362_, BlockState p_155363_, int p_155364_, int p_155365_) {

@@ -57,6 +57,11 @@ public class PedestalBlock extends Block implements SimpleWaterloggedBlock {
         p_51305_.add(WATERLOGGED);
     }
 
+    @Override
+    public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
+        return false;
+    }
+
 
     static {
         WATERLOGGED = BlockStateProperties.WATERLOGGED;

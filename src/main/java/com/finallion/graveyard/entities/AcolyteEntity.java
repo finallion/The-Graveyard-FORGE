@@ -9,7 +9,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,7 +16,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,18 +36,22 @@ public class AcolyteEntity extends CorruptedIllager {
 
     @Override
     public void playAmbientSound() {
-        this.playSound(SoundEvents.VINDICATOR_AMBIENT, 1.0F, 1.0F);
+        this.playSound(TGSounds.ACOLYTE_AMBIENT.get(), 1.0F, 0.75F);
     }
 
     @Override
     protected void playHurtSound(DamageSource source) {
-        this.playSound(SoundEvents.VINDICATOR_HURT, 1.0F, 1.0F);
+        this.playSound(TGSounds.ACOLYTE_HURT.get(), 1.0F, 0.75F);
+    }
+
+
+    protected SoundEvent getDeathSound() {
+        return TGSounds.ACOLYTE_DEATH.get();
     }
 
     @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        this.playSound(SoundEvents.VINDICATOR_DEATH, 1.0F, 1.0F);
+    public float getVoicePitch() {
+        return 0.75F;
     }
 
 

@@ -34,19 +34,27 @@ public class CorruptedPillager extends CorruptedIllager {
 
     @Override
     public void playAmbientSound() {
-        this.playSound(SoundEvents.ZOMBIE_VILLAGER_AMBIENT, 0.8F, 0.0F);
+        this.playSound(TGSounds.CORRUPTED_ILLAGER_AMBIENT.get(), 0.8F, 0.0F);
     }
 
     @Override
     protected void playHurtSound(DamageSource source) {
-        this.playSound(SoundEvents.ZOMBIE_VILLAGER_HURT, 0.8F, 0.0F);
+        this.playSound(TGSounds.CORRUPTED_ILLAGER_HURT.get(), 0.8F, 0.0F);
     }
 
 
+    protected SoundEvent getDeathSound() {
+        return TGSounds.CORRUPTED_ILLAGER_DEATH.get();
+    }
+
     @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        this.playSound(SoundEvents.ZOMBIE_VILLAGER_DEATH, 0.8F, 0.0F);
+    public float getVoicePitch() {
+        return -0.0F;
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        this.playSound(TGSounds.CORRUPTED_ILLAGER_STEP.get(), 0.8F, 0.0F);
     }
 
 }

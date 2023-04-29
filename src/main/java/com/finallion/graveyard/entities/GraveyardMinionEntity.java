@@ -21,6 +21,8 @@ import java.util.UUID;
 
 public class GraveyardMinionEntity extends PathfinderMob {
     protected static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(GraveyardMinionEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+    protected static final EntityDataAccessor<Byte> TAMEABLE_FLAGS = SynchedEntityData.defineId(GraveyardMinionEntity.class, EntityDataSerializers.BYTE);
+    private boolean sitting;
 
     public GraveyardMinionEntity(EntityType<? extends GraveyardMinionEntity> entityType, Level world) {
         super(entityType, world);
@@ -31,6 +33,7 @@ public class GraveyardMinionEntity extends PathfinderMob {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(OWNER_UUID, Optional.empty());
+        this.entityData.define(TAMEABLE_FLAGS, (byte)0);
     }
 
     public void addAdditionalSaveData(CompoundTag nbt) {
@@ -38,6 +41,7 @@ public class GraveyardMinionEntity extends PathfinderMob {
         if (this.getOwnerUuid() != null) {
             nbt.putUUID("Owner", this.getOwnerUuid());
         }
+        nbt.putBoolean("Sitting", this.sitting);
     }
 
     public void readAdditionalSaveData(CompoundTag nbt) {
@@ -56,6 +60,8 @@ public class GraveyardMinionEntity extends PathfinderMob {
             } catch (Throwable var4) {
             }
         }
+        this.sitting = nbt.getBoolean("Sitting");
+        this.setInSittingPose(this.sitting);
     }
 
     @Nullable
@@ -69,6 +75,28 @@ public class GraveyardMinionEntity extends PathfinderMob {
 
     public void setOwner(Player player) {
         this.setOwnerUuid(player.getUUID());
+    }
+
+    public boolean isSitting() {
+        return this.sitting;
+    }
+
+    public void setSitting(boolean sitting) {
+        this.sitting = sitting;
+    }
+
+    public boolean isInSittingPose() {
+        return ((Byte)this.entityData.get(TAMEABLE_FLAGS) & 1) != 0;
+    }
+
+    public void setInSittingPose(boolean inSittingPose) {
+        byte b = (Byte)this.entityData.get(TAMEABLE_FLAGS);
+        if (inSittingPose) {
+            this.entityData.set(TAMEABLE_FLAGS, (byte)(b | 1));
+        } else {
+            this.entityData.set(TAMEABLE_FLAGS, (byte)(b & -2));
+        }
+
     }
 
     @Nullable
@@ -107,9 +135,9 @@ public class GraveyardMinionEntity extends PathfinderMob {
 
     public boolean wantsToAttack(LivingEntity p_30389_, LivingEntity p_30390_) {
         if (!(p_30389_ instanceof Creeper) && !(p_30389_ instanceof Ghast)) {
-            if (p_30389_ instanceof Wolf) {
-                Wolf wolf = (Wolf)p_30389_;
-                return !wolf.isTame() || wolf.getOwner() != p_30390_;
+            if (p_30389_ instanceof GraveyardMinionEntity) {
+                GraveyardMinionEntity wolf = (GraveyardMinionEntity)p_30389_;
+                return wolf.getOwner() != p_30390_;
             } else if (p_30389_ instanceof Player && p_30390_ instanceof Player && !((Player)p_30390_).canHarmPlayer((Player)p_30389_)) {
                 return false;
             } else if (p_30389_ instanceof AbstractHorse && ((AbstractHorse)p_30389_).isTamed()) {

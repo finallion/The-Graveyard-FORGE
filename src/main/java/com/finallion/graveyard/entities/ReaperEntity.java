@@ -193,25 +193,24 @@ public class ReaperEntity extends HostileGraveyardEntity implements IAnimatable 
         return this.factory;
     }
 
-
     @Override
     public void playAmbientSound() {
-        this.playSound(SoundEvents.VEX_AMBIENT, 1.0F, -10.0F);
+        this.playSound(TGSounds.REAPER_AMBIENT.get(), 1.0F, -10.0F);
+    }
+
+    @Override
+    protected void playHurtSound(DamageSource source) {
+        this.playSound(TGSounds.REAPER_HURT.get(), 1.0F, -10.0F);
     }
 
 
-    @Nullable
-    @Override
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        this.playSound(SoundEvents.VEX_HURT, 1.0F, -10.0F);
-        return super.getHurtSound(p_184601_1_);
-    }
-
-    @Nullable
-    @Override
     protected SoundEvent getDeathSound() {
-        this.playSound(SoundEvents.VEX_DEATH, 1.0F, -10.0F);
-        return super.getDeathSound();
+        return TGSounds.REAPER_DEATH.get();
+    }
+
+    @Override
+    public float getVoicePitch() {
+        return -10.0F;
     }
 
     class CopyOwnerTargetGoal extends TargetGoal {
@@ -322,7 +321,7 @@ public class ReaperEntity extends HostileGraveyardEntity implements IAnimatable 
             }
 
             ReaperEntity.this.setIsCharging(true);
-            ReaperEntity.this.playSound(SoundEvents.VEX_CHARGE, 1.0F, -10.0F);
+            ReaperEntity.this.playSound(TGSounds.REAPER_CHARGE.get(), 1.0F, -10.0F);
         }
 
         public void stop() {

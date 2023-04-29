@@ -11,11 +11,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -100,7 +98,7 @@ public class GraveyardHordeSpawner {
         BlockState downState = p_64565_.getBlockState(p_64566_.below());
         if (!NaturalSpawner.isValidEmptySpawnBlock(p_64565_, p_64566_, blockstate, blockstate.getFluidState(), TGEntities.GHOUL.get())) {
             return false;
-        } else if (!Monster.isDarkEnoughToSpawn((ServerLevelAccessor) p_64565_, p_64566_, p_64567_)) {
+        } else if (p_64565_.getLightEmission(p_64566_) > 1) {
             return false;
         } else if (blockstate.getFluidState().is(Fluids.WATER) || downState.getFluidState().is(Fluids.WATER) ) {
             return false;

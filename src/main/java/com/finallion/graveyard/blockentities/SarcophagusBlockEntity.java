@@ -1,6 +1,7 @@
 package com.finallion.graveyard.blockentities;
 
 import com.finallion.graveyard.blockentities.animation.SarcophagusLidAnimator;
+import com.finallion.graveyard.init.TGSounds;
 import com.finallion.graveyard.init.TGTileEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -8,7 +9,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.CompoundContainer;
 import net.minecraft.world.Container;
@@ -34,17 +34,17 @@ public class SarcophagusBlockEntity extends RandomizableContainerBlockEntity imp
     private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
         protected void onOpen(Level p_155357_, BlockPos p_155358_, BlockState state) {
             if (state.getValue(BlockStateProperties.LIT)) {
-                SarcophagusBlockEntity.playSound(p_155357_, p_155358_, state, SoundEvents.CHEST_OPEN);
+                SarcophagusBlockEntity.playSound(p_155357_, p_155358_, state, TGSounds.COFFIN_OPEN.get());
             } else {
-                SarcophagusBlockEntity.playSound(p_155357_, p_155358_, state, SoundEvents.GRINDSTONE_USE);
+                SarcophagusBlockEntity.playSound(p_155357_, p_155358_, state, TGSounds.SARCOPHAGUS_USE.get());
             }
         }
 
         protected void onClose(Level p_155367_, BlockPos p_155368_, BlockState state) {
             if (state.getValue(BlockStateProperties.LIT)) {
-                SarcophagusBlockEntity.playSound(p_155367_, p_155368_, state, SoundEvents.CHEST_CLOSE);
+                SarcophagusBlockEntity.playSound(p_155367_, p_155368_, state, TGSounds.COFFIN_CLOSE.get());
             } else {
-                SarcophagusBlockEntity.playSound(p_155367_, p_155368_, state, SoundEvents.GRINDSTONE_USE);
+                SarcophagusBlockEntity.playSound(p_155367_, p_155368_, state, TGSounds.SARCOPHAGUS_USE.get());
             }
         }
 

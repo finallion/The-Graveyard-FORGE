@@ -60,6 +60,11 @@ public class UrnBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
      */
 
     @Override
+    public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
+        return false;
+    }
+
+    @Override
     public boolean propagatesSkylightDown(BlockState p_49928_, BlockGetter p_49929_, BlockPos p_49930_) {
         return true;
     }

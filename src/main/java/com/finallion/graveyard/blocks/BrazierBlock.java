@@ -62,6 +62,11 @@ public class BrazierBlock extends Block implements EntityBlock, SimpleWaterlogge
         return p_152844_.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(p_152844_);
     }
 
+    @Override
+    public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
+        return false;
+    }
+
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext p_51240_) {
         LevelAccessor levelaccessor = p_51240_.getLevel();

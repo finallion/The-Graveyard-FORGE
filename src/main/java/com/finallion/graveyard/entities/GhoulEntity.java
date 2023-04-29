@@ -211,9 +211,13 @@ public class GhoulEntity extends AngerableGraveyardEntity implements IAnimatable
             return PlayState.CONTINUE;
         }
 
+        if (!event.isMoving() && !isRaging()) {
+            event.getController().setAnimation(IDLE_ANIMATION);
+        }
+
         /* IDLE */
         if (getAnimationState() == ANIMATION_IDLE && getAttackAnimTimer() <= 0 && !event.isMoving()) {
-            event.getController().setAnimation(IDLE_ANIMATION);
+            setAnimationState(ANIMATION_IDLE);
             return PlayState.CONTINUE;
         }
 
@@ -341,18 +345,26 @@ public class GhoulEntity extends AngerableGraveyardEntity implements IAnimatable
 
     @Override
     public void playAmbientSound() {
-        this.playSound(SoundEvents.HUSK_AMBIENT, 1.0F, -5.0F);
+        this.playSound(TGSounds.GHOUL_AMBIENT.get(), 1.0F, -5.0F);
+    }
+
+    @Override
+    public void playStepSound(BlockPos pos, BlockState state) {
+        this.playSound(TGSounds.GHOUL_STEP.get(), 0.5F, -1.0F);
     }
 
     @Override
     protected void playHurtSound(DamageSource source) {
-        this.playSound(SoundEvents.HUSK_HURT, 1.0F, -5.0F);
+        this.playSound(TGSounds.GHOUL_HURT.get(), 1.0F, -5.0F);
+    }
+
+    protected SoundEvent getDeathSound() {
+        return TGSounds.GHOUL_DEATH.get();
     }
 
     @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        this.playSound(SoundEvents.HUSK_DEATH, 1.0F, -5.0F);
+    public float getVoicePitch() {
+        return -5.0F;
     }
 
     static {

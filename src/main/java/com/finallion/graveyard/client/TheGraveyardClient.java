@@ -52,8 +52,17 @@ public class TheGraveyardClient {
         modEventBus.addListener(this::onItemColorsInit);
         modEventBus.addListener(this::registerEntityRenderers);
         modEventBus.addListener(this::registerLayerDefinition);
-        modEventBus.addListener(this::onRegisterModels);
+        modEventBus.addListener(this::registerEntityModels);
+        modEventBus.addListener(this::initScreens);
 
+
+    }
+
+    @SubscribeEvent
+    public void initScreens(final FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            MenuScreens.register(TGScreens.OSSUARY_SCREEN_HANDLER.get(), OssuaryScreen::new);
+        });
     }
 
     @SubscribeEvent
@@ -86,10 +95,14 @@ public class TheGraveyardClient {
         event.registerEntityRenderer(TGEntities.FALLING_CORPSE.get(), FallingCorpseRenderer::new);
         event.registerEntityRenderer(TGEntities.SKULL.get(), SkullEntityRenderer::new);
         event.registerEntityRenderer(TGEntities.GHOULING.get(), GhoulingRenderer::new);
+        event.registerEntityRenderer(TGEntities.NAMELESS_HANGED.get(), NamelessHangedRenderer::new);
+
 
         event.registerBlockEntityRenderer(TGTileEntities.GRAVESTONE_BLOCK_ENTITY.get(), GravestoneBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(TGTileEntities.SARCOPHAGUS_BLOCK_ENTITY.get(), SarcophagusBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(TGTileEntities.BRAZIER_BLOCK_ENTITY.get(), BrazierBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(TGTileEntities.OSSUARY_BLOCK_ENTITY.get(), OssuaryBlockEntityRenderer::new);
+
     }
 
     @SubscribeEvent
@@ -143,7 +156,7 @@ public class TheGraveyardClient {
 
 
     @SubscribeEvent
-    public void onRegisterModels(final ModelRegistryEvent event) {
+    public void registerEntityModels(final ModelRegistryEvent event) {
         ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "item/sarcophagus_base"));
         ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "item/sarcophagus_lid"));
 

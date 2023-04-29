@@ -6,13 +6,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.PatrollingMonster;
-import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -20,7 +20,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -37,7 +36,7 @@ public abstract class HordeGraveyardEntity extends HostileGraveyardEntity {
     protected void registerGoals() {
         super.registerGoals();
         //this.goalSelector.add(2, new PatrolApproachGoal(this, 10.0F));
-        this.goalSelector.addGoal(4, new LongDistancePatrolGoal<>(this, 1.1D, 1.0D));
+        this.goalSelector.addGoal(4, new LongDistancePatrolGoal<>(this, 1.0D, 0.9D));
     }
 
     public void addAdditionalSaveData(CompoundTag p_33063_) {

@@ -256,23 +256,27 @@ public class RevenantEntity extends AngerableGraveyardEntity implements IAnimata
 
     @Override
     public void playAmbientSound() {
-        this.playSound(SoundEvents.WITHER_SKELETON_AMBIENT, 1.0F, 1.0F);
+        this.playSound(TGSounds.REVENANT_AMBIENT.get(), 1.0F, 1.0F);
     }
 
     @Override
     protected void playHurtSound(DamageSource source) {
-        this.playSound(SoundEvents.WITHER_SKELETON_HURT, 1.0F, 1.0F);
+        this.playSound(TGSounds.REVENANT_HURT.get(), 1.0F, 1.0F);
+    }
+
+
+    protected SoundEvent getDeathSound() {
+        return TGSounds.REVENANT_DEATH.get();
     }
 
     @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        this.playSound(SoundEvents.WITHER_SKELETON_DEATH, 1.0F, 1.0F);
+    public float getVoicePitch() {
+        return 1.0F;
     }
 
     @Override
-    protected void playStepSound(BlockPos p_20135_, BlockState p_20136_) {
-        this.playSound(SoundEvents.WITHER_SKELETON_STEP, 0.15F, 1.0F);
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        this.playSound(TGSounds.REVENANT_STEP.get(), 0.15F, 1.0F);
     }
 
     public int getAnimationState() {
