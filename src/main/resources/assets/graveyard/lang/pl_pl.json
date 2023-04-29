@@ -98,6 +98,8 @@
   "block.graveyard.red_sandstone_gravestone": "Red Sandstone Gravestone",
   "block.graveyard.quartz_bricks_gravestone": "Quartz Bricks Gravestone",
 
+  "item.graveyard.incarnated_evil_music_disc": "\"Incarnated Evil\" by Rotch Gwylt",
+  "item.graveyard.incarnated_evil_music_disc.desc": "\"Incarnated Evil\" by Rotch Gwylt",
   "item.graveyard.bone_dagger": "Kościany sztylet",
   "item.graveyard.dark_iron_ingot": "Sztabka mrocznego żelaza",
   "item.graveyard.corruption": "Skażenie",

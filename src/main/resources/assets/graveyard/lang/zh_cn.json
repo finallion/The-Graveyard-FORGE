@@ -102,6 +102,8 @@
   "block.graveyard.red_sandstone_gravestone": "Red Sandstone Gravestone",
   "block.graveyard.quartz_bricks_gravestone": "Quartz Bricks Gravestone",
 
+  "item.graveyard.incarnated_evil_music_disc": "\"Incarnated Evil\" by Rotch Gwylt",
+  "item.graveyard.incarnated_evil_music_disc.desc": "\"Incarnated Evil\" by Rotch Gwylt",
   "item.graveyard.bone_dagger": "骨头匕首",
   "item.graveyard.dark_iron_ingot": "暗铁锭",
   "item.graveyard.corruption": "堕落精华",
