@@ -149,6 +149,8 @@ public class TheGraveyardClient {
         ItemBlockRenderTypes.setRenderLayer(TGBlocks.WITHER_SKULL_ON_PIKE.get(), CUTOUT_MIPPED);
         ItemBlockRenderTypes.setRenderLayer(TGBlocks.LATERALLY_LYING_SKELETON.get(), CUTOUT_MIPPED);
         ItemBlockRenderTypes.setRenderLayer(TGBlocks.LATERALLY_LYING_WITHER_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.HANGED_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.HANGED_WITHER_SKELETON.get(), CUTOUT_MIPPED);
         ItemBlockRenderTypes.setRenderLayer(TGBlocks.LOWER_BONE_STAFF.get(), CUTOUT_MIPPED);
         ItemBlockRenderTypes.setRenderLayer(TGBlocks.MIDDLE_BONE_STAFF.get(), CUTOUT_MIPPED);
         ItemBlockRenderTypes.setRenderLayer(TGBlocks.UPPER_BONE_STAFF.get(), CUTOUT_MIPPED);

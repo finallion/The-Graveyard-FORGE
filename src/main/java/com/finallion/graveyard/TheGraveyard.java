@@ -41,24 +41,26 @@ public class TheGraveyard {
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        forgeBus.addListener(EventPriority.NORMAL, ServerEvents::onBiomesLoad);
-        forgeBus.addListener(EventPriority.NORMAL, ServerEvents::addBiomeFeatures);
-
         modEventBus.addListener(this::setup);
         TGBlocks.BLOCKS.register(modEventBus);
         TGItems.ITEMS.register(modEventBus);
         TGSounds.SOUNDS.register(modEventBus);
         TGEntities.ENTITIES.register(modEventBus);
-        TGFeatures.FEATURES.register(modEventBus);
-        TGStructureFeatures.STRUCTURES.register(modEventBus);
+        TGConfiguredStructureFeatures.STRUCTURES.register(modEventBus);
+        TGScreens.MENUS.register(modEventBus);
+        TGRecipeTypes.RECIPE_TYPES.register(modEventBus);
+        TGRecipeTypes.RECIPE_SERIALIZERS.register(modEventBus);
         TGTileEntities.TILE_ENTITIES.register(modEventBus);
         TGParticles.PARTICLES.register(modEventBus);
 
         modEventBus.addListener(this::setupClient);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC, "graveyard-common-1.18.2.toml");
-        GraveyardConfig.loadConfig(GraveyardConfig.COMMON_SPEC,
-                FMLPaths.CONFIGDIR.get().resolve("graveyard-common-1.18.2.toml").toString());
+        final DeferredRegister<Codec<? extends BiomeModifier>> serializers = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, MOD_ID);
+        serializers.register(modEventBus);
+        serializers.register("mobspawns", SpawnRules.ModSpawnModifier::makeCodec);
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC, "graveyard-1.19.x-common.toml");
+        CommonConfig.loadConfig(GraveyardConfig.COMMON_SPEC, FMLPaths.CONFIGDIR.get().resolve(MOD_ID + "-1.19.x-common.toml").toString());
 
     }
 
@@ -77,22 +79,18 @@ public class TheGraveyard {
 
     public void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            TGTags.init();
-            TGConfiguredFeatures.registerConfiguredFeatures();
-            TGConfiguredFeatures.registerPlacedFeatures();
-            TGProcessors.registerProcessors();
-            TGConfiguredStructureFeatures.init();
-            TGStructureSets.init();
             TGAdvancements.init();
+            TGTags.init();
+            TGStructureType.init();
+            TGProcessors.registerProcessors();
         });
     }
-
 
     public static final CreativeModeTab GROUP = new CreativeModeTab ("graveyard_group") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(Items.SKELETON_SKULL);
         }
-
     };
+
 }

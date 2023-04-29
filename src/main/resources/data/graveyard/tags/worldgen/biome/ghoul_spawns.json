@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:is_coniferous",
+    "#forge:is_dense/overworld",
+    "#forge:is_swamp"
+  ]
+}

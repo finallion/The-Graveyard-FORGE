@@ -42,6 +42,11 @@ public class TGEntities {
             .sized(0.25F, 0.25F)
             .build(TheGraveyard.MOD_ID + ":skull"));
 
+    public static final RegistryObject<EntityType<NamelessHangedEntity>> NAMELESS_HANGED = ENTITIES.register("nameless_hanged", () -> EntityType.Builder
+            .of(NamelessHangedEntity::new, MobCategory.CREATURE)
+            .sized(0.8F, 2.5F)
+            .build(TheGraveyard.MOD_ID + ":nameless_hanged"));
+
 
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -58,6 +63,7 @@ public class TGEntities {
         event.put(TGEntities.FALLING_CORPSE.get(), FallingCorpse.createAttributes().build());
         event.put(TGEntities.GHOULING.get(), GhoulingEntity.createAttributes().build());
         event.put(TGEntities.LICH.get(), LichEntity.createAttributes().build());
+        event.put(TGEntities.NAMELESS_HANGED.get(), NamelessHangedEntity.createAttributes().build());
     }
 
     @SubscribeEvent

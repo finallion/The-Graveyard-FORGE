@@ -23,15 +23,19 @@ public class TGBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TheGraveyard.MOD_ID);
     public static List<Block> coffins = new ArrayList<Block>();
 
-    public static final ResourceLocation GRAVESTONE_TEXTURE = new ResourceLocation("minecraft", "block/polished_basalt_side");
-    public static final ResourceLocation COBBLESTONE_GRAVESTONE_TEXTURE = new ResourceLocation("minecraft", "block/cobblestone");
-    public static final ResourceLocation MOSSY_COBBLESTONE_GRAVESTONE_TEXTURE = new ResourceLocation("minecraft", "block/mossy_cobblestone");
-    public static final ResourceLocation DEEPSLATE_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "block/deepslate");
-    public static final ResourceLocation BLACKSTONE_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "block/blackstone");
-    public static final ResourceLocation CRACKED_BLACKSTONE_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "block/cracked_blackstone");
-    public static final ResourceLocation STONE_BRICKS_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "block/stone_bricks");
-    public static final ResourceLocation MOSSY_STONE_BRICKS_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "block/mossy_stone_bricks");
-    public static final ResourceLocation BRICKS_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "block/bricks");
+    public static final ResourceLocation POLISHED_BASALT_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/polished_basalt.png");
+    public static final ResourceLocation COBBLESTONE_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/cobblestone.png");
+    public static final ResourceLocation MOSSY_COBBLESTONE_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/mossy_cobblestone.png");
+    public static final ResourceLocation DEEPSLATE_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/deepslate.png");
+    public static final ResourceLocation BLACKSTONE_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/blackstone.png");
+    public static final ResourceLocation BRICKS_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/bricks.png");
+    public static final ResourceLocation CRACKED_BLACKSTONE_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/cracked_blackstoe.png");
+    public static final ResourceLocation GILDED_BLACKSTONE_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/gilded_blackstone.png");
+    public static final ResourceLocation MOSSY_STONE_BRICKS_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/mossy_stone_bricks.png");
+    public static final ResourceLocation QUARTZ_BRICKS_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/quartz_bricks.png");
+    public static final ResourceLocation RED_SANDSTONE_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/red_sandstone.png");
+    public static final ResourceLocation SANDSTONE_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/sandstone.png");
+    public static final ResourceLocation STONE_BRICKS_GRAVESTONE_TEXTURE = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/stone_bricks.png");
 
     public static final RegistryObject<Block> TG_ROOTED_DIRT = BLOCKS.register("tg_rooted_dirt", () -> new Block(BlockBehaviour.Properties.copy(Blocks.ROOTED_DIRT).lootFrom(() -> Blocks.ROOTED_DIRT)));
     public static final RegistryObject<Block> TG_TUFF = BLOCKS.register("tg_tuff", () -> new Block(BlockBehaviour.Properties.copy(Blocks.TUFF).lootFrom(() -> Blocks.TUFF)));
@@ -57,30 +61,32 @@ public class TGBlocks {
     public static final RegistryObject<Block> DARK_IRON_TRAPDOOR = BLOCKS.register("dark_iron_trapdoor", () -> new TGTrapDoorBlock(BlockBehaviour.Properties.of(Material.WOOD).requiresCorrectToolForDrops().strength(5.0F).sound(SoundType.METAL).noOcclusion()));
     public static final RegistryObject<Block> DARK_IRON_DOOR = BLOCKS.register("dark_iron_door", () -> new TGDoorBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.RAW_IRON).requiresCorrectToolForDrops().strength(5.0F).sound(SoundType.METAL).noOcclusion()));
     public static final RegistryObject<Block> DARK_IRON_BLOCK = BLOCKS.register("dark_iron_block", () -> new Block(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.RAW_IRON).requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.METAL)));
-    public static final RegistryObject<Block> SKULL_WITH_RIB_CAGE = BLOCKS.register("skull_with_rib_cage", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> LEANING_SKELETON = BLOCKS.register("leaning_skeleton", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> SKULL_PILE = BLOCKS.register("skull_pile", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> LYING_SKELETON = BLOCKS.register("lying_skeleton", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> WITHER_SKULL_WITH_RIB_CAGE = BLOCKS.register("wither_skull_with_rib_cage", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> LEANING_WITHER_SKELETON = BLOCKS.register("leaning_wither_skeleton", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> WITHER_SKULL_PILE = BLOCKS.register("wither_skull_pile", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> LYING_WITHER_SKELETON = BLOCKS.register("lying_wither_skeleton", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> CREEPER_SKELETON = BLOCKS.register("creeper_skeleton", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> SKELETON_HAND = BLOCKS.register("skeleton_hand", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> WITHER_SKELETON_HAND = BLOCKS.register("wither_skeleton_hand", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> BONE_REMAINS = BLOCKS.register("bone_remains", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> WITHER_BONE_REMAINS = BLOCKS.register("wither_bone_remains", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> LATERALLY_LYING_SKELETON = BLOCKS.register("laterally_lying_skeleton", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> LATERALLY_LYING_WITHER_SKELETON = BLOCKS.register("laterally_lying_wither_skeleton", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> SKULL_ON_PIKE = BLOCKS.register("skull_on_pike", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> WITHER_SKULL_ON_PIKE = BLOCKS.register("wither_skull_on_pike", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> TORSO_PILE = BLOCKS.register("torso_pile", () -> new BoneDisplayBlock());
-    public static final RegistryObject<Block> WITHER_TORSO_PILE = BLOCKS.register("wither_torso_pile", () -> new BoneDisplayBlock());
+    public static final RegistryObject<Block> SKULL_WITH_RIB_CAGE = BLOCKS.register("skull_with_rib_cage", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> LEANING_SKELETON = BLOCKS.register("leaning_skeleton", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> SKULL_PILE = BLOCKS.register("skull_pile", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> LYING_SKELETON = BLOCKS.register("lying_skeleton", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> WITHER_SKULL_WITH_RIB_CAGE = BLOCKS.register("wither_skull_with_rib_cage", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> LEANING_WITHER_SKELETON = BLOCKS.register("leaning_wither_skeleton", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> WITHER_SKULL_PILE = BLOCKS.register("wither_skull_pile", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> LYING_WITHER_SKELETON = BLOCKS.register("lying_wither_skeleton", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> CREEPER_SKELETON = BLOCKS.register("creeper_skeleton", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> SKELETON_HAND = BLOCKS.register("skeleton_hand", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> WITHER_SKELETON_HAND = BLOCKS.register("wither_skeleton_hand", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> BONE_REMAINS = BLOCKS.register("bone_remains", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> WITHER_BONE_REMAINS = BLOCKS.register("wither_bone_remains", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> LATERALLY_LYING_SKELETON = BLOCKS.register("laterally_lying_skeleton", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> LATERALLY_LYING_WITHER_SKELETON = BLOCKS.register("laterally_lying_wither_skeleton", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> SKULL_ON_PIKE = BLOCKS.register("skull_on_pike", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> WITHER_SKULL_ON_PIKE = BLOCKS.register("wither_skull_on_pike", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> TORSO_PILE = BLOCKS.register("torso_pile", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> WITHER_TORSO_PILE = BLOCKS.register("wither_torso_pile", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> HANGED_SKELETON = BLOCKS.register("hanged_skeleton", BoneDisplayBlock::new);
+    public static final RegistryObject<Block> HANGED_WITHER_SKELETON = BLOCKS.register("hanged_wither_skeleton", BoneDisplayBlock::new);
 
 
     public static final RegistryObject<Block> VASE_BLOCK = BLOCKS.register("vase_block", () -> new VaseBlock());
 
-    public static final RegistryObject<Block> GRAVESTONE = BLOCKS.register("gravestone", () -> new GravestoneBlock(GRAVESTONE_TEXTURE));
+    public static final RegistryObject<Block> GRAVESTONE = BLOCKS.register("gravestone", () -> new GravestoneBlock(POLISHED_BASALT_GRAVESTONE_TEXTURE));
     public static final RegistryObject<Block> COBBLESTONE_GRAVESTONE = BLOCKS.register("cobblestone_gravestone", () -> new GravestoneBlock(COBBLESTONE_GRAVESTONE_TEXTURE));
     public static final RegistryObject<Block> MOSSY_COBBLESTONE_GRAVESTONE = BLOCKS.register("mossy_cobblestone_gravestone", () -> new GravestoneBlock(MOSSY_COBBLESTONE_GRAVESTONE_TEXTURE));
     public static final RegistryObject<Block> DEEPSLATE_GRAVESTONE = BLOCKS.register("deepslate_gravestone", () -> new GravestoneBlock(DEEPSLATE_GRAVESTONE_TEXTURE));
@@ -89,6 +95,10 @@ public class TGBlocks {
     public static final RegistryObject<Block> STONE_BRICKS_GRAVESTONE = BLOCKS.register("stone_bricks_gravestone", () -> new GravestoneBlock(STONE_BRICKS_GRAVESTONE_TEXTURE));
     public static final RegistryObject<Block> MOSSY_STONE_BRICKS_GRAVESTONE = BLOCKS.register("mossy_stone_bricks_gravestone", () -> new GravestoneBlock(MOSSY_STONE_BRICKS_GRAVESTONE_TEXTURE));
     public static final RegistryObject<Block> BRICKS_GRAVESTONE = BLOCKS.register("bricks_gravestone", () -> new GravestoneBlock(BRICKS_GRAVESTONE_TEXTURE));
+    public static final RegistryObject<Block> SANDSTONE_GRAVESTONE = BLOCKS.register("sandstone_gravestone", () -> new GravestoneBlock(SANDSTONE_GRAVESTONE_TEXTURE));
+    public static final RegistryObject<Block> RED_SANDSTONE_GRAVESTONE = BLOCKS.register("red_sandstone_gravestone", () -> new GravestoneBlock(RED_SANDSTONE_GRAVESTONE_TEXTURE));
+    public static final RegistryObject<Block> GILDED_BLACKSTONE_GRAVESTONE = BLOCKS.register("gilded_blackstone_gravestone", () -> new GravestoneBlock(GILDED_BLACKSTONE_GRAVESTONE_TEXTURE));
+    public static final RegistryObject<Block> QUARTZ_BRICKS_GRAVESTONE = BLOCKS.register("quartz_bricks_gravestone", () -> new GravestoneBlock(QUARTZ_BRICKS_GRAVESTONE_TEXTURE));
 
     public static final RegistryObject<Block> BLACK_URN = BLOCKS.register("black_urn", () -> new UrnBlock());
     public static final RegistryObject<Block> BROWN_URN = BLOCKS.register("brown_urn", () -> new UrnBlock());
@@ -134,15 +144,16 @@ public class TGBlocks {
     public static final RegistryObject<Block> WARPED_COFFIN = BLOCKS.register("warped_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "warped_coffin_lid", "warped_coffin_base"));
     public static final RegistryObject<Block> CRIMSON_COFFIN = BLOCKS.register("crimson_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "crimson_coffin_lid", "crimson_coffin_base"));
 
-    public static final RegistryObject<Block> ALTAR = BLOCKS.register("altar", () -> new AltarBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 3600000.0F).noDrops()));
-    public static final RegistryObject<Block> ALTAR_SIDE = BLOCKS.register("altar_side", () -> new AltarSideBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 1200.0F).noDrops()));
-    public static final RegistryObject<Block> ALTAR_CORNER = BLOCKS.register("altar_corner", () -> new AltarCornerBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 1200.0F).noDrops()));
-    public static final RegistryObject<Block> ALTAR_CENTER = BLOCKS.register("altar_center", () -> new AltarCenterBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 1200.0F).noDrops()));
+    public static final RegistryObject<Block> ALTAR = BLOCKS.register("altar", () -> new AltarBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 3600000.0F).noLootTable()));
+    public static final RegistryObject<Block> ALTAR_SIDE = BLOCKS.register("altar_side", () -> new AltarSideBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 1200.0F).noLootTable()));
+    public static final RegistryObject<Block> ALTAR_CORNER = BLOCKS.register("altar_corner", () -> new AltarCornerBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 1200.0F).noLootTable()));
+    public static final RegistryObject<Block> ALTAR_CENTER = BLOCKS.register("altar_center", () -> new AltarCenterBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 1200.0F).noLootTable()));
 
     public static final RegistryObject<Block> LOWER_BONE_STAFF = BLOCKS.register("lower_bone_staff", OminousBoneStaffFragment::new);
     public static final RegistryObject<Block> MIDDLE_BONE_STAFF = BLOCKS.register("middle_bone_staff", OminousBoneStaffFragment::new);
     public static final RegistryObject<Block> UPPER_BONE_STAFF = BLOCKS.register("upper_bone_staff", OminousBoneStaffFragment::new);
 
+    public static final RegistryObject<Block> OSSUARY = BLOCKS.register("ossuary", () -> new OssuaryBlock(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().noOcclusion().strength(3.5F)));
 
 
     public static List<Block> getCoffins() {

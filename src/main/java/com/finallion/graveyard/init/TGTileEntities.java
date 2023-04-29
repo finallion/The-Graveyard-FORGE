@@ -15,7 +15,10 @@ import java.util.function.Supplier;
 
 public class TGTileEntities {
 
-    public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, TheGraveyard.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, TheGraveyard.MOD_ID);
+
+    public static final RegistryObject<BlockEntityType<OssuaryBlockEntity>> OSSUARY_BLOCK_ENTITY = register("ossuary_block_entity", () -> BlockEntityType.Builder.of(OssuaryBlockEntity::new,
+            TGBlocks.OSSUARY.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<GravestoneBlockEntity>> GRAVESTONE_BLOCK_ENTITY = register("gravestone_block_entity", () -> BlockEntityType.Builder.of(GravestoneBlockEntity::new,
             TGBlocks.GRAVESTONE.get(),
@@ -26,7 +29,11 @@ public class TGTileEntities {
             TGBlocks.CRACKED_BLACKSTONE_GRAVESTONE.get(),
             TGBlocks.STONE_BRICKS_GRAVESTONE.get(),
             TGBlocks.MOSSY_STONE_BRICKS_GRAVESTONE.get(),
-            TGBlocks.BRICKS_GRAVESTONE.get()
+            TGBlocks.BRICKS_GRAVESTONE.get(),
+            TGBlocks.QUARTZ_BRICKS_GRAVESTONE.get(),
+            TGBlocks.RED_SANDSTONE_GRAVESTONE.get(),
+            TGBlocks.SANDSTONE_GRAVESTONE.get(),
+            TGBlocks.GILDED_BLACKSTONE_GRAVESTONE.get()
     ).build(null));
 
     public static final RegistryObject<BlockEntityType<UrnBlockEntity>> URN_BLOCK_ENTITY = register("urn_block_entity", () -> BlockEntityType.Builder.of(UrnBlockEntity::new,  TGBlocks.BLACK_URN.get(),

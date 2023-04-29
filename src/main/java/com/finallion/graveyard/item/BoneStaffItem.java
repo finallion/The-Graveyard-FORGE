@@ -96,9 +96,9 @@ public class BoneStaffItem extends Item {
 
             if (!stack.getTag().contains("OwnerUUID")) {
                 stack.getOrCreateTag().putUUID("OwnerUUID", player.getUUID());
-                player.displayClientMessage(new TextComponent("I hear and obey..."), true);
+                player.displayClientMessage(Component.translatable("entity.graveyard.ghouling.spawn"), true);
             } else {
-                player.displayClientMessage(new TextComponent("Death... is a mere inconvenience."), true);
+                player.displayClientMessage(Component.translatable("entity.graveyard.ghouling.respawn"), true);
             }
 
             /* END TAG INPUT */
@@ -121,7 +121,7 @@ public class BoneStaffItem extends Item {
         if (!world.isClientSide) {
             if (nbt != null && nbt.contains("GhoulingUUID") && nbt.contains("OwnerUUID")) {
                 if (user.getUUID().compareTo(nbt.getUUID("OwnerUUID")) != 0) { // case wrong owner
-                    user.displayClientMessage(new TextComponent("I don't obey your orders, you are no master of mine!"), true);
+                    user.displayClientMessage(Component.translatable("entity.graveyard.ghouling.obey"), true);
                     return InteractionResultHolder.fail(stack);
                 } else {
                     UUID ghoulingUUID = nbt.getUUID("GhoulingUUID");
@@ -130,6 +130,7 @@ public class BoneStaffItem extends Item {
                         if (user.isCrouching()) {
                             ghouling.setTarget(null);
                             ghouling.setAggressive(false);
+                            ghouling.setTeleportTimer(15);
                             ghouling.teleportTo(user.getX(), user.getY(), user.getZ());
                         } else {
                             Predicate<Entity> predicate = entity -> {
@@ -158,6 +159,7 @@ public class BoneStaffItem extends Item {
                                 if (entity instanceof LivingEntity livingEntity) {
                                     ghouling.setTarget(livingEntity);
                                     ghouling.setAggressive(true);
+                                    ghouling.setSitting(false);
                                 }
                             }
                         }

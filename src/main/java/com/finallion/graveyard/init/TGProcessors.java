@@ -21,18 +21,13 @@ public class TGProcessors {
 
     public static StructureProcessorType<RemoveWaterloggedProcessor> REMOVE_WATERLOGGED = () -> RemoveWaterloggedProcessor.CODEC;
     public static StructureProcessorType<SwitchSpawnerProcessor> SWITCH_SPAWNER = () -> SwitchSpawnerProcessor.CODEC;
+    public static StructureProcessorType<RemoveWaterloggedCryptProcessor> REMOVE_WATERLOGGED_CRYPT = () -> RemoveWaterloggedCryptProcessor.CODEC;
 
-    public static final Holder<StructureProcessorList> WATERLOGGED_LIST = BuiltinRegistries.m_206388_(BuiltinRegistries.PROCESSOR_LIST,
-            new ResourceLocation(TheGraveyard.MOD_ID, "waterlogged_processor_list"),
-            new StructureProcessorList(ImmutableList.of(new RemoveWaterloggedProcessor())));
-
-    public static final Holder<StructureProcessorList> SWITCH_SPAWNER_LIST = BuiltinRegistries.m_206388_(BuiltinRegistries.PROCESSOR_LIST,
-            new ResourceLocation(TheGraveyard.MOD_ID, "switch_spawner_processor_list"),
-            new StructureProcessorList(ImmutableList.of(new SwitchSpawnerProcessor())));
 
     public static void registerProcessors() {
         Registry.register(Registry.STRUCTURE_PROCESSOR, new ResourceLocation(TheGraveyard.MOD_ID, "remove_waterlogged_processor"), REMOVE_WATERLOGGED);
         Registry.register(Registry.STRUCTURE_PROCESSOR, new ResourceLocation(TheGraveyard.MOD_ID, "switch_spawner_processor"), SWITCH_SPAWNER);
+        Registry.register(Registry.STRUCTURE_PROCESSOR, new ResourceLocation(TheGraveyard.MOD_ID, "waterlogged_crypt_processor"), REMOVE_WATERLOGGED_CRYPT);
 
     }
 }
