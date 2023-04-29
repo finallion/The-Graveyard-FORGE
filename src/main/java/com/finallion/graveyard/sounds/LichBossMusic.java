@@ -19,7 +19,7 @@ public class LichBossMusic extends AbstractTickableSoundInstance {
         this.attenuation = Attenuation.NONE;
         this.looping = true;
         this.delay = 0;
-        this.volume = 4.0F;
+        this.volume = 4.5F;
         this.x = boss.getX();
         this.y = boss.getY();
         this.z = boss.getZ();
