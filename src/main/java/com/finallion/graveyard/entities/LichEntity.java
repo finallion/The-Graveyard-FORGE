@@ -1021,56 +1021,56 @@ public class LichEntity extends Monster implements IAnimatable {
     /* SOUNDS */
     ///////////////////////
     private void playSpawnSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_SPAWN.get(), SoundSource.HOSTILE, 15.0F, 0.75F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_SPAWN.get(), SoundSource.HOSTILE, 15.0F, 1.0F);
     }
 
     public void playAttackSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_MELEE.get(), SoundSource.HOSTILE, 10.0F, 0.75F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_MELEE.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
     }
 
     public void playHealSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CAST_TELEPORT.get(), SoundSource.HOSTILE, 10.0F, 0.75F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CAST_TELEPORT.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
     }
 
     private void playCorpseSpellSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CORPSE_SPELL.get(), SoundSource.HOSTILE, 10.0F, 0.75F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CORPSE_SPELL.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
     }
 
     private void playStartPhaseTwoSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_PHASE_02.get(), SoundSource.HOSTILE, 10.0F, 0.75F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_PHASE_02.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
     }
 
     private void playStartPhaseThreeSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_PHASE_03.get(), SoundSource.HOSTILE, 10.0F, 0.75F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_PHASE_03.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
     }
 
     private void playStartPhaseThreeAttackSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_PHASE_03_ATTACK.get(), SoundSource.HOSTILE, 10.0F, 0.75F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_PHASE_03_ATTACK.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
     }
 
     private void playDeathSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_DEATH.get(), SoundSource.HOSTILE, 10.0F, 0.75F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_DEATH.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
     }
 
     public void playScareSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_SCARE.get(), SoundSource.HOSTILE, 10.0F, 0.75F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_SCARE.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
     }
 
     private void playHuntSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_HUNT.get(), SoundSource.HOSTILE, 10.0F, 0.75F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_HUNT.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
     }
 
     private void playShootSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CAST_SKULL.get(), SoundSource.HOSTILE, 10.0F, 0.75F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CAST_SKULL.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
     }
 
     private void playLevitationSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CAST_LEVITATION.get(), SoundSource.HOSTILE, 10.0F, 0.75F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CAST_LEVITATION.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
     }
 
     @Override
     public void playAmbientSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_IDLE.get(), SoundSource.HOSTILE, 15.0F, 0.75F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_IDLE.get(), SoundSource.HOSTILE, 15.0F, 1.0F);
     }
 
     @Override
