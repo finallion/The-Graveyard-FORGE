@@ -15,7 +15,7 @@ The Graveyard adds new structures, bosses, mobs and blocks to your minecraft wor
 [[dependencies.graveyard]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[40.0.12,)" #mandatory
+    versionRange="[40.2.0,)" #mandatory
     ordering="NONE"
     side="BOTH"
 [[dependencies.graveyard]]
