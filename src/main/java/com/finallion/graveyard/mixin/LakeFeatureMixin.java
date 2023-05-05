@@ -2,10 +2,6 @@ package com.finallion.graveyard.mixin;
 
 
 import com.finallion.graveyard.init.TGConfiguredStructureFeatures;
-import com.finallion.graveyard.init.TGStructureFeatures;
-import com.finallion.graveyard.world.structures.AbstractGraveyardStructure;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
@@ -38,7 +34,7 @@ public class LakeFeatureMixin {
             ChunkAccess chunkAccess = context.level().getChunk(context.origin());
             StructureFeatureManager structureFeatureManager = ((WorldGenRegionAccessor) context.level()).getStructureFeatureManager();
 
-            for (ConfiguredStructureFeature<?, ?> configuredStructureFeature : TGConfiguredStructureFeatures.MOD_STRUCTURE_FEATURES) {
+            for (ConfiguredStructureFeature<?, ?> configuredStructureFeature : TGConfiguredStructureFeatures.structures) {
                 StructureStart startForFeature = structureFeatureManager.m_207802_(sectionPos, configuredStructureFeature, chunkAccess);
                 if (startForFeature != null && startForFeature.isValid()) {
                     info.setReturnValue(false);

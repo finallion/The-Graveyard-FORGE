@@ -5,7 +5,6 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.SectionPos;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
@@ -44,7 +43,7 @@ public class RemoveWaterloggedCryptProcessor extends StructureProcessor {
 
             LevelChunkSection currChunkSection = currentChunk.getSection(sectionYIndex);
 
-            if (getFluidState(world, infoIn2.pos).is(FluidTags.WATER)) {
+            if (getFluidState(world, infoIn2.pos).is(Fluids.WATER)) {
                 setBlockState(currChunkSection, infoIn2.pos, infoIn2.state);
             }
 
@@ -61,7 +60,7 @@ public class RemoveWaterloggedCryptProcessor extends StructureProcessor {
                     currChunkSection = currentChunk.getSection(sectionYIndex);
                 }
 
-                if (getFluidState(currChunkSection, mutable).is(FluidTags.WATER)) {
+                if (getFluidState(currChunkSection, mutable).is(Fluids.WATER)) {
                     Optional<BlockState> blockState = getBlockState(currChunkSection, mutable);
                     if (blockState.isPresent() && !(blockState.get().hasProperty(BlockStateProperties.WATERLOGGED) && blockState.get().getValue(BlockStateProperties.WATERLOGGED))) {
                         setBlockState(currChunkSection, mutable, Blocks.DEEPSLATE.defaultBlockState());

@@ -1,10 +1,7 @@
 package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
-import com.finallion.graveyard.blockentities.BrazierBlockEntity;
-import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
-import com.finallion.graveyard.blockentities.SarcophagusBlockEntity;
-import com.finallion.graveyard.blockentities.UrnBlockEntity;
+import com.finallion.graveyard.blockentities.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -15,7 +12,7 @@ import java.util.function.Supplier;
 
 public class TGTileEntities {
 
-    public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, TheGraveyard.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, TheGraveyard.MOD_ID);
 
     public static final RegistryObject<BlockEntityType<OssuaryBlockEntity>> OSSUARY_BLOCK_ENTITY = register("ossuary_block_entity", () -> BlockEntityType.Builder.of(OssuaryBlockEntity::new,
             TGBlocks.OSSUARY.get()).build(null));

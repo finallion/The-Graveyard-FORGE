@@ -1,8 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "#forge:is_cold/overworld",
-    "#forge:is_snowy",
-    "minecraft:snowy_taiga"
-  ]
-}

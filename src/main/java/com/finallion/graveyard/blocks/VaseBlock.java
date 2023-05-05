@@ -31,8 +31,6 @@ public class VaseBlock extends Block implements SimpleWaterloggedBlock {
     private static final VoxelShape VASE_SHAPE_THREE;
     private static final VoxelShape VASE_SHAPE_FOUR;
 
-
-
     public VaseBlock() {
         super(BlockBehaviour.Properties.of(Material.GLASS).instabreak().noCollission().noOcclusion().sound(SoundType.GLASS));
         this.registerDefaultState(this.getStateDefinition().any().setValue(VASES, 1).setValue(WATERLOGGED, false));
@@ -53,8 +51,6 @@ public class VaseBlock extends Block implements SimpleWaterloggedBlock {
         }
     }
 
-
-
     public FluidState getFluidState(BlockState state) {
         return (Boolean)state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
@@ -62,7 +58,6 @@ public class VaseBlock extends Block implements SimpleWaterloggedBlock {
     public boolean canBeReplaced(BlockState p_152814_, BlockPlaceContext p_152815_) {
         return !p_152815_.isSecondaryUseActive() && p_152815_.getItemInHand().getItem() == this.asItem() && p_152814_.getValue(VASES) < 4 ? true : super.canBeReplaced(p_152814_, p_152815_);
     }
-
 
     public VoxelShape getCollisionShape(BlockState state, BlockGetter p_220071_2_, BlockPos p_220071_3_, CollisionContext p_220071_4_) {
         switch(state.getValue(VASES)) {

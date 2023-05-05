@@ -114,7 +114,7 @@
   },
   "entity.ghouling.spawn": {
     "sounds": [
-      "minecraft:mob/warden/dig"
+      "graveyard:entity/ghouling/spawn"
     ],
     "subtitle": "subtitles.entity.graveyard.ghouling.spawn"
   },
@@ -330,7 +330,7 @@
   },
   "block.coffin.close": {
     "sounds": [
-      "minecraft:block/chest/close1",
+      "minecraft:block/chest/close",
       "minecraft:block/chest/close2",
       "minecraft:block/chest/close3"
     ],

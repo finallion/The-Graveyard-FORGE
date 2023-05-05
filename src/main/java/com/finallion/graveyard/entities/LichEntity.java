@@ -21,6 +21,7 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
@@ -320,7 +321,7 @@ public class LichEntity extends Monster implements IAnimatable {
 
     @Override
     public void handleEntityEvent(byte id) {
-        if (id == MUSIC_PLAY_ID && getMusicDelay() == 85) BossMusicPlayer.playBossMusic(this);
+        if (id == MUSIC_PLAY_ID && getMusicDelay() == 93) BossMusicPlayer.playBossMusic(this);
         else if (id == MUSIC_STOP_ID) BossMusicPlayer.stopBossMusic(this);
         else super.handleEntityEvent(id);
     }
@@ -369,7 +370,7 @@ public class LichEntity extends Monster implements IAnimatable {
         }
 
         if (getHealTimer() == 1 && getPhase() == 1) {
-            getLevel().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.WARDEN_SONIC_BOOM, SoundSource.HOSTILE, 3.0F, -1.0F);
+            //getLevel().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.WARDEN_SONIC_BOOM, SoundSource.HOSTILE, 3.0F, -1.0F);
             for (int i = 0; i < 20; i++) {
                 MathUtil.createParticleSpiral(this.getLevel(), this.getX() + rotation.x * 3.5, this.getY() - 0.5D, this.getZ() + rotation.z * 3.5, random.nextDouble() - random.nextDouble(), random.nextDouble() - random.nextDouble(), random.nextDouble() - random.nextDouble(), 350, ParticleTypes.SOUL_FIRE_FLAME, random);
             }
@@ -400,7 +401,7 @@ public class LichEntity extends Monster implements IAnimatable {
             level.playSound(null, this.blockPosition(), SoundEvents.SOUL_ESCAPE, SoundSource.HOSTILE, 4.0F, -10.0F);
         }
 
-        if (getMusicDelay() < 85) {
+        if (getMusicDelay() < 93) {
             setMusicDelay(getMusicDelay() + 1);
         }
 
@@ -1016,56 +1017,56 @@ public class LichEntity extends Monster implements IAnimatable {
     /* SOUNDS */
     ///////////////////////
     private void playSpawnSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_SPAWN.get(), SoundSource.HOSTILE, 15.0F, 1.0F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_SPAWN.get(), SoundSource.HOSTILE, 13.0F, 1.0F);
     }
 
     public void playAttackSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_MELEE.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_MELEE.get(), SoundSource.HOSTILE, 9.0F, 1.0F);
     }
 
     public void playHealSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CAST_TELEPORT.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CAST_TELEPORT.get(), SoundSource.HOSTILE, 9.0F, 1.0F);
     }
 
     private void playCorpseSpellSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CORPSE_SPELL.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CORPSE_SPELL.get(), SoundSource.HOSTILE, 9.0F, 1.0F);
     }
 
     private void playStartPhaseTwoSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_PHASE_02.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_PHASE_02.get(), SoundSource.HOSTILE, 9.0F, 1.0F);
     }
 
     private void playStartPhaseThreeSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_PHASE_03.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_PHASE_03.get(), SoundSource.HOSTILE, 9.0F, 1.0F);
     }
 
     private void playStartPhaseThreeAttackSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_PHASE_03_ATTACK.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_PHASE_03_ATTACK.get(), SoundSource.HOSTILE, 9.0F, 1.0F);
     }
 
     private void playDeathSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_DEATH.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_DEATH.get(), SoundSource.HOSTILE, 9.0F, 1.0F);
     }
 
     public void playScareSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_SCARE.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_SCARE.get(), SoundSource.HOSTILE, 9.0F, 1.0F);
     }
 
     private void playHuntSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_HUNT.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_HUNT.get(), SoundSource.HOSTILE, 9.0F, 1.0F);
     }
 
     private void playShootSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CAST_SKULL.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CAST_SKULL.get(), SoundSource.HOSTILE, 9.0F, 1.0F);
     }
 
     private void playLevitationSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CAST_LEVITATION.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_CAST_LEVITATION.get(), SoundSource.HOSTILE, 9.0F, 1.0F);
     }
 
     @Override
     public void playAmbientSound() {
-        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_IDLE.get(), SoundSource.HOSTILE, 15.0F, 1.0F);
+        this.level.playSound(null, this.blockPosition(), TGSounds.LICH_IDLE.get(), SoundSource.HOSTILE, 13.0F, 1.0F);
     }
 
 
@@ -1343,7 +1344,7 @@ public class LichEntity extends Monster implements IAnimatable {
 
                         int amount = random.nextInt(GraveyardConfig.COMMON.maxAmountSkullsInShootSkullSpell.get()) + 2;
                         for (int i = 0; i < amount; ++i) {
-                            SkullEntity devSkull = new SkullEntity(this.mob.level, this.mob, this.mob.getRandom().triangle(e, 2.297D * h), f, this.mob.getRandom().triangle(g, 2.297D * h));
+                            SkullEntity devSkull = new SkullEntity(this.mob.level, this.mob, e + this.mob.getRandom().nextGaussian() * h, f, g + this.mob.getRandom().nextGaussian() * h);
                             devSkull.moveTo(this.mob.getX() - vec3d3.x * 0.5, this.mob.getY(0.5D) + 1.25D, this.mob.getZ() - vec3d3.z * 0.5D);
                             world.addFreshEntity(devSkull);
                         }

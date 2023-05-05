@@ -176,6 +176,10 @@ public class GravestoneBlockEntityRenderer implements BlockEntityRenderer<Graves
         RenderType layer7 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/stone_bricks.png"));
         RenderType layer8 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/mossy_stone_bricks.png"));
         RenderType layer9 = RenderType.entitySolid(new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/gravestone/bricks.png"));
+        RenderType layer10 = RenderType.entitySolid(TGBlocks.RED_SANDSTONE_GRAVESTONE_TEXTURE);
+        RenderType layer11 = RenderType.entitySolid(TGBlocks.SANDSTONE_GRAVESTONE_TEXTURE);
+        RenderType layer12 = RenderType.entitySolid(TGBlocks.GILDED_BLACKSTONE_GRAVESTONE_TEXTURE);
+        RenderType layer13 = RenderType.entitySolid(TGBlocks.QUARTZ_BRICKS_GRAVESTONE_TEXTURE);
         LAYERS.put(TGBlocks.GRAVESTONE.get(), layer1);
         LAYERS.put(TGBlocks.COBBLESTONE_GRAVESTONE.get(), layer2);
         LAYERS.put(TGBlocks.MOSSY_COBBLESTONE_GRAVESTONE.get(), layer3);
@@ -185,7 +189,10 @@ public class GravestoneBlockEntityRenderer implements BlockEntityRenderer<Graves
         LAYERS.put(TGBlocks.STONE_BRICKS_GRAVESTONE.get(), layer7);
         LAYERS.put(TGBlocks.MOSSY_STONE_BRICKS_GRAVESTONE.get(), layer8);
         LAYERS.put(TGBlocks.BRICKS_GRAVESTONE.get(), layer9);
-
+        LAYERS.put(TGBlocks.RED_SANDSTONE_GRAVESTONE.get(), layer10);
+        LAYERS.put(TGBlocks.SANDSTONE_GRAVESTONE.get(), layer11);
+        LAYERS.put(TGBlocks.GILDED_BLACKSTONE_GRAVESTONE.get(), layer12);
+        LAYERS.put(TGBlocks.QUARTZ_BRICKS_GRAVESTONE.get(), layer13);
     }
 
 

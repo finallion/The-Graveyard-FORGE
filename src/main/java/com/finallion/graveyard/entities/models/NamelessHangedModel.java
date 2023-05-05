@@ -8,17 +8,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class NamelessHangedModel extends AnimatedGeoModel<NamelessHangedEntity> {
 
     @Override
-    public ResourceLocation getModelResource(NamelessHangedEntity object) {
+    public ResourceLocation getModelLocation(NamelessHangedEntity object) {
         return new ResourceLocation(TheGraveyard.MOD_ID, "geo/nameless_hanged.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureResource(NamelessHangedEntity object) {
+    public ResourceLocation getTextureLocation(NamelessHangedEntity object) {
         return new ResourceLocation(TheGraveyard.MOD_ID,"textures/entity/nameless_hanged.png");
     }
 
     @Override
-    public ResourceLocation getAnimationResource(NamelessHangedEntity animatable) {
+    public ResourceLocation getAnimationFileLocation(NamelessHangedEntity animatable) {
         return new ResourceLocation(TheGraveyard.MOD_ID, "animations/nameless_hanged/nameless_hanged.animation.json");
     }
 }

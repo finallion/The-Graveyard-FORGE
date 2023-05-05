@@ -6,7 +6,7 @@ import com.finallion.graveyard.entities.GraveyardMinionEntity;
 import com.finallion.graveyard.init.TGEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -39,8 +39,6 @@ public class BoneStaffItem extends Item {
         super(new Item.Properties().stacksTo(1).tab(TheGraveyard.GROUP));
         this.ghoulVariant = ghoulVariant;
     }
-
-
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
@@ -96,9 +94,9 @@ public class BoneStaffItem extends Item {
 
             if (!stack.getTag().contains("OwnerUUID")) {
                 stack.getOrCreateTag().putUUID("OwnerUUID", player.getUUID());
-                player.displayClientMessage(Component.translatable("entity.graveyard.ghouling.spawn"), true);
+                player.displayClientMessage(new TranslatableComponent("entity.graveyard.ghouling.spawn"), true);
             } else {
-                player.displayClientMessage(Component.translatable("entity.graveyard.ghouling.respawn"), true);
+                player.displayClientMessage(new TranslatableComponent("entity.graveyard.ghouling.respawn"), true);
             }
 
             /* END TAG INPUT */
@@ -121,7 +119,7 @@ public class BoneStaffItem extends Item {
         if (!world.isClientSide) {
             if (nbt != null && nbt.contains("GhoulingUUID") && nbt.contains("OwnerUUID")) {
                 if (user.getUUID().compareTo(nbt.getUUID("OwnerUUID")) != 0) { // case wrong owner
-                    user.displayClientMessage(Component.translatable("entity.graveyard.ghouling.obey"), true);
+                    user.displayClientMessage(new TranslatableComponent("entity.graveyard.ghouling.obey"), true);
                     return InteractionResultHolder.fail(stack);
                 } else {
                     UUID ghoulingUUID = nbt.getUUID("GhoulingUUID");

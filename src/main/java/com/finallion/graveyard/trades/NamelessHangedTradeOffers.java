@@ -5,10 +5,9 @@ import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
@@ -18,10 +17,12 @@ import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Random;
 
 
 //@Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -54,7 +55,7 @@ public class NamelessHangedTradeOffers {
                         new SellItemFactory(Items.BLACKSTONE, 12, 32, 6, 1),
                         new SellItemFactory(Items.GILDED_BLACKSTONE, 8, 2, 6, 1),
                         new SellItemFactory(Items.CLOCK, 6, 1, 6, 1),
-                        new SellItemFactory(Items.RECOVERY_COMPASS, 6, 1, 6, 1),
+                        //new SellItemFactory(Items.RECOVERY_COMPASS, 6, 1, 6, 1),
                         new SellItemFactory(Items.BLACK_SHULKER_BOX, 32, 1, 1, 1),
                         new SellEnchantedToolFactory(Items.DIAMOND_BOOTS, 32, 1, 1, 1),
                         new SellEnchantedToolFactory(Items.DIAMOND_CHESTPLATE, 32, 1, 1, 1),
@@ -86,7 +87,7 @@ public class NamelessHangedTradeOffers {
                         new SellItemFactory(Items.CRIMSON_FUNGUS, 2, 1, 12, 1),
                         new SellItemFactory(Items.DARK_OAK_LOG, 12, 32, 6, 1),
                         new SellItemFactory(Items.ANCIENT_DEBRIS, 16, 1, 1, 1),
-                        new SellItemFactory(Items.MUD, 8, 32, 6, 1),
+                        //new SellItemFactory(Items.MUD, 8, 32, 6, 1),
                         new SellItemFactory(Items.SOUL_SAND, 8, 16, 6, 1),
                         new SellItemFactory(Items.SOUL_SOIL, 8, 16, 6, 1),
                         new SellItemFactory(Items.NETHER_BRICK, 1, 1, 24, 1),
@@ -134,20 +135,20 @@ public class NamelessHangedTradeOffers {
             this.multiplier = multiplier;
         }
 
-        public MerchantOffer getOffer(Entity entity, RandomSource random) {
+        public MerchantOffer getOffer(Entity entity, Random random) {
             return new MerchantOffer(new ItemStack(TGItems.CORRUPTION.get(), this.price), new ItemStack(this.sell.getItem(), this.count), this.maxUses, this.experience, this.multiplier);
         }
     }
 
     public static class SellMapFactory implements VillagerTrades.ItemListing {
         private final int price;
-        private final TagKey<Structure> structure;
+        private final TagKey<ConfiguredStructureFeature<?, ?>> structure;
         private final String nameKey;
         private final MapDecoration.Type iconType;
         private final int maxUses;
         private final int experience;
 
-        public SellMapFactory(int price, TagKey<Structure> structure, String nameKey, MapDecoration.Type iconType, int maxUses, int experience) {
+        public SellMapFactory(int price, TagKey<ConfiguredStructureFeature<?, ?>> structure, String nameKey, MapDecoration.Type iconType, int maxUses, int experience) {
             this.price = price;
             this.structure = structure;
             this.nameKey = nameKey;
@@ -157,17 +158,17 @@ public class NamelessHangedTradeOffers {
         }
 
         @Nullable
-        public MerchantOffer getOffer(Entity entity, RandomSource random) {
+        public MerchantOffer getOffer(Entity entity, Random random) {
             if (!(entity.level instanceof ServerLevel)) {
                 return null;
             } else {
                 ServerLevel serverWorld = (ServerLevel)entity.level;
-                BlockPos blockPos = serverWorld.findNearestMapStructure(this.structure, entity.blockPosition(), 100, true);
+                BlockPos blockPos = serverWorld.m_207561_(this.structure, entity.blockPosition(), 100, true);
                 if (blockPos != null) {
                     ItemStack itemStack = MapItem.create(serverWorld, blockPos.getX(), blockPos.getZ(), (byte)2, true, true);
                     MapItem.renderBiomePreviewMap(serverWorld, itemStack);
                     MapItemSavedData.addTargetDecoration(itemStack, blockPos, "+", this.iconType);
-                    itemStack.setHoverName(Component.translatable(this.nameKey));
+                    itemStack.setHoverName(new TranslatableComponent(this.nameKey));
                     return new MerchantOffer(new ItemStack(TGItems.CORRUPTION.get(), this.price), new ItemStack(Items.COMPASS), itemStack, this.maxUses, this.experience, 0.2F);
                 } else {
                     return null;
@@ -195,7 +196,7 @@ public class NamelessHangedTradeOffers {
             this.multiplier = multiplier;
         }
 
-        public MerchantOffer getOffer(Entity entity, RandomSource random) {
+        public MerchantOffer getOffer(Entity entity, Random random) {
             int i = 5 + random.nextInt(15);
             ItemStack itemStack = EnchantmentHelper.enchantItem(random, new ItemStack(this.tool.getItem()), i, false);
             int j = Math.min(this.basePrice, 64);

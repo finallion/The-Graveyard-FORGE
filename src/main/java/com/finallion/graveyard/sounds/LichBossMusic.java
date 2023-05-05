@@ -5,21 +5,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 
 public class LichBossMusic extends AbstractTickableSoundInstance {
     public LichEntity boss;
     private int ticksExisted = 0;
     public final SoundEvent soundEvent;
 
-    public LichBossMusic(SoundEvent sound, LichEntity boss, RandomSource random) {
-        super(sound, SoundSource.MUSIC, random);
+    public LichBossMusic(SoundEvent sound, LichEntity boss) {
+        super(sound, SoundSource.MUSIC);
         this.boss = boss;
         this.soundEvent = sound;
         this.attenuation = Attenuation.NONE;
         this.looping = true;
         this.delay = 0;
-        this.volume = 4.0F;
+        this.volume = 4.5F;
         this.x = boss.getX();
         this.y = boss.getY();
         this.z = boss.getZ();

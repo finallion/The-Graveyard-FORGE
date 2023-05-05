@@ -2,6 +2,7 @@ package com.finallion.graveyard.entities;
 
 import com.finallion.graveyard.blocks.BrazierBlock;
 import com.finallion.graveyard.init.TGAdvancements;
+import com.finallion.graveyard.init.TGSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;

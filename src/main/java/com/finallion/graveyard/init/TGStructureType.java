@@ -1,11 +1,6 @@
 package com.finallion.graveyard.init;
 
-import com.finallion.graveyard.world.structures.TGJigsawStructure;
-import com.mojang.serialization.Codec;
-import net.minecraft.core.Registry;
-import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructureType;
-
+/*
 public class TGStructureType<S extends Structure> {
     public static void init() {
     }
@@ -18,3 +13,5 @@ public class TGStructureType<S extends Structure> {
         });
     }
 }
+
+ */

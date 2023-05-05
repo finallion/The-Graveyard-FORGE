@@ -8,7 +8,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public abstract class CarvingRecipe implements Recipe<Container> {
     protected final Ingredient ingredient;
@@ -61,7 +65,7 @@ public abstract class CarvingRecipe implements Recipe<Container> {
         return this.result.copy();
     }
 
-    public static class Serializer<T extends CarvingRecipe> implements RecipeSerializer<T> {
+    public static class Serializer<T extends CarvingRecipe> extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<T>  {
         final CarvingRecipe.Serializer.SingleItemMaker<T> factory;
 
         protected Serializer(CarvingRecipe.Serializer.SingleItemMaker<T> p_44435_) {

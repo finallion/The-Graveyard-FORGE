@@ -144,10 +144,10 @@ public class TGBlocks {
     public static final RegistryObject<Block> WARPED_COFFIN = BLOCKS.register("warped_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "warped_coffin_lid", "warped_coffin_base"));
     public static final RegistryObject<Block> CRIMSON_COFFIN = BLOCKS.register("crimson_coffin", () -> new SarcophagusBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().strength(1.0F), true, "crimson_coffin_lid", "crimson_coffin_base"));
 
-    public static final RegistryObject<Block> ALTAR = BLOCKS.register("altar", () -> new AltarBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 3600000.0F).noLootTable()));
-    public static final RegistryObject<Block> ALTAR_SIDE = BLOCKS.register("altar_side", () -> new AltarSideBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 1200.0F).noLootTable()));
-    public static final RegistryObject<Block> ALTAR_CORNER = BLOCKS.register("altar_corner", () -> new AltarCornerBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 1200.0F).noLootTable()));
-    public static final RegistryObject<Block> ALTAR_CENTER = BLOCKS.register("altar_center", () -> new AltarCenterBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 1200.0F).noLootTable()));
+    public static final RegistryObject<Block> ALTAR = BLOCKS.register("altar", () -> new AltarBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 3600000.0F).noDrops()));
+    public static final RegistryObject<Block> ALTAR_SIDE = BLOCKS.register("altar_side", () -> new AltarSideBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 1200.0F).noDrops()));
+    public static final RegistryObject<Block> ALTAR_CORNER = BLOCKS.register("altar_corner", () -> new AltarCornerBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 1200.0F).noDrops()));
+    public static final RegistryObject<Block> ALTAR_CENTER = BLOCKS.register("altar_center", () -> new AltarCenterBlock(BlockBehaviour.Properties.of(Material.STONE).strength(-1.0F, 1200.0F).noDrops()));
 
     public static final RegistryObject<Block> LOWER_BONE_STAFF = BLOCKS.register("lower_bone_staff", OminousBoneStaffFragment::new);
     public static final RegistryObject<Block> MIDDLE_BONE_STAFF = BLOCKS.register("middle_bone_staff", OminousBoneStaffFragment::new);

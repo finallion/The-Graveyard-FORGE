@@ -10,12 +10,15 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class TGRecipeTypes {
 
-    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, TheGraveyard.MOD_ID);
+    //public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, TheGraveyard.MOD_ID);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, TheGraveyard.MOD_ID);
 
-    public final static RegistryObject<RecipeType<OssuaryRecipe>> OSSUARY_CARVING = RECIPE_TYPES.register("ossuary_carving", () ->
+    /*
+    public final static RegistryObject<RecipeType<OssuaryRecipe>> OSSUARY_CARVING = RecipeType.register("ossuary_carving", () ->
             Type.INSTANCE
     );
+
+     */
 
     public final static RegistryObject<RecipeSerializer<OssuaryRecipe>> OSSUARY_CARVING_SERIALIZER = RECIPE_SERIALIZERS.register("ossuary_carving", () ->
             new CarvingRecipe.Serializer<>(OssuaryRecipe::new)

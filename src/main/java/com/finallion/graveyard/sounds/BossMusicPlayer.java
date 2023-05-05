@@ -26,7 +26,7 @@ public class BossMusicPlayer {
                 }
             } else {
                 if (entity.canPlayerHearMusic(player)) {
-                    music = new LichBossMusic(soundEvent, entity, entity.getRandom());
+                    music = new LichBossMusic(soundEvent, entity);
                 } else {
                     music = null;
                 }

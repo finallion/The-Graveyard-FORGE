@@ -1,12 +1,15 @@
 package com.finallion.graveyard;
 
 import com.finallion.graveyard.client.TheGraveyardClient;
+import com.finallion.graveyard.config.CommonConfig;
 import com.finallion.graveyard.config.GraveyardConfig;
-import com.finallion.graveyard.events.ServerEvents;
+import com.finallion.graveyard.events.TGEvents;
 import com.finallion.graveyard.init.*;
 import com.finallion.graveyard.item.VialOfBlood;
+import com.finallion.graveyard.recipe.TGRecipeTypes;
 import com.finallion.graveyard.util.TGTags;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -41,6 +44,8 @@ public class TheGraveyard {
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        forgeBus.addListener(EventPriority.NORMAL, TGEvents::onBiomesLoad);
+
         modEventBus.addListener(this::setup);
         TGBlocks.BLOCKS.register(modEventBus);
         TGItems.ITEMS.register(modEventBus);
@@ -48,16 +53,13 @@ public class TheGraveyard {
         TGEntities.ENTITIES.register(modEventBus);
         TGConfiguredStructureFeatures.STRUCTURES.register(modEventBus);
         TGScreens.MENUS.register(modEventBus);
-        TGRecipeTypes.RECIPE_TYPES.register(modEventBus);
+        //TGRecipeTypes.RECIPE_TYPES.register(modEventBus);
         TGRecipeTypes.RECIPE_SERIALIZERS.register(modEventBus);
         TGTileEntities.TILE_ENTITIES.register(modEventBus);
         TGParticles.PARTICLES.register(modEventBus);
 
         modEventBus.addListener(this::setupClient);
 
-        final DeferredRegister<Codec<? extends BiomeModifier>> serializers = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, MOD_ID);
-        serializers.register(modEventBus);
-        serializers.register("mobspawns", SpawnRules.ModSpawnModifier::makeCodec);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GraveyardConfig.COMMON_SPEC, "graveyard-1.19.x-common.toml");
         CommonConfig.loadConfig(GraveyardConfig.COMMON_SPEC, FMLPaths.CONFIGDIR.get().resolve(MOD_ID + "-1.19.x-common.toml").toString());
@@ -78,10 +80,12 @@ public class TheGraveyard {
     }
 
     public void setup(final FMLCommonSetupEvent event) {
+        Registry.register(Registry.RECIPE_TYPE, "graveyard:ossuary_carving", TGRecipeTypes.Type.INSTANCE);
+
         event.enqueueWork(() -> {
             TGAdvancements.init();
             TGTags.init();
-            TGStructureType.init();
+            //TGStructureType.init();
             TGProcessors.registerProcessors();
         });
     }

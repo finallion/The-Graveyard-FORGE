@@ -1,22 +1,27 @@
 package com.finallion.graveyard.entities;
 
-import com.finallion.graveyard.entities.ai.goals.AttackWithOwnerGoal;
-import com.finallion.graveyard.entities.ai.goals.FollowOwnerGoal;
-import com.finallion.graveyard.entities.ai.goals.GhoulingMeleeAttackGoal;
-import com.finallion.graveyard.entities.ai.goals.TrackOwnerAttackerGoal;
+import com.finallion.graveyard.entities.ai.goals.*;
 import com.finallion.graveyard.init.TGAdvancements;
 import com.finallion.graveyard.init.TGBlocks;
+import com.finallion.graveyard.init.TGParticles;
+import com.finallion.graveyard.init.TGSounds;
 import com.finallion.graveyard.item.BoneStaffItem;
+import com.finallion.graveyard.util.MathUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -25,6 +30,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -327,9 +333,9 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
                 if (!actionResult.consumesAction()) {
                     this.playSound(TGSounds.GHOULING_GROAN.get(), 1.0F, -2.0F);
                     if (isInSittingPose()) {
-                        player.displayClientMessage(Component.translatable("entity.graveyard.ghouling.nowait"), true);
+                        player.displayClientMessage(new TranslatableComponent("entity.graveyard.ghouling.nowait"), true);
                     } else {
-                        player.displayClientMessage(Component.translatable("entity.graveyard.ghouling.wait"), true);
+                        player.displayClientMessage(new TranslatableComponent("entity.graveyard.ghouling.wait"), true);
                     }
 
                     this.setSitting(!this.isSitting());

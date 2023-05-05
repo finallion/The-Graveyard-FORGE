@@ -2,11 +2,10 @@ package com.finallion.graveyard.blocks;
 
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.GrassBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,10 +28,10 @@ public class TGGrassBlock extends GrassBlock {
 
     @Nullable
     @Override
-    public BlockState getToolModifiedState(BlockState state, Level level, BlockPos pos, Player player, ItemStack stack, ToolAction toolAction) {
-        if (ToolActions.SHOVEL_FLATTEN == toolAction) {
+    public BlockState getToolModifiedState(BlockState state, UseOnContext context, ToolAction toolAction, boolean simulate) {
+        if (toolAction == ToolActions.SHOVEL_FLATTEN) {
             return Blocks.DIRT_PATH.defaultBlockState();
         }
-        return super.getToolModifiedState(state, level, pos, player, stack, toolAction);
+        return super.getToolModifiedState(state, context, toolAction, simulate);
     }
 }

@@ -1,12 +1,30 @@
 package com.finallion.graveyard.blocks;
 
 
+import com.finallion.graveyard.config.GraveyardConfig;
+import com.finallion.graveyard.entities.LichEntity;
 import com.finallion.graveyard.init.TGBlocks;
+import com.finallion.graveyard.init.TGEntities;
+import com.finallion.graveyard.init.TGItems;
 import com.finallion.graveyard.init.TGSounds;
+import com.finallion.graveyard.item.VialOfBlood;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -15,6 +33,7 @@ import net.minecraft.world.level.block.state.pattern.BlockPattern;
 import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.Random;
 
@@ -86,7 +105,7 @@ public class AltarBlock extends Block {
                     if (!player.isCreative()) {
                         ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
                         ItemUtils.createFilledResult(stack, player, bottle);
-                        player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 430));
+                        //player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 430));
                     }
 
                     BlockPos corner = pos.offset(-8, 0, -8);

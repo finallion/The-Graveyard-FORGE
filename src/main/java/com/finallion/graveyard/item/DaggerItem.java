@@ -20,9 +20,6 @@ public class DaggerItem extends SwordItem {
       super(material, (int) (effectiveDamage - material.getAttackDamageBonus()), effectiveSpeed, settings);
    }
 
-
-
-
    public float getDestroySpeed(ItemStack stack, BlockState state) {
       if (state.is(Blocks.COBWEB) || state.getBlock() instanceof GlassBlock || state.getBlock() instanceof StainedGlassBlock || state.getBlock() instanceof StainedGlassPaneBlock) {
          return 30.0F;

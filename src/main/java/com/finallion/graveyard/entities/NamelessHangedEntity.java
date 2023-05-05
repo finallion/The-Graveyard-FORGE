@@ -3,7 +3,7 @@ package com.finallion.graveyard.entities;
 import com.finallion.graveyard.init.TGSounds;
 import com.finallion.graveyard.trades.NamelessHangedTradeOffers;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -128,7 +128,7 @@ public class NamelessHangedEntity extends AbstractVillager implements IAnimatabl
 
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (level.isDay() && !this.level.isClientSide) {
-            player.displayClientMessage(Component.translatable("entity.graveyard.nameless_hanged.wait"), true);
+            player.displayClientMessage(new TranslatableComponent("entity.graveyard.nameless_hanged.wait"), true);
             level.playSound(null, player.blockPosition(), TGSounds.NAMELESS_HANGED_INTERACT.get(), SoundSource.HOSTILE, 0.6F, 1.0F);
             //player.playSound(TGSounds.NAMELESS_HANGED_INTERACT, 1.0F, 1.0F);
         }

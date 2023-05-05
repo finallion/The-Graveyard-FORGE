@@ -1,15 +1,11 @@
 package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
+import com.finallion.graveyard.world.processors.RemoveWaterloggedCryptProcessor;
 import com.finallion.graveyard.world.processors.RemoveWaterloggedProcessor;
 import com.finallion.graveyard.world.processors.SwitchSpawnerProcessor;
-import com.google.common.collect.ImmutableList;
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 
 public class TGProcessors {

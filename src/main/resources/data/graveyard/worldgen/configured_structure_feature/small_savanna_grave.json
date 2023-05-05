@@ -1,0 +1,21 @@
+{
+  "type": "graveyard:small_savanna_grave",
+  "config": {
+    "start_pool": "graveyard:small_savanna_grave/start_pool",
+    "size": 1,
+    "structure_name": "small_savanna_grave",
+    "max_distance_from_center": 80,
+    "use_expansion_hack": true,
+    "terrain_check_size": 4,
+    "max_height_difference": 3,
+    "start_height": {
+      "absolute": 0
+    },
+    "project_start_to_heightmap": "WORLD_SURFACE_WG"
+  },
+  "biomes": "#graveyard:has_structure/small_savanna_grave",
+  "adapt_noise": true,
+  "spawn_overrides": {
+
+  }
+}

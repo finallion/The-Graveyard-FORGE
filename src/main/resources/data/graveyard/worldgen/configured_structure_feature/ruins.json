@@ -1,19 +1,20 @@
 {
   "type": "graveyard:ruins",
-  "start_pool": "graveyard:ruins/start_pool",
-  "size": 1,
-  "max_distance_from_center": 80,
-  "biomes": "#graveyard:has_structure/ruins",
-  "step": "surface_structures",
-  "use_expansion_hack": true,
-  "terrain_check_size": 25,
-  "max_height_difference": 3,
-  "terrain_adaptation": "beard_box",
-  "structure_name": "ruins",
-  "start_height": {
-    "absolute": 0
+  "config": {
+    "start_pool": "graveyard:ruins/start_pool",
+    "size": 1,
+    "max_distance_from_center": 80,
+    "use_expansion_hack": true,
+    "terrain_check_size": 25,
+    "max_height_difference": 3,
+    "structure_name": "ruins",
+    "start_height": {
+      "absolute": 0
+    },
+    "project_start_to_heightmap": "WORLD_SURFACE_WG"
   },
-  "project_start_to_heightmap": "WORLD_SURFACE_WG",
+  "adapt_noise": true,
+  "biomes": "#graveyard:has_structure/ruins",
   "spawn_overrides": {
     "monster": {
       "bounding_box": "piece",
