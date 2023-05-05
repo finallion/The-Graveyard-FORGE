@@ -5,7 +5,6 @@ import com.finallion.graveyard.client.gui.OssuaryScreenHandler;
 import com.finallion.graveyard.init.TGTileEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
@@ -26,12 +25,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.levelgen.RandomSource;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Random;
 
 public class OssuaryBlock extends BaseEntityBlock {
     private static final Component TITLE = new TranslatableComponent("container.ossuary");
@@ -61,15 +57,6 @@ public class OssuaryBlock extends BaseEntityBlock {
             player.openMenu(state.getMenuProvider(world, pos));
             return InteractionResult.CONSUME;
         }
-    }
-
-    @Override
-    public void animateTick(BlockState state, Level world, BlockPos pos, Random random) {
-        for (int i = 0; i < 10; i++) {
-            world.addParticle(ParticleTypes.ASH, pos.getX() + random.nextInt(-1, 1) + 0.5D, pos.getY() + 1.0D, pos.getZ() + random.nextInt(-1, 1) + 0.5D, 0, 0, 0);
-
-        }
-
     }
 
 

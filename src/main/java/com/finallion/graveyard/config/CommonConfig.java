@@ -50,9 +50,6 @@ public class CommonConfig {
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> modWhitelistRevenant;
 
     public final ForgeConfigSpec.BooleanValue enableReaper;
-    public final ForgeConfigSpec.IntValue weightReaper;
-    public final ForgeConfigSpec.IntValue minGroupSizeReaper;
-    public final ForgeConfigSpec.IntValue maxGroupSizeReaper;
     public final ForgeConfigSpec.BooleanValue reaperCanBurnInSunlight;
     public final ForgeConfigSpec.BooleanValue reaperCanBeWithered;
 
@@ -195,10 +192,7 @@ public class CommonConfig {
         this.blacklistRevenant = builder.defineList("revenant.blacklist", getMobBlacklist(), o -> o instanceof String);
         this.modWhitelistRevenant = builder.defineList("revenant.modWhitelist", Arrays.asList("#minecraft", "#graveyard_biomes"), o -> o instanceof String);
 
-        this.enableReaper = builder.define("reaper.enabled", true);
-        this.weightReaper = builder.defineInRange("reaper.weight", 10, 0, 100);
-        this.minGroupSizeReaper = builder.defineInRange("reaper.minGroupSizeReaper", 2, 1, 100);
-        this.maxGroupSizeReaper = builder.defineInRange("reaper.maxGroupSizeGhoul", 3, 1, 100);
+        this.enableReaper = builder.define("reaper.enabled", false);
         this.reaperCanBurnInSunlight = builder.define("reaper.canBurnInSunlight", true);
         this.reaperCanBeWithered = builder.define("reaper.canBeWithered", true);
 
