@@ -12,6 +12,7 @@ import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.common.world.ModifiableBiomeInfo;
@@ -29,6 +30,10 @@ public class SpawnRules {
         @Override
         public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
             if (phase == Phase.ADD) {
+                if (biome.is(Biomes.MUSHROOM_FIELDS)) {
+                    return;
+                }
+
                 if (this.spawn.type == TGEntities.GHOUL.get() && GraveyardConfig.COMMON.enableGhoul.get() && biome.is(TGTags.GHOUL_SPAWNS)) {
                     MobSpawnSettings.SpawnerData data = new MobSpawnSettings.SpawnerData(this.spawn.type, GraveyardConfig.COMMON.weightGhoul.get(), GraveyardConfig.COMMON.minGroupSizeGhoul.get(), GraveyardConfig.COMMON.maxGroupSizeGhoul.get());
                     builder.getMobSpawnSettings().addSpawn(this.spawn.type.getCategory(), data);
