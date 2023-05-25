@@ -4,6 +4,7 @@ import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.TGEntities;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 
@@ -13,6 +14,9 @@ public class TGEvents {
 
     public static void onBiomesLoad(BiomeLoadingEvent event) {
         List<MobSpawnSettings.SpawnerData> base = event.getSpawns().getSpawner(MobCategory.MONSTER);
+        if (event.getCategory() == Biome.BiomeCategory.MUSHROOM) {
+            return;
+        }
 
         if (parseBiomes(GraveyardConfig.COMMON.whitelistGhoul.get(), GraveyardConfig.COMMON.blacklistGhoul.get(), event) &&
                 parseWhitelistedMods(GraveyardConfig.COMMON.modWhitelistGhoul.get(), event) && GraveyardConfig.COMMON.enableGhoul.get()) {

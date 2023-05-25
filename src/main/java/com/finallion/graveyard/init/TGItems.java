@@ -20,7 +20,7 @@ public class TGItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TheGraveyard.MOD_ID);
 
     public static final RegistryObject<Item> OSSUARY = ITEMS.register("ossuary", () -> new BlockItem(TGBlocks.OSSUARY.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
-    public static final RegistryObject<Item> INCARNATED_EVIL_MUSIC_DISC = ITEMS.register("incarnated_evil_music_disc", () -> new RecordItem(0, TGSounds.LICH_THEME_01, new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> INCARNATED_EVIL_MUSIC_DISC = ITEMS.register("incarnated_evil_music_disc", () -> new RecordItem(0, TGSounds.LICH_THEME_01, new Item.Properties().stacksTo(1).tab(TheGraveyard.GROUP)));
 
     public static final RegistryObject<Item> SKELETON_CREEPER_SPAWN_EGG = ITEMS.register("skeleton_creeper_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.SKELETON_CREEPER, 7960171, 15263976, (new Item.Properties()).tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> ACOLYTE_SPAWN_EGG = ITEMS.register("acolyte_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.ACOLYTE, 2688830, 5898240, (new Item.Properties()).tab(TheGraveyard.GROUP)));
