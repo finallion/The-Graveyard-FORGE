@@ -3,7 +3,7 @@ loaderVersion="[38,)" #mandatory
 license="GNU GENERAL PUBLIC LICENSE Version 3"
 [[mods]] #mandatory
 modId="graveyard" #mandatory
-version="2.5.2" #mandatory
+version="2.5.3" #mandatory
 displayName="The Graveyard" #mandatory
 logoFile="graveyard_logo.png" #optional
 credits="" #optional
