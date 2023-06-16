@@ -1,0 +1,7 @@
+{
+  "parent": "graveyard:block/template_two_candles",
+  "textures": {
+    "all": "graveyard:block/light_gray_candle_lit",
+    "particle": "graveyard:block/light_gray_candle_lit"
+  }
+}

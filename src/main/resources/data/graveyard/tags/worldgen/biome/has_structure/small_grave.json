@@ -2,8 +2,9 @@
   "replace": false,
   "values": [
     "minecraft:forest",
-    "#c:plains",
-    "#c:forest",
+    "#forge:is_plains",
+    "#forge:is_coniferous",
+    "#forge:is_dense/overworld",
     {"id": "terralith:blooming_plateau", "required": false},
     {"id": "terralith:blooming_valley", "required": false}
   ]

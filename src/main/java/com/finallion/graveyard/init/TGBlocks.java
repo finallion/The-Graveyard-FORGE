@@ -5,8 +5,11 @@ import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.blocks.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.DyeColor;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -63,6 +66,45 @@ public class TGBlocks {
     public static RegistryObject<Block> TG_CRACKED_DEEPSLATE_TILES = BLOCKS.register("tg_cracked_deepslate_tiles", () -> new TGDeepslateBlock(AbstractBlock.Properties.copy(Blocks.STONE)));
 
     public static RegistryObject<Block> TG_CHISELED_DEEPSLATE = BLOCKS.register("tg_chiseled_deepslate", () -> new TGDeepslateBlock(AbstractBlock.Properties.copy(Blocks.STONE)));
+
+    public static final Block TG_MOSS_CARPET =  new CarpetBlock(FabricBlockSettings.of(Material.PLANT, MapColor.GREEN).strength(0.1F));
+            Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "tg_moss_carpet"), TG_MOSS_CARPET);
+
+    public static final Block CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.PALE_YELLOW).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block WHITE_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.WHITE_GRAY).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block ORANGE_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.ORANGE).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block MAGENTA_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.MAGENTA).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block LIGHT_BLUE_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.LIGHT_BLUE).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block YELLOW_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.YELLOW).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block LIME_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.LIME).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block PINK_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.PINK).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block GRAY_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.GRAY).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block LIGHT_GRAY_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.LIGHT_GRAY).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block CYAN_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.CYAN).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block PURPLE_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.PURPLE).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block BLUE_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.BLUE).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block BROWN_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.BROWN).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block GREEN_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.GREEN).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block RED_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.RED).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+    public static final Block BLACK_CANDLE = new CandleBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.BLACK).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.CANDLE).luminance(CandleBlock.STATE_TO_LUMINANCE));
+            Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "candle"), CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "white_candle"), WHITE_CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "orange_candle"), ORANGE_CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "magenta_candle"), MAGENTA_CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "light_blue_candle"), LIGHT_BLUE_CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "yellow_candle"), YELLOW_CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "lime_candle"), LIME_CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "pink_candle"), PINK_CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "gray_candle"), GRAY_CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "light_gray_candle"), LIGHT_GRAY_CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "cyan_candle"), CYAN_CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "purple_candle"), PURPLE_CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "blue_candle"), BLUE_CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "brown_candle"), BROWN_CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "green_candle"), GREEN_CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "red_candle"), RED_CANDLE);
+        Registry.register(Registries.BLOCK, new Identifier(TheGraveyard.MOD_ID, "black_candle"), BLACK_CANDLE);
+
 
     // helper blocks that get don't get replaced on world generation, generate ores or generate trees on
     public static final RegistryObject<Block> TG_GRASS_BLOCK = BLOCKS.register("tg_grass_block", () -> new TGGrassBlock(AbstractBlock.Properties.copy(Blocks.GRASS_BLOCK).lootFrom(() -> Blocks.GRASS_BLOCK)));

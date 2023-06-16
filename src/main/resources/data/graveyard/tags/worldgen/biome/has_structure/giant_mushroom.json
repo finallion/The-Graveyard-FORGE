@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "#c:mushroom"
+    "#forge:is_mushroom"
   ]
 }

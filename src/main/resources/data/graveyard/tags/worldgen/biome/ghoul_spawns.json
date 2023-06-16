@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "#c:dead",
-    "#c:forest",
-    "#c:wasteland",
-    "#c:swamp"
-  ]
-}

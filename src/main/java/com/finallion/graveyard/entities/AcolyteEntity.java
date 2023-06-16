@@ -44,10 +44,13 @@ public class AcolyteEntity extends CorruptedIllager {
         this.playSound(TGSounds.ACOLYTE_HURT.get(), 1.0F, 0.75F);
     }
 
+    protected SoundEvent getDeathSound() {
+        return TGSounds.ACOLYTE_DEATH.get();
+    }
+
     @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        this.playSound(TGSounds.ACOLYTE_DEATH.get(), 1.0F, 0.75F);
+    public float getVoicePitch() {
+        return 0.75F;
     }
 
 

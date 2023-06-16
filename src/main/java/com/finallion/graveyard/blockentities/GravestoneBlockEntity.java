@@ -2,148 +2,104 @@ package com.finallion.graveyard.blockentities;
 
 import com.finallion.graveyard.init.TGTileEntities;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.commands.CommandSource;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentUtils;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.block.BlockState;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.ICommandSource;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.DyeColor;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IReorderingProcessor;
+import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentUtils;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import java.util.UUID;
 import java.util.function.Function;
 
-public class GravestoneBlockEntity extends BlockEntity {
-    public static final int LINES = 4;
-    private static final String[] RAW_TEXT_FIELD_NAMES = new String[]{"Text1", "Text2", "Text3", "Text4"};
-    private static final String[] FILTERED_TEXT_FIELD_NAMES = new String[]{"FilteredText1", "FilteredText2", "FilteredText3", "FilteredText4"};
-    private final Component[] messages = new Component[]{Component.empty(), Component.empty(), Component.empty(), Component.empty()};
-    private final Component[] filteredMessages = new Component[]{Component.empty(), Component.empty(), Component.empty(), Component.empty()};
+public class GravestoneBlockEntity extends TileEntity {
+    private final ITextComponent[] messages = new ITextComponent[]{StringTextComponent.EMPTY, StringTextComponent.EMPTY, StringTextComponent.EMPTY, StringTextComponent.EMPTY};
     private boolean isEditable = true;
-    @javax.annotation.Nullable
-    private UUID playerWhoMayEdit;
-    @javax.annotation.Nullable
-    private FormattedCharSequence[] renderMessages;
-    private boolean renderMessagedFiltered;
+    private PlayerEntity playerWhoMayEdit;
+    private final IReorderingProcessor[] renderMessages = new IReorderingProcessor[4];
     private DyeColor color = DyeColor.BLACK;
-    private boolean hasGlowingText;
 
-    public GravestoneBlockEntity(BlockPos pos, BlockState state) {
-        super(TGTileEntities.GRAVESTONE_BLOCK_ENTITY.get(), pos, state);
+    public GravestoneBlockEntity() {
+        super(TGTileEntities.GRAVESTONE_BLOCK_ENTITY.get());
     }
 
-
-    protected void saveAdditional(CompoundTag p_187515_) {
-        super.saveAdditional(p_187515_);
+    public CompoundNBT save(CompoundNBT p_189515_1_) {
+        super.save(p_189515_1_);
 
         for(int i = 0; i < 4; ++i) {
-            Component component = this.messages[i];
-            String s = Component.Serializer.toJson(component);
-            p_187515_.putString(RAW_TEXT_FIELD_NAMES[i], s);
-            Component component1 = this.filteredMessages[i];
-            if (!component1.equals(component)) {
-                p_187515_.putString(FILTERED_TEXT_FIELD_NAMES[i], Component.Serializer.toJson(component1));
-            }
+            String s = ITextComponent.Serializer.toJson(this.messages[i]);
+            p_189515_1_.putString("Text" + (i + 1), s);
         }
 
-        p_187515_.putString("Color", this.color.getName());
-        p_187515_.putBoolean("GlowingText", this.hasGlowingText);
+        p_189515_1_.putString("Color", this.color.getName());
+        return p_189515_1_;
     }
 
-    public void load(CompoundTag p_155716_) {
+    public void load(BlockState p_230337_1_, CompoundNBT p_230337_2_) {
         this.isEditable = false;
-        super.load(p_155716_);
-        this.color = DyeColor.byName(p_155716_.getString("Color"), DyeColor.BLACK);
+        super.load(p_230337_1_, p_230337_2_);
+        this.color = DyeColor.byName(p_230337_2_.getString("Color"), DyeColor.BLACK);
 
         for(int i = 0; i < 4; ++i) {
-            String s = p_155716_.getString(RAW_TEXT_FIELD_NAMES[i]);
-            Component component = this.loadLine(s);
-            this.messages[i] = component;
-            String s1 = FILTERED_TEXT_FIELD_NAMES[i];
-            if (p_155716_.contains(s1, 8)) {
-                this.filteredMessages[i] = this.loadLine(p_155716_.getString(s1));
+            String s = p_230337_2_.getString("Text" + (i + 1));
+            ITextComponent itextcomponent = ITextComponent.Serializer.fromJson(s.isEmpty() ? "\"\"" : s);
+            if (this.level instanceof ServerWorld) {
+                try {
+                    this.messages[i] = TextComponentUtils.updateForEntity(this.createCommandSourceStack((ServerPlayerEntity)null), itextcomponent, (Entity)null, 0);
+                } catch (CommandSyntaxException commandsyntaxexception) {
+                    this.messages[i] = itextcomponent;
+                }
             } else {
-                this.filteredMessages[i] = component;
+                this.messages[i] = itextcomponent;
             }
+
+            this.renderMessages[i] = null;
         }
 
-        this.renderMessages = null;
-        this.hasGlowingText = p_155716_.getBoolean("GlowingText");
     }
 
-    private Component loadLine(String p_155712_) {
-        Component component = this.deserializeTextSafe(p_155712_);
-        if (this.level instanceof ServerLevel) {
-            try {
-                return ComponentUtils.updateForEntity(this.createCommandSourceStack((ServerPlayer)null), component, (Entity)null, 0);
-            } catch (CommandSyntaxException commandsyntaxexception) {
-            }
+    @OnlyIn(Dist.CLIENT)
+    public ITextComponent getMessage(int p_212366_1_) {
+        return this.messages[p_212366_1_];
+    }
+
+    public void setMessage(int p_212365_1_, ITextComponent p_212365_2_) {
+        this.messages[p_212365_1_] = p_212365_2_;
+        this.renderMessages[p_212365_1_] = null;
+    }
+
+    @Nullable
+    @OnlyIn(Dist.CLIENT)
+    public IReorderingProcessor getRenderMessage(int p_242686_1_, Function<ITextComponent, IReorderingProcessor> p_242686_2_) {
+        if (this.renderMessages[p_242686_1_] == null && this.messages[p_242686_1_] != null) {
+            this.renderMessages[p_242686_1_] = p_242686_2_.apply(this.messages[p_242686_1_]);
         }
 
-        return component;
+        return this.renderMessages[p_242686_1_];
     }
 
-    private Component deserializeTextSafe(String p_155721_) {
-        try {
-            Component component = Component.Serializer.fromJson(p_155721_);
-            if (component != null) {
-                return component;
-            }
-        } catch (Exception exception) {
-        }
-
-        return Component.empty();
+    @Nullable
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(this.worldPosition, 9, this.getUpdateTag());
     }
 
-    public Component getMessage(int p_155707_, boolean p_155708_) {
-        return this.getMessages(p_155708_)[p_155707_];
-    }
-
-    public void setMessage(int p_59733_, Component p_59734_) {
-        this.setMessage(p_59733_, p_59734_, p_59734_);
-    }
-
-    public void setMessage(int p_155703_, Component p_155704_, Component p_155705_) {
-        this.messages[p_155703_] = p_155704_;
-        this.filteredMessages[p_155703_] = p_155705_;
-        this.renderMessages = null;
-    }
-
-    public FormattedCharSequence[] getRenderMessages(boolean p_155718_, Function<Component, FormattedCharSequence> p_155719_) {
-        if (this.renderMessages == null || this.renderMessagedFiltered != p_155718_) {
-            this.renderMessagedFiltered = p_155718_;
-            this.renderMessages = new FormattedCharSequence[4];
-
-            for(int i = 0; i < 4; ++i) {
-                this.renderMessages[i] = p_155719_.apply(this.getMessage(i, p_155718_));
-            }
-        }
-
-        return this.renderMessages;
-    }
-
-    private Component[] getMessages(boolean p_155725_) {
-        return p_155725_ ? this.filteredMessages : this.messages;
-    }
-
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    public CompoundTag getUpdateTag() {
-        return this.saveWithoutMetadata();
+    public CompoundNBT getUpdateTag() {
+        return this.save(new CompoundNBT());
     }
 
     public boolean onlyOpCanSetNbt() {
@@ -154,72 +110,55 @@ public class GravestoneBlockEntity extends BlockEntity {
         return this.isEditable;
     }
 
-    public void setEditable(boolean p_59747_) {
-        this.isEditable = p_59747_;
-        if (!p_59747_) {
+    @OnlyIn(Dist.CLIENT)
+    public void setEditable(boolean p_145913_1_) {
+        this.isEditable = p_145913_1_;
+        if (!p_145913_1_) {
             this.playerWhoMayEdit = null;
         }
 
     }
 
-    public void setAllowedPlayerEditor(UUID p_155714_) {
-        this.playerWhoMayEdit = p_155714_;
+    public void setAllowedPlayerEditor(PlayerEntity p_145912_1_) {
+        this.playerWhoMayEdit = p_145912_1_;
     }
 
-    @javax.annotation.Nullable
-    public UUID getPlayerWhoMayEdit() {
+    public PlayerEntity getPlayerWhoMayEdit() {
         return this.playerWhoMayEdit;
     }
 
-    public boolean executeClickCommands(ServerPlayer p_155710_) {
-        for(Component component : this.getMessages(p_155710_.isTextFilteringEnabled())) {
-            Style style = component.getStyle();
-            ClickEvent clickevent = style.getClickEvent();
-            if (clickevent != null && clickevent.getAction() == ClickEvent.Action.RUN_COMMAND) {
-                p_155710_.getServer().getCommands().performPrefixedCommand(this.createCommandSourceStack(p_155710_), clickevent.getValue());
+    public boolean executeClickCommands(PlayerEntity p_174882_1_) {
+        for(ITextComponent itextcomponent : this.messages) {
+            Style style = itextcomponent == null ? null : itextcomponent.getStyle();
+            if (style != null && style.getClickEvent() != null) {
+                ClickEvent clickevent = style.getClickEvent();
+                if (clickevent.getAction() == ClickEvent.Action.RUN_COMMAND) {
+                    p_174882_1_.getServer().getCommands().performCommand(this.createCommandSourceStack((ServerPlayerEntity)p_174882_1_), clickevent.getValue());
+                }
             }
         }
 
         return true;
     }
 
-    public CommandSourceStack createCommandSourceStack(@Nullable ServerPlayer p_59736_) {
-        String s = p_59736_ == null ? "Sign" : p_59736_.getName().getString();
-        Component component = (Component)(p_59736_ == null ? Component.literal("Sign") : p_59736_.getDisplayName());
-        return new CommandSourceStack(CommandSource.NULL, Vec3.atCenterOf(this.worldPosition), Vec2.ZERO, (ServerLevel)this.level, 2, s, component, this.level.getServer(), p_59736_);
+    public CommandSource createCommandSourceStack(@Nullable ServerPlayerEntity p_195539_1_) {
+        String s = p_195539_1_ == null ? "Sign" : p_195539_1_.getName().getString();
+        ITextComponent itextcomponent = (ITextComponent)(p_195539_1_ == null ? new StringTextComponent("Sign") : p_195539_1_.getDisplayName());
+        return new CommandSource(ICommandSource.NULL, Vector3d.atCenterOf(this.worldPosition), Vector2f.ZERO, (ServerWorld)this.level, 2, s, itextcomponent, this.level.getServer(), p_195539_1_);
     }
 
     public DyeColor getColor() {
         return this.color;
     }
 
-    public boolean setColor(DyeColor p_59740_) {
-        if (p_59740_ != this.getColor()) {
-            this.color = p_59740_;
-            this.markUpdated();
+    public boolean setColor(DyeColor p_214068_1_) {
+        if (p_214068_1_ != this.getColor()) {
+            this.color = p_214068_1_;
+            this.setChanged();
+            this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
             return true;
         } else {
             return false;
         }
     }
-
-    public boolean hasGlowingText() {
-        return this.hasGlowingText;
-    }
-
-    public boolean setHasGlowingText(boolean p_155723_) {
-        if (this.hasGlowingText != p_155723_) {
-            this.hasGlowingText = p_155723_;
-            this.markUpdated();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private void markUpdated() {
-        this.setChanged();
-        this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
-    }
-
 }

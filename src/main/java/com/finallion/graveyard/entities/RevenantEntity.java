@@ -225,7 +225,7 @@ public class RevenantEntity extends AngerableGraveyardEntity implements IAnimata
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source == DamageSource.CRAMMING ||source == DamageSource.IN_WALL || source == DamageSource.STARVE || source == DamageSource.OUT_OF_WORLD || source == DamageSource.ON_FIRE) {
+        if (source == DamageSource.CRAMMING ||source == DamageSource.IN_WALL || source == DamageSource.STARVE || source == DamageSource.OUT_OF_WORLD) {
             setCanReanimate(false);
             setReanimateAnimTimer(0);
         }
@@ -263,10 +263,14 @@ public class RevenantEntity extends AngerableGraveyardEntity implements IAnimata
         this.playSound(TGSounds.REVENANT_HURT.get(), 1.0F, 1.0F);
     }
 
+
+    protected SoundEvent getDeathSound() {
+        return TGSounds.REVENANT_DEATH.get();
+    }
+
     @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        this.playSound(TGSounds.REVENANT_DEATH.get(), 1.0F, 1.0F);
+    public float getVoicePitch() {
+        return 1.0F;
     }
 
     @Override

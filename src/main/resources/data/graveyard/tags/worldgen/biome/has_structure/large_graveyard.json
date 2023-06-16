@@ -3,7 +3,7 @@
   "values": [
     "minecraft:taiga",
     "minecraft:snowy_taiga",
-    "#c:plains",
+    "#forge:is_plains",
     {"id": "terralith:forested_highlands", "required": false},
     {"id": "terralith:lush_valley", "required": false},
     {"id": "terralith:shield", "required": false},

@@ -421,7 +421,15 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
             BoneStaffItem.ownerGhoulingMapping.remove(this.uuid, getOwnerUuid());
         }
         super.die(source);
-        this.playSound(TGSounds.GHOULING_DEATH.get(), 1.0F, -2.0F);
+    }
+
+    protected SoundEvent getDeathSound() {
+        return TGSounds.GHOULING_DEATH.get();
+    }
+
+    @Override
+    public float getVoicePitch() {
+        return -2.0F;
     }
 
 
@@ -500,7 +508,6 @@ public class GhoulingEntity extends GraveyardMinionEntity implements IAnimatable
         GHOULING_HOLDABLE.add(TGBlocks.BIRCH_COFFIN.get().asItem());
         GHOULING_HOLDABLE.add(TGBlocks.JUNGLE_COFFIN.get().asItem());
         GHOULING_HOLDABLE.add(TGBlocks.ACACIA_COFFIN.get().asItem());
-        GHOULING_HOLDABLE.add(TGBlocks.MANGROVE_COFFIN.get().asItem());
         GHOULING_HOLDABLE.add(TGBlocks.WARPED_COFFIN.get().asItem());
         GHOULING_HOLDABLE.add(TGBlocks.CRIMSON_COFFIN.get().asItem());
 

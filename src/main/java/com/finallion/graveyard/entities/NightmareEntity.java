@@ -73,12 +73,7 @@ public class NightmareEntity extends HostileGraveyardEntity implements IAnimatab
 
     public NightmareEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world, "nightmare");
-        //this.maxUpStep = 1.0F;
-    }
-
-    @Override
-    public float getStepHeight() {
-        return 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     @Override
@@ -269,10 +264,13 @@ public class NightmareEntity extends HostileGraveyardEntity implements IAnimatab
         this.playSound(TGSounds.NIGHTMARE_HURT.get(), 1.0F, -10.0F);
     }
 
+    protected SoundEvent getDeathSound() {
+        return TGSounds.NIGHTMARE_DEATH.get();
+    }
+
     @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        this.playSound(TGSounds.NIGHTMARE_DEATH.get(), 1.0F, -10.0F);
+    public float getVoicePitch() {
+        return -10.0F;
     }
 
     boolean isLookingAtMe(Player p_32535_) {

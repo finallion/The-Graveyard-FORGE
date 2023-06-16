@@ -94,7 +94,7 @@ public class ReaperEntity extends HostileGraveyardEntity implements IAnimatable 
         this.goalSelector.addGoal(8, new MoveRandomGoal());
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, Raider.class)).setAlertOthers());
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this, new Class[0]));
         this.targetSelector.addGoal(2, new CopyOwnerTargetGoal(this));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
@@ -204,10 +204,14 @@ public class ReaperEntity extends HostileGraveyardEntity implements IAnimatable 
         this.playSound(TGSounds.REAPER_HURT.get(), 1.0F, -10.0F);
     }
 
+
+    protected SoundEvent getDeathSound() {
+        return TGSounds.REAPER_DEATH.get();
+    }
+
     @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        this.playSound(TGSounds.REAPER_DEATH.get(), 1.0F, -10.0F);
+    public float getVoicePitch() {
+        return -10.0F;
     }
 
 
@@ -319,7 +323,7 @@ public class ReaperEntity extends HostileGraveyardEntity implements IAnimatable 
             }
 
             ReaperEntity.this.setIsCharging(true);
-            ReaperEntity.this.playSound(SoundEvents.VEX_CHARGE, 1.0F, -10.0F);
+            ReaperEntity.this.playSound(TGSounds.REAPER_CHARGE.get(), 1.0F, -10.0F);
         }
 
         public void stop() {

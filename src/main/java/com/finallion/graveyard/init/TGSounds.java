@@ -1,11 +1,11 @@
 package com.finallion.graveyard.init;
 
 import com.finallion.graveyard.TheGraveyard;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 public class TGSounds {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, TheGraveyard.MOD_ID);
@@ -41,6 +41,7 @@ public class TGSounds {
     public static final RegistryObject<SoundEvent> REAPER_AMBIENT = build("entity.reaper.ambient");
     public static final RegistryObject<SoundEvent> REAPER_HURT = build("entity.reaper.hurt");
     public static final RegistryObject<SoundEvent> REAPER_DEATH = build("entity.reaper.death");
+    public static final RegistryObject<SoundEvent> REAPER_CHARGE = build("entity.reaper.charge");
 
     public static final RegistryObject<SoundEvent> GHOUL_ROAR = build("entity.ghoul.roar");
     public static final RegistryObject<SoundEvent> GHOUL_AMBIENT = build("entity.ghoul.ambient");
@@ -76,6 +77,8 @@ public class TGSounds {
     public static final RegistryObject<SoundEvent> URN_OPEN = build("block.urn.open");
     public static final RegistryObject<SoundEvent> URN_CLOSE = build("block.urn.close");
 
+    public static final RegistryObject<SoundEvent> OSSUARY_OPEN = build("block.ossuary.open");
+
     public static final RegistryObject<SoundEvent> SARCOPHAGUS_USE = build("block.sarcophagus.use");
 
     public static final RegistryObject<SoundEvent> BONE_PLACED = build("block.bone.placed");
@@ -83,6 +86,8 @@ public class TGSounds {
 
 
     public static final RegistryObject<SoundEvent> VIAL_SPLASH = build("item.vial.splash");
+
+    public static final RegistryObject<SoundEvent> LICH_THEME_01 = build("entity.lich.theme_01");
 
 
     private static RegistryObject<SoundEvent> build(String id) {

@@ -4,14 +4,14 @@ import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.item.BoneStaffItem;
 import com.finallion.graveyard.item.DaggerItem;
 import com.finallion.graveyard.item.VialOfBlood;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 
 @Mod.EventBusSubscriber(modid = TheGraveyard.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -19,6 +19,7 @@ public class TGItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TheGraveyard.MOD_ID);
 
     public static final RegistryObject<Item> OSSUARY = ITEMS.register("ossuary", () -> new BlockItem(TGBlocks.OSSUARY.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> INCARNATED_EVIL_MUSIC_DISC = ITEMS.register("incarnated_evil_music_disc", () -> new RecordItem(0, TGSounds.LICH_THEME_01, new Item.Properties().stacksTo(1).tab(TheGraveyard.GROUP)));
 
     public static final RegistryObject<Item> SKELETON_CREEPER_SPAWN_EGG = ITEMS.register("skeleton_creeper_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.SKELETON_CREEPER, 7960171, 15263976, (new Item.Properties()).tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> ACOLYTE_SPAWN_EGG = ITEMS.register("acolyte_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.ACOLYTE, 2688830, 5898240, (new Item.Properties()).tab(TheGraveyard.GROUP)));
@@ -26,8 +27,8 @@ public class TGItems {
     public static final RegistryObject<Item> REAPER_SPAWN_EGG = ITEMS.register("reaper_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.REAPER, 1381653, 7456477, (new Item.Properties()).tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> REVENANT_SPAWN_EGG = ITEMS.register("revenant_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.REVENANT, 12965589, 9765908, (new Item.Properties()).tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> NIGHTMARE_SPAWN_EGG = ITEMS.register("nightmare_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.NIGHTMARE, 592137, 4718849, (new Item.Properties()).tab(TheGraveyard.GROUP)));
-    public static final RegistryObject<Item> LICH_SPAWN_EGG = ITEMS.register("", () -> new ForgeSpawnEggItem(TGEntities.LICH, 13750223, 4144959, (new Item.Properties()).tab(TheGraveyard.GROUP)));
-    public static final RegistryObject<Item> NAMELESS_HANGED_SPAWN_EGG = ITEMS.register("", () -> new ForgeSpawnEggItem(TGEntities.NAMELESS_HANGED, 5389367, 9803156, (new Item.Properties()).tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> LICH_SPAWN_EGG = ITEMS.register("lich_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.LICH, 13750223, 4144959, (new Item.Properties()).tab(TheGraveyard.GROUP)));
+    public static final RegistryObject<Item> NAMELESS_HANGED_SPAWN_EGG = ITEMS.register("nameless_hanged_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.NAMELESS_HANGED, 5389367, 9803156, (new Item.Properties()).tab(TheGraveyard.GROUP)));
 
     public static final RegistryObject<Item> WRAITH_SPAWN_EGG = ITEMS.register("wraith_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.WRAITH, 1644568, 16777215, (new Item.Properties()).tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> CORRUPTED_PILLAGER_SPAWN_EGG = ITEMS.register("corrupted_pillager_spawn_egg", () -> new ForgeSpawnEggItem(TGEntities.CORRUPTED_PILLAGER, 7567737, 4924973, (new Item.Properties()).tab(TheGraveyard.GROUP)));
@@ -41,6 +42,71 @@ public class TGItems {
     public static final RegistryObject<Item> TG_TUFF = ITEMS.register("tg_tuff", () -> new BlockItem(TGBlocks.TG_TUFF.get(), new Item.Properties()));
     public static final RegistryObject<Item> TG_MOSS_BLOCK = ITEMS.register("tg_moss_block", () -> new BlockItem(TGBlocks.TG_MOSS_BLOCK.get(), new Item.Properties()));
     public static final RegistryObject<Item> TG_DEEPSLATE = ITEMS.register("tg_deepslate", () -> new BlockItem(TGBlocks.TG_DEEPSLATE.get(), new Item.Properties()));
+
+    public static RegistryObject<Item> TG_COBBLED_DEEPSLATE = ITEMS.register("tg_cobbled_deepslate", () -> new BlockItem(TGBlocks.TG_COBBLED_DEEPSLATE.get(), new Item.Properties()));
+    public static RegistryObject<Item> TG_COBBLED_DEEPSLATE_STAIRS = ITEMS.register("tg_cobbled_deepslate_stairs", () -> new BlockItem(TGBlocks.TG_COBBLED_DEEPSLATE_STAIRS.get(), new Item.Properties()));
+    public static RegistryObject<Item> TG_COBBLED_DEEPSLATE_SLAB = ITEMS.register("tg_cobbled_deepslate_slab", () -> new BlockItem(TGBlocks.TG_COBBLED_DEEPSLATE_SLAB.get(), new Item.Properties()));
+    public static RegistryObject<Item> TG_COBBLED_DEEPSLATE_WALL = ITEMS.register("tg_cobbled_deepslate_wall", () -> new BlockItem(TGBlocks.TG_COBBLED_DEEPSLATE_WALL.get(), new Item.Properties()));
+
+    public static RegistryObject<Item> TG_POLISHED_DEEPSLATE = ITEMS.register("tg_polished_deepslate", () -> new BlockItem(TGBlocks.TG_POLISHED_DEEPSLATE.get(), new Item.Properties()));
+    public static RegistryObject<Item> TG_POLISHED_DEEPSLATE_STAIRS = ITEMS.register("tg_polished_deepslate_stairs", () -> new BlockItem(TGBlocks.TG_POLISHED_DEEPSLATE_STAIRS.get(), new Item.Properties()));
+    public static RegistryObject<Item> TG_POLISHED_DEEPSLATE_SLAB = ITEMS.register("tg_polished_deepslate_slab", () -> new BlockItem(TGBlocks.TG_POLISHED_DEEPSLATE_SLAB.get(), new Item.Properties()));
+    public static RegistryObject<Item> TG_POLISHED_DEEPSLATE_WALL = ITEMS.register("tg_polished_deepslate_wall", () -> new BlockItem(TGBlocks.TG_POLISHED_DEEPSLATE_WALL.get(), new Item.Properties()));
+
+    public static RegistryObject<Item> TG_DEEPSLATE_BRICKS = ITEMS.register("tg_deepslate_bricks", () -> new BlockItem(TGBlocks.TG_DEEPSLATE_BRICKS.get(), new Item.Properties()));
+    public static RegistryObject<Item> TG_DEEPSLATE_BRICK_STAIRS = ITEMS.register("tg_deepslate_brick_stairs", () -> new BlockItem(TGBlocks.TG_DEEPSLATE_BRICK_STAIRS.get(), new Item.Properties()));
+    public static RegistryObject<Item> TG_DEEPSLATE_BRICK_SLAB = ITEMS.register("tg_deepslate_brick_slab", () -> new BlockItem(TGBlocks.TG_DEEPSLATE_BRICK_SLAB.get(), new Item.Properties()));
+    public static RegistryObject<Item> TG_DEEPSLATE_BRICK_WALL = ITEMS.register("tg_deepslate_brick_wall", () -> new BlockItem(TGBlocks.TG_DEEPSLATE_BRICK_WALL.get(), new Item.Properties()));
+    public static RegistryObject<Item> TG_CRACKED_DEEPSLATE_BRICKS = ITEMS.register("tg_cracked_deepslate_bricks", () -> new BlockItem(TGBlocks.TG_CRACKED_DEEPSLATE_BRICKS.get(), new Item.Properties()));
+
+    public static RegistryObject<Item> TG_DEEPSLATE_TILES = ITEMS.register("tg_deepslate_tiles", () -> new BlockItem(TGBlocks.TG_DEEPSLATE_TILES.get(), new Item.Properties()));
+    public static RegistryObject<Item> TG_DEEPSLATE_TILE_STAIRS = ITEMS.register("tg_deepslate_tile_stairs", () -> new BlockItem(TGBlocks.TG_DEEPSLATE_TILE_STAIRS.get(), new Item.Properties()));
+    public static RegistryObject<Item> TG_DEEPSLATE_TILE_SLAB = ITEMS.register("tg_deepslate_tile_slab", () -> new BlockItem(TGBlocks.TG_DEEPSLATE_TILE_SLAB.get(), new Item.Properties()));
+    public static RegistryObject<Item> TG_DEEPSLATE_TILE_WALL = ITEMS.register("tg_deepslate_tile_wall", () -> new BlockItem(TGBlocks.TG_DEEPSLATE_TILE_WALL.get(), new Item.Properties()));
+    public static RegistryObject<Item> TG_CRACKED_DEEPSLATE_TILES = ITEMS.register("tg_cracked_deepslate_tiles", () -> new BlockItem(TGBlocks.TG_CRACKED_DEEPSLATE_TILES.get(), new Item.Properties()));
+
+    public static RegistryObject<Item> TG_CHISELED_DEEPSLATE = ITEMS.register("tg_chiseled_deepslate", () -> new BlockItem(TGBlocks.TG_CHISELED_DEEPSLATE.get(), new Item.Properties()));
+
+
+    public static final Item CANDLE = new BlockItem(TGBlocks.CANDLE, new FabricItemSettings());
+    public static final Item WHITE_CANDLE = new BlockItem(TGBlocks.WHITE_CANDLE, new FabricItemSettings());
+    public static final Item ORANGE_CANDLE = new BlockItem(TGBlocks.ORANGE_CANDLE, new FabricItemSettings());
+    public static final Item MAGENTA_CANDLE = new BlockItem(TGBlocks.MAGENTA_CANDLE, new FabricItemSettings());
+    public static final Item LIGHT_BLUE_CANDLE = new BlockItem(TGBlocks.LIGHT_BLUE_CANDLE, new FabricItemSettings());
+    public static final Item YELLOW_CANDLE = new BlockItem(TGBlocks.YELLOW_CANDLE, new FabricItemSettings());
+    public static final Item LIME_CANDLE = new BlockItem(TGBlocks.LIME_CANDLE, new FabricItemSettings());
+    public static final Item PINK_CANDLE = new BlockItem(TGBlocks.PINK_CANDLE, new FabricItemSettings());
+    public static final Item GRAY_CANDLE = new BlockItem(TGBlocks.GRAY_CANDLE, new FabricItemSettings());
+    public static final Item LIGHT_GRAY_CANDLE = new BlockItem(TGBlocks.LIGHT_GRAY_CANDLE, new FabricItemSettings());
+    public static final Item CYAN_CANDLE = new BlockItem(TGBlocks.CYAN_CANDLE, new FabricItemSettings());
+    public static final Item PURPLE_CANDLE = new BlockItem(TGBlocks.PURPLE_CANDLE, new FabricItemSettings());
+    public static final Item BLUE_CANDLE = new BlockItem(TGBlocks.BLUE_CANDLE, new FabricItemSettings());
+    public static final Item BROWN_CANDLE = new BlockItem(TGBlocks.BROWN_CANDLE, new FabricItemSettings());
+    public static final Item GREEN_CANDLE = new BlockItem(TGBlocks.GREEN_CANDLE, new FabricItemSettings());
+    public static final Item RED_CANDLE = new BlockItem(TGBlocks.RED_CANDLE, new FabricItemSettings());
+    public static final Item BLACK_CANDLE = new BlockItem(TGBlocks.BLACK_CANDLE, new FabricItemSettings());
+
+    public static final Item TG_MOSS_CARPET = new BlockItem(TGBlocks.TG_MOSS_CARPET, new FabricItemSettings());
+
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "tg_moss_carpet"), TG_MOSS_CARPET);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "candle"), CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "white_candle"), WHITE_CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "orange_candle"), ORANGE_CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "magenta_candle"), MAGENTA_CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "light_blue_candle"), LIGHT_BLUE_CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "yellow_candle"), YELLOW_CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "lime_candle"), LIME_CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "pink_candle"), PINK_CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "gray_candle"), GRAY_CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "light_gray_candle"), LIGHT_GRAY_CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "cyan_candle"), CYAN_CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "purple_candle"), PURPLE_CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "blue_candle"), BLUE_CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "brown_candle"), BROWN_CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "green_candle"), GREEN_CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "red_candle"), RED_CANDLE);
+        Registry.register(Registries.ITEM, new Identifier(TheGraveyard.MOD_ID, "black_candle"), BLACK_CANDLE);
+
 
     // helper blocks that get don't get replaced on world generation, generate ores or generate trees on
     public static final RegistryObject<Item> TG_GRASS_BLOCK = ITEMS.register("tg_grass_block", () -> new BlockItem(TGBlocks.TG_GRASS_BLOCK.get(), new Item.Properties()));
@@ -135,7 +201,6 @@ public class TGItems {
     public static final RegistryObject<Item> ACACIA_COFFIN = ITEMS.register("acacia_coffin", () -> new BlockItem(TGBlocks.ACACIA_COFFIN.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> WARPED_COFFIN = ITEMS.register("warped_coffin", () -> new BlockItem(TGBlocks.WARPED_COFFIN.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> CRIMSON_COFFIN = ITEMS.register("crimson_coffin", () -> new BlockItem(TGBlocks.CRIMSON_COFFIN.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
-    public static final RegistryObject<Item> MANGROVE_COFFIN = ITEMS.register("mangrove_coffin", () -> new BlockItem(TGBlocks.MANGROVE_COFFIN.get(), new Item.Properties().tab(TheGraveyard.GROUP)));
 
     public static final RegistryObject<Item> SARCOPHAGUS_LID = ITEMS.register("sarcophagus_lid", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> SARCOPHAGUS_BASE = ITEMS.register("sarcophagus_base", () -> new Item(new Item.Properties()));
@@ -155,8 +220,6 @@ public class TGItems {
     public static final RegistryObject<Item> WARPED_COFFIN_BASE = ITEMS.register("warped_coffin_base", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> CRIMSON_COFFIN_LID = ITEMS.register("crimson_coffin_lid", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> CRIMSON_COFFIN_BASE = ITEMS.register("crimson_coffin_base", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> MANGROVE_COFFIN_LID = ITEMS.register("mangrove_coffin_lid", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> MANGROVE_COFFIN_BASE = ITEMS.register("mangrove_coffin_base", () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> VIAL_OF_BLOOD = ITEMS.register("vial_of_blood", VialOfBlood::new);
 
@@ -183,6 +246,7 @@ public class TGItems {
     public static final RegistryObject<Item> UPPER_BONE_STAFF = ITEMS.register("upper_bone_staff", () -> new BlockItem(TGBlocks.UPPER_BONE_STAFF.get(), new Item.Properties().stacksTo(1).tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> MIDDLE_BONE_STAFF = ITEMS.register("middle_bone_staff", () -> new BlockItem(TGBlocks.MIDDLE_BONE_STAFF.get(), new Item.Properties().stacksTo(1).tab(TheGraveyard.GROUP)));
     public static final RegistryObject<Item> LOWER_BONE_STAFF = ITEMS.register("lower_bone_staff", () -> new BlockItem(TGBlocks.LOWER_BONE_STAFF.get(), new Item.Properties().stacksTo(1).tab(TheGraveyard.GROUP)));
+
 
 
 }

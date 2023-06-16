@@ -61,15 +61,6 @@ public class OssuaryBlock extends BaseEntityBlock {
         }
     }
 
-    @Override
-    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
-        for (int i = 0; i < 10; i++) {
-            world.addParticle(ParticleTypes.ASH, pos.getX() + random.nextInt(-1, 1) + 0.5D, pos.getY() + 1.0D, pos.getZ() + random.nextInt(-1, 1) + 0.5D, 0, 0, 0);
-
-        }
-
-    }
-
 
     @Nullable
     public MenuProvider getMenuProvider(BlockState state, Level world, BlockPos pos) {
@@ -92,7 +83,7 @@ public class OssuaryBlock extends BaseEntityBlock {
     }
 
     @Override
-    public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
+    public boolean isPathfindable(BlockState p_60475_, IBlockReader p_60476_, BlockPos p_60477_, PathType p_60478_) {
         return false;
     }
 

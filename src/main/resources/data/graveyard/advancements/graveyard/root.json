@@ -17,68 +17,36 @@
   },
   "criteria": {
     "grave_01": {
+      "trigger": "minecraft:location",
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "structure": "graveyard:small_grave"
-              }
-            }
-          }
-        ]
-      },
-      "trigger": "minecraft:location"
+        "location": {
+          "feature": "graveyard:small_grave"
+        }
+      }
     },
     "grave_02": {
+      "trigger": "minecraft:location",
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "structure": "graveyard:small_desert_grave"
-              }
-            }
-          }
-        ]
-      },
-      "trigger": "minecraft:location"
+        "location": {
+          "feature": "graveyard:small_mountain_grave"
+        }
+      }
     },
     "grave_03": {
+      "trigger": "minecraft:location",
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "structure": "graveyard:small_savanna_grave"
-              }
-            }
-          }
-        ]
-      },
-      "trigger": "minecraft:location"
+        "location": {
+          "feature": "graveyard:small_desert_grave"
+        }
+      }
     },
     "grave_04": {
+      "trigger": "minecraft:location",
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "structure": "graveyard:small_mountain_grave"
-              }
-            }
-          }
-        ]
-      },
-      "trigger": "minecraft:location"
+        "location": {
+          "feature": "graveyard:small_savanna_grave"
+        }
+      }
     }
   },
   "requirements": [

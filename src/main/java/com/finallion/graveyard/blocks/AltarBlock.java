@@ -9,39 +9,36 @@ import com.finallion.graveyard.init.TGItems;
 import com.finallion.graveyard.init.TGSounds;
 import com.finallion.graveyard.item.VialOfBlood;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.pattern.BlockPattern;
+import net.minecraft.block.pattern.BlockPatternBuilder;
+import net.minecraft.block.pattern.BlockStateMatcher;
+import net.minecraft.client.audio.SoundSource;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUtils;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.pattern.BlockInWorld;
-import net.minecraft.world.level.block.state.pattern.BlockPattern;
-import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
-import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.World;
+
+import java.util.Random;
+
 
 public class AltarBlock extends Block {
     public static final BooleanProperty BLOODY = BooleanProperty.create("bloody");
     private static BlockPattern COMPLETED_ALTAR;
 
 
-    public AltarBlock(BlockBehaviour.Properties settings) {
+    public AltarBlock(AbstractBlock.Properties settings) {
         super(settings);
         this.registerDefaultState((BlockState)((BlockState)((BlockState)this.stateDefinition.any()).setValue(BLOODY, false)));
     }
@@ -52,7 +49,7 @@ public class AltarBlock extends Block {
     }
 
 
-    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
+    public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
         super.animateTick(state, world, pos, random);
         if (state.getValue(BLOODY)) {
             if (random.nextInt(10) == 0) {
@@ -65,31 +62,32 @@ public class AltarBlock extends Block {
     public static BlockPattern getCompletedFramePattern() {
         if (COMPLETED_ALTAR == null) {
             COMPLETED_ALTAR = BlockPatternBuilder.start().aisle("???x???", "???????", "???????", "???????", "???????", "???????", "???????", "a??b??c")
-                    .where('?', BlockInWorld.hasState(BlockStatePredicate.ANY))
-                    .where('a', BlockInWorld.hasState(BlockStatePredicate.forBlock(TGBlocks.LOWER_BONE_STAFF.get()).or(BlockStatePredicate.forBlock(TGBlocks.UPPER_BONE_STAFF.get()))))
-                    .where('b', BlockInWorld.hasState(BlockStatePredicate.forBlock(TGBlocks.MIDDLE_BONE_STAFF.get())))
-                    .where('c', BlockInWorld.hasState(BlockStatePredicate.forBlock(TGBlocks.UPPER_BONE_STAFF.get()).or(BlockStatePredicate.forBlock(TGBlocks.LOWER_BONE_STAFF.get()))))
-                    .where('x', BlockInWorld.hasState(BlockStatePredicate.forBlock(TGBlocks.ALTAR.get())))
+                    .where('?', CachedBlockInfo.hasState(BlockStateMatcher.ANY))
+                    .where('a', CachedBlockInfo.hasState(BlockStateMatcher.forBlock(TGBlocks.LOWER_BONE_STAFF.get()).or(BlockStateMatcher.forBlock(TGBlocks.UPPER_BONE_STAFF.get()))))
+                    .where('b', CachedBlockInfo.hasState(BlockStateMatcher.forBlock(TGBlocks.MIDDLE_BONE_STAFF.get())))
+                    .where('c', CachedBlockInfo.hasState(BlockStateMatcher.forBlock(TGBlocks.UPPER_BONE_STAFF.get()).or(BlockStateMatcher.forBlock(TGBlocks.LOWER_BONE_STAFF.get()))))
+                    .where('x', CachedBlockInfo.hasState(BlockStateMatcher.forBlock(TGBlocks.ALTAR.get())))
                     .build();
         }
 
         return COMPLETED_ALTAR;
     }
 
+
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult p_60508_) {
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult p_60508_) {
         ItemStack stack = player.getItemInHand(hand);
 
         float blood = 0.0F;
-        if (stack.is(TGItems.VIAL_OF_BLOOD.get())) {
+        if (stack.sameItem(TGItems.VIAL_OF_BLOOD.get())) {
             blood = VialOfBlood.getBlood(stack);
         }
 
         if (state.is(TGBlocks.ALTAR.get()) && (blood >= 0.8F || GraveyardConfig.COMMON.isBossSummonableItem.get().contains(stack.getItem().getDescriptionId())) && world.getDifficulty() != Difficulty.PEACEFUL && (world.isNight() || world.dimensionType().hasFixedTime())) {
-            BlockPattern.BlockPatternMatch result = AltarBlock.getCompletedFramePattern().find(world, pos);
+            BlockPattern.PatternHelper result = AltarBlock.getCompletedFramePattern().find(world, pos);
 
             if (!state.getValue(AltarBlock.BLOODY) && (result != null || !GraveyardConfig.COMMON.summoningNeedsStaffFragments.get())) {
-                player.level.playSound(null, player.blockPosition(), TGSounds.VIAL_SPLASH.get(), SoundSource.BLOCKS, 5.0F, 1.0F);
+                player.level.playSound(null, player.blockPosition(), TGSounds.VIAL_SPLASH.get(), SoundCategory.BLOCKS, 5.0F, 1.0F);
                 world.setBlock(pos, state.setValue(AltarBlock.BLOODY, true), 3);
 
                 Direction direction;
@@ -103,8 +101,8 @@ public class AltarBlock extends Block {
                 if (!world.isClientSide()) {
                     if (!player.isCreative()) {
                         ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
-                        ItemUtils.createFilledResult(stack, player, bottle);
-                        player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 430));
+                        DrinkHelper.createFilledResult(stack, player, bottle);
+                        //player.addEffect(new EffectInstance(EffectInstance.DARKNESS, 430));
                     }
 
                     BlockPos corner = pos.offset(-8, 0, -8);
@@ -132,19 +130,19 @@ public class AltarBlock extends Block {
                     lich.onSummoned(direction.getOpposite(), pos.above());
 
 
-                    for (ServerPlayer serverplayer : world.getEntitiesOfClass(ServerPlayer.class, lich.getBoundingBox().inflate(50.0D))) {
+                    for (ServerPlayerEntity serverplayer : world.getEntitiesOfClass(ServerPlayerEntity.class, lich.getBoundingBox().inflate(50.0D))) {
                         CriteriaTriggers.SUMMONED_ENTITY.trigger(serverplayer, lich);
                     }
 
 
 
                     world.addFreshEntity(lich);
-                    lich.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 5));
+                    lich.addEffect(new EffectInstance(Effects.INVISIBILITY, 5));
 
-                    return InteractionResult.CONSUME;
+                    return ActionResultType.CONSUME;
                 }
 
-                return InteractionResult.sidedSuccess(player.level.isClientSide);
+                return ActionResultType.sidedSuccess(player.level.isClientSide);
             }
         }
 

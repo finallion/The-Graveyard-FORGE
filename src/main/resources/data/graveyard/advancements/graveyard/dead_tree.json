@@ -17,20 +17,12 @@
   },
   "criteria": {
     "dead_tree": {
+      "trigger": "minecraft:location",
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "structure": "graveyard:dead_tree"
-              }
-            }
-          }
-        ]
-      },
-      "trigger": "minecraft:location"
+        "location": {
+          "feature": "graveyard:dead_tree"
+        }
+      }
     }
   },
   "requirements": [

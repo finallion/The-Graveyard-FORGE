@@ -44,13 +44,13 @@ public class VialOfBlood extends Item {
         }
 
         if (blood > 0.8F && blood < 0.9F) {
-            tooltip.add(Component.translatable("Blood level: full").withStyle(ChatFormatting.GRAY));
+            tooltip.add(new TextComponent("Blood level: full").withStyle(ChatFormatting.GRAY));
         } else {
             int level = (int)(blood * 10);
             if (level == 0) {
-                tooltip.add(Component.translatable("Blood level: 1/8").withStyle(ChatFormatting.GRAY));
+                tooltip.add(new TextComponent("Blood level: 1/8").withStyle(ChatFormatting.GRAY));
             } else {
-                tooltip.add(Component.translatable("Blood level: " + level + "/8").withStyle(ChatFormatting.GRAY));
+                tooltip.add(new TextComponent("Blood level: " + level + "/8").withStyle(ChatFormatting.GRAY));
             }
         }
 

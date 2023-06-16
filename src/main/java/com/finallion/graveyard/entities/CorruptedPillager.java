@@ -45,10 +45,13 @@ public class CorruptedPillager extends CorruptedIllager {
     }
 
 
+    protected SoundEvent getDeathSound() {
+        return TGSounds.CORRUPTED_ILLAGER_DEATH.get();
+    }
+
     @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        this.playSound(TGSounds.CORRUPTED_ILLAGER_DEATH.get(), 0.8F, 0.0F);
+    public float getVoicePitch() {
+        return -0.0F;
     }
 
     @Override

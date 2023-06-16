@@ -2,43 +2,33 @@ package com.finallion.graveyard.blocks;
 
 import com.finallion.graveyard.blockentities.UrnBlockEntity;
 import com.finallion.graveyard.init.TGTileEntities;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.block.*;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathType;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.Container;
-import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.piglin.PiglinAi;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
 
-public class UrnBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+public class UrnBlock extends ContainerBlock implements IWaterLoggable {
     public static final BooleanProperty WATERLOGGED;
     public static final DirectionProperty FACING;
     public static final BooleanProperty OPEN;
@@ -59,21 +49,21 @@ public class UrnBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
      */
 
     @Override
-    public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
+    public boolean isPathfindable(BlockState p_60475_, IBlockReader p_60476_, BlockPos p_60477_, PathType p_60478_) {
         return false;
     }
 
     @Override
-    public boolean propagatesSkylightDown(BlockState p_49928_, BlockGetter p_49929_, BlockPos p_49930_) {
+    public boolean propagatesSkylightDown(BlockState p_49928_, IBlockReader p_49929_, BlockPos p_49930_) {
         return true;
     }
 
     @Override
-    public float getShadeBrightness(BlockState p_60472_, BlockGetter p_60473_, BlockPos p_60474_) {
+    public float getShadeBrightness(BlockState p_60472_, IBlockReader p_60473_, BlockPos p_60474_) {
         return 1.0F;
     }
 
-    public VoxelShape getShape(BlockState p_220053_1_, BlockGetter p_220053_2_, BlockPos p_220053_3_, CollisionContext p_220053_4_) {
+    public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
         if (this.asBlock().toString().contains("small")) {
             return SMALL_URN;
         }
@@ -83,7 +73,7 @@ public class UrnBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
 
 
     @Override
-    public VoxelShape getCollisionShape(BlockState p_220071_1_, BlockGetter p_220071_2_, BlockPos p_220071_3_, CollisionContext p_220071_4_) {
+    public VoxelShape getCollisionShape(BlockState p_220071_1_, IBlockReader p_220071_2_, BlockPos p_220071_3_, ISelectionContext p_220071_4_) {
         if (this.asBlock().toString().contains("small")) {
             return SMALL_URN;
         }
@@ -94,24 +84,24 @@ public class UrnBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
         return (Boolean)state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
-    public InteractionResult use(BlockState p_49069_, Level p_49070_, BlockPos p_49071_, Player p_49072_, InteractionHand p_49073_, BlockHitResult p_49074_) {
+    public ActionResultType use(BlockState p_49069_, World p_49070_, BlockPos p_49071_, PlayerEntity p_49072_, Hand p_49073_, BlockRayTraceResult p_49074_) {
         if (p_49070_.isClientSide) {
-            return InteractionResult.SUCCESS;
+            return ActionResultType.SUCCESS;
         } else {
-            BlockEntity blockentity = p_49070_.getBlockEntity(p_49071_);
+            TileEntity blockentity = p_49070_.getBlockEntity(p_49071_);
             if (blockentity instanceof UrnBlockEntity) {
                 p_49072_.openMenu((UrnBlockEntity)blockentity);
                 p_49072_.awardStat(Stats.OPEN_BARREL);
                 PiglinAi.angerNearbyPiglins(p_49072_, true);
             }
 
-            return InteractionResult.CONSUME;
+            return ActionResultType.CONSUME;
         }
     }
 
 
 
-    public void onRemove(BlockState p_49076_, Level p_49077_, BlockPos p_49078_, BlockState p_49079_, boolean p_49080_) {
+    public void onRemove(BlockState p_49076_, World p_49077_, BlockPos p_49078_, BlockState p_49079_, boolean p_49080_) {
         if (!p_49076_.is(p_49079_.getBlock())) {
             BlockEntity blockentity = p_49077_.getBlockEntity(p_49078_);
             if (blockentity instanceof Container) {
@@ -175,7 +165,7 @@ public class UrnBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
 
 
     @Nullable
-    public BlockEntity newBlockEntity(BlockPos p_152102_, BlockState p_152103_) {
+    public TileEntity newBlockEntity(BlockPos p_152102_, BlockState p_152103_) {
         return TGTileEntities.URN_BLOCK_ENTITY.get().create(p_152102_, p_152103_);
     }
 

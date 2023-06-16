@@ -42,7 +42,7 @@ public class TheGraveyardClient {
     public TheGraveyardClient() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        //modEventBus.addListener(this::clientInit);
+        modEventBus.addListener(this::clientInit);
         modEventBus.addListener(this::initParticles);
         modEventBus.addListener(this::onBlockColorsInit);
         modEventBus.addListener(this::onItemColorsInit);
@@ -68,12 +68,12 @@ public class TheGraveyardClient {
 
 
     @SubscribeEvent
-    public void initParticles(RegisterParticleProvidersEvent event){
-        event.register(TGParticles.GRAVEYARD_FOG_PARTICLE.get(), GraveyardFogParticle.FogFactory::new);
-        event.register(TGParticles.GRAVEYARD_SOUL_PARTICLE.get(), GraveyardSoulParticle.Provider::new);
-        event.register(TGParticles.GRAVEYARD_HAND_PARTICLE.get(), GraveyardHandParticle.Provider::new);
-        event.register(TGParticles.GRAVEYARD_LEFT_HAND_PARTICLE.get(), GraveyardHandParticle.Provider::new);
-        event.register(TGParticles.GRAVEYARD_SOUL_BEAM_PARTICLE.get(), SonicBoomParticle.Provider::new);
+    public void initParticles(ParticleFactoryRegisterEvent event){
+        Minecraft.getInstance().particleEngine.register(TGParticles.GRAVEYARD_FOG_PARTICLE.get(), GraveyardFogParticle.FogFactory::new);
+        Minecraft.getInstance().particleEngine.register(TGParticles.GRAVEYARD_SOUL_PARTICLE.get(), GraveyardSoulParticle.Provider::new);
+        Minecraft.getInstance().particleEngine.register(TGParticles.GRAVEYARD_HAND_PARTICLE.get(), GraveyardHandParticle.Provider::new);
+        Minecraft.getInstance().particleEngine.register(TGParticles.GRAVEYARD_LEFT_HAND_PARTICLE.get(), GraveyardHandParticle.Provider::new);
+        Minecraft.getInstance().particleEngine.register(TGParticles.GRAVEYARD_SOUL_BEAM_PARTICLE.get(), SonicBoomParticle.Provider::new);
     }
 
     @SubscribeEvent
@@ -122,14 +122,46 @@ public class TheGraveyardClient {
     }
 
     @SubscribeEvent
-    public void registerEntityModels(ModelEvent.RegisterAdditional event) {
-        event.register(new ResourceLocation(TheGraveyard.MOD_ID, "item/sarcophagus_base"));
-        event.register(new ResourceLocation(TheGraveyard.MOD_ID, "item/sarcophagus_lid"));
+    public void clientInit(FMLClientSetupEvent event) {
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.DARK_IRON_BARS.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.TG_GRASS_BLOCK.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.SKULL_WITH_RIB_CAGE.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.WITHER_SKULL_WITH_RIB_CAGE.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LEANING_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LEANING_WITHER_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LYING_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LYING_WITHER_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.SOUL_FIRE_BRAZIER.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.FIRE_BRAZIER.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.CANDLE_HOLDER.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.DARK_IRON_DOOR.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.DARK_IRON_TRAPDOOR.get(), CUTOUT_MIPPED);
+
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.BONE_REMAINS.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.WITHER_BONE_REMAINS.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.TORSO_PILE.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.WITHER_TORSO_PILE.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.SKULL_ON_PIKE.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.WITHER_SKULL_ON_PIKE.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LATERALLY_LYING_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LATERALLY_LYING_WITHER_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.HANGED_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.HANGED_WITHER_SKELETON.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.LOWER_BONE_STAFF.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.MIDDLE_BONE_STAFF.get(), CUTOUT_MIPPED);
+        ItemBlockRenderTypes.setRenderLayer(TGBlocks.UPPER_BONE_STAFF.get(), CUTOUT_MIPPED);
+    }
+
+
+    @SubscribeEvent
+    public void registerEntityModels(final ModelRegistryEvent event) {
+        ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "item/sarcophagus_base"));
+        ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "item/sarcophagus_lid"));
 
         for (Block block : TGBlocks.getCoffins()) {
             String woodType = block.getDescriptionId().split("\\.")[2];
-            event.register(new ResourceLocation(TheGraveyard.MOD_ID, "item/" + woodType + "_base"));
-            event.register(new ResourceLocation(TheGraveyard.MOD_ID, "item/" + woodType + "_lid"));
+            ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "item/" + woodType + "_base"));
+            ForgeModelBakery.addSpecialModel(new ResourceLocation(TheGraveyard.MOD_ID, "item/" + woodType + "_lid"));
         }
 
     }

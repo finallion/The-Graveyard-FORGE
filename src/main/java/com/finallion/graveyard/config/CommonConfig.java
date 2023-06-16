@@ -25,6 +25,7 @@ public class CommonConfig {
     public final ForgeConfigSpec.BooleanValue canGenerateGiantMushroom;
     public final ForgeConfigSpec.BooleanValue canGenerateLichPrison;
     public final ForgeConfigSpec.BooleanValue canGenerateRuins;
+    public final ForgeConfigSpec.BooleanValue canGenerateDeadTree;
 
     public final ForgeConfigSpec.BooleanValue enableGhoul;
     public final ForgeConfigSpec.IntValue weightGhoul;
@@ -32,6 +33,9 @@ public class CommonConfig {
     public final ForgeConfigSpec.IntValue maxGroupSizeGhoul;
     public final ForgeConfigSpec.BooleanValue ghoulCanBurnInSunlight;
     public final ForgeConfigSpec.BooleanValue ghoulCanBeWithered;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistGhoul;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistGhoul;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> modWhitelistGhoul;
 
     public final ForgeConfigSpec.BooleanValue enableRevenant;
     public final ForgeConfigSpec.IntValue weightRevenant;
@@ -39,11 +43,11 @@ public class CommonConfig {
     public final ForgeConfigSpec.IntValue maxGroupSizeRevenant;
     public final ForgeConfigSpec.BooleanValue revenantCanBurnInSunlight;
     public final ForgeConfigSpec.BooleanValue revenantCanBeWithered;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistRevenant;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistRevenant;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> modWhitelistRevenant;
 
     public final ForgeConfigSpec.BooleanValue enableReaper;
-    public final ForgeConfigSpec.IntValue weightReaper;
-    public final ForgeConfigSpec.IntValue minGroupSizeReaper;
-    public final ForgeConfigSpec.IntValue maxGroupSizeReaper;
     public final ForgeConfigSpec.BooleanValue reaperCanBurnInSunlight;
     public final ForgeConfigSpec.BooleanValue reaperCanBeWithered;
 
@@ -53,6 +57,9 @@ public class CommonConfig {
     public final ForgeConfigSpec.IntValue maxGroupSizeNightmare;
     public final ForgeConfigSpec.BooleanValue nightmareCanBurnInSunlight;
     public final ForgeConfigSpec.BooleanValue nightmareCanBeWithered;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistNightmare;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistNightmare;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> modWhitelistNightmare;
 
     public final ForgeConfigSpec.BooleanValue enableSkeletonCreeper;
     public final ForgeConfigSpec.IntValue weightSkeletonCreeper;
@@ -60,6 +67,9 @@ public class CommonConfig {
     public final ForgeConfigSpec.IntValue maxGroupSizeSkeletonCreeper;
     public final ForgeConfigSpec.BooleanValue skeletonCreeperCanBurnInSunlight;
     public final ForgeConfigSpec.BooleanValue skeletonCreeperCanBeWithered;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistSkeletonCreeper;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistSkeletonCreeper;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> modWhitelistSkeletonCreeper;
 
     public final ForgeConfigSpec.BooleanValue enableAcolyte;
     public final ForgeConfigSpec.BooleanValue acolyteCanBurnInSunlight;
@@ -87,6 +97,7 @@ public class CommonConfig {
 
     public final ForgeConfigSpec.BooleanValue urnHasDoubleInventory;
     public final ForgeConfigSpec.BooleanValue disableWitherSkeletonSpawner;
+    public final ForgeConfigSpec.BooleanValue enableBossMusic;
 
     public final ForgeConfigSpec.DoubleValue healthInCastingPhase;
     public final ForgeConfigSpec.DoubleValue healthInHuntingPhase;
@@ -116,20 +127,24 @@ public class CommonConfig {
 
     public CommonConfig(ForgeConfigSpec.Builder builder) {
         builder.comment(" Welcome to The Graveyard Config!" +
-                "Welcome to The Graveyard Config! \n " +
-                "\n" +
-                "Structures: \n " +
-                "Enable or disable structure spawns. \n " +
-                "\n" +
-                "Mobs: \n" +
-                "Configure spawning weight and group size of the spawn (ghoul, revenant, reaper, nightmare, skeleton creeper). \n " +
-                "Configure if mobs burn in sunlight and/or if mobs are affected by the wither effect. \n " +
-                "\n" +
-                "Additional: \n" +
-                "Configure graveyard fog particles rising from moss and set the chance of spawning them (higher numbers = lower chance of spawning). \n " +
-                "Configure if hordes of graveyard mobs can spawn and set their size and frequency. \n " +
-                "Configure if urns have a double chest inventory. \n " +
-                "Configure if the wither skeleton spawner in the large graveyard will be replaced by a skeleton spawner. \n "
+                        "Welcome to The Graveyard Config! \n " +
+                        "\n" +
+                        "Structures: \n " +
+                        "Enable or disable structure spawns. \n " +
+                        "\n" +
+                        "Mobs: \n" +
+                        "Configure spawning weight and group size of the spawn (ghoul, revenant, reaper, nightmare, skeleton creeper). \n " +
+                        "Configure if mobs burn in sunlight and/or if mobs are affected by the wither effect. \n " +
+                        "\n" +
+                        "Additional: \n" +
+                        "Configure graveyard fog particles rising from moss and set the chance of spawning them (higher numbers = lower chance of spawning). \n " +
+                        "Configure if hordes of graveyard mobs can spawn and set their size and frequency. \n " +
+                        "Configure if urns have a double chest inventory. \n " +
+                        "Configure if the wither skeleton spawner in the large graveyard will be replaced by a skeleton spawner. \n ",
+                "Configure if boss music plays during the fight against the Corrupted Champion. \n ",
+                "\n",
+                "Music: \n",
+                "Incarnated Evil by Rotch Gwylt (Official The Graveyard Soundtrack). \n "
         );
 
         builder.push("The Graveyard - Structures Config");
@@ -150,6 +165,7 @@ public class CommonConfig {
         this.canGenerateGiantMushroom = builder.define("giantMushroom.generate", true);
         this.canGenerateLichPrison = builder.define("lichPrison.generate", true);
         this.canGenerateRuins = builder.define("ruins.generate", true);
+        this.canGenerateDeadTree = builder.define("deadTree.generate", true);
 
         builder.pop();
 
@@ -160,21 +176,24 @@ public class CommonConfig {
         this.minGroupSizeGhoul = builder.defineInRange("ghoul.minGroupSizeGhoul", 2, 1, 100);
         this.maxGroupSizeGhoul = builder.defineInRange("ghoul.maxGroupSizeGhoul", 5, 1, 100);
         this.ghoulCanBurnInSunlight = builder.define("ghoul.canBurnInSunlight", true);
-        this.ghoulCanBeWithered = builder.define("ghoul.canBeWithered", false);
+        this.ghoulCanBeWithered = builder.define("ghoul.canBeWithered", true);
+        this.whitelistGhoul = builder.defineList("ghoul.whitelist", getGhoulWhitelist(), o -> o instanceof String);
+        this.blacklistGhoul = builder.defineList("ghoul.blacklist", getMobBlacklist(), o -> o instanceof String);
+        this.modWhitelistGhoul = builder.defineList("ghoul.modWhitelist", Arrays.asList("#minecraft", "#graveyard_biomes"), o -> o instanceof String);
 
         this.enableRevenant = builder.define("revenant.enabled", true);
         this.weightRevenant = builder.defineInRange("revenant.weight", 25, 0, 100);
         this.minGroupSizeRevenant = builder.defineInRange("revenant.minGroupSizeRevenant", 5, 1, 100);
         this.maxGroupSizeRevenant = builder.defineInRange("revenant.maxGroupSizeRevenant", 8, 1, 100);
         this.revenantCanBurnInSunlight = builder.define("revenant.canBurnInSunlight", true);
-        this.revenantCanBeWithered = builder.define("revenant.canBeWithered", false);
+        this.revenantCanBeWithered = builder.define("revenant.canBeWithered", true);
+        this.whitelistRevenant = builder.defineList("revenant.whitelist", getRevenantWhitelist(), o -> o instanceof String);
+        this.blacklistRevenant = builder.defineList("revenant.blacklist", getMobBlacklist(), o -> o instanceof String);
+        this.modWhitelistRevenant = builder.defineList("revenant.modWhitelist", Arrays.asList("#minecraft", "#graveyard_biomes"), o -> o instanceof String);
 
-        this.enableReaper = builder.define("reaper.enabled", true);
-        this.weightReaper = builder.defineInRange("reaper.weight", 10, 0, 100);
-        this.minGroupSizeReaper = builder.defineInRange("reaper.minGroupSizeReaper", 2, 1, 100);
-        this.maxGroupSizeReaper = builder.defineInRange("reaper.maxGroupSizeGhoul", 3, 1, 100);
+        this.enableReaper = builder.define("reaper.enabled", false);
         this.reaperCanBurnInSunlight = builder.define("reaper.canBurnInSunlight", true);
-        this.reaperCanBeWithered = builder.define("reaper.canBeWithered", false);
+        this.reaperCanBeWithered = builder.define("reaper.canBeWithered", true);
 
         this.enableNightmare = builder.define("nightmare.enabled", true);
         this.weightNightmare = builder.defineInRange("nightmare.weight", 10, 0, 100);
@@ -182,17 +201,23 @@ public class CommonConfig {
         this.maxGroupSizeNightmare = builder.defineInRange("nightmare.maxGroupSizeNightmare", 1, 1, 100);
         this.nightmareCanBurnInSunlight = builder.define("nightmare.canBurnInSunlight", false);
         this.nightmareCanBeWithered = builder.define("nightmare.canBeWithered", false);
+        this.whitelistNightmare = builder.defineList("nightmare.whitelist", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.blacklistNightmare = builder.defineList("nightmare.blacklist", getMobBlacklist(), o -> o instanceof String);
+        this.modWhitelistNightmare = builder.defineList("nightmare.modWhitelist", Arrays.asList("#minecraft", "#graveyard_biomes"), o -> o instanceof String);
 
         this.enableSkeletonCreeper = builder.define("skeleton_creeper.enabled", true);
         this.weightSkeletonCreeper = builder.defineInRange("skeleton_creeper.weight", 25, 0, 100);
         this.minGroupSizeSkeletonCreeper = builder.defineInRange("skeleton_creeper.minGroupSizeSkeletonCreeper", 1, 1, 100);
         this.maxGroupSizeSkeletonCreeper = builder.defineInRange("skeleton_creeper.maxGroupSizeSkeletonCreeper", 4, 1, 100);
         this.skeletonCreeperCanBurnInSunlight = builder.define("skeleton_creeper.canBurnInSunlight", true);
-        this.skeletonCreeperCanBeWithered = builder.define("skeleton_creeper.canBeWithered", false);
+        this.skeletonCreeperCanBeWithered = builder.define("skeleton_creeper.canBeWithered", true);
+        this.whitelistSkeletonCreeper = builder.defineList("skeleton_creeper.whitelist", getAllOverworldBiomeCategories(), o -> o instanceof String);
+        this.blacklistSkeletonCreeper = builder.defineList("skeleton_creeper.blacklist", getMobBlacklist(), o -> o instanceof String);
+        this.modWhitelistSkeletonCreeper = builder.defineList("skeleton_creeper.modWhitelist", Arrays.asList("#minecraft", "#graveyard_biomes"), o -> o instanceof String);
 
         this.enableAcolyte = builder.define("acolyte.enabled", false);
         this.acolyteCanBurnInSunlight = builder.define("acolyte.canBurnInSunlight", false);
-        this.acolyteCanBeWithered = builder.define("acolyte.canBeWithered", false);
+        this.acolyteCanBeWithered = builder.define("acolyte.canBeWithered", true);
 
         this.enableWraith = builder.define("wraith.enabled", false);
         this.wraithCanBurnInSunlight = builder.define("wraith.canBurnInSunlight", true);
@@ -200,11 +225,11 @@ public class CommonConfig {
 
         this.enableCorruptedPillager = builder.define("corruptedPillager.enabled", false);
         this.corruptedPillagerCanBurnInSunlight = builder.define("corruptedPillager.canBurnInSunlight", true);
-        this.corruptedPillagerCanBeWithered = builder.define("corruptedPillager.canBeWithered", false);
+        this.corruptedPillagerCanBeWithered = builder.define("corruptedPillager.canBeWithered", true);
 
         this.enableCorruptedVindicator = builder.define("corruptedVindicator.enabled", false);
         this.corruptedVindicatorCanBurnInSunlight = builder.define("corruptedVindicator.canBurnInSunlight", true);
-        this.corruptedVindicatorCanBeWithered = builder.define("corruptedVindicator.canBeWithered", false);
+        this.corruptedVindicatorCanBeWithered = builder.define("corruptedVindicator.canBeWithered", true);
 
         builder.pop();
 
@@ -249,10 +274,58 @@ public class CommonConfig {
 
         builder.push("The Graveyard - Additional Config");
         this.urnHasDoubleInventory = builder.define("urn.urnHasDoubleInventory", true);
+        this.enableBossMusic = builder.define("bossMusic.enableBossMusic", true);
         this.disableWitherSkeletonSpawner = builder.define("spawner.disableWitherSkeletonSpawner", false);
         builder.pop();
     }
 
+    private List<String> getAllOverworldBiomeCategories() {
+        Biome.BiomeCategory[] biomeCategory = Biome.BiomeCategory.values();
+        List<String> biomeNames = new ArrayList<>();
+        for (Biome.BiomeCategory biome : biomeCategory) {
+            if (biome.getName().contains("river") || biome.getName().contains("ocean") || biome.getName().contains("none") || biome.getName().contains("the_end") || biome.getName().contains("nether") || biome.getName().contains("mushroom")) {
+                continue;
+            }
+            biomeNames.add("#" + biome.getName());
+        }
+        return biomeNames;
+    }
+
+    private List<String> getGhoulWhitelist() {
+        Set<ResourceKey<Biome>> biomes = new HashSet<>();
+        biomes.add(Biomes.TAIGA);
+        biomes.add(Biomes.OLD_GROWTH_PINE_TAIGA);
+        biomes.add(Biomes.OLD_GROWTH_SPRUCE_TAIGA);
+        biomes.add(Biomes.JUNGLE);
+        biomes.add(Biomes.BAMBOO_JUNGLE);
+        biomes.add(Biomes.FOREST);
+        biomes.add(Biomes.DARK_FOREST);
+        biomes.add(Biomes.SWAMP);
+
+        return new ArrayList<>(biomes.stream().map(value -> value.location().toString()).toList());
+    }
+
+    private List<String> getRevenantWhitelist() {
+        Set<ResourceKey<Biome>> biomes = new HashSet<>();
+        biomes.add(Biomes.SNOWY_PLAINS);
+        biomes.add(Biomes.SNOWY_SLOPES);
+        biomes.add(Biomes.SNOWY_TAIGA);
+        biomes.add(Biomes.ICE_SPIKES);
+        biomes.add(Biomes.FROZEN_PEAKS);
+        biomes.add(Biomes.JAGGED_PEAKS);
+        biomes.add(Biomes.WINDSWEPT_GRAVELLY_HILLS);
+
+        return new ArrayList<>(biomes.stream().map(value -> value.location().toString()).toList());
+    }
+
+    private List<String> getMobBlacklist() {
+        Set<ResourceKey<Biome>> biomes = new HashSet<>();
+        biomes.add(Biomes.MUSHROOM_FIELDS);
+        biomes.add(Biomes.FLOWER_FOREST);
+
+
+        return new ArrayList<>(biomes.stream().map(value -> value.location().toString()).toList());
+    }
 
     /*
     Credit to AzureDoom and Tslat

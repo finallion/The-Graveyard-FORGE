@@ -1,7 +1,7 @@
 package com.finallion.graveyard.blocks;
 
 
-import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.block.TrapDoorBlock;
 
 public class TGTrapDoorBlock extends TrapDoorBlock {
 

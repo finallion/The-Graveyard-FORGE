@@ -138,7 +138,7 @@ public class OssuaryScreenHandler extends AbstractContainerMenu {
         this.selectedRecipeIndex.set(-1);
         this.resultSlot.set(ItemStack.EMPTY);
         if (!p_40305_.isEmpty()) {
-            this.recipes = this.level.getRecipeManager().getRecipesFor(TGRecipeTypes.OSSUARY_CARVING.get(), p_40304_, this.level);
+            this.recipes = this.level.getRecipeManager().getRecipesFor(TGRecipeTypes.Type.INSTANCE, p_40304_, this.level);
         }
 
     }
@@ -186,7 +186,7 @@ public class OssuaryScreenHandler extends AbstractContainerMenu {
                 if (!this.moveItemStackTo(itemstack1, 2, 38, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (this.level.getRecipeManager().getRecipeFor(TGRecipeTypes.OSSUARY_CARVING.get(), new SimpleContainer(itemstack1), this.level).isPresent()) {
+            } else if (this.level.getRecipeManager().getRecipeFor(TGRecipeTypes.Type.INSTANCE, new SimpleContainer(itemstack1), this.level).isPresent()) {
                 if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }

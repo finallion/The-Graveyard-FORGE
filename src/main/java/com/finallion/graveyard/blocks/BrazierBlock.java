@@ -1,42 +1,32 @@
 package com.finallion.graveyard.blocks;
 
 import com.finallion.graveyard.blockentities.BrazierBlockEntity;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ContainerBlock;
+import net.minecraft.block.IWaterLoggable;
+import net.minecraft.client.audio.SoundSource;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.PathType;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.function.ToIntFunction;
 
-public class BrazierBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
+
+public class BrazierBlock extends Block implements ContainerBlock, IWaterLoggable {
     public static final BooleanProperty LIT;
     public static final BooleanProperty WATERLOGGED;
     public static final ToIntFunction<BlockState> STATE_TO_LUMINANCE;
@@ -49,12 +39,12 @@ public class BrazierBlock extends Block implements EntityBlock, SimpleWaterlogge
         this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false).setValue(WATERLOGGED, false));
     }
 
-    public InteractionResult use(BlockState p_152822_, Level p_152823_, BlockPos p_152824_, Player p_152825_, InteractionHand p_152826_, BlockHitResult p_152827_) {
+    public ActionResultType use(BlockState p_152822_, World p_152823_, BlockPos p_152824_, PlayerEntity p_152825_, Hand p_152826_, BlockRayTraceResult p_152827_) {
         if (p_152825_.getAbilities().mayBuild && p_152825_.getItemInHand(p_152826_).isEmpty() && p_152822_.getValue(LIT)) {
             extinguish(p_152825_, p_152822_, p_152823_, p_152824_);
-            return InteractionResult.sidedSuccess(p_152823_.isClientSide);
+            return ActionResultType.sidedSuccess(p_152823_.isClientSide);
         } else {
-            return InteractionResult.PASS;
+            return ActionResultType.PASS;
         }
     }
 
@@ -63,7 +53,7 @@ public class BrazierBlock extends Block implements EntityBlock, SimpleWaterlogge
     }
 
     @Override
-    public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
+    public boolean isPathfindable(BlockState p_60475_, IBlockReader p_60476_, BlockPos p_60477_, PathType p_60478_) {
         return false;
     }
 

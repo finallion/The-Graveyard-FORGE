@@ -23,5 +23,4 @@ public class BrazierBlockEntityRenderer extends GeoBlockRenderer<BrazierBlockEnt
     public RenderType getRenderType(BrazierBlockEntity animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
         return RenderType.entityCutout(getTextureLocation(animatable));
     }
-
 }

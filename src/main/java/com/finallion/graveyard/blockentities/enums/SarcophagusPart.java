@@ -1,9 +1,9 @@
 package com.finallion.graveyard.blockentities.enums;
 
 
-import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.IStringSerializable;
 
-public enum SarcophagusPart implements StringRepresentable {
+public enum SarcophagusPart implements IStringSerializable {
     HEAD("head"),
     FOOT("foot");
 

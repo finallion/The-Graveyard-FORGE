@@ -83,7 +83,13 @@ public class NamelessHangedEntity extends AbstractVillager implements IAnimatabl
 
     @Override
     public boolean hurt(DamageSource source, float p_21017_) {
-        return source == DamageSource.OUT_OF_WORLD || source == DamageSource.CRAMMING;
+        if (!this.level.isClientSide && !this.isRemoved()) {
+            if (DamageSource.OUT_OF_WORLD.equals(source) || DamageSource.CRAMMING.equals(source)) {
+                this.remove(RemovalReason.DISCARDED);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -185,11 +191,11 @@ public class NamelessHangedEntity extends AbstractVillager implements IAnimatabl
 
 
     public SoundEvent getNotifyTradeSound() {
-        return null;
+        return SoundEvents.SOUL_ESCAPE;
     }
 
     protected SoundEvent getTradeUpdatedSound(boolean p_35890_) {
-        return null;
+        return SoundEvents.SOUL_ESCAPE;
     }
 
 
