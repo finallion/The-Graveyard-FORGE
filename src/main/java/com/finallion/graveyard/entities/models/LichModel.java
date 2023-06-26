@@ -3,9 +3,9 @@ package com.finallion.graveyard.entities.models;
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.entities.LichEntity;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class LichModel extends AnimatedGeoModel<LichEntity> {
+public class LichModel extends GeoModel<LichEntity> {
     private ResourceLocation texture = new ResourceLocation(TheGraveyard.MOD_ID, "textures/entity/lich_texture.png");
 
     @Override

@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.Nullable;
 
 public class OminousBoneStaffFragment extends Block {
@@ -29,7 +28,7 @@ public class OminousBoneStaffFragment extends Block {
     public static final BooleanProperty WATERLOGGED;
 
     public OminousBoneStaffFragment() {
-        super(BlockBehaviour.Properties.of(Material.STONE).noOcclusion().noCollission().sound(SoundType.BONE_BLOCK).lightLevel((light) -> 7));
+        super(BlockBehaviour.Properties.of().noOcclusion().noCollission().sound(SoundType.BONE_BLOCK).lightLevel((light) -> 7));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
     }
 

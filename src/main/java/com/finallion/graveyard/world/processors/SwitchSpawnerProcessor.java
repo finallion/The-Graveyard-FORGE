@@ -1,6 +1,5 @@
 package com.finallion.graveyard.world.processors;
 
-import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.config.GraveyardConfig;
 import com.finallion.graveyard.init.TGProcessors;
 import com.mojang.serialization.Codec;
@@ -20,18 +19,19 @@ import org.jetbrains.annotations.Nullable;
 public class SwitchSpawnerProcessor extends StructureProcessor {
     public static final Codec<SwitchSpawnerProcessor> CODEC = Codec.unit(SwitchSpawnerProcessor::new);
 
-
     @Nullable
     @Override
-    public StructureTemplate.StructureBlockInfo processBlock(LevelReader worldReader, BlockPos pos, BlockPos pos2, StructureTemplate.StructureBlockInfo infoIn1, StructureTemplate.StructureBlockInfo structureBlockInfo2, StructurePlaceSettings settings) {
-        if (structureBlockInfo2.state.getBlock() instanceof SpawnerBlock && GraveyardConfig.COMMON.disableWitherSkeletonSpawner.get()) {
-            BlockPos worldPos = structureBlockInfo2.pos;
+    public StructureTemplate.StructureBlockInfo process(LevelReader worldReader, BlockPos pos, BlockPos pos2, StructureTemplate.StructureBlockInfo infoIn1, StructureTemplate.StructureBlockInfo structureBlockInfo2, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
+        if (structureBlockInfo2.state().getBlock() instanceof SpawnerBlock && GraveyardConfig.COMMON.disableWitherSkeletonSpawner.get()) {
+            BlockPos worldPos = structureBlockInfo2.pos();
             BlockEntity blockEntity = worldReader.getBlockEntity(worldPos);
             if (blockEntity instanceof SpawnerBlockEntity) {
-                CompoundTag nbtCompound = structureBlockInfo2.nbt.getCompound("SpawnData");
-                if (nbtCompound.toString().contains("wither_skeleton")) {
-                    ((SpawnerBlockEntity)blockEntity).getSpawner().setEntityId(EntityType.SKELETON);
-                    //TheGraveyard.LOGGER.error("The Graveyard Config: Wither Skeleton Spawner switched to Skeleton Spawner at " + worldPos);
+                CompoundTag nbt = structureBlockInfo2.nbt();
+                if (nbt != null) {
+                    CompoundTag nbtCompound = nbt.getCompound("SpawnData");
+                    if (nbtCompound.toString().contains("wither_skeleton")) {
+                        ((SpawnerBlockEntity) blockEntity).setEntityId(EntityType.SKELETON, settings.getRandom(worldPos));
+                    }
                 }
             }
         }

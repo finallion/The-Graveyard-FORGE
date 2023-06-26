@@ -3,9 +3,9 @@ package com.finallion.graveyard.entities.models;
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.entities.NamelessHangedEntity;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class NamelessHangedModel extends AnimatedGeoModel<NamelessHangedEntity> {
+public class NamelessHangedModel extends GeoModel<NamelessHangedEntity> {
 
     @Override
     public ResourceLocation getModelResource(NamelessHangedEntity object) {

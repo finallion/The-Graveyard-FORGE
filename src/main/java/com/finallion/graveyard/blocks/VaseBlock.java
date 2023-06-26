@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -34,7 +33,7 @@ public class VaseBlock extends Block implements SimpleWaterloggedBlock {
 
 
     public VaseBlock() {
-        super(BlockBehaviour.Properties.of(Material.GLASS).instabreak().noCollission().noOcclusion().sound(SoundType.GLASS));
+        super(BlockBehaviour.Properties.of().instabreak().noCollission().noOcclusion().sound(SoundType.GLASS));
         this.registerDefaultState(this.getStateDefinition().any().setValue(VASES, 1).setValue(WATERLOGGED, false));
     }
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

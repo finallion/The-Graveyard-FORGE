@@ -60,7 +60,9 @@ public class TGTileEntities {
             TGBlocks.CRIMSON_COFFIN.get(),
             TGBlocks.WARPED_COFFIN.get(),
             TGBlocks.SPRUCE_COFFIN.get(),
-            TGBlocks.MANGROVE_COFFIN.get()
+            TGBlocks.MANGROVE_COFFIN.get(),
+            TGBlocks.BAMBOO_COFFIN.get(),
+            TGBlocks.CHERRY_COFFIN.get()
     ).build(null));
 
     public static final RegistryObject<BlockEntityType<BrazierBlockEntity>> BRAZIER_BLOCK_ENTITY = register("brazier_block_entity", () -> BlockEntityType.Builder.of(BrazierBlockEntity::new,

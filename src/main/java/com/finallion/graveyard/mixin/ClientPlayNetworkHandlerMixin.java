@@ -3,18 +3,16 @@ package com.finallion.graveyard.mixin;
 import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
 import com.finallion.graveyard.client.gui.GravestoneScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.inventory.CommandBlockEditScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.PacketUtils;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.network.protocol.game.ClientboundOpenSignEditorPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.CommandBlockEntity;
-import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -44,8 +42,8 @@ public class ClientPlayNetworkHandlerMixin {
         BlockEntity blockentity = this.level.getBlockEntity(blockpos);
         if (blockentity instanceof GravestoneBlockEntity) {
             BlockState blockstate = this.level.getBlockState(blockpos);
-            blockentity = new GravestoneBlockEntity(blockpos, blockstate);
-            blockentity.setLevel(this.level);
+            GravestoneBlockEntity signblockentity1 = new GravestoneBlockEntity(blockpos, blockstate);
+            signblockentity1.setLevel(this.level);
             Minecraft.getInstance().setScreen(new GravestoneScreen((GravestoneBlockEntity) blockentity,  false));
             info.cancel();
         }
@@ -58,7 +56,10 @@ public class ClientPlayNetworkHandlerMixin {
       BlockPos blockpos = p_104976_.getPos();
       BlockEntity blockEntity = this.level.getBlockEntity(blockpos);
         if (blockEntity instanceof GravestoneBlockEntity) {
-            blockEntity.load(p_104976_.getTag());
+            CompoundTag tag = p_104976_.getTag();
+            if (tag != null) {
+                blockEntity.load(tag);
+            }
             info.cancel();
         }
    }

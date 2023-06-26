@@ -11,66 +11,56 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import software.bernie.geckolib3.core.AnimationState;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoBlockEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 
-public class OssuaryBlockEntity extends BlockEntity implements IAnimatable {
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
-    private final AnimationBuilder OPEN = new AnimationBuilder().addAnimation("open", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder CLOSE = new AnimationBuilder().addAnimation("close", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME);
-    private final AnimationBuilder IDLE = new AnimationBuilder().addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP);
+public class OssuaryBlockEntity extends BlockEntity implements GeoBlockEntity {
+    private final AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
+    private final RawAnimation OPEN = RawAnimation.begin().then("open", Animation.LoopType.HOLD_ON_LAST_FRAME);
+    private final RawAnimation CLOSE = RawAnimation.begin().then("close", Animation.LoopType.HOLD_ON_LAST_FRAME);
+    private final RawAnimation IDLE = RawAnimation.begin().then("idle", Animation.LoopType.LOOP);
     private boolean playedSound = false;
-    private boolean canClose = false; // ugly fast workaround for hold-on-last-frame not working in Geckolib3
-    private int timer = 0;
 
     public OssuaryBlockEntity(BlockPos pos, BlockState state) {
         super(TGTileEntities.OSSUARY_BLOCK_ENTITY.get(), pos, state);
     }
 
     @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
-    }
-
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        AnimationState state = event.getController().getAnimationState();
-        if (timer > 0) timer--;
-        if (this.getBlockState().getValue(OssuaryBlock.OPEN)) {
-            if (state == AnimationState.Stopped)  {
-                if (level != null && !playedSound) {
-                    Player playerEntity = level.getNearestPlayer((double)worldPosition.getX() + 0.5D, (double)worldPosition.getY() + 0.5D, (double)worldPosition.getZ() + 0.5D, 4.0D, false);
-                    if (playerEntity != null) {
-                        playerEntity.playNotifySound(TGSounds.OSSUARY_OPEN.get(), SoundSource.BLOCKS, 1.0F, -2.0F);
-                        playedSound = true;
-                        timer = 160;
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "controller", 0, event -> {
+            AnimationController.State state = event.getController().getAnimationState();
+            if (this.getBlockState().getValue(OssuaryBlock.OPEN)) {
+                if (state == AnimationController.State.STOPPED || state == AnimationController.State.PAUSED)  {
+                    if (level != null && !playedSound) {
+                        Player playerEntity = level.getNearestPlayer((double)worldPosition.getX() + 0.5D, (double)worldPosition.getY() + 0.5D, (double)worldPosition.getZ() + 0.5D, 4.0D, false);
+                        if (playerEntity != null) {
+                            playerEntity.playNotifySound(TGSounds.OSSUARY_OPEN.get(), SoundSource.BLOCKS, 1.0F, -2.0F);
+                            playedSound = true;
+                        }
                     }
-                }
 
-                event.getController().setAnimation(OPEN);
+                    event.getController().setAnimation(OPEN);
+                }
+                return PlayState.CONTINUE;
+            } else if (!this.getBlockState().getValue(OssuaryBlock.OPEN) && state == AnimationController.State.PAUSED) {
+                event.getController().setAnimation(CLOSE);
+                if (playedSound) playedSound = false;
+
+                return PlayState.CONTINUE;
             }
             return PlayState.CONTINUE;
-        } else if (!this.getBlockState().getValue(OssuaryBlock.OPEN) && timer == 0) {
-            event.getController().setAnimation(CLOSE);
-            if (playedSound) playedSound = false;
-
-
-            return PlayState.CONTINUE;
-        }
-
-        return PlayState.CONTINUE;
+        }));
     }
 
     @Override
-    public AnimationFactory getFactory() {
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
         return factory;
     }
 

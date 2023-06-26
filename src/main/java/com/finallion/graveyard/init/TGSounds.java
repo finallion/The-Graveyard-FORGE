@@ -91,7 +91,7 @@ public class TGSounds {
 
 
     private static RegistryObject<SoundEvent> build(String id) {
-        return SOUNDS.register(id, () -> new SoundEvent(new ResourceLocation(TheGraveyard.MOD_ID, id)));
+        return SOUNDS.register(id, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(TheGraveyard.MOD_ID, id)));
     }
 
 

@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.FilteredText;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,45 +30,21 @@ public class ServerPlayNetworkHandlerMixin {
     @Shadow
     public ServerPlayer player;
 
-    @Final
-    @Shadow
-    public Connection connection;
-
-
-    @Shadow @Final private MinecraftServer server;
-
     @Inject(method = "updateSignText", at = @At(value = "HEAD"), cancellable = true)
     private void signUpdate(ServerboundSignUpdatePacket packet, List<FilteredText> signText, CallbackInfo info) {
         this.player.resetLastActionTime();
-        ServerLevel serverlevel = this.player.getLevel();
+        ServerLevel serverlevel = this.player.serverLevel();
         BlockPos blockpos = packet.getPos();
+
         if (serverlevel.hasChunkAt(blockpos)) {
-            BlockState blockstate = serverlevel.getBlockState(blockpos);
             BlockEntity blockentity = serverlevel.getBlockEntity(blockpos);
-
-            if (!(blockentity instanceof GravestoneBlockEntity)) {
+            if (!(blockentity instanceof GravestoneBlockEntity) ) {
                 return;
             }
 
-            GravestoneBlockEntity signblockentity = (GravestoneBlockEntity)blockentity;
-            if (!signblockentity.isEditable() || !this.player.getUUID().equals(signblockentity.getPlayerWhoMayEdit())) {
-                TheGraveyard.LOGGER.warn("Player {} just tried to change non-editable sign", (Object)this.player.getName().getString());
-                return;
-            }
-
-            for(int i = 0; i < signText.size(); ++i) {
-                FilteredText filteredtext = signText.get(i);
-                if (this.player.isTextFilteringEnabled()) {
-                    signblockentity.setMessage(i, Component.literal(filteredtext.m_243113_()));
-                } else {
-                    signblockentity.setMessage(i, Component.literal(filteredtext.raw()), Component.literal(filteredtext.m_243113_()));
-                }
-            }
-            signblockentity.setChanged();
-            serverlevel.sendBlockUpdated(blockpos, blockstate, blockstate, 3);
+            GravestoneBlockEntity signblockentity = (GravestoneBlockEntity) blockentity;
+            signblockentity.updateSignText(this.player, signText);
             info.cancel();
-
-
         }
     }
 }

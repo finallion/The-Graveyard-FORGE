@@ -28,7 +28,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -46,17 +45,9 @@ public class UrnBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
     private static final VoxelShape SMALL_URN = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 10.0D, 13.0D);
 
     public UrnBlock() {
-        super(BlockBehaviour.Properties.of(Material.GLASS).noOcclusion().sound(SoundType.METAL).strength(0.3F));
+        super(BlockBehaviour.Properties.of().noOcclusion().sound(SoundType.METAL).strength(0.3F));
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false).setValue(OPEN, false));
     }
-
-    /*
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
-     */
 
     @Override
     public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {

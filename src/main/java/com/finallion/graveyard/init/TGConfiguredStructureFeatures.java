@@ -3,7 +3,7 @@ package com.finallion.graveyard.init;
 import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.world.structures.TGJigsawStructure;
 import com.mojang.serialization.Codec;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -15,7 +15,7 @@ import java.util.List;
 public class TGConfiguredStructureFeatures {
     public static List<Structure> structures = new ArrayList<>();
 
-    public static final DeferredRegister<StructureType<?>> STRUCTURES = DeferredRegister.create(Registry.STRUCTURE_TYPE_REGISTRY, TheGraveyard.MOD_ID);
+    public static final DeferredRegister<StructureType<?>> STRUCTURES = DeferredRegister.create(Registries.STRUCTURE_TYPE, TheGraveyard.MOD_ID);
 
     public static final RegistryObject<StructureType<TGJigsawStructure>> ALTAR = STRUCTURES.register("altar", () -> explicitStructureTypeTyping(TGJigsawStructure.CODEC));
     public static final RegistryObject<StructureType<TGJigsawStructure>> DEAD_TREE = STRUCTURES.register("dead_tree", () -> explicitStructureTypeTyping(TGJigsawStructure.CODEC));

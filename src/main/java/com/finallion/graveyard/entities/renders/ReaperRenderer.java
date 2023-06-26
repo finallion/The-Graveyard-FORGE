@@ -5,14 +5,14 @@ import com.finallion.graveyard.entities.ReaperEntity;
 import com.finallion.graveyard.entities.models.ReaperModel;
 import com.finallion.graveyard.entities.renders.features.ReaperEyesFeatureRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 
 public class ReaperRenderer extends GeoEntityRenderer<ReaperEntity> {
 
     public ReaperRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new ReaperModel());
-        this.addLayer(new ReaperEyesFeatureRenderer(this));
+        this.addRenderLayer(new ReaperEyesFeatureRenderer(this));
         this.shadowRadius = 0.7F;
     }
 

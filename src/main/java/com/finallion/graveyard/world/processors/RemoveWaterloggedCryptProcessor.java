@@ -19,6 +19,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -32,11 +33,11 @@ public class RemoveWaterloggedCryptProcessor extends StructureProcessor {
     public RemoveWaterloggedCryptProcessor() { }
 
     @Override
-    public StructureTemplate.StructureBlockInfo processBlock(LevelReader world, BlockPos pos, BlockPos pos2, StructureTemplate.StructureBlockInfo infoIn1, StructureTemplate.StructureBlockInfo infoIn2, StructurePlaceSettings settings) {
-        if (infoIn2.state.hasProperty(BlockStateProperties.WATERLOGGED) && !infoIn2.state.getValue(BlockStateProperties.WATERLOGGED)) {
-            ChunkPos currentChunkPos = new ChunkPos(infoIn2.pos);
+    public StructureTemplate.StructureBlockInfo process(LevelReader world, BlockPos pos, BlockPos pos2, StructureTemplate.StructureBlockInfo infoIn1, StructureTemplate.StructureBlockInfo infoIn2, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
+        if (infoIn2.state().hasProperty(BlockStateProperties.WATERLOGGED) && !infoIn2.state().getValue(BlockStateProperties.WATERLOGGED)) {
+            ChunkPos currentChunkPos = new ChunkPos(infoIn2.pos());
             ChunkAccess currentChunk = world.getChunk(currentChunkPos.x, currentChunkPos.z);
-            int sectionYIndex = currentChunk.getSectionIndex(infoIn2.pos.getY());
+            int sectionYIndex = currentChunk.getSectionIndex(infoIn2.pos().getY());
 
             if (sectionYIndex < 0) {
                 return infoIn2;
@@ -44,13 +45,13 @@ public class RemoveWaterloggedCryptProcessor extends StructureProcessor {
 
             LevelChunkSection currChunkSection = currentChunk.getSection(sectionYIndex);
 
-            if (getFluidState(world, infoIn2.pos).is(FluidTags.WATER)) {
-                setBlockState(currChunkSection, infoIn2.pos, infoIn2.state);
+            if (getFluidState(world, infoIn2.pos()).is(FluidTags.WATER)) {
+                setBlockState(currChunkSection, infoIn2.pos(), infoIn2.state());
             }
 
             BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
             for (Direction direction : Direction.values()) {
-                mutable.set(infoIn2.pos).move(direction);
+                mutable.set(infoIn2.pos()).move(direction);
                 if (currentChunkPos.x != mutable.getX() >> 4 || currentChunkPos.z != mutable.getZ() >> 4) {
                     currentChunkPos = new ChunkPos(mutable);
                     currentChunk = world.getChunk(currentChunkPos.x, currentChunkPos.z);

@@ -32,7 +32,7 @@ public class TGCommands {
     }
 
     public static int executeSpawn(CommandSourceStack source) {
-        source.sendSuccess(Component.literal("Spawned a graveyard horde."), false);
+        source.sendSuccess(() -> Component.literal("Spawned a graveyard horde."), false);
         int o = GraveyardConfig.COMMON.mobSpawnAttempts.get();
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos(source.getPosition().x, source.getPosition().y, source.getPosition().z);
         ServerLevel level = source.getLevel();
@@ -80,7 +80,7 @@ public class TGCommands {
                 hordeEntity.findPatrolTarget();
             }
             hordeEntity.setPos((double)p_64566_.getX(), (double)p_64566_.getY(), (double)p_64566_.getZ());
-            if(net.minecraftforge.common.ForgeHooks.canEntitySpawn(hordeEntity, p_64565_, p_64566_.getX(), p_64566_.getY(), p_64566_.getZ(), null, MobSpawnType.PATROL) == -1) return false;
+            //if(net.minecraftforge.common.ForgeHooks.canEntitySpawn(hordeEntity, p_64565_, p_64566_.getX(), p_64566_.getY(), p_64566_.getZ(), null, MobSpawnType.PATROL) == -1) return false;
             hordeEntity.finalizeSpawn((ServerLevel)p_64565_, p_64565_.getCurrentDifficultyAt(p_64566_), MobSpawnType.PATROL, (SpawnGroupData)null, (CompoundTag)null);
             ((ServerLevel)p_64565_).addFreshEntityWithPassengers(hordeEntity);
             return true;

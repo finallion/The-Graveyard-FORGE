@@ -15,7 +15,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 
 import java.util.Collection;
@@ -35,7 +34,7 @@ public class SkeletonCreeper extends Creeper {
     }
 
     public boolean canStart() {
-        this.closestPlayer = this.level.getNearestPlayer(this, 8.0D);
+        this.closestPlayer = this.level().getNearestPlayer(this, 8.0D);
         return this.closestPlayer != null;
     }
 
@@ -57,8 +56,8 @@ public class SkeletonCreeper extends Creeper {
 
 
     public void explode() {
-        if (!this.level.isClientSide) {
-            Explosion.BlockInteraction explosion$mode = Explosion.BlockInteraction.NONE;
+        if (!this.level().isClientSide) {
+            Level.ExplosionInteraction explosion$mode = Level.ExplosionInteraction.NONE;
             float f = this.isPowered() ? 2.0F : 1.0F;
 
             if (canStart()) {
@@ -67,7 +66,7 @@ public class SkeletonCreeper extends Creeper {
             }
 
             this.dead = true;
-            this.level.explode(this, this.getX(), this.getY(), this.getZ(), (float)this.explosionRadius * f, explosion$mode);
+            this.level().explode(this, this.getX(), this.getY(), this.getZ(), (float)this.explosionRadius * f, explosion$mode);
             this.discard();
             this.spawnLingeringCloud();
         }
@@ -77,7 +76,7 @@ public class SkeletonCreeper extends Creeper {
     private void spawnLingeringCloud() {
         Collection<MobEffectInstance> collection = this.getActiveEffects();
         if (!collection.isEmpty()) {
-            AreaEffectCloud areaeffectcloud = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
+            AreaEffectCloud areaeffectcloud = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
             areaeffectcloud.setRadius(2.5F);
             areaeffectcloud.setRadiusOnUse(-0.5F);
             areaeffectcloud.setWaitTime(10);
@@ -88,15 +87,15 @@ public class SkeletonCreeper extends Creeper {
                 areaeffectcloud.addEffect(new MobEffectInstance(mobeffectinstance));
             }
 
-            this.level.addFreshEntity(areaeffectcloud);
+            this.level().addFreshEntity(areaeffectcloud);
         }
     }
 
     @Override
     public void aiStep() {
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             if (random.nextInt(7) == 0) {
-                this.level.addParticle(ParticleTypes.ASH, this.getRandomX(2.0D), this.getRandomY() + new Random().nextInt(1), this.getRandomZ(2.0D), 2.0D, 7.0D, 2.0D);
+                this.level().addParticle(ParticleTypes.ASH, this.getRandomX(2.0D), this.getRandomY() + new Random().nextInt(1), this.getRandomZ(2.0D), 2.0D, 7.0D, 2.0D);
             }
         }
 

@@ -51,7 +51,7 @@ public class OssuaryScreenHandler extends AbstractContainerMenu {
     public OssuaryScreenHandler(int p_40297_, Inventory p_40298_, final ContainerLevelAccess p_40299_) {
         super(MenuType.STONECUTTER, p_40297_);
         this.access = p_40299_;
-        this.level = p_40298_.player.level;
+        this.level = p_40298_.player.level();
         this.inputSlot = this.addSlot(new Slot(this.container, 0, 20, 33));
         this.resultSlot = this.addSlot(new Slot(this.resultContainer, 1, 143, 33) {
             public boolean mayPlace(ItemStack p_40362_) {
@@ -59,8 +59,8 @@ public class OssuaryScreenHandler extends AbstractContainerMenu {
             }
 
             public void onTake(Player p_150672_, ItemStack p_150673_) {
-                p_150673_.onCraftedBy(p_150672_.level, p_150672_, p_150673_.getCount());
-                OssuaryScreenHandler.this.resultContainer.awardUsedRecipes(p_150672_);
+                p_150673_.onCraftedBy(p_150672_.level(), p_150672_, p_150673_.getCount());
+                OssuaryScreenHandler.this.resultContainer.awardUsedRecipes(p_150672_, this.getInputStacks());
                 ItemStack itemstack = OssuaryScreenHandler.this.inputSlot.remove(1);
                 if (!itemstack.isEmpty()) {
                     OssuaryScreenHandler.this.setupResultSlot();
@@ -75,6 +75,10 @@ public class OssuaryScreenHandler extends AbstractContainerMenu {
 
                 });
                 super.onTake(p_150672_, p_150673_);
+            }
+
+            private List<ItemStack> getInputStacks() {
+                return List.of(OssuaryScreenHandler.this.inputSlot.getItem());
             }
         });
 
@@ -146,8 +150,13 @@ public class OssuaryScreenHandler extends AbstractContainerMenu {
     void setupResultSlot() {
         if (!this.recipes.isEmpty() && this.isValidRecipeIndex(this.selectedRecipeIndex.get())) {
             OssuaryRecipe carvingRecipe = this.recipes.get(this.selectedRecipeIndex.get());
-            this.resultContainer.setRecipeUsed(carvingRecipe);
-            this.resultSlot.set(carvingRecipe.assemble(this.container));
+            ItemStack itemStack = carvingRecipe.assemble(this.container, this.level.registryAccess());
+            if (itemStack.isItemEnabled(this.level.enabledFeatures())) {
+                this.resultContainer.setRecipeUsed(carvingRecipe);
+                this.resultSlot.set(itemStack);
+            } else {
+                this.resultSlot.set(ItemStack.EMPTY);
+            }
         } else {
             this.resultSlot.set(ItemStack.EMPTY);
         }
@@ -176,7 +185,7 @@ public class OssuaryScreenHandler extends AbstractContainerMenu {
             Item item = itemstack1.getItem();
             itemstack = itemstack1.copy();
             if (p_40329_ == 1) {
-                item.onCraftedBy(itemstack1, p_40328_.level, p_40328_);
+                item.onCraftedBy(itemstack1, p_40328_.level(), p_40328_);
                 if (!this.moveItemStackTo(itemstack1, 2, 38, true)) {
                     return ItemStack.EMPTY;
                 }

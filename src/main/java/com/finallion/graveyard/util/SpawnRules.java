@@ -7,10 +7,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -18,8 +15,6 @@ import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.common.world.ModifiableBiomeInfo;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-
-import java.util.List;
 
 public class SpawnRules {
 
@@ -65,43 +60,5 @@ public class SpawnRules {
                     MobSpawnSettings.SpawnerData.CODEC.fieldOf("spawn").forGetter(SpawnRules.ModSpawnModifier::spawn)
             ).apply(builder, ModSpawnModifier::new));
         }
-    }
-
-    public static boolean parseBiomes(List<? extends String> biomeWhitelist, List<? extends String> biomeBlacklist, Holder<Biome> biome) {
-        if (biomeWhitelist == null || biomeBlacklist == null) {
-            TheGraveyard.LOGGER.error("The Graveyard config file isn't up to date. Please delete the file in your .minecraft/config folder and restart the game to create a new config file. If the error keeps showing up, contact the mod developer via Github or Discord (links can be found here: https://www.curseforge.com/minecraft/mc-mods/the-graveyard-forge)!");
-            return false;
-        }
-
-        String biomeName = biome.unwrapKey().orElseThrow().location().toString();
-
-        if (biomeBlacklist.contains(biomeName)) {
-            return false;
-        }
-
-
-        for (String biomeInList : biomeWhitelist) {
-            if (biomeInList.startsWith("#")) { // check if biome is in tag
-                String[] parts = biomeInList.substring(1).split(":");
-                TagKey<Biome> tag = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(parts[0], parts[1]));
-                // RegistryAccess causes massive delay on game startup. Since this loads only once and not on runtime, use BuiltinRegistries.
-                //Registry<Biome> registry = RegistryAccess.builtinCopy().registryOrThrow(Registry.BIOME_REGISTRY);
-
-
-                if (BuiltinRegistries.BIOME.isKnownTagName(tag)) {
-                    if (BuiltinRegistries.BIOME.getTag(tag).orElseThrow().contains(biome)) {
-                        return true;
-                    }
-                }
-
-
-
-            } else if (biomeWhitelist.contains(biomeName)) { // check if biome is on whitelist
-                return true;
-            }
-        }
-
-
-        return false;
     }
 }

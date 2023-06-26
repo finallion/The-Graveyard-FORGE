@@ -4,7 +4,7 @@ import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.init.TGAdvancements;
 import com.finallion.graveyard.init.TGSounds;
 import com.finallion.graveyard.item.DaggerItem;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -28,7 +28,7 @@ public class AcolyteEntity extends CorruptedIllager {
     }
 
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_34084_) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Registry.ITEM.get(new ResourceLocation(TheGraveyard.MOD_ID, "bone_dagger"))));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(TheGraveyard.MOD_ID, "bone_dagger"))));
     }
 
     public static AttributeSupplier.Builder createAttributes() {

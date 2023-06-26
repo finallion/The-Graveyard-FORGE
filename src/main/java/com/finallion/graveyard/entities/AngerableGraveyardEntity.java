@@ -35,8 +35,8 @@ public abstract class AngerableGraveyardEntity extends HordeGraveyardEntity impl
     }
 
     public void aiStep() {
-        if (!this.level.isClientSide()) {
-            this.updatePersistentAnger((ServerLevel) this.level, true);
+        if (!this.level().isClientSide()) {
+            this.updatePersistentAnger((ServerLevel) this.level(), true);
         }
         super.aiStep();
     }
@@ -56,7 +56,7 @@ public abstract class AngerableGraveyardEntity extends HordeGraveyardEntity impl
 
     public void readAdditionalSaveData(CompoundTag p_32511_) {
         super.readAdditionalSaveData(p_32511_);
-        this.readPersistentAngerSaveData(this.level, p_32511_);
+        this.readPersistentAngerSaveData(this.level(), p_32511_);
     }
 
 

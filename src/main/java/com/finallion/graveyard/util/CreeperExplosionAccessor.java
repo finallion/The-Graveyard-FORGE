@@ -12,7 +12,7 @@ public class CreeperExplosionAccessor {
 
     public static void explode(Creeper creeperEntity, CallbackInfo info) {
         if (creeperEntity instanceof SkeletonCreeper) {
-            if (!creeperEntity.level.isClientSide()) {
+            if (!creeperEntity.level().isClientSide()) {
                 ((SkeletonCreeper) creeperEntity).explode();
                 info.cancel();
             }

@@ -2,13 +2,17 @@ package com.finallion.graveyard.recipe;
 
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public abstract class CarvingRecipe implements Recipe<Container> {
     protected final Ingredient ingredient;
@@ -43,7 +47,8 @@ public abstract class CarvingRecipe implements Recipe<Container> {
         return this.group;
     }
 
-    public ItemStack getResultItem() {
+    @Override
+    public ItemStack getResultItem(RegistryAccess p_267052_) {
         return this.result;
     }
 
@@ -57,7 +62,8 @@ public abstract class CarvingRecipe implements Recipe<Container> {
         return true;
     }
 
-    public ItemStack assemble(Container p_44427_) {
+    @Override
+    public ItemStack assemble(Container p_44001_, RegistryAccess p_267165_) {
         return this.result.copy();
     }
 
@@ -79,7 +85,7 @@ public abstract class CarvingRecipe implements Recipe<Container> {
 
             String s1 = GsonHelper.getAsString(p_44450_, "result");
             int i = GsonHelper.getAsInt(p_44450_, "count");
-            ItemStack itemstack = new ItemStack(Registry.ITEM.get(new ResourceLocation(s1)), i);
+            ItemStack itemstack = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(s1)), i);
             return this.factory.create(p_44449_, s, ingredient, itemstack);
         }
 

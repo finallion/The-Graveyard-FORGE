@@ -158,10 +158,10 @@ public class NamelessHangedTradeOffers {
 
         @Nullable
         public MerchantOffer getOffer(Entity entity, RandomSource random) {
-            if (!(entity.level instanceof ServerLevel)) {
+            if (!(entity.level() instanceof ServerLevel)) {
                 return null;
             } else {
-                ServerLevel serverWorld = (ServerLevel)entity.level;
+                ServerLevel serverWorld = (ServerLevel)entity.level();
                 BlockPos blockPos = serverWorld.findNearestMapStructure(this.structure, entity.blockPosition(), 100, true);
                 if (blockPos != null) {
                     ItemStack itemStack = MapItem.create(serverWorld, blockPos.getX(), blockPos.getZ(), (byte)2, true, true);

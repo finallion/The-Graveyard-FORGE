@@ -40,7 +40,7 @@ public class LichMeleeGoal extends Goal {
     }
 
     public boolean canUse() {
-        long l = this.mob.level.getGameTime();
+        long l = this.mob.level().getGameTime();
         // for some reason if you time your attack good enough, and position yourself close enough to the mob, the mob will deadlock and do nothing while you're standing still
         // this is because l - this.lastUpdateTime < 20L is true and will only reset if you move away and close in again
         if (l - this.lastUpdateTime < 20L) {
@@ -164,7 +164,7 @@ public class LichMeleeGoal extends Goal {
 
                     for (int i = 1; i < Mth.floor(vec3d2.length()) + 7; ++i) {
                         Vec3 vec3d4 = vec3d.add(vec3d3.scale((double) i));
-                        ((ServerLevel) mob.getLevel()).sendParticles(TGParticles.GRAVEYARD_SOUL_BEAM_PARTICLE.get(), vec3d4.x, vec3d4.y + 1.0D, vec3d4.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                        ((ServerLevel) mob.level()).sendParticles(TGParticles.GRAVEYARD_SOUL_BEAM_PARTICLE.get(), vec3d4.x, vec3d4.y + 1.0D, vec3d4.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
                     }
 
                     double e = 2.5D * (1.0D - target.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE));

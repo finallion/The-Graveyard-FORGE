@@ -21,7 +21,7 @@ public class SitGoal extends Goal {
     public boolean canUse() {
         if (this.tameable.isInWaterOrBubble()) {
             return false;
-        } else if (!this.tameable.isOnGround()) {
+        } else if (!this.tameable.onGround()) {
             return false;
         } else {
             LivingEntity livingEntity = this.tameable.getOwner();

@@ -8,6 +8,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -16,20 +17,19 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class FallingCorpse extends Monster implements IAnimatable {
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
-    private final AnimationBuilder FALLING_ANIMATION = new AnimationBuilder().addAnimation("falling", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder LANDING_ANIMATION = new AnimationBuilder().addAnimation("landing", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("despawn", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+public class FallingCorpse extends Monster implements GeoEntity {
+    private AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
+    private final RawAnimation FALLING_ANIMATION = RawAnimation.begin().then("falling", Animation.LoopType.LOOP);
+    private final RawAnimation LANDING_ANIMATION = RawAnimation.begin().then("landing", Animation.LoopType.PLAY_ONCE).then("despawn", Animation.LoopType.PLAY_ONCE);
     private static final EntityDataAccessor<Boolean> IS_FALLING;
     private static final EntityDataAccessor<Boolean> HAS_COLLIDED;
     private final float DAMAGE = 10.0F;
@@ -50,26 +50,36 @@ public class FallingCorpse extends Monster implements IAnimatable {
         this.rotation = rotation;
     }
 
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (isFalling()) {
-            event.getController().setAnimation(FALLING_ANIMATION);
-            return PlayState.CONTINUE;
-        } else {
-            event.getController().setAnimation(LANDING_ANIMATION);
-            return PlayState.CONTINUE;
-        }
 
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar animationData) {
+        animationData.add(new AnimationController<>(this, "controller", 0, event -> {
+            if (isFalling()) {
+                event.setAnimation(FALLING_ANIMATION);
+                return PlayState.CONTINUE;
+            } else {
+                event.getController().setAnimation(LANDING_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+        }));
     }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return factory;
+    }
+
+
     // I don't want the red overlay on death, so bypass landing effects and kill the mob after some ticks (in mobTick())
     @Override
     public boolean causeFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
-        this.level.playSound(null, this.blockPosition(), SoundEvents.HOSTILE_BIG_FALL, SoundSource.HOSTILE, 2.0F, 1.0F);
+        this.level().playSound(null, this.blockPosition(), SoundEvents.HOSTILE_BIG_FALL, SoundSource.HOSTILE, 2.0F, 1.0F);
         return false;
     }
 
 
     public boolean hurt(DamageSource source, float amount) {
-        if (source == DamageSource.OUT_OF_WORLD) {
+        if (source.is(DamageTypeTags.BYPASSES_RESISTANCE)) {
             return true;
         }
         return false;
@@ -90,12 +100,6 @@ public class FallingCorpse extends Monster implements IAnimatable {
     }
 
 
-    @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
-    }
-
-
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 10.0D)
@@ -107,10 +111,10 @@ public class FallingCorpse extends Monster implements IAnimatable {
         if (this.getBlockStateOn().isAir()) {
             for (int i = 0; i < 20; i++) {
                 BlockPos pos = this.blockPosition().offset(0, -i, 0);
-                BlockState state = this.level.getBlockState(pos);
-                if (!state.isAir() && state.isSolidRender(level, pos)) {
+                BlockState state = this.level().getBlockState(pos);
+                if (!state.isAir() && state.isSolidRender(level(), pos)) {
                     //this.world.addParticle(ParticleTypes.SCULK_CHARGE_POP, pos.getX() + random.nextDouble() + random.nextDouble() - random.nextDouble(), pos.getY() + 1.3D, pos.getZ() + random.nextDouble() + random.nextDouble() - random.nextDouble(), 0.0D, 0.0D, 0.0D);
-                    MathUtil.createParticleDisk(this.level, pos.getX() + random.nextDouble(), pos.getY() + 1.3D, pos.getZ() + + random.nextDouble(), 0.0D, 0.0D, 0.0D,1, DustParticleOptions.REDSTONE, this.getRandom());
+                    MathUtil.createParticleDisk(this.level(), pos.getX() + random.nextDouble(), pos.getY() + 1.3D, pos.getZ() + + random.nextDouble(), 0.0D, 0.0D, 0.0D,1, DustParticleOptions.REDSTONE, this.getRandom());
                     break;
                 }
             }
@@ -137,7 +141,7 @@ public class FallingCorpse extends Monster implements IAnimatable {
             this.discard();
         }
 
-        if (!level.getBlockState(this.blockPosition().below()).isAir()) {
+        if (!level().getBlockState(this.blockPosition().below()).isAir()) {
             setIsFalling(false);
         }
 
@@ -151,16 +155,12 @@ public class FallingCorpse extends Monster implements IAnimatable {
     @Override
     public void playerTouch(Player p_20081_) {
         if (!hasCollided() && isFalling()) {
-            p_20081_.hurt(DamageSource.GENERIC, DAMAGE);
+            p_20081_.hurt(this.damageSources().fall(), DAMAGE);
             setHasCollided(true);
         }
         super.playerTouch(p_20081_);
     }
 
-    @Override
-    public AnimationFactory getFactory() {
-        return factory;
-    }
 
     public boolean isFalling() {
         return this.entityData.get(IS_FALLING);

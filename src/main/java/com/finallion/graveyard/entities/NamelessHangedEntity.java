@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -22,22 +23,21 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 
 
-public class NamelessHangedEntity extends AbstractVillager implements IAnimatable {
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
-    private final AnimationBuilder IDLE_ANIMATION = new AnimationBuilder().addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP);
+public class NamelessHangedEntity extends AbstractVillager implements GeoEntity {
+    private AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
+    private final RawAnimation IDLE_ANIMATION = RawAnimation.begin().then("idle", Animation.LoopType.LOOP);
 
     public NamelessHangedEntity(EntityType<? extends NamelessHangedEntity> entityType, Level world) {
         super(entityType, world);
@@ -55,19 +55,17 @@ public class NamelessHangedEntity extends AbstractVillager implements IAnimatabl
     }
 
     @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
+    public void registerControllers(AnimatableManager.ControllerRegistrar animationData) {
+        animationData.add(new AnimationController<>(this, "controller", 0, event -> {
+            event.getController().setAnimation(IDLE_ANIMATION);
+            return PlayState.CONTINUE;
+        }));
     }
 
     @Override
-    public AnimationFactory getFactory() {
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
         return factory;
     }
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(IDLE_ANIMATION);
-        return PlayState.CONTINUE;
-    }
-
 
     @Override
     public boolean canBeSeenAsEnemy() {
@@ -84,8 +82,8 @@ public class NamelessHangedEntity extends AbstractVillager implements IAnimatabl
 
     @Override
     public boolean hurt(DamageSource source, float p_21017_) {
-        if (!this.level.isClientSide && !this.isRemoved()) {
-            if (DamageSource.OUT_OF_WORLD.equals(source) || DamageSource.CRAMMING.equals(source)) {
+        if (!this.level().isClientSide() && !this.isRemoved()) {
+            if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
                 this.remove(RemovalReason.DISCARDED);
                 return true;
             }
@@ -117,8 +115,8 @@ public class NamelessHangedEntity extends AbstractVillager implements IAnimatabl
     }
 
     public void aiStep() {
-        if (this.level.isClientSide) {
-            this.level.addParticle(ParticleTypes.ASH, this.getRandomX(0.5D), this.getY() + 1.75D, this.getRandomZ(0.5D), 0, 0, 0);
+        if (this.level().isClientSide) {
+            this.level().addParticle(ParticleTypes.ASH, this.getRandomX(0.5D), this.getY() + 1.75D, this.getRandomZ(0.5D), 0, 0, 0);
         }
 
         super.aiStep();
@@ -126,7 +124,7 @@ public class NamelessHangedEntity extends AbstractVillager implements IAnimatabl
 
     @Override
     public void tick() {
-        if (level.isDay() && this.offers != null) {
+        if (level().isDay() && this.offers != null) {
             this.offers = null;
         }
 
@@ -134,22 +132,22 @@ public class NamelessHangedEntity extends AbstractVillager implements IAnimatabl
     }
 
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (level.isDay() && !this.level.isClientSide) {
+        if (level().isDay() && !this.level().isClientSide) {
             player.displayClientMessage(Component.translatable("entity.graveyard.nameless_hanged.wait"), true);
-            level.playSound(null, player.blockPosition(), TGSounds.NAMELESS_HANGED_INTERACT.get(), SoundSource.HOSTILE, 0.6F, 1.0F);
+            level().playSound(null, player.blockPosition(), TGSounds.NAMELESS_HANGED_INTERACT.get(), SoundSource.HOSTILE, 0.6F, 1.0F);
             //player.playSound(TGSounds.NAMELESS_HANGED_INTERACT, 1.0F, 1.0F);
         }
 
-        if (this.isAlive() && !this.isTrading() && level.isNight()) {
+        if (this.isAlive() && !this.isTrading() && level().isNight()) {
             if (!this.getOffers().isEmpty()) {
-                if (!this.level.isClientSide) {
+                if (!this.level().isClientSide) {
                     this.setTradingPlayer(player);
                     this.openTradingScreen(player, this.getDisplayName(), 1);
-                    level.playSound(null, player.blockPosition(), TGSounds.NAMELESS_HANGED_INTERACT.get(), SoundSource.HOSTILE, 0.6F, 1.0F);
+                    level().playSound(null, player.blockPosition(), TGSounds.NAMELESS_HANGED_INTERACT.get(), SoundSource.HOSTILE, 0.6F, 1.0F);
                     //player.playSound(TGSounds.NAMELESS_HANGED_INTERACT, 1.0F, 1.0F);
                 }
             }
-            return InteractionResult.sidedSuccess(this.level.isClientSide);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {
             return super.mobInteract(player, hand);
         }
@@ -167,7 +165,7 @@ public class NamelessHangedEntity extends AbstractVillager implements IAnimatabl
     protected void rewardTradeXp(MerchantOffer offer) {
         if (offer.shouldRewardExp()) {
             int i = 3 + this.random.nextInt(4);
-            this.level.addFreshEntity(new ExperienceOrb(this.level, this.getX(), this.getY() + 0.5D, this.getZ(), i));
+            this.level().addFreshEntity(new ExperienceOrb(this.level(), this.getX(), this.getY() + 0.5D, this.getZ(), i));
         }
 
     }

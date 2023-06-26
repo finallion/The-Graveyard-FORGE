@@ -155,7 +155,7 @@ public abstract class HordeGraveyardEntity extends HostileGraveyardEntity {
         }
 
         public boolean canUse() {
-            boolean flag = this.mob.level.getGameTime() < this.cooldownUntil;
+            boolean flag = this.mob.level().getGameTime() < this.cooldownUntil;
             return this.mob.isPatrolling() && this.mob.getTarget() == null && !this.mob.isVehicle() && this.mob.hasPatrolTarget() && !flag;
         }
 
@@ -180,11 +180,11 @@ public abstract class HordeGraveyardEntity extends HostileGraveyardEntity {
                     Vec3 vec32 = vec31.subtract(vec3);
                     vec3 = vec32.yRot(90.0F).scale(0.4D).add(vec3);
                     Vec3 vec33 = vec3.subtract(vec31).normalize().scale(10.0D).add(vec31);
-                    BlockPos blockpos = new BlockPos(vec33);
-                    blockpos = this.mob.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, blockpos);
+                    BlockPos blockpos = BlockPos.containing(vec33);
+                    blockpos = this.mob.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, blockpos);
                     if (!pathnavigation.moveTo((double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ(), flag ? this.leaderSpeedModifier : this.speedModifier)) {
                         this.moveRandomly();
-                        this.cooldownUntil = this.mob.level.getGameTime() + 200L;
+                        this.cooldownUntil = this.mob.level().getGameTime() + 200L;
                     } else if (flag) {
                         for(HordeGraveyardEntity patrollingmonster : list) {
                             patrollingmonster.setPatrolTarget(blockpos);
@@ -197,14 +197,14 @@ public abstract class HordeGraveyardEntity extends HostileGraveyardEntity {
 
 
         private List<HordeGraveyardEntity> findPatrolCompanions() {
-            return this.mob.level.getEntitiesOfClass(HordeGraveyardEntity.class, this.mob.getBoundingBox().inflate(16.0D), (p_33089_) -> {
+            return this.mob.level().getEntitiesOfClass(HordeGraveyardEntity.class, this.mob.getBoundingBox().inflate(16.0D), (p_33089_) -> {
                 return p_33089_.canJoinPatrol() && !p_33089_.is(this.mob);
             });
         }
 
         private boolean moveRandomly() {
             RandomSource random = this.mob.getRandom();
-            BlockPos blockpos = this.mob.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, this.mob.blockPosition().offset(-8 + random.nextInt(16), 0, -8 + random.nextInt(16)));
+            BlockPos blockpos = this.mob.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, this.mob.blockPosition().offset(-8 + random.nextInt(16), 0, -8 + random.nextInt(16)));
             return this.mob.getNavigation().moveTo((double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ(), this.speedModifier);
         }
     }

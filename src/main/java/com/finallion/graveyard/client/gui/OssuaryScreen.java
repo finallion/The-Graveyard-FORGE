@@ -1,11 +1,9 @@
 package com.finallion.graveyard.client.gui;
 
 import com.finallion.graveyard.recipe.OssuaryRecipe;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -37,31 +35,27 @@ public class OssuaryScreen extends AbstractContainerScreen<OssuaryScreenHandler>
         --this.titleLabelY;
     }
 
-    public void render(PoseStack p_99337_, int p_99338_, int p_99339_, float p_99340_) {
-        super.render(p_99337_, p_99338_, p_99339_, p_99340_);
-        this.renderTooltip(p_99337_, p_99338_, p_99339_);
+    public void render(GuiGraphics p_281735_, int p_282517_, int p_282840_, float p_282389_) {
+        super.render(p_281735_, p_282517_, p_282840_, p_282389_);
+        this.renderTooltip(p_281735_, p_282517_, p_282840_);
     }
 
-
-    protected void renderBg(PoseStack p_99328_, float p_99329_, int p_99330_, int p_99331_) {
-        this.renderBackground(p_99328_);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, BG_LOCATION);
+    protected void renderBg(GuiGraphics p_283115_, float p_282453_, int p_282940_, int p_282328_) {
+        this.renderBackground(p_283115_);
         int i = this.leftPos;
         int j = this.topPos;
-        this.blit(p_99328_, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        p_283115_.blit(BG_LOCATION, i, j, 0, 0, this.imageWidth, this.imageHeight);
         int k = (int)(41.0F * this.scrollOffs);
-        this.blit(p_99328_, i + 119, j + 15 + k, 176 + (this.isScrollBarActive() ? 0 : 12), 0, 12, 15);
+        p_283115_.blit(BG_LOCATION, i + 119, j + 15 + k, 176 + (this.isScrollBarActive() ? 0 : 12), 0, 12, 15);
         int l = this.leftPos + 52;
         int i1 = this.topPos + 14;
         int j1 = this.startIndex + 12;
-        this.renderButtons(p_99328_, p_99330_, p_99331_, l, i1, j1);
-        this.renderRecipes(l, i1, j1);
+        this.renderButtons(p_283115_, p_282940_, p_282328_, l, i1, j1);
+        this.renderRecipes(p_283115_, l, i1, j1);
     }
 
-    protected void renderTooltip(PoseStack p_99333_, int p_99334_, int p_99335_) {
-        super.renderTooltip(p_99333_, p_99334_, p_99335_);
+    protected void renderTooltip(GuiGraphics p_282396_, int p_283157_, int p_282258_) {
+        super.renderTooltip(p_282396_, p_283157_, p_282258_);
         if (this.displayRecipes) {
             int i = this.leftPos + 52;
             int j = this.topPos + 14;
@@ -72,40 +66,41 @@ public class OssuaryScreen extends AbstractContainerScreen<OssuaryScreenHandler>
                 int i1 = l - this.startIndex;
                 int j1 = i + i1 % 4 * 16;
                 int k1 = j + i1 / 4 * 18 + 2;
-                if (p_99334_ >= j1 && p_99334_ < j1 + 16 && p_99335_ >= k1 && p_99335_ < k1 + 18) {
-                    this.renderTooltip(p_99333_, list.get(l).getResultItem(), p_99334_, p_99335_);
+                if (p_283157_ >= j1 && p_283157_ < j1 + 16 && p_282258_ >= k1 && p_282258_ < k1 + 18) {
+                    p_282396_.renderTooltip(this.font, list.get(l).getResultItem(this.minecraft.level.registryAccess()), p_283157_, p_282258_);
                 }
             }
         }
+
     }
 
-    private void renderButtons(PoseStack p_99342_, int p_99343_, int p_99344_, int p_99345_, int p_99346_, int p_99347_) {
-        for(int i = this.startIndex; i < p_99347_ && i < this.menu.getNumRecipes(); ++i) {
+    private void renderButtons(GuiGraphics p_282733_, int p_282136_, int p_282147_, int p_281987_, int p_281276_, int p_282688_) {
+        for(int i = this.startIndex; i < p_282688_ && i < this.menu.getNumRecipes(); ++i) {
             int j = i - this.startIndex;
-            int k = p_99345_ + j % 4 * 16;
+            int k = p_281987_ + j % 4 * 16;
             int l = j / 4;
-            int i1 = p_99346_ + l * 18 + 2;
+            int i1 = p_281276_ + l * 18 + 2;
             int j1 = this.imageHeight;
             if (i == this.menu.getSelectedRecipeIndex()) {
                 j1 += 18;
-            } else if (p_99343_ >= k && p_99344_ >= i1 && p_99343_ < k + 16 && p_99344_ < i1 + 18) {
+            } else if (p_282136_ >= k && p_282147_ >= i1 && p_282136_ < k + 16 && p_282147_ < i1 + 18) {
                 j1 += 36;
             }
 
-            this.blit(p_99342_, k, i1 - 1, 0, j1, 16, 18);
+            p_282733_.blit(BG_LOCATION, k, i1 - 1, 0, j1, 16, 18);
         }
 
     }
 
-    private void renderRecipes(int p_99349_, int p_99350_, int p_99351_) {
+    private void renderRecipes(GuiGraphics p_281999_, int p_282658_, int p_282563_, int p_283352_) {
         List<OssuaryRecipe> list = this.menu.getRecipes();
 
-        for(int i = this.startIndex; i < p_99351_ && i < this.menu.getNumRecipes(); ++i) {
+        for(int i = this.startIndex; i < p_283352_ && i < this.menu.getNumRecipes(); ++i) {
             int j = i - this.startIndex;
-            int k = p_99349_ + j % 4 * 16;
+            int k = p_282658_ + j % 4 * 16;
             int l = j / 4;
-            int i1 = p_99350_ + l * 18 + 2;
-            this.minecraft.getItemRenderer().renderAndDecorateItem(list.get(i).getResultItem(), k, i1);
+            int i1 = p_282563_ + l * 18 + 2;
+            p_281999_.renderItem(list.get(i).getResultItem(this.minecraft.level.registryAccess()), k, i1);
         }
 
     }

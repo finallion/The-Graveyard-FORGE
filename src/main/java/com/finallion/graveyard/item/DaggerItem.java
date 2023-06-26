@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.StainedGlassBlock;
 import net.minecraft.world.level.block.StainedGlassPaneBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 public class DaggerItem extends SwordItem {
 
@@ -27,8 +26,7 @@ public class DaggerItem extends SwordItem {
       if (state.is(Blocks.COBWEB) || state.getBlock() instanceof GlassBlock || state.getBlock() instanceof StainedGlassBlock || state.getBlock() instanceof StainedGlassPaneBlock) {
          return 30.0F;
       } else {
-         Material material = state.getMaterial();
-         return material != Material.PLANT && material != Material.REPLACEABLE_PLANT && !state.is(BlockTags.LEAVES) && material != Material.VEGETABLE ? 1.0F : 1.5F;
+         return state.is(BlockTags.SWORD_EFFICIENT) ? 1.5F : 1.0F;
       }
    }
 

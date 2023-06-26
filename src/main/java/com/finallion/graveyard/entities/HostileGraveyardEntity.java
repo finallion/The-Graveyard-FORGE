@@ -45,7 +45,6 @@ public abstract class HostileGraveyardEntity extends Monster {
         entityData.set(CAN_BURN_IN_SUNLIGHT, bool);
     }
 
-    // TODO: do mob config and access like structure config
     private boolean getSunBurnConfigBoolean(String name) {
         switch (name) {
             case ("acolyte") -> {return GraveyardConfig.COMMON.acolyteCanBurnInSunlight.get();}

@@ -13,8 +13,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -26,8 +26,6 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
-import net.minecraft.world.entity.ai.util.HoverRandomPos;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
@@ -41,28 +39,26 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.EnumSet;
 import java.util.UUID;
 
-public class WraithEntity extends HostileGraveyardEntity implements IAnimatable {
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+public class WraithEntity extends HostileGraveyardEntity implements GeoEntity {
+    private AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
     private static final UUID SPEED_MODIFIER_ATTACKING_UUID = UUID.fromString("020E0DFB-87AE-4653-9556-831010E291A0");
     private static final AttributeModifier ATTACKING_SPEED_BOOST = new AttributeModifier(SPEED_MODIFIER_ATTACKING_UUID, "Attacking speed boost", (double)0.2F, AttributeModifier.Operation.ADDITION);
-    private final AnimationBuilder DEATH_ANIMATION = new AnimationBuilder().addAnimation("death", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-    private final AnimationBuilder IDLE_ANIMATION = new AnimationBuilder().addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder SPAWN_ANIMATION = new AnimationBuilder().addAnimation("spawn", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-    private final AnimationBuilder MOVE_ANIMATION = new AnimationBuilder().addAnimation("moving", ILoopType.EDefaultLoopTypes.LOOP);
-    private final AnimationBuilder ATTACK_ANIMATION = new AnimationBuilder().addAnimation("attacking", ILoopType.EDefaultLoopTypes.LOOP);
+    private final RawAnimation DEATH_ANIMATION = RawAnimation.begin().then("death", Animation.LoopType.PLAY_ONCE);
+    private final RawAnimation IDLE_ANIMATION = RawAnimation.begin().then("idle", Animation.LoopType.LOOP);
+    private final RawAnimation SPAWN_ANIMATION = RawAnimation.begin().then("spawn", Animation.LoopType.PLAY_ONCE);
+    private final RawAnimation MOVE_ANIMATION = RawAnimation.begin().then("moving", Animation.LoopType.LOOP);
+    private final RawAnimation ATTACK_ANIMATION = RawAnimation.begin().then("attacking", Animation.LoopType.LOOP);
     protected final byte ANIMATION_SPAWN = 0;
     protected final byte ANIMATION_IDLE = 1;
     protected final byte ANIMATION_DEATH = 2;
@@ -132,7 +128,7 @@ public class WraithEntity extends HostileGraveyardEntity implements IAnimatable 
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
-        } else if (source instanceof IndirectEntityDamageSource) {
+        } else if (source.is(DamageTypeTags.IS_PROJECTILE)) {
             Entity entity = source.getDirectEntity();
             if (entity instanceof Arrow) {
                return false;
@@ -197,12 +193,12 @@ public class WraithEntity extends HostileGraveyardEntity implements IAnimatable 
     @Override
     public void aiStep() {
         spawnTimer--;
-        if (level.isClientSide() && spawnTimer >= 0 && spawned) {
+        if (level().isClientSide() && spawnTimer >= 0 && spawned) {
             addParticles();
         }
 
-        if (level.isClientSide() && spawnTimer >= 0) {
-            level.playSound(null, this.getOnPos(), SoundEvents.SOUL_SAND_BREAK, SoundSource.BLOCKS,2.5F, -10.0F);
+        if (level().isClientSide() && spawnTimer >= 0) {
+            level().playSound(null, this.getOnPos(), SoundEvents.SOUL_SAND_BREAK, SoundSource.BLOCKS,2.5F, -10.0F);
         }
 
         AttributeInstance attributeinstance = this.getAttribute(Attributes.FLYING_SPEED);
@@ -233,20 +229,20 @@ public class WraithEntity extends HostileGraveyardEntity implements IAnimatable 
         for (int i = 0; i < 5; i++) {
             this.playSound(TGSounds.WRAITH_AMBIENT.get(), 2.0F, -10.0F);
         }
-        if (this.deathTime == 42 && !this.level.isClientSide()) {
-            this.level.broadcastEntityEvent(this, (byte)60);
+        if (this.deathTime == 42 && !this.level().isClientSide()) {
+            this.level().broadcastEntityEvent(this, (byte)60);
             this.remove(RemovalReason.KILLED);
         }
     }
 
 
     private void addParticles() {
-        level.addParticle(ParticleTypes.SOUL, this.getX() + (random.nextDouble() - random.nextDouble()), this.getY(), this.getZ() + (random.nextDouble() - random.nextDouble()), 0, 0.05F, 0);
+        level().addParticle(ParticleTypes.SOUL, this.getX() + (random.nextDouble() - random.nextDouble()), this.getY(), this.getZ() + (random.nextDouble() - random.nextDouble()), 0, 0.05F, 0);
     }
 
     private void addDeathParticles() {
         for (int i = 0; i < 10; i++) {
-            level.addParticle(ParticleTypes.SMOKE, this.getX() + (random.nextDouble() - random.nextDouble()), this.getY() + 1.0D, this.getZ() + (random.nextDouble() - random.nextDouble()), 0, 0.05F, 0);
+            level().addParticle(ParticleTypes.SMOKE, this.getX() + (random.nextDouble() - random.nextDouble()), this.getY() + 1.0D, this.getZ() + (random.nextDouble() - random.nextDouble()), 0, 0.05F, 0);
         }
     }
 
@@ -266,54 +262,14 @@ public class WraithEntity extends HostileGraveyardEntity implements IAnimatable 
 
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
-        if (damageSource == DamageSource.CACTUS ||
-                damageSource == DamageSource.DROWN ||
-                damageSource == DamageSource.SWEET_BERRY_BUSH ||
-                damageSource == DamageSource.HOT_FLOOR ||
-                damageSource == DamageSource.FLY_INTO_WALL ||
-                damageSource == DamageSource.FALLING_BLOCK ||
-                damageSource == DamageSource.FALL ||
-                damageSource == DamageSource.ANVIL)
+        if (damageSource.is(DamageTypeTags.BYPASSES_ARMOR) ||
+                damageSource.is(DamageTypeTags.BYPASSES_EFFECTS) ||
+                damageSource.is(DamageTypeTags.BYPASSES_SHIELD))
             return true;
 
         return super.isInvulnerableTo(damageSource);
     }
 
-
-    @SuppressWarnings("rawtypes")
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        AnimationController controller = event.getController();
-        float limbSwingAmount = event.getLimbSwingAmount();
-        boolean isMoving = !(limbSwingAmount > -0.05F && limbSwingAmount < 0.05F);
-
-        if (this.isDeadOrDying()) {
-            controller.setAnimation(DEATH_ANIMATION);
-            return PlayState.CONTINUE;
-        }
-
-        if (spawnTimer < 0) {
-            if (isAggressive()) {
-                controller.setAnimation(ATTACK_ANIMATION);
-            } else if (isMoving) {
-                controller.setAnimation(MOVE_ANIMATION);
-            } else {
-                controller.setAnimation(IDLE_ANIMATION);
-            }
-            return PlayState.CONTINUE;
-
-        }
-        return PlayState.CONTINUE;
-    }
-
-    private <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
-        if (getAnimation() == 0) {
-            event.getController().setAnimation(SPAWN_ANIMATION);
-            spawned = true;
-
-            return PlayState.CONTINUE;
-        }
-        return PlayState.CONTINUE;
-    }
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0D)
@@ -332,16 +288,47 @@ public class WraithEntity extends HostileGraveyardEntity implements IAnimatable 
     }
 
 
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
-        data.addAnimationController(new AnimationController(this, "controller2", 0, this::predicate2));
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController(this, "controller", 2, event -> {
+            AnimationController controller = event.getController();
+            float limbSwingAmount = event.getLimbSwingAmount();
+            boolean isMoving = !(limbSwingAmount > -0.05F && limbSwingAmount < 0.05F);
+
+            if (this.isDeadOrDying()) {
+                controller.setAnimation(DEATH_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+
+            if (spawnTimer < 0) {
+                if (isAggressive()) {
+                    controller.setAnimation(ATTACK_ANIMATION);
+                } else if (isMoving) {
+                    controller.setAnimation(MOVE_ANIMATION);
+                } else {
+                    controller.setAnimation(IDLE_ANIMATION);
+                }
+                return PlayState.CONTINUE;
+
+            }
+            return PlayState.CONTINUE;
+        }));
+        data.add(new AnimationController(this, "controller2", 0, event -> {
+            if (getAnimation() == 0) {
+                event.getController().setAnimation(SPAWN_ANIMATION);
+                spawned = true;
+
+                return PlayState.CONTINUE;
+            }
+            return PlayState.CONTINUE;
+        }));
     }
 
 
     @Override
-    public AnimationFactory getFactory() {
-        return this.factory;
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return factory;
     }
+
 
     boolean closerThan(BlockPos pos, int distance) {
         if (pos == null) {
@@ -427,7 +414,7 @@ public class WraithEntity extends HostileGraveyardEntity implements IAnimatable 
             if (WraithEntity.this.random.nextInt(this.adjustedTickDelay(10)) == 0) {
                 for (int i = 1; i <= 2; ++i) {
                     BlockPos blockPos = WraithEntity.this.getOnPos().below(i);
-                    BlockState blockState = WraithEntity.this.level.getBlockState(blockPos);
+                    BlockState blockState = WraithEntity.this.level().getBlockState(blockPos);
                     Block block = blockState.getBlock();
                     boolean bl = false;
                     boolean torchAndLantern = false;
@@ -443,8 +430,8 @@ public class WraithEntity extends HostileGraveyardEntity implements IAnimatable 
                         }
                         if (bl) {
                             //WraithEntity.this.world.syncWorldEvent(1502, blockPos, 0);
-                            WraithEntity.this.level.playSound((Player) null, blockPos, SoundEvents.CANDLE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
-                            WraithEntity.this.level.setBlock(blockPos, (BlockState) blockState.setValue(BlockStateProperties.LIT, false), 3);
+                            WraithEntity.this.level().playSound((Player) null, blockPos, SoundEvents.CANDLE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
+                            WraithEntity.this.level().setBlock(blockPos, (BlockState) blockState.setValue(BlockStateProperties.LIT, false), 3);
                             WraithEntity.this.addExtinguishCounter();
                             triggerAdvancement(WraithEntity.this, bl);
                             return;
@@ -452,21 +439,21 @@ public class WraithEntity extends HostileGraveyardEntity implements IAnimatable 
                     }
                     if (random.nextInt(10) == 0) {
                         if (blockState.is(Blocks.TORCH)) {
-                            WraithEntity.this.level.setBlock(blockPos, Blocks.SOUL_TORCH.defaultBlockState(), 3);
+                            WraithEntity.this.level().setBlock(blockPos, Blocks.SOUL_TORCH.defaultBlockState(), 3);
                             torchAndLantern = true;
                         } else if (blockState.is(Blocks.LANTERN)) {
-                            WraithEntity.this.level.setBlock(blockPos, Blocks.SOUL_LANTERN.defaultBlockState()
+                            WraithEntity.this.level().setBlock(blockPos, Blocks.SOUL_LANTERN.defaultBlockState()
                                     .setValue(BlockStateProperties.HANGING, blockState.getValue(BlockStateProperties.HANGING))
                                     .setValue(BlockStateProperties.WATERLOGGED, blockState.getValue(BlockStateProperties.WATERLOGGED)), 3);
                             torchAndLantern = true;
                         } else if (blockState.is(Blocks.WALL_TORCH)) {
-                            WraithEntity.this.level.setBlock(blockPos, Blocks.SOUL_WALL_TORCH.defaultBlockState()
+                            WraithEntity.this.level().setBlock(blockPos, Blocks.SOUL_WALL_TORCH.defaultBlockState()
                                     .setValue(HorizontalDirectionalBlock.FACING, blockState.getValue(HorizontalDirectionalBlock.FACING)), 3);
                             torchAndLantern = true;
                         }
 
                         if (torchAndLantern) {
-                            WraithEntity.this.level.playSound((Player) null, blockPos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
+                            WraithEntity.this.level().playSound((Player) null, blockPos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
                             WraithEntity.this.addExtinguishCounter();
                             return;
                         }
@@ -479,56 +466,11 @@ public class WraithEntity extends HostileGraveyardEntity implements IAnimatable 
 
     private static void triggerAdvancement(WraithEntity wraith, boolean bool) {
         if (bool) {
-            Player player = wraith.level.getNearestPlayer(wraith, 10.0D);
+            Player player = wraith.level().getNearestPlayer(wraith, 10.0D);
             if (player instanceof ServerPlayer) {
                 TGAdvancements.DIM_LIGHT.trigger((ServerPlayer) player);
             }
         }
     }
-
-
-    class WraithWanderAroundGoal extends Goal {
-        private static final int MAX_DISTANCE = 15;
-
-        WraithWanderAroundGoal() {
-            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
-        }
-
-        public boolean canUse() {
-            return WraithEntity.this.navigation.isDone() && WraithEntity.this.random.nextInt(10) == 0;
-        }
-
-
-        public boolean canContinueToUse() {
-            return WraithEntity.this.navigation.isInProgress();
-        }
-
-
-        public void start() {
-            Vec3 vec3 = this.findPos();
-            if (vec3 != null) {
-                WraithEntity.this.navigation.moveTo(WraithEntity.this.navigation.createPath(new BlockPos(vec3), 1), 1.0D);
-            }
-
-
-        }
-
-        @Nullable
-        private Vec3 findPos() {
-            Vec3 vec3d2;
-            if (!WraithEntity.this.closerThan(WraithEntity.this.homePosition, MAX_DISTANCE) && WraithEntity.this.hasHomePosition()) {
-                Vec3 vec3dx = Vec3.atCenterOf(WraithEntity.this.homePosition);
-                vec3d2 = vec3dx.subtract(WraithEntity.this.position()).normalize();
-            } else {
-                vec3d2 = WraithEntity.this.getViewVector(0.0F);
-            }
-
-
-            Vec3 vec3d3 = HoverRandomPos.getPos(WraithEntity.this, 8, 2, vec3d2.x, vec3d2.z, 1.5707964F, 2, 1);
-            return vec3d3 != null ? vec3d3 : AirAndWaterRandomPos.getPos(WraithEntity.this, 8, 2, -2, vec3d2.x, vec3d2.z, 1.5707963705062866D);
-        }
-
-    }
-
 
 }

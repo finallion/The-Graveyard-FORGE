@@ -1,9 +1,10 @@
 package com.finallion.graveyard.blocks;
 
 import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraft.network.protocol.game.ClientboundOpenSignEditorPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,10 +15,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -28,21 +26,24 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StandingSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 
 public class GravestoneBlock extends StandingSignBlock {
@@ -54,7 +55,7 @@ public class GravestoneBlock extends StandingSignBlock {
     private final ResourceLocation texture;
 
     public GravestoneBlock(ResourceLocation texture) {
-        super(BlockBehaviour.Properties.of(Material.STONE).noCollission().noOcclusion().sound(SoundType.BASALT).strength(1.5F), WoodType.OAK);
+        super(BlockBehaviour.Properties.of().noCollission().noOcclusion().sound(SoundType.BASALT).strength(1.5F), WoodType.OAK);
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(FLOOR, true).setValue(WATERLOGGED, false).setValue(ROTATION, 0));
         this.texture = texture;
     }
@@ -77,73 +78,139 @@ public class GravestoneBlock extends StandingSignBlock {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
-
-
     public InteractionResult use(BlockState p_56278_, Level p_56279_, BlockPos p_56280_, Player p_56281_, InteractionHand p_56282_, BlockHitResult p_56283_) {
         ItemStack itemstack = p_56281_.getItemInHand(p_56282_);
         Item item = itemstack.getItem();
-        boolean flag = item instanceof DyeItem;
-        boolean flag1 = itemstack.is(Items.GLOW_INK_SAC);
-        boolean flag2 = itemstack.is(Items.INK_SAC);
-        boolean flag3 = (flag1 || flag || flag2) && p_56281_.getAbilities().mayBuild;
-        if (p_56279_.isClientSide) {
-            return flag3 ? InteractionResult.SUCCESS : InteractionResult.CONSUME;
+        Item $$11 = itemstack.getItem();
+        SignApplicator signapplicator2;
+        if ($$11 instanceof SignApplicator signapplicator1) {
+            signapplicator2 = signapplicator1;
         } else {
-            BlockEntity blockentity = p_56279_.getBlockEntity(p_56280_);
-            if (!(blockentity instanceof GravestoneBlockEntity)) {
-                return InteractionResult.PASS;
-            } else {
-                GravestoneBlockEntity signblockentity = (GravestoneBlockEntity) blockentity;
-                boolean flag4 = signblockentity.hasGlowingText();
-                if ((!flag1 || !flag4) && (!flag2 || flag4)) {
-                    if (flag3) {
-                        boolean flag5;
-                        if (flag1) {
-                            p_56279_.playSound((Player) null, p_56280_, SoundEvents.GLOW_INK_SAC_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
-                            flag5 = signblockentity.setHasGlowingText(true);
-                            if (p_56281_ instanceof ServerPlayer) {
-                                CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger((ServerPlayer) p_56281_, p_56280_, itemstack);
-                            }
-                        } else if (flag2) {
-                            p_56279_.playSound((Player) null, p_56280_, SoundEvents.INK_SAC_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
-                            flag5 = signblockentity.setHasGlowingText(false);
-                        } else {
-                            p_56279_.playSound((Player) null, p_56280_, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
-                            flag5 = signblockentity.setColor(((DyeItem) item).getDyeColor());
-                        }
+            signapplicator2 = null;
+        }
 
-                        if (flag5) {
-                            if (!p_56281_.isCreative()) {
-                                itemstack.shrink(1);
-                            }
+        SignApplicator signapplicator = signapplicator2;
+        boolean flag1 = signapplicator != null && p_56281_.mayBuild();
+        BlockEntity $$12 = p_56279_.getBlockEntity(p_56280_);
+        if ($$12 instanceof GravestoneBlockEntity signblockentity) {
+            if (!p_56279_.isClientSide) {
+                SignText signtext = signblockentity.getText();
+                boolean flag = signblockentity.executeClickCommandsIfPresent(p_56281_, p_56279_, p_56280_);
 
-                            p_56281_.awardStat(Stats.ITEM_USED.get(item));
-                        }
+                if (signblockentity.isWaxed()) {
+                    p_56279_.playSound((Player)null, signblockentity.getBlockPos(), SoundEvents.WAXED_SIGN_INTERACT_FAIL, SoundSource.BLOCKS);
+                    return InteractionResult.PASS;
+                } else if (flag1 && !this.otherPlayerIsEditingSign(p_56281_, signblockentity) && signapplicator.canApplyToSign(signtext, p_56281_)) {
+                    boolean useOnSign = false;
+
+                    if (signapplicator instanceof DyeItem dyeItem) {
+                        useOnSign = useDyeOnSign(p_56279_, signblockentity, dyeItem.getDyeColor());
+                    } else if (signapplicator instanceof InkSacItem) {
+                        useOnSign = useInkOnSign(p_56279_, signblockentity);
+                    } else if (signapplicator instanceof HoneycombItem) {
+                        useOnSign = useWaxOnSign(p_56279_, signblockentity);
+                    } else if (signapplicator instanceof GlowInkSacItem) {
+                        useOnSign = useGlowInkOnSign(p_56279_, signblockentity);
                     }
 
-                    return signblockentity.executeClickCommands((ServerPlayer) p_56281_) ? InteractionResult.SUCCESS : InteractionResult.PASS;
+                    if (useOnSign) {
+                        if (!p_56281_.isCreative()) {
+                            itemstack.shrink(1);
+                        }
+
+                        p_56279_.gameEvent(GameEvent.BLOCK_CHANGE, signblockentity.getBlockPos(), GameEvent.Context.of(p_56281_, signblockentity.getBlockState()));
+                        p_56281_.awardStat(Stats.ITEM_USED.get(item));
+                        return InteractionResult.SUCCESS;
+                    }
+                } else if (flag) {
+                    return InteractionResult.SUCCESS;
+                } else if (!this.otherPlayerIsEditingSign(p_56281_, signblockentity) && p_56281_.mayBuild() && this.hasEditableText(p_56281_, signblockentity)) {
+                    this.openEditScreen(p_56281_, signblockentity, p_56279_, p_56280_, p_56278_);
+                    return InteractionResult.SUCCESS;
                 } else {
                     return InteractionResult.PASS;
                 }
+            } else {
+                return !flag1 && !signblockentity.isWaxed() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
             }
         }
+        return InteractionResult.PASS;
     }
+
+    private boolean hasEditableText(Player p_279394_, GravestoneBlockEntity p_279187_) {
+        SignText signtext = p_279187_.getText();
+        return Arrays.stream(signtext.getMessages(p_279394_.isTextFilteringEnabled())).allMatch((p_279411_) -> {
+            return p_279411_.equals(CommonComponents.EMPTY) || p_279411_.getContents() instanceof LiteralContents;
+        });
+    }
+
+    public boolean useDyeOnSign(Level world, GravestoneBlockEntity signBlockEntity, DyeColor color) {
+        if (signBlockEntity.updateText((text) -> text.setColor(color))) {
+            world.playSound(null, signBlockEntity.getBlockPos(), SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean useInkOnSign(Level world, GravestoneBlockEntity signBlockEntity) {
+        if (signBlockEntity.updateText((text) -> {
+            return text.setHasGlowingText(false);
+        })) {
+            world.playSound(null, signBlockEntity.getBlockPos(), SoundEvents.INK_SAC_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean useGlowInkOnSign(Level world, GravestoneBlockEntity signBlockEntity) {
+        if (signBlockEntity.updateText((text) -> text.setHasGlowingText(true))) {
+            world.playSound(null, signBlockEntity.getBlockPos(), SoundEvents.GLOW_INK_SAC_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean useWaxOnSign(Level world, GravestoneBlockEntity signBlockEntity) {
+        if (signBlockEntity.setWaxed(true)) {
+            world.levelEvent(null, 3003, signBlockEntity.getBlockPos(), 0);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean otherPlayerIsEditingSign(Player p_277952_, GravestoneBlockEntity p_277599_) {
+        UUID uuid = p_277599_.getPlayerWhoMayEdit();
+        return uuid != null && !uuid.equals(p_277952_.getUUID());
+    }
+
 
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new GravestoneBlockEntity(pos, state);
     }
 
+    private void openScreen(Level world, BlockPos pos, Player placer) {
+        GravestoneBlockEntity sign = (GravestoneBlockEntity) world.getBlockEntity(pos);
+        if (!world.isClientSide) {
+            sign.setAllowedPlayerEditor(placer.getUUID());
+            ((ServerPlayer) placer).connection.send(new ClientboundOpenSignEditorPacket(pos, true));
+        }
+    }
+
+
+    public void openEditScreen(Player player, GravestoneBlockEntity blockEntity, Level world, BlockPos pos, BlockState state) {
+        blockEntity.setAllowedPlayerEditor(player.getUUID());
+        openScreen(world, pos, player);
+    }
+
 
     @Override
     public void setPlacedBy(Level world, BlockPos pos, BlockState state, @org.jetbrains.annotations.Nullable LivingEntity placer, ItemStack p_49851_) {
-        if (placer != null && placer instanceof Player) {
-            GravestoneBlockEntity sign = (GravestoneBlockEntity) world.getBlockEntity(pos);
-            if (!world.isClientSide) {
-                sign.setAllowedPlayerEditor(placer.getUUID());
-                ((ServerPlayer) placer).connection.send(new ClientboundOpenSignEditorPacket(pos));
-            }
-            else
-                sign.setEditable(true);
+        if (placer instanceof Player player) {
+            openScreen(world, pos, player);
         }
     }
 
@@ -180,10 +247,9 @@ public class GravestoneBlock extends StandingSignBlock {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState p_60537_, LootContext.Builder p_60538_) {
+    public List<ItemStack> getDrops(BlockState p_287732_, LootParams.Builder p_287596_) {
         return Collections.singletonList(new ItemStack(this));
     }
-
 
     public ResourceLocation getTexture() {
         return texture;
@@ -191,6 +257,6 @@ public class GravestoneBlock extends StandingSignBlock {
 
 
     public boolean canSurvive(BlockState p_196260_1_, LevelReader p_196260_2_, BlockPos p_196260_3_) {
-        return p_196260_2_.getBlockState(p_196260_3_.below()).getMaterial().isSolid();
+        return p_196260_2_.getBlockState(p_196260_3_.below()).isSolid();
     }
 }

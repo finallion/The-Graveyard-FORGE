@@ -1,6 +1,5 @@
 package com.finallion.graveyard.item;
 
-import com.finallion.graveyard.TheGraveyard;
 import com.finallion.graveyard.entities.GhoulingEntity;
 import com.finallion.graveyard.entities.GraveyardMinionEntity;
 import com.finallion.graveyard.init.TGEntities;
@@ -36,7 +35,7 @@ public class BoneStaffItem extends Item {
     public static Map<UUID, UUID> ownerGhoulingMapping = new HashMap<>();
 
     public BoneStaffItem(byte ghoulVariant) {
-        super(new Item.Properties().stacksTo(1).tab(TheGraveyard.GROUP));
+        super(new Item.Properties().stacksTo(1));
         this.ghoulVariant = ghoulVariant;
     }
 

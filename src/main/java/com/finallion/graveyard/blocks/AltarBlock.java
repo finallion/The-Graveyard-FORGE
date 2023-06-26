@@ -89,7 +89,7 @@ public class AltarBlock extends Block {
             BlockPattern.BlockPatternMatch result = AltarBlock.getCompletedFramePattern().find(world, pos);
 
             if (!state.getValue(AltarBlock.BLOODY) && (result != null || !GraveyardConfig.COMMON.summoningNeedsStaffFragments.get())) {
-                player.level.playSound(null, player.blockPosition(), TGSounds.VIAL_SPLASH.get(), SoundSource.BLOCKS, 5.0F, 1.0F);
+                player.level().playSound(null, player.blockPosition(), TGSounds.VIAL_SPLASH.get(), SoundSource.BLOCKS, 5.0F, 1.0F);
                 world.setBlock(pos, state.setValue(AltarBlock.BLOODY, true), 3);
 
                 Direction direction;
@@ -144,7 +144,7 @@ public class AltarBlock extends Block {
                     return InteractionResult.CONSUME;
                 }
 
-                return InteractionResult.sidedSuccess(player.level.isClientSide);
+                return InteractionResult.sidedSuccess(player.level().isClientSide);
             }
         }
 

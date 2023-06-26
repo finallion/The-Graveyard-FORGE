@@ -1,7 +1,7 @@
 package com.finallion.graveyard.util;
 
 import com.finallion.graveyard.TheGraveyard;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
@@ -20,7 +20,7 @@ public class TGTags {
 
 
     public static TagKey<Biome> biomeTag(String name) {
-        return TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(TheGraveyard.MOD_ID, name));
+        return TagKey.create(Registries.BIOME, new ResourceLocation(TheGraveyard.MOD_ID, name));
     }
 
 }

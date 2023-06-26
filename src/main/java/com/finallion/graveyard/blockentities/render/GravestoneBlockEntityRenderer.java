@@ -5,10 +5,9 @@ import com.finallion.graveyard.blockentities.GravestoneBlockEntity;
 import com.finallion.graveyard.blocks.GravestoneBlock;
 import com.finallion.graveyard.init.TGBlocks;
 import com.google.common.collect.Maps;
-import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -16,17 +15,20 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.phys.Vec3;
@@ -59,7 +61,7 @@ public class GravestoneBlockEntityRenderer implements BlockEntityRenderer<Graves
 
         float rotation = -(blockState.getValue(GravestoneBlock.FACING).toYRot());
         //float h = -((float)((Integer)blockState.getStructure(SignBlock.ROTATION) * 360) / 16.0F);
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
+        matrixStack.mulPose(Axis.YP.rotationDegrees(rotation));
         matrixStack.pushPose();
         // size
         matrixStack.scale(0.6666667F, -0.6666667F, -0.6666667F);
@@ -69,19 +71,18 @@ public class GravestoneBlockEntityRenderer implements BlockEntityRenderer<Graves
 
 
         //int i = signBlockEntity.getColor().getTextColor();
-        int i = getDarkColor(signBlockEntity);
+        int i = getDarkColor(signBlockEntity.getText());
 
-        FormattedCharSequence[] aformattedcharsequence = signBlockEntity.getRenderMessages(Minecraft.getInstance().isTextFilteringEnabled(), (p_173653_) -> {
+        FormattedCharSequence[] aformattedcharsequence = signBlockEntity.getText().getRenderMessages(Minecraft.getInstance().isTextFilteringEnabled(), (p_173653_) -> {
             List<FormattedCharSequence> list = this.font.split(p_173653_, 90);
             return list.isEmpty() ? FormattedCharSequence.EMPTY : list.get(0);
         });
 
-
         int k;
         boolean flag;
         int l;
-        if (signBlockEntity.hasGlowingText()) {
-            k = signBlockEntity.getColor().getTextColor();
+        if (signBlockEntity.getText().hasGlowingText()) {
+            k = signBlockEntity.getText().getColor().getTextColor();
             flag = isOutlineVisible(signBlockEntity, k);
             l = 15728880;
         } else {
@@ -97,24 +98,24 @@ public class GravestoneBlockEntityRenderer implements BlockEntityRenderer<Graves
             if (flag) {
                 this.font.drawInBatch8xOutline(formattedcharsequence, f3, (float)(i1 * 10 - 20), k, i, matrixStack.last().pose(), vertexConsumerProvider, l);
             } else {
-                this.font.drawInBatch(formattedcharsequence, f3, (float)(i1 * 10 - 20), k, false, matrixStack.last().pose(), vertexConsumerProvider, false, 0, l);
+                this.font.drawInBatch(formattedcharsequence, f3, (float)(i1 * 10 - 20), k, false, matrixStack.last().pose(), vertexConsumerProvider, Font.DisplayMode.POLYGON_OFFSET, 0, l);
             }
         }
 
 
         matrixStack.popPose();
-        renderGrave(blockState, f, matrixStack, vertexConsumerProvider, p_112501_, p_112502_);
+        renderGrave(blockState, f, matrixStack, vertexConsumerProvider, p_112501_, p_112502_, signBlockEntity.getLevel());
 
     }
 
-    public void renderGrave(BlockState state, float f, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, int j) {
+    public void renderGrave(BlockState state, float f, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, int j, Level level) {
         matrixStack.pushPose();
         matrixStack.translate(0.5, 0.43, 0.5);
         matrixStack.scale(2.28F, 2.15F, 2.28F);
 
         float rotation = -((float)state.getValue(GravestoneBlock.FACING).toYRot());
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
-        Minecraft.getInstance().getItemRenderer().renderStatic(new ItemStack(state.getBlock().asItem(), 1), ItemTransforms.TransformType.GROUND, i, j, matrixStack, vertexConsumerProvider, 2);
+        matrixStack.mulPose(Axis.YP.rotationDegrees(rotation));
+        Minecraft.getInstance().getItemRenderer().renderStatic(new ItemStack(state.getBlock().asItem(), 1), ItemDisplayContext.GROUND, i, j, matrixStack, vertexConsumerProvider, level, 2);
 
 
 
@@ -138,31 +139,22 @@ public class GravestoneBlockEntityRenderer implements BlockEntityRenderer<Graves
     }
 
 
-    private static int getDarkColor(GravestoneBlockEntity p_173640_) {
-        int i = p_173640_.getColor().getTextColor();
-        double d0 = 0.4D;
-        int j = (int)((double) NativeImage.getR(i) * 0.4D);
-        int k = (int)((double)NativeImage.getG(i) * 0.4D);
-        int l = (int)((double)NativeImage.getB(i) * 0.4D);
-        return i == DyeColor.BLACK.getTextColor() && p_173640_.hasGlowingText() ? -988212 : NativeImage.combine(0, l, k, j);
-    }
-
-    public static WoodType getSignType(Block block) {
-        WoodType signType2;
-        if (block instanceof GravestoneBlock) {
-            signType2 = ((GravestoneBlock)block).type();
+    static int getDarkColor(SignText p_277914_) {
+        int i = p_277914_.getColor().getTextColor();
+        if (i == DyeColor.BLACK.getTextColor() && p_277914_.hasGlowingText()) {
+            return -988212;
         } else {
-            signType2 = WoodType.CRIMSON;
+            double d0 = 0.4D;
+            int j = (int)((double) FastColor.ARGB32.red(i) * 0.4D);
+            int k = (int)((double)FastColor.ARGB32.green(i) * 0.4D);
+            int l = (int)((double)FastColor.ARGB32.blue(i) * 0.4D);
+            return FastColor.ARGB32.color(0, j, k, l);
         }
-
-        return signType2;
     }
 
     public static SignRenderer.SignModel createSignModel(EntityModelSet p_173647_, WoodType p_173648_) {
         return new SignRenderer.SignModel(p_173647_.bakeLayer(ModelLayers.createSignModelName(p_173648_)));
     }
-
-
 
     static {
         defaultLayer = RenderType.entitySolid(new ResourceLocation("textures/entity/signs/oak.png"));

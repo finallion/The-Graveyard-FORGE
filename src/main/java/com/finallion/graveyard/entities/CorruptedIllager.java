@@ -16,23 +16,14 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.util.GoalUtils;
-import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Ravager;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Blocks;
-import org.jetbrains.annotations.Nullable;
-
-import java.time.LocalDate;
-import java.time.temporal.ChronoField;
-import java.util.List;
 
 public abstract class CorruptedIllager extends HordeGraveyardEntity {
 
@@ -65,7 +56,7 @@ public abstract class CorruptedIllager extends HordeGraveyardEntity {
 
     protected void customServerAiStep() {
         if (!this.isNoAi() && GoalUtils.hasGroundPathNavigation(this)) {
-            boolean flag = ((ServerLevel)this.level).isRaided(this.blockPosition());
+            boolean flag = ((ServerLevel)this.level()).isRaided(this.blockPosition());
             ((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(flag);
         }
 

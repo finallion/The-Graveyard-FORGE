@@ -4,6 +4,7 @@ import com.finallion.graveyard.init.TGEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -33,9 +34,21 @@ public class SkullEntity extends AbstractHurtingProjectile {
         super(TGEntities.SKULL.get(), owner, directionX, directionY, directionZ, world);
     }
 
-    public Packet<?> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
+    /*
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return super.getAddEntityPacket();
     }
+
+     */
+
+
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        Entity entity = this.getOwner();
+        int i = entity == null ? 0 : entity.getId();
+        return new ClientboundAddEntityPacket(this.getId(), this.uuid, this.getX(), this.getY(), this.getZ(), 1, 1, this.getType(), i, new Vec3(this.xPower, this.yPower, this.zPower), 0);
+    }
+
 
     protected float getInertia() {
         return this.isDangerous() ? 0.73F : super.getInertia();
@@ -56,13 +69,13 @@ public class SkullEntity extends AbstractHurtingProjectile {
 
     protected void onHitEntity(EntityHitResult entityHitResult) {
         super.onHitEntity(entityHitResult);
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             Entity entity = entityHitResult.getEntity();
             Entity entity2 = this.getOwner();
             boolean bl;
             if (entity2 instanceof LivingEntity) {
                 LivingEntity livingEntity = (LivingEntity)entity2;
-                bl = entity.hurt(DamageSource.indirectMagic(this, livingEntity), 10.0F);
+                bl = entity.hurt(this.damageSources().indirectMagic(this, livingEntity), 10.0F);
                 if (bl) {
                     if (entity.isAlive()) {
                         this.doEnchantDamageEffects(livingEntity, entity);
@@ -77,15 +90,15 @@ public class SkullEntity extends AbstractHurtingProjectile {
     public void tick() {
         super.tick();
         Vec3 vec3d = this.getDeltaMovement();
-        this.getLevel().addParticle(ParticleTypes.SOUL_FIRE_FLAME, this.getX() + vec3d.x * 0.4D, this.getY() + vec3d.y + 0.5D, this.getZ() + vec3d.z * 0.4D, 0.0D, 0.0D, 0.0D);
+        this.level().addParticle(ParticleTypes.SOUL_FIRE_FLAME, this.getX() + vec3d.x * 0.4D, this.getY() + vec3d.y + 0.5D, this.getZ() + vec3d.z * 0.4D, 0.0D, 0.0D, 0.0D);
     }
 
 
     protected void onHit(HitResult p_37628_) {
         super.onHit(p_37628_);
-        if (!this.level.isClientSide) {
-            Explosion.BlockInteraction explosion$blockinteraction = Explosion.BlockInteraction.NONE;
-            this.level.explode(this, this.getX(), this.getY(), this.getZ(), 2.0F, false, explosion$blockinteraction);
+        if (!this.level().isClientSide) {
+            Level.ExplosionInteraction explosion$blockinteraction = Level.ExplosionInteraction.NONE;
+            this.level().explode(this, this.getX(), this.getY(), this.getZ(), 2.0F, false, explosion$blockinteraction);
             this.discard();
         }
 

@@ -20,6 +20,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.particle.SonicBoomParticle;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.GrassColor;
@@ -75,11 +76,11 @@ public class TheGraveyardClient {
 
     @SubscribeEvent
     public void initParticles(RegisterParticleProvidersEvent event){
-        event.register(TGParticles.GRAVEYARD_FOG_PARTICLE.get(), GraveyardFogParticle.FogFactory::new);
-        event.register(TGParticles.GRAVEYARD_SOUL_PARTICLE.get(), GraveyardSoulParticle.Provider::new);
-        event.register(TGParticles.GRAVEYARD_HAND_PARTICLE.get(), GraveyardHandParticle.Provider::new);
-        event.register(TGParticles.GRAVEYARD_LEFT_HAND_PARTICLE.get(), GraveyardHandParticle.Provider::new);
-        event.register(TGParticles.GRAVEYARD_SOUL_BEAM_PARTICLE.get(), SonicBoomParticle.Provider::new);
+        event.registerSpriteSet(TGParticles.GRAVEYARD_FOG_PARTICLE.get(), GraveyardFogParticle.FogFactory::new);
+        event.registerSpriteSet(TGParticles.GRAVEYARD_SOUL_PARTICLE.get(), GraveyardSoulParticle.Provider::new);
+        event.registerSpriteSet(TGParticles.GRAVEYARD_HAND_PARTICLE.get(), GraveyardHandParticle.Provider::new);
+        event.registerSpriteSet(TGParticles.GRAVEYARD_LEFT_HAND_PARTICLE.get(), GraveyardHandParticle.Provider::new);
+        event.registerSpriteSet(TGParticles.GRAVEYARD_SOUL_BEAM_PARTICLE.get(), SonicBoomParticle.Provider::new);
     }
 
     @SubscribeEvent
@@ -102,9 +103,8 @@ public class TheGraveyardClient {
 
         event.registerBlockEntityRenderer(TGTileEntities.GRAVESTONE_BLOCK_ENTITY.get(), GravestoneBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(TGTileEntities.SARCOPHAGUS_BLOCK_ENTITY.get(), SarcophagusBlockEntityRenderer::new);
-        event.registerBlockEntityRenderer(TGTileEntities.BRAZIER_BLOCK_ENTITY.get(), BrazierBlockEntityRenderer::new);
-        event.registerBlockEntityRenderer(TGTileEntities.OSSUARY_BLOCK_ENTITY.get(), OssuaryBlockEntityRenderer::new);
-
+        event.registerBlockEntityRenderer(TGTileEntities.BRAZIER_BLOCK_ENTITY.get(), (BlockEntityRendererProvider.Context in) -> new BrazierBlockEntityRenderer());
+        event.registerBlockEntityRenderer(TGTileEntities.OSSUARY_BLOCK_ENTITY.get(), (BlockEntityRendererProvider.Context in) -> new OssuaryBlockEntityRenderer());
     }
 
     @SubscribeEvent

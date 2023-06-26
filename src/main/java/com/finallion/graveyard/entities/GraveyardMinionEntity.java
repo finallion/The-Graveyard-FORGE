@@ -102,7 +102,7 @@ public class GraveyardMinionEntity extends PathfinderMob {
     public LivingEntity getOwner() {
         try {
             UUID uUID = this.getOwnerUuid();
-            return uUID == null ? null : this.level.getPlayerByUUID(uUID);
+            return uUID == null ? null : this.level().getPlayerByUUID(uUID);
         } catch (IllegalArgumentException var2) {
             return null;
         }
