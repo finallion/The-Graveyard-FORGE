@@ -1,46 +1,58 @@
+# Welcome to the Graveyard Wiki!
 
-Source installation information for modders
--------------------------------------------
-This code follows the Minecraft Forge installation methodology. It will apply
-some small patches to the vanilla MCP source code, giving you and it access 
-to some of the data and functions you need to build a successful mod.
+## Forge:
+Versions: 1.16.4, 1.16.5, 1.18, 1.18.1, 1.18.2, 1.19-1.19.2, 1.20-1.20.1
+Up-to-date versions: 1.18.2, 1.19.2, 1.20-1.20.1
 
-Note also that the patches are built against "un-renamed" MCP source code (aka
-SRG Names) - this means that you will not be able to read them directly against
-normal code.
+## Configuration: 
+The Graveyard comes with a config file, located in .minecraft/config/graveyard folder.
 
-Setup Process:
-==============================
+### Structures:
+Each structure can be enabled/disabled in the config file.
+Changing the frequency, spacing or separation of structures requires the use of a datapack.
+Changing the generation biomes of structures requires the use of a datapack.
 
-Step 1: Open your command-line and browse to the folder where you extracted the zip file.
+### Mobs:
+Ghouls, Revenants, Nightmares and Skeleton Creepers spawn naturally. Their spawn weight and group size can be configured in the config file.
+Each mob can be set to burn/not burn in sunlight and to take damage from wither roses in the config file.
+Changing the spawn biomes of naturally spawning mobs requires the use of a datapack.
 
-Step 2: You're left with a choice.
-If you prefer to use Eclipse:
-1. Run the following command: `gradlew genEclipseRuns` (`./gradlew genEclipseRuns` if you are on Mac/Linux)
-2. Open Eclipse, Import > Existing Gradle Project > Select Folder 
-   or run `gradlew eclipse` to generate the project.
+### Horde:
+An random event happening at night, where a large group of ghouls and revenants OR undead illagers spawn.
+The size of the spawning group and its frequency can be set in the config file. It can also be disabled.
 
-If you prefer to use IntelliJ:
-1. Open IDEA, and import project.
-2. Select your build.gradle file and have it import.
-3. Run the following command: `gradlew genIntellijRuns` (`./gradlew genIntellijRuns` if you are on Mac/Linux)
-4. Refresh the Gradle Project in IDEA if required.
+## Boss:
+### Corrupted Champion (Lich):
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can 
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+#### How to find and to summon the boss:
+Collect the three bone staff pieces (Ominous Bone Staff Fragment) from the Ruins structure. Every Ruin has a unique fragment (upper, middle and lower bone staff fragment). These structures spawn in forests and are 1) a broken tower (head fragment) 2) a bloody hill (middle fragment) and 3) a campsite (lower fragment)
+All three staff pieces can also sometimes be bought by the Nameless Hanged located at the Dead Tree structure for a price of 64 Corruption.
+Obtain a bone dagger from an Acolyte, or craft it yourself.
+Hold a glass bottle in your offhand and start killing villagers with the bone dagger. You'll get a Vial of Blood. Fill the vial to the limit.
+Find the Lich Prison structure, a large floating island above the oceans.
+Wait until it is night, place the bone staff pieces (from upper to lower) on the dark corrupted deepslate blocks in front of the altar (they should fairly stand out).
+Pour the Vial of Blood into the altar.
 
-Mapping Names:
-=============================
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license, if you do not agree with it you can change your mapping names to other crowdsourced names in your 
-build.gradle. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/MinecraftForge/MCPConfig/blob/master/Mojang.md
+#### How to fight the boss:
+Phase 1. The Champion has its coat on and relies on using magic to attack you. During some of these attacks the Champion will have a disc surrounding it, which will make it immune to attacks.
+Phase 2. The coat is gone and its time to hunt. The Champion will be immune during its hunt. It will blind you and teleport you randomly. Key in this phase is to survive and stay away from the Champion. A loud cracking noise indicates when the Champion comes closer. After a certain amount of time the hunt is over and the Champion can be attacked.
+Phase 3. The Champion is basically defeated, but still dangerous. Be fast to take it down.
 
-Additional Resources: 
-=========================
-Community Documentation: http://mcforge.readthedocs.io/en/latest/gettingstarted/  
-LexManos' Install Video: https://www.youtube.com/watch?v=8VEdtQLuLO0  
-Forge Forum: https://forums.minecraftforge.net/  
-Forge Discord: https://discord.gg/UvedJ9m  
+The Corrupted Champion will drop one of 5 staffs (see Ghouling).
+
+The Corrupted Champion can heavily be modified in the config file (damage, health, phases, attacks, summonable items etc.)
+
+## Ghouling
+The Ghouling is a mob summoned from the Bone Staff, dropped by the Corrupted Champion. It is loyal to whomever summoned it. It is not possible, once summoned, to give the staff to another player for him to use. The staff is bound to the player who used it first.
+The Ghouling follows and teleports to its master.
+Once dead the Ghouling can be resummoned by its master.
+
+### Commands:
+Right-click with staff on Ghouling: a disc appears and the ghouling will stay in place.
+Shift-Right-click: the Ghouling will teleport to you.
+Right-click on entity: the Ghouling will attack this entity.
+
+Right-click with a coffin or sarcophagus on the Ghouling will equip it onto the Ghouling. Only the owner can access the storage then.
+
+### Troubleshooting:
+If you lost your ghouling or something similar: in your .minecraft/saves/YOUR_WORLD_NAME is a file called "graveyardGhoulingUUIDmapping.txt". It will contain a list of all pairs (UUID of ghouling - UUID of player). You can delete the line matching your player UUID (on multiplayer) or the file itself (on singleplayer). This will reset the corresponding staff (line deleted) or all staffs (file deleted), meaning that every staff can summon a Ghouling again, but every existant Ghouling will no longer obey any orders.
