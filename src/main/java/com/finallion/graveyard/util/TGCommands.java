@@ -26,9 +26,7 @@ public class TGCommands {
     public static void register(CommandDispatcher<CommandSourceStack> p_138815_) {
         p_138815_.register(Commands.literal("horde").requires((p_138819_) -> {
             return p_138819_.hasPermission(3);
-        }).then(Commands.literal("trigger").executes((context -> {
-            return TGCommands.executeSpawn(context.getSource());
-        }))));
+        }).then(Commands.literal("trigger").executes((context -> TGCommands.executeSpawn(context.getSource())))));
     }
 
     public static int executeSpawn(CommandSourceStack source) {

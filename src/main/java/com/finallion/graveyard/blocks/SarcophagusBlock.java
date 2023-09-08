@@ -281,7 +281,7 @@ public class SarcophagusBlock extends AbstractCoffinBlock<SarcophagusBlockEntity
 
 
     public static DoubleBlockCombiner.Combiner<SarcophagusBlockEntity, Float2FloatFunction> opennessCombiner(final LidBlockEntity p_51518_) {
-        return new DoubleBlockCombiner.Combiner<SarcophagusBlockEntity, Float2FloatFunction>() {
+        return new DoubleBlockCombiner.Combiner<>() {
             public Float2FloatFunction acceptDouble(SarcophagusBlockEntity p_51633_, SarcophagusBlockEntity p_51634_) {
                 return (p_51638_) -> {
                     return Math.max(p_51633_.getOpenNess(p_51638_), p_51634_.getOpenNess(p_51638_));
